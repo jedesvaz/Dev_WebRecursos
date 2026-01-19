@@ -70,6 +70,65 @@
             min-height: calc(100vh - 70px);
         }
 
+        .btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    max-width: 320px;
+
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+
+    font-size: 1rem;
+    font-weight: 600;
+
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+
+
+/* Verde menta */
+.btn-mint {
+    background-color: #3eb489; /* mint green */
+}
+
+.btn-mint:hover {
+    background-color: #34a27a;
+}
+
+/* Azul rey */
+.btn-royal {
+    background-color: #1f3cff; /* royal blue */
+}
+
+.btn-royal:hover {
+    background-color: #162fd1;
+}
+.btn-royal,
+.btn-mint,
+.btn-royal:visited,
+.btn-mint:visited {
+    color: white;
+    text-decoration: none;
+}
+
+/* Feedback al hacer clic */
+.btn:active {
+    transform: scale(0.97);
+}
+.btn:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.2);
+    outline-offset: 2px;
+}
+
+
         /* Barra lateral */
         .sidebar {
             display: none;
