@@ -15,7 +15,7 @@ Recursos sobre estructura celular, biología molecular y técnicas de laboratori
 ### Bioestadística
 Material sobre análisis estadístico aplicado a ciencias de la salud, probabilidad y diseño experimental.
 
-## ✨ Características
+##  Características
 
 - **Diseño Mobile-First**: Optimizado para dispositivos móviles
 -  **Paleta Biomédica**: Colores inspirados en ciencias de la salud (verdes, azules y grises)
