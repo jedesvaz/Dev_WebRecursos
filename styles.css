@@ -211,7 +211,7 @@
         }
 
         .topic:target .topic-content {
-            max-height: 200rem;
+            max-height: 2000rem;
             transition: max-height 0.5s ease-in;
         }
 
