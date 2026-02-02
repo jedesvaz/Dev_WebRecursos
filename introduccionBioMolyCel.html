@@ -13,11 +13,56 @@
     <nav class="navbar">
         <h1>Introducción a la Biología Celular y Molecular</h1>
         <div class="navbar-buttons">
-            <a href="index.html" ><button>Inicio</button></a>
-            
-            <button>Documentos Importantes</button>
+            <a href="index.html"><button>Inicio</button></a>
+            <a href="#modal-recursos"><button>Recomendar Recursos</button></a>
         </div>
     </nav>
+
+    <!-- Modal Recomendar Recursos -->
+    <div id="modal-recursos" class="modal">
+        <form class="formulario-recursos" id="modalRecomendacion" action="https://sheetdb.io/api/v1/ymqe5fh5o9aww"
+            method="post">
+            <h2>Recomienda un Recurso</h2>
+            <p>Ayúdanos a mejorar compartiendo recursos útiles para la clase</p>
+
+
+
+            <label for="materia">Materia</label>
+            <select id="materia" name="materia" required>
+                <option value="">Selecciona una materia...</option>
+                <option value="probabilidad">Bioestadística Aplicada</option>
+                <option value="variables-aleatorias">Introducción a la Biología Celular y Molecular</option>
+
+            </select>
+            <label for="tema">Tema</label>
+            <input type="tema" id="tema" name="tema" required placeholder="2.1 Tema fregón">
+
+            <label for="tipo-recurso">Tipo de recurso</label>
+            <select id="tipo-recurso" name="tipoRecurso" required>
+                <option value="">Selecciona...</option>
+                <option value="video">Video</option>
+                <option value="articulo">Artículo</option>
+                <option value="pdf">PDF/Documento</option>
+                <option value="sitio-web">Sitio Web</option>
+                <option value="libro">Capítulo de Libro</option>
+                <option value="tutorial">Tutorial</option>
+                <option value="otro">Otro</option>
+            </select>
+
+            <label for="url-recurso">URL del recurso</label>
+            <input type="url" id="url-recurso" name="url" required placeholder="https://ejemplo.com/recurso">
+
+
+
+            <label for="descripcion">Descripción breve</label>
+            <textarea id="descripcion" name="descripcion" rows="4" required
+                placeholder="¿Por qué recomiendas este recurso? ¿Qué temas cubre?"></textarea>
+
+            <p><b>Gracias por contribuir al aprendizaje colaborativo.</b></p>
+            <button type="submit">Enviar recomendación</button>
+        </form>
+        <a href="#" class="cerrar-modal">✖</a>
+    </div>
 
     <!-- Contenedor principal -->
     <div class="container">
@@ -1295,3 +1340,33 @@
 </body>
 
 </html>
+<script>
+    // Envía el formulario por AJAX y luego redirige al inicio (#inicio)
+    document.addEventListener('DOMContentLoaded', function () {
+        var form = document.getElementById('modalRecomendacion');
+        if (!form) return;
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var url = form.action;
+            var method = (form.method || 'POST').toUpperCase();
+            var data = new FormData(form);
+
+            fetch(url, { method: method, body: data, mode: 'cors' })
+                .then(function (res) {
+                    // opcional: comprobar res.ok
+                    form.reset();
+                    // cambiar hash y hacer scroll suave al inicio
+                    location.hash = '#inicio';
+                    var target = document.querySelector('#inicio');
+                    if (target && 'scrollIntoView' in target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                })
+                .catch(function () {
+                    // en caso de error igualmente redirige al inicio
+                    location.hash = '#inicio';
+                });
+        });
+    });
+</script>
