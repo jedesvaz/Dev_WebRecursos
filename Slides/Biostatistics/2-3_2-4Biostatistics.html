@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioestadística Aplicada — Medidas de Tendencia Central y Dispersión</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:#0f1629;
+            color:#e4e8f0;
+            overflow:hidden;
+        }
+
+        .container { width:100vw; height:100vh; position:relative; }
+
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.8rem 6.5rem;
+            flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* ─── PORTADA ─── */
+        .cover {
+            background:linear-gradient(135deg,#1a1f3a 0%,#2c3e6b 50%,#3a5a8a 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-100px; right:-100px;
+            width:340px; height:340px; border-radius:50%;
+            background:rgba(100,160,255,0.07);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-70px; left:-70px;
+            width:260px; height:260px; border-radius:50%;
+            background:rgba(100,160,255,0.05);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.4rem; font-weight:900;
+            line-height:1.2; margin-bottom:1rem;
+            position:relative; z-index:1;
+        }
+        .cover .subtitle {
+            font-size:1.25rem; opacity:0.85;
+            position:relative; z-index:1;
+        }
+        .cover .line {
+            width:80px; height:3px;
+            background:#64a0ff; margin:1.6rem auto;
+            position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.2rem; font-size:0.9rem;
+            opacity:0.6; position:relative; z-index:1;
+        }
+        .cover .meta {
+            margin-top:0.7rem; font-size:0.84rem;
+            opacity:0.5; position:relative; z-index:1;
+        }
+
+        /* ─── SLIDES NORMALES ─── */
+        .slide-header { margin-bottom:1.4rem; flex-shrink:0; }
+
+        .slide-number {
+            color:#64a0ff; font-size:0.8rem;
+            font-weight:700; letter-spacing:2.5px;
+            text-transform:uppercase; margin-bottom:0.35rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.2rem; color:#e4e8f0;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.35rem; color:#64a0ff;
+            margin:1.2rem 0 0.7rem;
+        }
+
+        .content { flex:1; overflow-y:auto; padding-right:1.4rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(100,160,255,0.06); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#4a8fd4; border-radius:3px; }
+
+        p { font-size:1.02rem; line-height:1.72; margin-bottom:1.1rem; opacity:0.92; }
+
+        ul { list-style:none; margin:0.7rem 0; }
+        ul li {
+            font-size:0.97rem; line-height:1.6;
+            margin-bottom:0.6rem; padding-left:1.4rem;
+            position:relative; opacity:0.9;
+        }
+        ul li::before {
+            content:'▸'; position:absolute;
+            left:0; color:#64a0ff; font-weight:bold;
+        }
+
+        /* ─── CAJAS ─── */
+        .box {
+            background:rgba(100,160,255,0.07);
+            border-left:4px solid #64a0ff;
+            padding:1.2rem 1.4rem;
+            margin:1.2rem 0; border-radius:0 6px 6px 0;
+        }
+        .box strong { color:#64a0ff; display:block; margin-bottom:0.35rem; font-size:1.02rem; }
+        .box p { margin-bottom:0.3rem; }
+
+        .box-warn { background:rgba(255,170,80,0.08); border-left-color:#ffaa50; }
+        .box-warn strong { color:#ffaa50; }
+
+        .box-green { background:rgba(80,200,150,0.08); border-left-color:#50c896; }
+        .box-green strong { color:#50c896; }
+
+        /* ─── CARDS / GRIDS ─── */
+        .grid { display:grid; gap:1.1rem; margin:1.1rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+
+        .card {
+            background:rgba(255,255,255,0.04);
+            padding:1.2rem; border-radius:8px;
+            border:1px solid rgba(100,160,255,0.18);
+        }
+        .card h4 { color:#64a0ff; margin-bottom:0.45rem; font-size:1.05rem; }
+        .card p { font-size:0.94rem; margin-bottom:0.25rem; }
+
+        .card-accent { border-color:rgba(100,160,255,0.38); background:rgba(100,160,255,0.06); }
+
+        .em { color:#64a0ff; font-weight:700; }
+        .em-warn { color:#ffaa50; font-weight:700; }
+        .em-green { color:#50c896; font-weight:700; }
+
+        /* ─── TABLAS ─── */
+        table { width:100%; border-collapse:collapse; margin:1rem 0; }
+        th,td { padding:0.7rem 0.9rem; text-align:left; border-bottom:1px solid rgba(100,160,255,0.15); font-size:0.93rem; }
+        th { background:rgba(100,160,255,0.1); color:#64a0ff; font-weight:700; font-size:0.88rem; letter-spacing:0.4px; }
+        tr:last-child td { border-bottom:none; }
+
+        /* ─── FÓRMULA BOX ─── */
+        .formula-box {
+            background:rgba(15,22,41,0.7);
+            border:1px solid rgba(100,160,255,0.3);
+            border-radius:8px;
+            padding:1rem 1.4rem;
+            text-align:center;
+            margin:0.9rem 0;
+        }
+        .formula {
+            font-family:'Playfair Display',serif;
+            font-size:1.35rem;
+            color:#a8d4ff;
+            line-height:1.8;
+        }
+        .formula .frac {
+            display:inline-flex; flex-direction:column;
+            align-items:center; vertical-align:middle;
+            margin:0 0.15rem;
+        }
+        .formula .frac-num { border-bottom:2px solid #a8d4ff; padding-bottom:2px; }
+        .formula .frac-den { padding-top:2px; }
+
+        /* ─── BADGES ─── */
+        .exercise-badge {
+            background:linear-gradient(135deg,#4a8fd4,#64a0ff);
+            color:#0f1629; padding:0.28rem 1.1rem;
+            border-radius:22px; display:inline-block;
+            font-weight:800; font-size:0.8rem;
+            letter-spacing:1.4px;
+            box-shadow:0 3px 9px rgba(100,160,255,0.3);
+        }
+
+        /* ─── EJERCICIOS ─── */
+        .exercise-input {
+            width:100%; background:rgba(255,255,255,0.05);
+            border:1px solid rgba(100,160,255,0.28);
+            border-radius:6px; padding:0.55rem 0.85rem;
+            color:#e4e8f0; font-size:0.94rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.25rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#64a0ff; background:rgba(100,160,255,0.07); }
+        .exercise-input.correct { border-color:#50c896; background:rgba(80,200,150,0.1); }
+        .exercise-input.incorrect { border-color:#e06060; background:rgba(224,96,96,0.1); }
+
+        .exercise-q { margin-bottom:0.85rem; }
+        .exercise-q label { font-size:0.94rem; opacity:0.9; display:block; }
+        .exercise-q .qnum { color:#64a0ff; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:0.9rem; margin-top:1.3rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#4a8fd4; border:none; color:#fff;
+            padding:0.5rem 1.5rem; border-radius:22px;
+            font-weight:700; font-size:0.88rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#64a0ff; transform:scale(1.04); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(100,160,255,0.38); color:#64a0ff; }
+        .ex-btn-sec:hover { background:rgba(100,160,255,0.1); border-color:#64a0ff; }
+
+        .feedback-msg { margin-top:0.9rem; padding:0.7rem 1.1rem; border-radius:6px; font-size:0.93rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(80,200,150,0.1); border:1px solid rgba(80,200,150,0.32); color:#50c896; }
+        .feedback-msg.partial { background:rgba(255,170,80,0.08); border:1px solid rgba(255,170,80,0.32); color:#ffaa50; }
+
+        /* ─── OPCIÓN MÚLTIPLE ─── */
+        .mc-option {
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(100,160,255,0.2);
+            border-radius:6px; padding:0.55rem 0.9rem;
+            margin:0.3rem 0; cursor:pointer;
+            transition:all 0.2s; font-size:0.94rem;
+        }
+        .mc-option:hover { border-color:#64a0ff; background:rgba(100,160,255,0.07); }
+        .mc-option.selected { border-color:#64a0ff; background:rgba(100,160,255,0.11); }
+        .mc-option.correct-sel { border-color:#50c896; background:rgba(80,200,150,0.18); }
+        .mc-option.incorrect-sel { border-color:#e06060; background:rgba(224,96,96,0.13); }
+
+        /* ─── PASO A PASO (ejercicios resueltos) ─── */
+        .step {
+            display:flex; gap:0.9rem; align-items:flex-start;
+            margin-bottom:0.85rem;
+        }
+        .step-num {
+            background:#4a8fd4; color:#fff;
+            width:26px; height:26px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:0.82rem; font-weight:700; flex-shrink:0;
+            margin-top:2px;
+        }
+        .step-text { font-size:0.95rem; line-height:1.6; }
+
+        /* ─── BARRA VISUAL (sesgos) ─── */
+        .skew-row {
+            display:flex; align-items:center; gap:1rem;
+            margin:0.7rem 0;
+        }
+        .skew-label { width:100px; font-size:0.88rem; color:#64a0ff; font-weight:600; flex-shrink:0; }
+        .skew-bar {
+            flex:1; height:44px; border-radius:6px;
+            position:relative; overflow:hidden;
+            background:rgba(255,255,255,0.04);
+            border:1px solid rgba(100,160,255,0.15);
+        }
+        .skew-bar svg { width:100%; height:100%; }
+
+        /* ─── NAV ─── */
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1rem; z-index:1000; }
+        .btn {
+            width:54px; height:54px; background:#4a8fd4;
+            border:none; border-radius:50%; color:#fff;
+            font-size:1.3rem; font-weight:bold; cursor:pointer;
+            transition:all 0.3s; box-shadow:0 4px 14px rgba(0,0,0,0.3);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.1); background:#64a0ff; }
+        .btn:disabled { opacity:0.25; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(15,22,41,0.9);
+            padding:0.75rem 1.5rem; border-radius:26px;
+            border:2px solid #4a8fd4; color:#64a0ff;
+            font-weight:700; z-index:1000; font-size:0.93rem;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media(max-width:1024px){
+            .slide{padding:2.4rem 2.8rem;}
+            .cover h1{font-size:2.3rem;}
+            h2{font-size:1.85rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.6rem 1.4rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════ SLIDE 1 — PORTADA ══════════ -->
+<div class="slide cover active">
+    <h1>Bioestadística Aplicada</h1>
+    <div class="line"></div>
+    <p class="subtitle">Tema 2.3 — Medidas de Tendencia Central<br>Tema 2.4 — Medidas de Dispersión</p>
+    <p class="meta">Nivel: Principiante</p>
+    <p class="help">👉 Usa las flechas del teclado o los botones para navegar →</p>
+</div>
+
+<!-- ══════════ SLIDE 2 — ÍNDICE ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">CONTENIDO</div>
+        <h2>Temas de esta Clase</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📊 2.3 Tendencia Central</h4>
+                <p>Las medidas que resumen dónde está el "centro" de un conjunto de datos.</p>
+                <ul>
+                    <li>Media (promedio)</li>
+                    <li>Mediana</li>
+                    <li>Moda</li>
+                    <li>Relación entre las tres y el sesgo</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>📈 2.4 Dispersión</h4>
+                <p>Las medidas que indican cuánto se dispersan los datos alrededor del centro.</p>
+                <ul>
+                    <li>Rango</li>
+                    <li>Desviación media</li>
+                    <li>Varianza</li>
+                    <li>Desviación estándar</li>
+                </ul>
+            </div>
+        </div>
+        <div class="box box-warn" style="margin-top:1.2rem;">
+            <strong>💡 Idea clave</strong>
+            <p>La tendencia central nos dice <em>dónde está</em> el centro de los datos. La dispersión nos dice <em>cuánto se abiertos</em> están alrededor de ese centro. Juntas dan una imagen completa.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 3 — ¿QUÉ ES TENDENCIA CENTRAL? ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — TENDENCIA CENTRAL</div>
+        <h2>¿Qué es la Tendencia Central?</h2>
+    </div>
+    <div class="content">
+        <p>Si tu jefe te pide un resumen rápido de los datos de ventas del trimestre y solo tiene tiempo para escuchar <span class="em">un solo número</span>, ese número debería ser una <strong>medida de tendencia central</strong>.</p>
+
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>Una medida de tendencia central es un valor que representa el <strong>centro</strong> de un conjunto de datos. Es un buen resumen de lo que podemos esperar del grupo en su conjunto.</p>
+        </div>
+
+        <p>Las tres medidas principales son:</p>
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>📊 Media</h4>
+                <p>El <strong>promedio</strong> clásico. Suma todos los valores y divide entre la cantidad de datos.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>📍 Mediana</h4>
+                <p>El valor <strong>del medio</strong> cuando los datos se ordenan de menor a mayor.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🏆 Moda</h4>
+                <p>El valor <strong>más frecuente</strong> en el conjunto de datos.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Dato curioso clínico</strong>
+            <p>¿Cuál es el número promedio de dedos en las manos de la gente? No es exactamente 10. Es un poco <em>menos</em> de 10, porque el promedio incluye a las personas que han perdido dedos por traumatismos o intervenciones quirúrgicas. Si tienes 10 dedos, ¡tienes más que el promedio!</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 4 — LA MEDIA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — TENDENCIA CENTRAL</div>
+        <h2>La Media (Promedio)</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">media</span> toma la <strong>suma de todos los valores</strong> y la divide entre el <strong>número de datos</strong>. Cada dato contribuye por igual al cálculo.</p>
+
+        <div class="formula-box">
+            <div class="formula">
+                <span style="font-size:1.1rem; color:#64a0ff;">Media (x̄)</span> = 
+                <span class="frac">
+                    <span class="frac-num">x₁ + x₂ + … + xₙ</span>
+                    <span class="frac-den">n</span>
+                </span>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🏥 Ejemplo 1</h4>
+                <p>10 pacientes quirúrgicos tienen una duración total de cirugía de 50 horas.</p>
+                <p><strong>Media = 50 ÷ 10 = 5 horas</strong> por cirugía.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>💉 Ejemplo 2</h4>
+                <p>Paciente A tiene TA sistólica de 120 mmHg y el Paciente B tiene 140 mmHg.</p>
+                <p><strong>Media = (120 + 140) ÷ 2 = 130 mmHg</strong>. Pero ninguno tiene exactamente 130.</p>
+            </div>
+        </div>
+
+        <div class="box box-green">
+            <strong>✅ ¿Cuándo usar la media?</strong>
+            <p>Es buena cuando los datos están <strong>normalmente distribuidos</strong> (forma de campana simétrica, sin valores atípicos extremos). Es la medida más usada, pero puede ser <em>engañosa</em> cuando hay outliers.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 5 — LA MEDIA: CUANDO ES ENGAÑOSA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — TENDENCIA CENTRAL</div>
+        <h2>Cuando la Media es Engañosa</h2>
+    </div>
+    <div class="content">
+        <div class="box box-warn">
+            <strong>⚠️ Caso: Esperanza de vida en la Edad Media</strong>
+            <p>La esperanza de vida promedio era de ~30 años. Pero esto se debe a una <strong>tasa muy alta de mortalidad infantil</strong>. Una persona que llegaba a los 30 años probablemente vivía hasta los 50. La media estaba distorsionada por los valores bajos.</p>
+        </div>
+
+        <h3>El problema de los valores atípicos (Outliers)</h3>
+        <p>Imagina una sala de hospitalización con <strong>10 pacientes</strong> que todos tienen un nivel de colesterol de <strong>180 mg/dL</strong>. La media y la mediana son 180.</p>
+        <p>Ahora ingresa un nuevo paciente con <span class="em-warn">hipercolesterolemia familiar</span>, con un nivel de colesterol de <strong>1000 mg/dL</strong>.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📊 Antes del paciente atípico (10 pacientes)</h4>
+                <p>Media = <strong>180 mg/dL</strong><br>Mediana = <strong>180 mg/dL</strong></p>
+            </div>
+            <div class="card card-accent" style="border-color:rgba(255,170,80,0.4); background:rgba(255,170,80,0.06);">
+                <h4 style="color:#ffaa50;">📊 Después del paciente atípico (11 pacientes)</h4>
+                <p>Media = <strong>~254.5 mg/dL</strong> ← ¡se disparó!<br>Mediana = <strong>180 mg/dL</strong> ← no cambió</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📌 Conclusión</strong>
+            <p>Un solo valor atípico puede arrastrar la media completamente. La <strong>mediana</strong> es más resistente a estos casos.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 6 — LA MEDIANA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — TENDENCIA CENTRAL</div>
+        <h2>La Mediana</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">mediana</span> es el valor <strong>central</strong> cuando ordenamos los datos de menor a mayor. A diferencia de la media, <strong>no usa el valor de cada dato</strong> en su cálculo, por lo que los outliers no la afectan tanto.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🔢 Cantidad impar de datos</h4>
+                <p>Ejemplo: edad de 3 pacientes internados → <strong>45, 52, 68</strong> años</p>
+                <p>El valor central es <strong>52</strong>. La mediana = <strong>52 años</strong>.</p>
+                <p style="font-size:0.88rem; color:#64a0ff; margin-top:0.4rem;">El dato del medio directamente.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🔢 Cantidad par de datos</h4>
+                <p>Ejemplo: edad de 4 pacientes → <strong>45, 52, 68, 82</strong> años</p>
+                <p>No hay un solo centro. Tomamos la <strong>media de los dos centrales</strong>:</p>
+                <p><strong>Mediana = (52 + 68) ÷ 2 = 60 años</strong></p>
+            </div>
+        </div>
+
+        <div class="box box-green">
+            <strong>✅ ¿Cuándo usar la mediana?</strong>
+            <p>Es preferible cuando los datos tienen <strong>valores atípicos</strong> o la distribución es muy asimétrica. Es más representativa de la "persona típica" del conjunto.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 7 — LA MODA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — TENDENCIA CENTRAL</div>
+        <h2>La Moda</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">moda</span> es el valor que aparece con <strong>más frecuencia</strong> en un conjunto de datos. Proviene del latín <em>modus</em> (manera, estilo), de donde viene la expresión "a la moda".</p>
+
+        <div class="box">
+            <strong>🏥 Ejemplo: Encuesta de satisfacción con un tratamiento</strong>
+            <p>Se encuestaron 400 pacientes sobre la <em>efectividad percibida</em> de un medicamento (escala del 1 al 5). 200 respondieron <strong>⭐⭐⭐⭐⭐ (muy efectivo)</strong> y 200 respondieron <strong>⭐ (no efectivo)</strong>. El promedio resulta 3, pero <strong>nadie respondió 3</strong>. Las modas son <strong>1 y 5</strong>, lo que revela que la opinión está dividida en dos subgrupos.</p>
+        </div>
+
+        <h3>Tipos según la cantidad de modas</h3>
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>Unimodal</h4>
+                <p>Solo <strong>un valor</strong> es el más frecuente.</p>
+                <p style="font-size:1.2rem; text-align:center; margin-top:0.4rem;">📊</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Bimodal</h4>
+                <p><strong>Dos valores</strong> son igualmente frecuentes.</p>
+                <p style="font-size:1.2rem; text-align:center; margin-top:0.4rem;">📊📊</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Multimodal</h4>
+                <p><strong>Varios valores</strong> son igualmente frecuentes. Sugiere varios subgrupos.</p>
+                <p style="font-size:1.2rem; text-align:center; margin-top:0.4rem;">📊📊📊</p>
+            </div>
+        </div>
+
+        <div class="box box-green">
+            <strong>✅ Ventaja única de la moda</strong>
+            <p>Es la <strong>única medida que se puede usar con datos no numéricos</strong>. Ejemplo: si registramos el tipo de sangre de los pacientes de un banco de sangre, la moda podría ser <strong>"O+"</strong>. No existe una "media" de tipos de sangre.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 8 — RELACIÓN MEDIA/MEDIANA/MODA Y SESGO ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — TENDENCIA CENTRAL</div>
+        <h2>Sesgo: la Relación entre las Tres</h2>
+    </div>
+    <div class="content">
+        <p>La relación entre la media, la mediana y la moda nos dice mucho sobre la <strong>forma de la distribución</strong> de los datos.</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4 class="em-green">✅ Sin sesgo (Normal)</h4>
+                <p>Media = Mediana = Moda</p>
+                <p>Distribución <strong>simétrica</strong> en forma de campana. Misma cantidad de datos a cada lado del centro.</p>
+                <p style="text-align:center; font-size:1.4rem; margin-top:0.4rem;">🔺</p>
+            </div>
+            <div class="card card-accent">
+                <h4 class="em-warn">⚠️ Sesgo positivo (derecha)</h4>
+                <p>Media &gt; Mediana &gt; Moda</p>
+                <p>Hay valores <strong>grandes atípicos</strong> que arrastran la media hacia la derecha.</p>
+                <p style="text-align:center; font-size:1.4rem; margin-top:0.4rem;">📈➡️</p>
+            </div>
+            <div class="card card-accent">
+                <h4 style="color:#e06060;">⚠️ Sesgo negativo (izquierda)</h4>
+                <p>Media &lt; Mediana &lt; Moda</p>
+                <p>Hay valores <strong>pequeños atípicos</strong> que arrastran la media hacia la izquierda.</p>
+                <p style="text-align:center; font-size:1.4rem; margin-top:0.4rem;">⬅️📉</p>
+            </div>
+        </div>
+
+        <div class="box box-warn" style="margin-top:1rem;">
+            <strong>🏥 Caso real: Duración de estancia hospitalaria</strong>
+            <p>En el <strong>Periodo A</strong>, la media de estancia fue <strong>8 días</strong> y la mediana <strong>6 días</strong>. En el <strong>Periodo B</strong> (tras incorporar más casos quirúrgicos complejos), la media <em>subió</em> a <strong>11 días</strong>, pero la mediana <em>bajó</em> a <strong>5 días</strong>, porque la mayoría de los pacientes sencillos salían más rápido. Los pocos casos complejos arrastran la media hacia arriba. Las estadísticas pueden ser <strong>verdaderas y engañosas</strong> al mismo tiempo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 9 — EJERCICIO 1: TENDENCIA CENTRAL ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Tendencia Central</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta para cada pregunta.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 10 — ¿QUÉ ES LA DISPERSIÓN? ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — DISPERSIÓN</div>
+        <h2>¿Qué es la Dispersión?</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">dispersión</span> mide en qué grado los valores de un conjunto de datos están <strong>esparcidos o agrupados</strong> alrededor de un promedio (como la media o la mediana).</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🟢 Poca dispersión</h4>
+                <p>Los datos están <strong>cerca del centro</strong>. Alta consistencia y uniformidad.</p>
+                <p style="text-align:center; font-size:1.3rem; margin-top:0.5rem; letter-spacing:4px;">● ● ● ● ●</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🔴 Mucha dispersión</h4>
+                <p>Los datos están <strong>lejos del centro</strong>. Alta variabilidad.</p>
+                <p style="text-align:center; font-size:1.3rem; margin-top:0.5rem; letter-spacing:12px;">●  ●  ●  ●  ●</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📌 ¿Por qué importa?</strong>
+            <p>La tendencia central nos dice <em>dónde está</em> el centro. Pero dos conjuntos de datos pueden tener la <strong>misma media</strong> y ser muy diferentes. La dispersión nos ayuda a entender la <strong>confiabilidad</strong> y la <strong>variabilidad</strong> de los datos.</p>
+        </div>
+
+        <h3>Medidas principales de dispersión</h3>
+        <ul>
+            <li><strong>Rango</strong> — diferencia entre el máximo y el mínimo</li>
+            <li><strong>Desviación media</strong> — promedio de las distancias al centro</li>
+            <li><strong>Varianza</strong> — promedio de las desviaciones al cuadrado</li>
+            <li><strong>Desviación estándar</strong> — raíz cuadrada de la varianza</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 11 — EL RANGO ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — DISPERSIÓN</div>
+        <h2>El Rango</h2>
+    </div>
+    <div class="content">
+        <p>El <span class="em">rango</span> es la medida más simple de dispersión: la diferencia entre el valor <strong>más grande</strong> y el valor <strong>más pequeño</strong> del conjunto.</p>
+
+        <div class="formula-box">
+            <div class="formula">
+                <span style="font-size:1.1rem; color:#64a0ff;">Rango (R)</span> = L − S
+            </div>
+            <p style="font-size:0.82rem; color:#a8d4ff; margin-top:0.3rem;">L = valor más grande &nbsp;|&nbsp; S = valor más pequeño</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📊 Datos no agrupados</h4>
+                <p>Edad de pacientes en consulta externa: {20, 24, 31, 17, 45, 39, 51, 61} años</p>
+                <p>Mayor = <strong>61</strong> &nbsp; Menor = <strong>17</strong></p>
+                <p><strong>R = 61 − 17 = 44 años</strong></p>
+            </div>
+            <div class="card card-accent">
+                <h4>📊 Datos agrupados</h4>
+                <p>Días de estancia hospitalaria: intervalos 0-10, 10-20, 20-30, 30-40</p>
+                <p>Límite superior mayor = <strong>40</strong><br>Límite inferior menor = <strong>0</strong></p>
+                <p><strong>R = 40 − 0 = 40 días</strong></p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Limitación del rango</strong>
+            <p>Solo considera el <strong>máximo y el mínimo</strong>. Un solo valor atípico puede hacer que el rango sea muy grande, aunque el resto de los datos estén muy agrupados. No es el indicador más confiable por sí solo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 12 — LA DESVIACIÓN MEDIA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — DISPERSIÓN</div>
+        <h2>La Desviación Media</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">desviación media</span> mide cuánto se desvian los datos del promedio, <strong>en promedio</strong>. Es más informativa que el rango porque considera <strong>todos los datos</strong>.</p>
+
+        <div class="box box-warn">
+            <strong>⚠️ ¿Por qué usar valores absolutos?</strong>
+            <p>Si simplemente restamos la media a cada dato, las desviaciones positivas y negativas se <em>cancelan</em>. Ejemplo: el cambio de presión arterial respecto al valor base en 3 pacientes fue de <strong>-5, +10, +25 mmHg</strong> (media = 10). Las desviaciones son -15, 0 y +15 → suma = 0. Eso no nos dice nada útil. Por eso usamos el <strong>valor absoluto |d|</strong> de cada desviación.</p>
+        </div>
+
+        <div class="formula-box">
+            <div class="formula">
+                <span style="font-size:1.1rem; color:#64a0ff;">D.M.</span> = 
+                <span class="frac">
+                    <span class="frac-num">|x₁ − μ| + |x₂ − μ| + … + |xₙ − μ|</span>
+                    <span class="frac-den">n</span>
+                </span>
+            </div>
+            <p style="font-size:0.82rem; color:#a8d4ff; margin-top:0.3rem;">μ = media &nbsp;|&nbsp; n = cantidad de datos &nbsp;|&nbsp; | | = valor absoluto</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 13 — EJEMPLO RESUELTO: DESVIACIÓN MEDIA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — DISPERSIÓN</div>
+        <h2>Ejemplo Resuelto: Desviación Media</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📋 Datos: Frecuencia respiratoria de 5 neonatos (respiraciones/min): {2, 4, 6, 8, 10}</strong>
+        </div>
+
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Calcular la media:</strong><br>μ = (2 + 4 + 6 + 8 + 10) ÷ 5 = 30 ÷ 5 = <span class="em">6 resp/min</span></div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>Calcular la desviación absoluta de cada dato:</strong><br>
+                |2 − 6| = <strong>4</strong> &nbsp;&nbsp;
+                |4 − 6| = <strong>2</strong> &nbsp;&nbsp;
+                |6 − 6| = <strong>0</strong> &nbsp;&nbsp;
+                |8 − 6| = <strong>2</strong> &nbsp;&nbsp;
+                |10 − 6| = <strong>4</strong>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>Sumar las desviaciones:</strong><br>4 + 2 + 0 + 2 + 4 = <span class="em">12</span></div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text"><strong>Dividir entre n:</strong><br>D.M. = 12 ÷ 5 = <span class="em-green" style="font-size:1.15rem;">2.4 resp/min</span></div>
+        </div>
+
+        <div class="box box-green">
+            <strong>✅ Resultado</strong>
+            <p>La desviación media es <strong>2.4 resp/min</strong>. Esto significa que, en promedio, cada neonato se aleja <strong>2.4 respiraciones por minuto</strong> respecto a la media del grupo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 14 — VARIANZA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — DISPERSIÓN</div>
+        <h2>La Varianza</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">varianza</span> también mide la dispersión, pero en lugar de usar el valor absoluto, <strong>eleva al cuadrado</strong> cada desviación. Esto le da más peso a los valores que se alejan más del centro.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🌐 Varianza de Población (σ²)</h4>
+                <div class="formula-box" style="margin-top:0.6rem;">
+                    <div class="formula" style="font-size:1.15rem;">
+                        σ² = <span class="frac">
+                            <span class="frac-num">Σ (xᵢ − μ)²</span>
+                            <span class="frac-den">n</span>
+                        </span>
+                    </div>
+                </div>
+                <p style="font-size:0.88rem;">Se usa cuando tenemos <strong>todos los datos</strong> de la población.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>📋 Varianza de Muestra (S²)</h4>
+                <div class="formula-box" style="margin-top:0.6rem;">
+                    <div class="formula" style="font-size:1.15rem;">
+                        S² = <span class="frac">
+                            <span class="frac-num">Σ (xᵢ − x̄)²</span>
+                            <span class="frac-den">n − 1</span>
+                        </span>
+                    </div>
+                </div>
+                <p style="font-size:0.88rem;">Se usa cuando los datos son una <strong>muestra</strong> de una población mayor. Se divide entre <em>n−1</em> para corregir el sesgo.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Limitación</strong>
+            <p>Como eleva al cuadrado las desviaciones, la varianza se expresa en <strong>unidades al cuadrado</strong>. Si los datos originales estaban en metros, la varianza estará en metros². Esto la hace difícil de interpretar directamente.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 15 — DESVIACIÓN ESTÁNDAR ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — DISPERSIÓN</div>
+        <h2>La Desviación Estándar</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">desviación estándar</span> es simplemente la <strong>raíz cuadrada de la varianza</strong>. Al tomar la raíz cuadrada, los resultados vuelven a estar en las <strong>mismas unidades</strong> que los datos originales, lo que la hace mucho más fácil de interpretar.</p>
+
+        <div class="formula-box">
+            <div class="formula">
+                <span style="font-size:1.1rem; color:#64a0ff;">D.E. (σ)</span> = √(σ²) = √<span class="frac"><span class="frac-num">Σ (xᵢ − μ)²</span><span class="frac-den">n</span></span>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🔍 Interpretación</h4>
+                <ul>
+                    <li>D.E. <strong>pequeña</strong> → datos muy agrupados alrededor de la media. Alta consistencia.</li>
+                    <li>D.E. <strong>grande</strong> → datos muy esparcidos. Alta variabilidad.</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>📊 Ejemplo clínico</h4>
+                <p>Si la media de niveles de <strong>glucosa en sangre</strong> es 100 mg/dL y la D.E. es <strong>5</strong>, la mayoría de los valores estarán entre 95 y 105 mg/dL (alta consistencia).</p>
+                <p>Si la D.E. fuera <strong>30</strong>, los valores estarían entre 70 y 130 mg/dL (alta variabilidad).</p>
+            </div>
+        </div>
+
+        <div class="box box-green">
+            <strong>✅ ¿Varianza o Desviación Estándar?</strong>
+            <p>En la práctica, la <strong>desviación estándar</strong> es más utilizada porque sus unidades son compatibles con los datos originales y es más fácil de interpretar.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 16 — RESUMEN: MEDIDAS ABSOLUTAS VS RELATIVAS ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — DISPERSIÓN</div>
+        <h2>Medidas Absolutas vs Relativas</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📐 Medidas Absolutas</h4>
+                <p>Se expresan en las <strong>mismas unidades</strong> que los datos originales (mmHg, mg/dL, kg).</p>
+                <table style="margin-top:0.7rem;">
+                    <thead><tr><th>Medida</th><th>Fórmula</th></tr></thead>
+                    <tbody>
+                        <tr><td>Rango</td><td>L − S</td></tr>
+                        <tr><td>Desviación Media</td><td>Σ|xᵢ − μ| / n</td></tr>
+                        <tr><td>Varianza</td><td>Σ(xᵢ − μ)² / n</td></tr>
+                        <tr><td>Desviación Estándar</td><td>√(Varianza)</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card card-accent">
+                <h4>📊 Medidas Relativas</h4>
+                <p>Se usan para <strong>comparar</strong> dos conjuntos de datos con unidades diferentes. Se expresan como porcentajes o ratios.</p>
+                <table style="margin-top:0.7rem;">
+                    <thead><tr><th>Medida</th><th>Fórmula</th></tr></thead>
+                    <tbody>
+                        <tr><td>Coef. de Rango</td><td>(L − S) / (L + S)</td></tr>
+                        <tr><td>Coef. de Variación</td><td>(σ / μ) × 100</td></tr>
+                        <tr><td>Coef. de Desv. Media</td><td>D.M. / μ</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>💡 ¿Cuándo usar medidas relativas?</strong>
+            <p>Cuando quieres comparar la dispersión de dos conjuntos que tienen <strong>unidades o escalas diferentes</strong>. Por ejemplo, comparar la variabilidad de la <strong>presión arterial</strong> (mmHg) entre dos hospitales con la variabilidad de la <strong>glucosa en sangre</strong> (mg/dL) en el mismo estudio.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 17 — EJERCICIO 2: RANGO ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Cálculo del Rango</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco con el valor correcto.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 18 — EJERCICIO 3: DESVIACIÓN MEDIA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 3</div>
+        <h2>Práctica: Desviación Media</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Sigue los pasos para calcular la desviación media del cambio de peso (kg) de 5 pacientes: {-5, -4, 0, 4, 5}. Completa cada paso.</p>
+        </div>
+        <div id="ex3-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx3()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx3()">↺ Limpiar</button>
+        </div>
+        <div id="ex3-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 19 — EJERCICIO 4: DISPERSIÓN OPCIÓN MÚLTIPLE ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 4</div>
+        <h2>Práctica: Dispersión — Opción Múltiple</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la opción correcta.</p>
+        </div>
+        <div id="ex4-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx4()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx4()">↺ Limpiar</button>
+        </div>
+        <div id="ex4-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 20 — TENDENCIA CENTRAL VS DISPERSIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">RESUMEN</div>
+        <h2>Tendencia Central vs Dispersión</h2>
+    </div>
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Característica</th>
+                    <th>Tendencia Central</th>
+                    <th>Dispersión</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>¿Qué mide?</strong></td>
+                    <td>Dónde está el <strong>centro</strong> de los datos</td>
+                    <td>Cuánto se <strong>esparcen</strong> los datos</td>
+                </tr>
+                <tr>
+                    <td><strong>Pregunta</strong></td>
+                    <td>¿Cuál es el valor típico?</td>
+                    <td>¿Cuánto varía entre sí?</td>
+                </tr>
+                <tr>
+                    <td><strong>Medidas</strong></td>
+                    <td>Media, Mediana, Moda</td>
+                    <td>Rango, Varianza, D.E., D.M.</td>
+                </tr>
+                <tr>
+                    <td><strong>Ejemplo</strong></td>
+                    <td>La presión arterial media es 120 mmHg</td>
+                    <td>La TA varía ±10 mmHg entre pacientes</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box" style="margin-top:1.2rem;">
+            <strong>🔑 Idea clave final</strong>
+            <p>Un conjunto de datos bien descrito necesita <strong>ambas</strong> medidas. Decir solo "la TA media es 120 mmHg" no es suficiente si no sabemos si los valores van de 118 a 122 (poca dispersión) o de 80 a 160 (mucha dispersión). <strong>Centro + dispersión = imagen completa.</strong></p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 21 — BIBLIOGRAFÍA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAFÍA</div>
+        <h2>Fuentes y Recursos</h2>
+    </div>
+    <div class="content">
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>🎥 Video — Crash Course Statistics</h4>
+            <p><em>Medidas de Tendencia Central: Media, Mediana y Moda.</em> Presentado por Adriene Hill. Explicación con ejemplos cotidianos de los conceptos de media, mediana, moda, valores atípicos y sesgo.</p>
+            <p style="font-size:0.85rem; color:#64a0ff; margin-top:0.35rem;">https://youtu.be/kn83BA7cRNM</p>
+        </div>
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>📄 Artículo — GeeksforGeeks</h4>
+            <p><em>Measures of Dispersion.</em> Referencia técnica con definiciones, clasificación (absolutas vs relativas), fórmulas y ejemplos resueltos de rango, desviación media, varianza y desviación estándar.</p>
+            <p style="font-size:0.85rem; color:#64a0ff; margin-top:0.35rem;">https://www.geeksforgeeks.org/maths/measures-of-dispersion/</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 22 — PORTADA FINAL ══════════ -->
+<div class="slide cover">
+    <h1>¿Preguntas?</h1>
+    <div class="line"></div>
+    <p class="subtitle">Gracias por tu atención</p>
+</div>
+
+</div><!-- /container -->
+
+<!-- ─── CONTADOR Y NAV ─── -->
+<div class="counter"><span id="current">1</span> / <span id="total">22</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════ -->
+<script>
+// ── NAVEGACIÓN ──
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+// ── UTIL ──
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9.,\-\s]/g,'')
+        .replace(/\s+/g,' ');
+}
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 1 — Opción múltiple: Tendencia Central
+// ══════════════════════════════════════════════════
+const ex1Data = [
+    {
+        q: "Se registró la edad (años) de 5 pacientes en consulta: {38, 45, 52, 52, 65}. ¿Cuál es la <strong>media</strong>?",
+        opts: ["48.5", "50.4", "52", "65"],
+        correct: 1  // (38+45+52+52+65)=252 / 5 = 50.4
+    },
+    {
+        q: "Con los mismos datos ordenados {38, 45, 52, 52, 65}, ¿cuál es la <strong>mediana</strong>?",
+        opts: ["45", "50.4", "52", "58.5"],
+        correct: 2  // valor central (posición 3) = 52
+    },
+    {
+        q: "¿Cuál es la <strong>moda</strong> del conjunto de edades {38, 45, 52, 52, 65}?",
+        opts: ["38", "45", "52", "65"],
+        correct: 2  // 52 aparece 2 veces
+    },
+    {
+        q: "En un estudio clínico, la media de la duración de tratamiento es mucho <strong>mayor</strong> que la mediana y la moda. La distribución tiene:",
+        opts: ["Sesgo negativo", "Sesgo positivo", "Sin sesgo", "Es imposible"],
+        correct: 1
+    },
+    {
+        q: "En una sala de hospitalización con un paciente atípico de edad extrema, ¿qué medida es más resistente a ese outlier?",
+        opts: ["La media", "La mediana", "Ambas por igual", "Ninguna"],
+        correct: 1
+    },
+    {
+        q: "Una encuesta de pacientes sobre un tratamiento tiene modas 1 y 5. Se dice que los datos son:",
+        opts: ["Unimodales", "Bimodales", "Multimodales", "Sin moda"],
+        correct: 1
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 2 — Fill-in-blank: Rango
+// (basado en los 3 ejemplos resueltos de GeeksforGeeks)
+// ══════════════════════════════════════════════════
+const ex2Data = [
+    { q: "Edad de pacientes en consulta externa: {20, 42, 13, 71, 54, 93, 15, 16} años. El valor mayor es 93 y el menor es 13. El rango es:", a: "80" },
+    { q: "Tabla agrupada de días de estancia hospitalaria con intervalos 10-20, 20-30, 30-40. Límite superior mayor = 40, límite inferior menor = 10. El rango es:", a: "30" },
+    { q: "Frecuencia cardiaca de neonatos (lpm): {10, 20, 15, 0, 100}. El valor menor es 0 y el mayor es 100. El rango es:", a: "100" },
+    { q: "Saturación de O₂ en 5 pacientes estables (%): {5, 5, 5, 5, 5}. Todos los valores son iguales. El rango es:", a: "0" },
+    { q: "Cambio de peso (kg) de 5 pacientes respecto al ingreso: {-3, 0, 4, 7, 12}. El valor menor es -3 y el mayor es 12. El rango es:", a: "15" },
+    { q: "Frecuencia cardiaca de 6 pacientes post-quirúrgicos (lpm): {88, 76, 95, 60, 72, 83}. El valor menor es 60 y el mayor es 95. El rango es:", a: "35" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 3 — Fill-in-blank guiado: Desviación Media
+// (basado en el ejemplo resuelto de {-5,-4,0,4,5})
+// ══════════════════════════════════════════════════
+const ex3Data = [
+    { q: "Un estudio registró el cambio de peso (kg) de 5 pacientes respecto al ingreso: {-5, -4, 0, 4, 5}. Paso 1 — Suma todos los valores: (-5)+(-4)+(0)+(4)+(5) = ___", a: "0" },
+    { q: "Paso 2 — Divide la suma entre n (cantidad de pacientes = 5). μ = 0 ÷ 5 = ___", a: "0" },
+    { q: "Paso 3 — Calcula |xᵢ − μ| para cada dato. El primer paciente perdió 5 kg: |-5 − 0| = ___ ", a: "5" },
+    { q: "Paso 3 (cont.) — El segundo paciente perdió 4 kg: |-4 − 0| = ___ ", a: "4" },
+    { q: "Paso 3 (cont.) — El tercer paciente no cambió de peso: |0 − 0| = ___ ", a: "0" },
+    { q: "Paso 4 — Suma todas las desviaciones absolutas: 5 + 4 + 0 + 4 + 5 = ___", a: "18" },
+    { q: "Paso 5 — Divide entre n para obtener la D.M. D.M. = 18 ÷ 5 = ___ kg", a: "3.6" }
+];
+
+(function renderEx3() {
+    document.getElementById('ex3-container').innerHTML = ex3Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex3-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 4 — Opción múltiple: Dispersión
+// ══════════════════════════════════════════════════
+const ex4Data = [
+    {
+        q: "En un estudio clínico se registra la presión arterial de varios pacientes. ¿Qué mide la dispersión de esos datos?",
+        opts: ["El valor central de las presiones", "Cuánto se esparcen los datos alrededor del centro", "La frecuencia más común de TA", "El valor máximo registrado"],
+        correct: 1
+    },
+    {
+        q: "La fórmula del rango es:",
+        opts: ["(L + S) / 2", "L × S", "L − S", "√(L − S)"],
+        correct: 2
+    },
+    {
+        q: "Al calcular la desviación media de los niveles de glucosa de varios pacientes, ¿por qué se usan valores absolutos |d|?",
+        opts: ["Para hacer los cálculos más fáciles", "Porque las desviaciones positivas y negativas se cancelan", "Para obtener un resultado mayor", "No se usan valores absolutos"],
+        correct: 1
+    },
+    {
+        q: "Un laboratorio reporta la varianza de un análisis clínico. La desviación estándar de ese mismo análisis es:",
+        opts: ["La suma de todas las desviaciones", "La diferencia entre máximo y mínimo", "La raíz cuadrada de la varianza", "El promedio de los datos"],
+        correct: 2
+    },
+    {
+        q: "Dos hospitales tienen la misma media de estancia hospitalaria (7 días), pero distinta desviación estándar. ¿Qué significa?",
+        opts: ["Sus datos de estancia son idénticos", "Uno tiene más variabilidad en la estancia que el otro", "No es posible que ocurra esto", "La media de uno es incorrecta"],
+        correct: 1
+    }
+];
+
+(function renderEx4() {
+    document.getElementById('ex4-container').innerHTML = ex4Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex4-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex4',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// FUNCIONES GENÉRICOS DE EJERCICIOS
+// ══════════════════════════════════════════════════
+
+// ── Selección múltiple genérica ──
+function selMC(prefix, qi, oi) {
+    const data = prefix === 'ex1' ? ex1Data : ex4Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+// ── Check opción múltiple genérica ──
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+// ── Reset opción múltiple genérica ──
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+// ── Check fill-in-blank genérico ──
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        if (normalise(inp.value) === normalise(item.a)) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+// ── Reset fill-in-blank genérico ──
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+// ══════════════════════════════════════════════════
+// CONECTAR EJERCICIOS A FUNCIONES
+// ══════════════════════════════════════════════════
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+function checkEx3()  { checkFill('ex3', ex3Data, 'ex3-feedback'); }
+function resetEx3()  { resetFill('ex3', ex3Data, 'ex3-feedback'); }
+function checkEx4()  { checkMC('ex4', ex4Data, 'ex4-feedback'); }
+function resetEx4()  { resetMC('ex4', ex4Data, 'ex4-feedback'); }
+</script>
+</body>
+</html>

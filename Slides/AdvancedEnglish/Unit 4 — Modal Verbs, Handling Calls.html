@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced English 2 – Modal Verbs, Handling Calls & Office Life</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: #1a1a2e;
+            color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* ── SLIDES ── */
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 4.5rem 7rem;
+            flex-direction: column;
+            background: #1a1a2e;
+        }
+        .slide.active { display: flex; }
+
+        /* ── COVER ── */
+        .cover {
+            background: linear-gradient(135deg, #0f4c81 0%, #1e6f5c 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 5rem 8rem;
+        }
+        .cover h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.8rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .cover .subtitle {
+            font-size: 1.45rem;
+            opacity: 0.9;
+            margin-bottom: 0.4rem;
+        }
+        .cover .line {
+            width: 100px;
+            height: 3px;
+            background: #d4af37;
+            margin: 1.8rem auto;
+        }
+        .cover .meta {
+            font-size: 1.05rem;
+            opacity: 0.75;
+            margin-top: 0.3rem;
+        }
+        .cover .help {
+            margin-top: 2.5rem;
+            font-size: 0.95rem;
+            opacity: 0.6;
+        }
+
+        /* ── SLIDE HEADER ── */
+        .slide-header { margin-bottom: 1.6rem; }
+        .slide-number {
+            color: #d4af37;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+        }
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            color: #f0f0f0;
+            margin-bottom: 0.6rem;
+        }
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: #d4af37;
+            margin: 1.4rem 0 0.8rem;
+        }
+
+        /* ── SCROLLABLE CONTENT ── */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 1.8rem;
+        }
+        .content::-webkit-scrollbar { width: 6px; }
+        .content::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 3px;
+        }
+
+        /* ── TYPOGRAPHY ── */
+        p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            opacity: 0.95;
+        }
+        ul { list-style: none; margin: 0.8rem 0; }
+        ul li {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 0.8rem;
+            padding-left: 1.5rem;
+            position: relative;
+            opacity: 0.9;
+        }
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .em { color: #d4af37; font-weight: 700; }
+
+        /* ── BOX ── */
+        .box {
+            background: rgba(212,175,55,0.1);
+            border-left: 4px solid #d4af37;
+            padding: 1.3rem 1.5rem;
+            margin: 1.3rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+        .box strong {
+            color: #d4af37;
+            display: block;
+            margin-bottom: 0.45rem;
+            font-size: 1.05rem;
+        }
+        .box p { margin-bottom: 0.6rem; }
+
+        /* ── GRID & CARD ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.3rem;
+            margin: 1.2rem 0;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            padding: 1.3rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+        .card h4 {
+            color: #d4af37;
+            margin-bottom: 0.5rem;
+            font-size: 1.15rem;
+        }
+        .card p { margin-bottom: 0.5rem; font-size: 0.97rem; }
+
+        /* ── TABLE ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+        }
+        th, td {
+            padding: 0.85rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(212,175,55,0.18);
+            font-size: 0.97rem;
+            vertical-align: top;
+        }
+        th {
+            background: rgba(212,175,55,0.12);
+            color: #d4af37;
+            font-weight: 700;
+            font-size: 0.92rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        tr:last-child td { border-bottom: none; }
+
+        /* ── EXERCISE BADGE ── */
+        .exercise-badge {
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            color: #1a1a2e;
+            padding: 0.3rem 1.2rem;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: 800;
+            font-size: 0.82rem;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 10px rgba(212,175,55,0.3);
+        }
+
+        /* ── INTERACTIVE EXERCISE INPUTS ── */
+        .ex-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.7rem;
+            margin: 0.75rem 0;
+            flex-wrap: wrap;
+        }
+        .ex-num {
+            color: #d4af37;
+            font-weight: 700;
+            min-width: 24px;
+            font-size: 1rem;
+        }
+        .ex-text { font-size: 0.97rem; opacity: 0.92; }
+        .ex-input {
+            background: rgba(212,175,55,0.08);
+            border: 1px solid rgba(212,175,55,0.35);
+            border-radius: 6px;
+            padding: 0.38rem 0.7rem;
+            color: #f0f0f0;
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 0.97rem;
+            width: 180px;
+            outline: none;
+            transition: border-color 0.25s, background 0.25s;
+        }
+        .ex-input:focus {
+            border-color: #d4af37;
+            background: rgba(212,175,55,0.14);
+        }
+        .ex-input.correct {
+            border-color: #4ade80;
+            background: rgba(74,222,128,0.12);
+        }
+        .ex-input.incorrect {
+            border-color: #f87171;
+            background: rgba(248,113,113,0.12);
+        }
+        .feedback {
+            font-size: 0.82rem;
+            margin-left: 4px;
+            min-width: 120px;
+            font-weight: 600;
+        }
+        .feedback.correct { color: #4ade80; }
+        .feedback.incorrect { color: #f87171; }
+
+        .btn-check {
+            margin-top: 1.2rem;
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            color: #1a1a2e;
+            border: none;
+            padding: 0.6rem 1.8rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            letter-spacing: 0.8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 3px 10px rgba(212,175,55,0.3);
+        }
+        .btn-check:hover {
+            transform: scale(1.04);
+            box-shadow: 0 5px 16px rgba(212,175,55,0.4);
+        }
+        .btn-reset {
+            background: transparent;
+            color: #d4af37;
+            border: 1px solid rgba(212,175,55,0.4);
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            margin-left: 0.8rem;
+            transition: background 0.2s;
+        }
+        .btn-reset:hover { background: rgba(212,175,55,0.1); }
+
+        /* ── QUOTE BLOCK ── */
+        .quote-block {
+            background: rgba(255,255,255,0.04);
+            border-left: 3px solid rgba(212,175,55,0.5);
+            padding: 1rem 1.4rem;
+            margin: 1rem 0;
+            border-radius: 0 6px 6px 0;
+            font-style: italic;
+            opacity: 0.88;
+        }
+        .quote-block .attr {
+            font-style: normal;
+            color: #d4af37;
+            font-weight: 600;
+            font-size: 0.88rem;
+            margin-top: 0.4rem;
+        }
+
+        /* ── SECTION DIVIDER (thin colored bar between topic blocks) ── */
+        .section-tag {
+            display: inline-block;
+            background: rgba(212,175,55,0.15);
+            color: #d4af37;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            padding: 0.25rem 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 0.6rem;
+        }
+
+        /* ── NAVIGATION ── */
+        .nav {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.8rem;
+            z-index: 1000;
+        }
+        .btn {
+            width: 56px;
+            height: 56px;
+            background: #d4af37;
+            border: none;
+            border-radius: 50%;
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn:hover:not(:disabled) {
+            transform: scale(1.1);
+            background: #e6c04a;
+        }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .counter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(26,26,46,0.92);
+            padding: 0.85rem 1.6rem;
+            border-radius: 30px;
+            border: 2px solid #d4af37;
+            color: #d4af37;
+            font-weight: 700;
+            font-size: 0.95rem;
+            z-index: 1000;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .slide { padding: 3rem 3.5rem; }
+            .cover { padding: 3rem 2rem; }
+            .cover h1 { font-size: 2.6rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.3rem; }
+        }
+        @media (max-width: 680px) {
+            .slide { padding: 2.2rem 1.4rem; }
+            .cover h1 { font-size: 2rem; }
+            .cover .subtitle { font-size: 1.1rem; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.15rem; }
+            .grid { grid-template-columns: 1fr; }
+            .ex-input { width: 140px; }
+            .nav { right: 1rem; bottom: 1rem; }
+            .counter { left: 1rem; bottom: 1rem; }
+            .btn { width: 46px; height: 46px; font-size: 1.1rem; }
+            table { font-size: 0.88rem; }
+            th, td { padding: 0.6rem 0.55rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 1 — PORTADA
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide cover active">
+    <h1>Advanced English 2</h1>
+    <div class="line"></div>
+    <p class="subtitle">Unit 4 — Modal Verbs, Handling Calls<br>&amp; Office Life Vocabulary</p>
+    <p class="meta">Level: Advanced &nbsp;|&nbsp; Powell, M. (2014). <em>In Company 3.0</em></p>
+    <p class="help">👉 Use arrow keys or the buttons below to navigate →</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 2 — UNIT OVERVIEW
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">01 — Introduction</div>
+        <h2>What We'll Cover Today</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>🎯 General Objective</strong>
+            <p>Understand and apply modal verbs in professional contexts, manage phone calls with confidence, and master essential office vocabulary for workplace communication.</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h4>4.1 Modal Verbs</h4>
+                <p>Learn the primary modals, their purposes (predictions, offers, requests…) and how present and past/conditional forms differ.</p>
+            </div>
+            <div class="card">
+                <h4>4.2 Handling Calls</h4>
+                <p>Strategies for offering help, buying time, and ending conversations gracefully in a professional setting.</p>
+            </div>
+            <div class="card">
+                <h4>4.3 Office Life Vocabulary</h4>
+                <p>Key workplace terms you'll encounter in meetings, emails and calls — with real-world usage examples.</p>
+            </div>
+        </div>
+
+        <h3>Learning Outcomes</h3>
+        <ul>
+            <li>Use modal verbs correctly in spoken and written English</li>
+            <li>Make polite requests and offer assistance professionally</li>
+            <li>Handle incoming and outgoing phone calls smoothly</li>
+            <li>Apply office vocabulary in realistic workplace scenarios</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 3 — WHAT ARE MODAL VERBS
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">02 — 4.1 Modal Verbs</div>
+        <h2>What Are Modal Verbs?</h2>
+    </div>
+    <div class="content">
+        <p>Modal verbs are a sub-group of <span class="em">auxiliary verbs</span> that add layers of meaning to the main verb — expressing possibility, obligation, politeness and more.</p>
+
+        <div class="box">
+            <strong>Key Rule</strong>
+            <p>Modal verbs do <strong style="color:#f87171;">not</strong> combine with any auxiliary form of <em>do</em>.</p>
+            <p style="color:#4ade80;">✔ &nbsp;I <strong>will</strong> call you tomorrow.</p>
+            <p style="color:#f87171;">✘ &nbsp;I will <strong>do</strong> call you tomorrow.</p>
+            <p style="color:#f87171;">✘ &nbsp;I <strong>do</strong> will call you tomorrow.</p>
+        </div>
+
+        <h3>Common Purposes</h3>
+        <div class="grid">
+            <div class="card"><h4>💬 Communication</h4><p>Predictions, spontaneous decisions, offers, requests</p></div>
+            <div class="card"><h4>📋 Commitment</h4><p>Promises, refusals, threats</p></div>
+            <div class="card"><h4>🎯 Politeness</h4><p>Softening language, making polite questions</p></div>
+        </div>
+
+        <div class="box">
+            <strong>✦ No Conjugation Needed</strong>
+            <p>Most modals do <em>not</em> change with the subject — which makes them much easier to use!</p>
+            <p style="opacity:0.75; font-size:0.93rem;">
+                I <strong>should</strong> work. &nbsp; You <strong>should</strong> work. &nbsp; He <strong>should</strong> work. &nbsp; They <strong>should</strong> work.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 4 — PRESENT vs PAST / CONDITIONAL TABLE
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">03 — 4.1 Modal Verbs</div>
+        <h2>Present &amp; Past / Conditional Forms</h2>
+    </div>
+    <div class="content">
+        <p>Each present-tense modal has a corresponding past or conditional counterpart. Mastering both forms is essential for advanced English.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Present</th>
+                    <th>Past / Conditional</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="em">can</span></td>
+                    <td><span class="em">could</span></td>
+                    <td>Could works for both past and conditional</td>
+                </tr>
+                <tr>
+                    <td><span class="em">may</span></td>
+                    <td><span class="em">might</span></td>
+                    <td>Both mean "maybe will"</td>
+                </tr>
+                <tr>
+                    <td><span class="em">shall</span></td>
+                    <td><span class="em">should</span></td>
+                    <td><em>Shall</em> is uncommon in informal American English</td>
+                </tr>
+                <tr>
+                    <td><span class="em">will</span></td>
+                    <td><span class="em">would</span></td>
+                    <td>Contraction of <em>will not</em> = <strong>won't</strong> (not "willn't")</td>
+                </tr>
+                <tr>
+                    <td><span class="em">must</span></td>
+                    <td>—</td>
+                    <td>Not used for past events; use <em>were required to</em> instead</td>
+                </tr>
+                <tr>
+                    <td>—</td>
+                    <td><span class="em">ought to</span></td>
+                    <td>Strong suggestions/warnings; negative = <em>ought not</em></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box">
+            <strong>📌 Remember</strong>
+            <p><em>Could</em> is unique — it covers <strong>past</strong> and <strong>conditional</strong> meanings depending on context.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 5 — COULD: PAST & CONDITIONAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">04 — 4.1 Modal Verbs</div>
+        <h2>Could — Past &amp; Conditional</h2>
+    </div>
+    <div class="content">
+        <p><span class="em">Could</span> is one of the most versatile modals. It can express something that happened in the past <em>or</em> something hypothetical.</p>
+
+        <h3>Past Usage</h3>
+        <div class="quote-block">
+            When I lived in Miami, my house was close to the beach — I <strong>could</strong> just walk there.
+            <div class="attr">→ Ability in the past</div>
+        </div>
+        <div class="quote-block">
+            When I was younger, I <strong>could</strong> run very fast.
+            <div class="attr">→ Past ability</div>
+        </div>
+
+        <h3>Conditional Usage</h3>
+        <div class="quote-block">
+            I <strong>could</strong> solve this math problem more quickly if I had a calculator.
+            <div class="attr">→ Hypothetical / what-if scenario</div>
+        </div>
+        <div class="quote-block">
+            If I had a visa, I <strong>could</strong> travel to China.
+            <div class="attr">→ Conditional possibility</div>
+        </div>
+
+        <div class="box">
+            <strong>💡 How to tell the difference?</strong>
+            <p>Look for time signals like <em>when I was…</em> or <em>last year</em> (past) vs. <em>if I had…</em> (conditional).</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 6 — MUST: OBLIGATION & DEDUCTION
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">05 — 4.1 Modal Verbs</div>
+        <h2>Must — Obligation &amp; Deduction</h2>
+    </div>
+    <div class="content">
+        <p><span class="em">Must</span> has two very different meanings depending on context. Understanding both is key to sounding natural.</p>
+
+        <h3>1. Obligation</h3>
+        <div class="quote-block">
+            Students <strong>must</strong> do their homework.
+            <div class="attr">→ "They are required / obligated to"</div>
+        </div>
+        <div class="box">
+            <strong>⚠️ Past Tense Workaround</strong>
+            <p><em>Must</em> cannot express past events. Use <strong>were required to</strong> instead.</p>
+            <p style="color:#4ade80;">✔ &nbsp;Students <strong>were required to</strong> complete their homework.</p>
+        </div>
+
+        <h3>2. Strong Deduction / Belief</h3>
+        <p><em>Must</em> can also mean "I am sure / it's extremely probable that…"</p>
+        <div class="quote-block">
+            You worked in Brazil for eleven years. You <strong>must</strong> speak Portuguese pretty well!
+            <div class="attr">→ "I'm sure you speak Portuguese" (not obligation)</div>
+        </div>
+        <div class="quote-block">
+            You've had a long flight. You <strong>must</strong> be tired.
+            <div class="attr">→ Logical deduction</div>
+        </div>
+        <div class="quote-block">
+            I <strong>must have</strong> forgotten to run a spell check.
+            <div class="attr">→ Deduction about the past</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 7 — OUGHT TO
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">06 — 4.1 Modal Verbs</div>
+        <h2>Ought To — Strong Suggestions</h2>
+    </div>
+    <div class="content">
+        <p><span class="em">Ought to</span> is used for strong suggestions, recommendations and warnings. Like <em>must</em>, it is not used to refer to past events.</p>
+
+        <h3>Examples in Context</h3>
+        <div class="quote-block">
+            We haven't been anywhere in a long time. We <strong>ought to</strong> take a vacation!
+            <div class="attr">→ Strong suggestion</div>
+        </div>
+        <div class="quote-block">
+            You seem tired lately. You <strong>ought to</strong> get to bed earlier.
+            <div class="attr">→ Recommendation</div>
+        </div>
+
+        <h3>Negative Form</h3>
+        <div class="box">
+            <strong>⚠️ Note</strong>
+            <p>The negative is <strong>ought not</strong> (not "ought to not"). In informal American English, people often pronounce <em>ought to</em> as <strong>"outta."</strong></p>
+        </div>
+
+        <h3>Ought To vs. Should</h3>
+        <div class="grid">
+            <div class="card">
+                <h4>Ought To</h4>
+                <p>Carries a <strong>stronger</strong> moral or ethical weight. Often implies something you really should not ignore.</p>
+            </div>
+            <div class="card">
+                <h4>Should</h4>
+                <p>A lighter recommendation or advice — less pressure attached to it.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 8 — WILL: ALL 7 USES
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">07 — 4.1 Modal Verbs</div>
+        <h2>Will — Seven Uses at a Glance</h2>
+    </div>
+    <div class="content">
+        <p><span class="em">Will</span> is the most versatile present-tense modal — it covers everything from future tense to threats.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Use</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="em">Prediction</span></td>
+                    <td>I imagine we'll arrive around 8:00 tomorrow.</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Spontaneous decision</span></td>
+                    <td>I'll order pizza for dinner.</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Offer</span></td>
+                    <td>I'll help you translate that if you want.</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Request</span></td>
+                    <td>Will you make a copy of this for me, please?</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Promise</span></td>
+                    <td>I will submit the report by noon.</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Refusal</span></td>
+                    <td>I won't engage in unethical activity.</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Threat</span></td>
+                    <td>Stop arriving late or I'll write you up.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box">
+            <strong>💡 Will vs. Would for Requests</strong>
+            <p>"<em>Will</em> you help me?" and "<em>Would</em> you help me?" have essentially the same meaning — but <em>would</em> sounds slightly more polite.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 9 — SHOULD & WOULD (CONDITIONAL)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">08 — 4.1 Modal Verbs</div>
+        <h2>Should &amp; Would — Advice &amp; Conditionals</h2>
+    </div>
+    <div class="content">
+        <h3>Should — Advice &amp; Suggestion</h3>
+        <div class="quote-block">
+            If you're feeling sick, you <strong>should</strong> stay home.
+            <div class="attr">→ Advice / recommendation</div>
+        </div>
+
+        <h3>Would — Conditional Scenarios</h3>
+        <div class="quote-block">
+            I <strong>would</strong> have done well on the test if I had studied more.
+            <div class="attr">→ Past conditional (hypothetical)</div>
+        </div>
+        <div class="quote-block">
+            If I had vacation time, I <strong>would</strong> take a trip to Cancun.
+            <div class="attr">→ Present conditional (what-if)</div>
+        </div>
+
+        <h3>Quick Comparison</h3>
+        <div class="grid">
+            <div class="card">
+                <h4>Should</h4>
+                <p>Advice, suggestions, expectations.<br><em>"You should exercise more."</em></p>
+            </div>
+            <div class="card">
+                <h4>Would</h4>
+                <p>Hypotheticals, polite requests, past habits.<br><em>"I would go if I could."</em></p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📌 Past Habits with Would</strong>
+            <p><em>Would</em> can also express repeated actions in the past:<br>
+            "Every summer, we <strong>would</strong> go camping in the mountains."</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 10 — POLITE QUESTIONS WITH MODALS
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">09 — 4.1 Modal Verbs</div>
+        <h2>Making Polite Questions</h2>
+    </div>
+    <div class="content">
+        <p>Modal verbs are especially helpful for making <span class="em">polite questions</span>. The most common modals for this purpose are <strong>will</strong>, <strong>could</strong> and <strong>would</strong>.</p>
+
+        <h3>Adding If-Clauses for Extra Politeness</h3>
+        <p>These softening phrases make your requests sound even more considerate:</p>
+
+        <table>
+            <thead>
+                <tr><th>Softening Phrase</th><th>Full Example</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="em">got a minute</span></td>
+                    <td>Could you give me a call if you've got a minute?</td>
+                </tr>
+                <tr>
+                    <td><span class="em">got time</span></td>
+                    <td>If you've got time, could you stop by the office?</td>
+                </tr>
+                <tr>
+                    <td><span class="em">not too busy</span></td>
+                    <td>If you're not too busy, would you mind translating this for me?</td>
+                </tr>
+                <tr>
+                    <td><span class="em">not too much trouble</span></td>
+                    <td>Could you give me a ride to work tomorrow if it's not too much trouble?</td>
+                </tr>
+                <tr>
+                    <td><span class="em">possible</span></td>
+                    <td>If it's possible, could I leave a little early today?</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box">
+            <strong>💡 Tip</strong>
+            <p>You can also rephrase with <em>Would it be possible…?</em> — e.g. "Would it be possible to leave a little early today?"</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 11 — EJERCICIO INTERACTIVO: MODAL VERBS
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">✏️ Exercise 1</div>
+        <h2>Modal Verbs — Fill in the Blank</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>Instructions</strong>
+            <p>Choose the correct modal verb to complete each sentence. Type your answer and press <strong>Check</strong>.</p>
+        </div>
+
+        <div id="ex-modals"></div>
+
+        <div style="margin-top:1rem;">
+            <button class="btn-check" onclick="checkExercise('modals')">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise('modals')">Reset</button>
+        </div>
+
+        <div class="box" style="margin-top:1.4rem;">
+            <strong>💡 Word Bank</strong>
+            <p>can &nbsp; could &nbsp; will &nbsp; would &nbsp; should &nbsp; must &nbsp; might &nbsp; ought to</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 12 — 4.2 HANDLING CALLS — OFFERING HELP
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">10 — 4.2 Handling Calls</div>
+        <h2>Offering Help &amp; Buying Time</h2>
+    </div>
+    <div class="content">
+        <p>When you need to offer assistance — or when you <em>can't</em> help right away — these phrases keep the conversation professional and courteous.</p>
+
+        <h3>When You Don't Have the Answer Yet</h3>
+        <div class="quote-block">I don't have the information you're requesting. <strong>Could I call you back later?</strong><div class="attr">→ Polite delay</div></div>
+        <div class="quote-block">I don't know if I can finish the report today, but <strong>I'll see what I can do.</strong><div class="attr">→ Honest &amp; proactive</div></div>
+        <div class="quote-block">The numbers you're giving me don't match up. <strong>Let me sort it out</strong> with the accounting team, and I'll call you back.<div class="attr">→ Taking ownership</div></div>
+
+        <h3>Empathising &amp; Acting</h3>
+        <div class="quote-block">I'm sorry to hear that the bathrooms were dirty. <strong>I'll speak with someone in maintenance about that right now.</strong><div class="attr">→ Showing care + immediate action</div></div>
+
+        <div class="box">
+            <strong>🎯 Key Pattern</strong>
+            <p><strong>Acknowledge</strong> the issue → <strong>Apologise</strong> if needed → <strong>Promise</strong> a next step. This three-part structure builds trust.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 13 — ENDING CALLS GRACEFULLY
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">11 — 4.2 Handling Calls</div>
+        <h2>Ending Calls Gracefully</h2>
+    </div>
+    <div class="content">
+        <p>Ending a call when the other person wants to keep talking is delicate. The trick: show consideration for <em>them</em>, not yourself.</p>
+
+        <div class="box">
+            <strong>📌 Model Farewell</strong>
+            <p>"Carol, I know you're busy, and I don't want to keep you any longer, so I'll speak with you tomorrow. Thanks so much for making time for this phone call!"</p>
+        </div>
+
+        <h3>More Farewell Phrases</h3>
+        <table>
+            <thead><tr><th>Phrase</th><th>Tone</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>I'm sorry, but I have an appointment in five minutes. <em>Can I catch you later?</em></td>
+                    <td>Honest &amp; casual (<em>catch</em> is informal)</td>
+                </tr>
+                <tr>
+                    <td>I won't keep you any longer because I know you have a lot going on.</td>
+                    <td>Considerate</td>
+                </tr>
+                <tr>
+                    <td>I'll let you get on with the rest of your day then. Take care!</td>
+                    <td>Warm &amp; friendly</td>
+                </tr>
+                <tr>
+                    <td>I've got to put the phone down now because I'm about to hit the road.</td>
+                    <td>Informal but natural</td>
+                </tr>
+                <tr>
+                    <td>Could we speak about this later today? I want to check some figures first.</td>
+                    <td>Professional</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box">
+            <strong>⚡ Quick Tip</strong>
+            <p>Always <strong>thank</strong> the person before hanging up — it leaves a positive impression.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 14 — 4.3 OFFICE LIFE VOCABULARY TABLE
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">12 — 4.3 Office Life</div>
+        <h2>Office Life Vocabulary</h2>
+    </div>
+    <div class="content">
+        <p>These are the key terms you'll encounter regularly in meetings, emails and phone calls.</p>
+
+        <table>
+            <thead>
+                <tr><th>Term</th><th>Definition</th><th>Term</th><th>Definition</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="em">Update</span></td>
+                    <td>Make information as new as possible</td>
+                    <td><span class="em">Draft</span></td>
+                    <td>Make a preliminary copy</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Delegate</span></td>
+                    <td>Assign responsibilities</td>
+                    <td><span class="em">Put (someone) through</span></td>
+                    <td>Connect via telephone</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Hold</span></td>
+                    <td>Being late (running late)</td>
+                    <td><span class="em">Blow</span></td>
+                    <td>Fail at / do a terrible job</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Put on hold</span></td>
+                    <td>Pause a phone call; make caller wait</td>
+                    <td><span class="em">Hand in</span></td>
+                    <td>Submit</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box">
+            <strong>📌 Watch Out — Similar but Different</strong>
+            <p><strong>Hold</strong> (= being late) vs. <strong>Put on hold</strong> (= pause a call). Context is everything!</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 15 — OFFICE VOCABULARY IN CONTEXT
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">13 — 4.3 Office Life</div>
+        <h2>Vocabulary in Context — Examples</h2>
+    </div>
+    <div class="content">
+        <div class="quote-block">If you move, make sure to <strong>update</strong> your contact information with HR.<div class="attr">→ update</div></div>
+        <div class="quote-block">Nicole <strong>delegates</strong> all the grunt work instead of helping, so they don't see her as a team player.<div class="attr">→ delegate</div></div>
+        <div class="quote-block">I don't have time to stop for coffee because I'm already <strong>running late</strong>.<div class="attr">→ hold / late</div></div>
+        <div class="quote-block">Could you <strong>hold on</strong> a minute? I need to take this phone call.<div class="attr">→ hold on (wait)</div></div>
+        <div class="quote-block">Do you mind if I <strong>put you on hold</strong> while I check with my supervisor?<div class="attr">→ put on hold</div></div>
+        <div class="quote-block">Let's <strong>draft</strong> an email to the client and <strong>hand it in</strong> to Janine for feedback.<div class="attr">→ draft / hand in</div></div>
+        <div class="quote-block">Could you <strong>put me through</strong> to someone in your customer service department?<div class="attr">→ put through</div></div>
+        <div class="quote-block">If I <strong>blow</strong> the presentation, I won't get a bonus this year.<div class="attr">→ blow</div></div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 16 — EJERCICIO INTERACTIVO: OFFICE VOCABULARY (original)
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">✏️ Exercise 2</div>
+        <h2>Office Vocabulary — Fill in the Blank</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>Instructions</strong>
+            <p>Use a term from the vocabulary chart to complete each sentence. Type your answer and press <strong>Check</strong>.</p>
+        </div>
+
+        <div id="ex-office"></div>
+
+        <div style="margin-top:1rem;">
+            <button class="btn-check" onclick="checkExercise('office')">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise('office')">Reset</button>
+        </div>
+
+        <div class="box" style="margin-top:1.4rem;">
+            <strong>💡 Word Bank</strong>
+            <p>update &nbsp; delegate &nbsp; draft &nbsp; put … through &nbsp; hand in &nbsp; put … on hold &nbsp; blow &nbsp; hold / running late</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 17 — EJERCICIO INTERACTIVO: HANDLING CALLS
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">✏️ Exercise 3</div>
+        <h2>Handling Calls — Choose the Best Response</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>Instructions</strong>
+            <p>Read each scenario and type the <strong>letter</strong> (A, B or C) of the most appropriate professional response.</p>
+        </div>
+
+        <div id="ex-calls"></div>
+
+        <div style="margin-top:1rem;">
+            <button class="btn-check" onclick="checkExercise('calls')">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise('calls')">Reset</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 18 — EJERCICIO INTERACTIVO: EXTRA MODALS
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">✏️ Exercise 4</div>
+        <h2>Advanced Modals — Extra Practice</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>Instructions</strong>
+            <p>Fill in each blank with the correct modal or modal phrase. Pay attention to tense and context!</p>
+        </div>
+
+        <div id="ex-extra"></div>
+
+        <div style="margin-top:1rem;">
+            <button class="btn-check" onclick="checkExercise('extra')">Check Answers</button>
+            <button class="btn-reset" onclick="resetExercise('extra')">Reset</button>
+        </div>
+
+        <div class="box" style="margin-top:1.4rem;">
+            <strong>💡 Word Bank</strong>
+            <p>could &nbsp; should &nbsp; must &nbsp; might &nbsp; would &nbsp; ought to &nbsp; could … have</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 19 — ACTIVIDAD EVALUABLE
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 Evaluable Activity</div>
+        <h2>Integrative Activity</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>⏱️ Time: 25–30 minutes</strong>
+            <p>This activity combines everything from Unit 4 in a realistic workplace scenario.</p>
+        </div>
+
+        <h3>Scenario</h3>
+        <p>You are a new employee at an international company. Your boss, Sarah, asks you to handle several tasks and interactions. Write your responses using modals and office vocabulary.</p>
+
+        <h3>Tasks</h3>
+        <ul>
+            <li><strong>a)</strong> Sarah asks: "Can you finish the quarterly report by Friday?" Write your response — you <em>think</em> you can, but you're not 100% sure. (Use an appropriate modal.)</li>
+            <li><strong>b)</strong> A client calls asking for invoice details you don't have. Write what you would say, including how you'll get back to them.</li>
+            <li><strong>c)</strong> Write a short email to a colleague suggesting they <em>ought to</em> update the project timeline before the meeting.</li>
+            <li><strong>d)</strong> The client from (b) wants to keep talking, but you have another call. Write a polite way to end the conversation.</li>
+        </ul>
+
+        <div class="box">
+            <strong>🎓 Deliverable</strong>
+            <p>Submit your written responses as a single document. Each answer must use <strong>at least one modal verb</strong> and demonstrate appropriate office vocabulary.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 20 — COMMON MISTAKES
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">14 — Common Mistakes</div>
+        <h2>Errors to Avoid</h2>
+    </div>
+    <div class="content">
+        <div class="grid">
+            <div class="card">
+                <h4>❌ Modal + do</h4>
+                <p><span style="color:#f87171;">✘</span> I will <strong>do</strong> call you.<br><span style="color:#4ade80;">✔</span> I <strong>will</strong> call you.</p>
+            </div>
+            <div class="card">
+                <h4>❌ Must for the Past</h4>
+                <p><span style="color:#f87171;">✘</span> He must finished it.<br><span style="color:#4ade80;">✔</span> He <strong>was required to</strong> finish it.</p>
+            </div>
+            <div class="card">
+                <h4>❌ Willn't</h4>
+                <p><span style="color:#f87171;">✘</span> I willn't go.<br><span style="color:#4ade80;">✔</span> I <strong>won't</strong> go.</p>
+            </div>
+            <div class="card">
+                <h4>❌ Conjugating Modals</h4>
+                <p><span style="color:#f87171;">✘</span> He <strong>shoulds</strong> work.<br><span style="color:#4ade80;">✔</span> He <strong>should</strong> work.</p>
+            </div>
+            <div class="card">
+                <h4>❌ Hold vs Put on Hold</h4>
+                <p><span style="color:#f87171;">✘</span> "I'll hold you" (wrong meaning!).<br><span style="color:#4ade80;">✔</span> "I'll <strong>put you on hold</strong>."</p>
+            </div>
+            <div class="card">
+                <h4>❌ Ought Not To</h4>
+                <p><span style="color:#f87171;">✘</span> You ought <strong>not to</strong> … (wrong order).<br><span style="color:#4ade80;">✔</span> You <strong>ought not</strong> …</p>
+            </div>
+        </div>
+
+        <div class="box" style="margin-top:1rem;">
+            <strong>💡 Golden Rule</strong>
+            <p>When in doubt, read your sentence aloud. If it sounds awkward, a modal is probably being misused.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 21 — RECURSOS / BIBLIOGRAPHY
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">15 — Resources</div>
+        <h2>Bibliography &amp; Resources</h2>
+    </div>
+    <div class="content">
+        <h3>Primary Bibliography</h3>
+        <div class="box">
+            <strong>📚 Textbook</strong>
+            <p>Powell, M. (2014). <em>In Company 3.0 — Student's Book</em>. Thailand: Macmillan Press.</p>
+        </div>
+
+        <h3>Institutional Platform</h3>
+        <div class="box">
+            <strong>🎓 Canva Universidad Tecmilenio</strong>
+            <p>Access additional materials, videos and practice activities through the university's learning platform.</p>
+        </div>
+
+        <h3>Supplementary Resources</h3>
+        <div class="grid">
+            <div class="card">
+                <h4>Forbes – Ending Conversations</h4>
+                <p>Frost, A. (2015). <em>21 Ways To Leave A Never-Ending Conversation Without Being Rude.</em> forbes.com</p>
+            </div>
+            <div class="card">
+                <h4>Grammar Reference</h4>
+                <p>Use reliable online dictionaries (Oxford, Merriam-Webster) to verify modal usage in context.</p>
+            </div>
+            <div class="card">
+                <h4>Practice Apps</h4>
+                <p>Apps like <em>Grammarly</em> can help you identify modal verb errors in your own writing.</p>
+            </div>
+            <div class="card">
+                <h4>Podcasts</h4>
+                <p><em>Business English Pod</em> – episodes on phone etiquette and professional communication.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 22 — SUMMARY
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">16 — Summary</div>
+        <h2>Unit 4 — Key Takeaways</h2>
+    </div>
+    <div class="content">
+        <div class="grid">
+            <div class="card">
+                <h4>4.1 Modal Verbs</h4>
+                <p>Modals add meaning (obligation, possibility, politeness) without conjugating. Present ↔ past/conditional pairs are essential. Never combine a modal with <em>do</em>.</p>
+            </div>
+            <div class="card">
+                <h4>4.2 Handling Calls</h4>
+                <p>Use the <strong>Acknowledge → Apologise → Act</strong> pattern. End calls by showing consideration for the other person, and always say thank you.</p>
+            </div>
+            <div class="card">
+                <h4>4.3 Office Vocabulary</h4>
+                <p>Know the difference between similar terms (<em>hold</em> vs <em>put on hold</em>). Context clues help you choose the right word every time.</p>
+            </div>
+        </div>
+
+        <h3>What You Can Now Do</h3>
+        <ul>
+            <li>Select the right modal for predictions, offers, requests, promises and more</li>
+            <li>Soften questions using if-clauses and polite modals</li>
+            <li>Handle professional phone calls — from greeting to farewell</li>
+            <li>Use office vocabulary correctly in real workplace situations</li>
+        </ul>
+
+        <div class="box">
+            <strong>🎯 Next Step</strong>
+            <p>Complete the <strong>Integrative Activity</strong> (Slide 19) to demonstrate all the skills covered in this unit.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SLIDE 23 — CIERRE
+     ═══════════════════════════════════════════════════════════ -->
+<div class="slide cover">
+    <h1>Questions?</h1>
+    <div class="line"></div>
+    <p class="subtitle">Thank you for your attention!</p>
+    <p class="meta">Advanced English 2 &nbsp;|&nbsp; Unit 4</p>
+</div>
+
+</div><!-- end .container -->
+
+<!-- ── COUNTER ── -->
+<div class="counter">
+    <span id="current">1</span> / <span id="total">23</span>
+</div>
+
+<!-- ── NAV BUTTONS ── -->
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCRIPT
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+// ─── SLIDE ENGINE ───────────────────────────────────
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total   = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled  = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+
+show(0);
+
+// ─── EXERCISE DATA ──────────────────────────────────
+const exerciseData = {
+
+    // ── 4.1 Modal Verbs basic ──
+    modals: [
+        { sentence: "I think it _____ rain later today.", answer: "might", hint: "prediction / possibility" },
+        { sentence: "You _____ study more if you want to pass.", answer: "should", hint: "advice" },
+        { sentence: "_____ I help you with that?", answer: "Can", hint: "offer (present)" },
+        { sentence: "I _____ finish the project by Friday — no problem.", answer: "will", hint: "promise / commitment" },
+        { sentence: "She _____ speak three languages when she was younger.", answer: "could", hint: "past ability" },
+        { sentence: "You _____ be tired after such a long trip.", answer: "must", hint: "strong deduction" },
+        { sentence: "If I _____ the chance, I would travel the world.", answer: "had", hint: "conditional (if-clause)" },
+        { sentence: "We _____ to leave earlier to avoid traffic.", answer: "ought", hint: "strong suggestion (_____ to)" }
+    ],
+
+    // ── 4.3 Office Life (original from textbook + extras) ──
+    office: [
+        { sentence: "Jack is out of the office today, but I can _____ to his voicemail.", answer: "put you through", hint: "connect via phone" },
+        { sentence: "Our boss will _____ a part of this project to each team member.", answer: "delegate", hint: "assign responsibilities" },
+        { sentence: "The meeting begins at 9 AM promptly. Make sure to call if you're _____.", answer: "running late", hint: "not on time" },
+        { sentence: "Carl _____ the English test, and he's upset because he studied hard!", answer: "blew", hint: "failed badly (past tense)" },
+        { sentence: "I forgot to _____ my sales report, so I need to return to the office.", answer: "hand in", hint: "submit" },
+        { sentence: "Will you please _____ a brochure for the new product?", answer: "draft", hint: "make a preliminary copy" },
+        { sentence: "Marie has a new phone number. Make sure to _____ her contact info.", answer: "update", hint: "make current" },
+        { sentence: "May I _____ while I look for Susan?", answer: "put you on hold", hint: "pause the call" }
+    ],
+
+    // ── 4.2 Handling Calls — multiple choice (letter A / B / C) ──
+    calls: [
+        {
+            sentence: "A client asks for a document you haven't prepared yet. What do you say?",
+            options: { A: "I have no idea. Call back later.", B: "I don't have that ready right now, but I'll get it to you as soon as possible.", C: "That's not my job." },
+            answer: "B",
+            hint: "Professional + proactive"
+        },
+        {
+            sentence: "You need to end the call, but the caller keeps talking. What do you do?",
+            options: { A: "Just hang up.", B: "Interrupt them mid-sentence.", C: "Say: 'I don't want to keep you — let's continue tomorrow. Thanks for your time!'" },
+            answer: "C",
+            hint: "Polite + considerate farewell"
+        },
+        {
+            sentence: "A caller complains that their order arrived damaged. How do you respond?",
+            options: { A: "I'm sorry to hear that. I'll look into this right away and get back to you today.", B: "That's not our fault.", C: "You should have checked it before." },
+            answer: "A",
+            hint: "Acknowledge → apologise → act"
+        },
+        {
+            sentence: "Someone asks to speak with a manager, but the manager is in a meeting. What do you say?",
+            options: { A: "She's busy. Try again later.", B: "The manager is currently in a meeting. May I put you on hold, or would you prefer a callback?", C: "I can't help you." },
+            answer: "B",
+            hint: "Offer alternatives professionally"
+        }
+    ],
+
+    // ── Extra advanced modals ──
+    extra: [
+        { sentence: "When I was a child, I _____ swim very fast.", answer: "could", hint: "past ability" },
+        { sentence: "You really _____ call her — she's been waiting.", answer: "should", hint: "advice / recommendation" },
+        { sentence: "He _____ be the new manager — everyone says so.", answer: "must", hint: "strong deduction" },
+        { sentence: "If I had more time, I _____ finish the report.", answer: "could", hint: "conditional" },
+        { sentence: "We _____ to update the website before the launch.", answer: "ought", hint: "strong suggestion (_____ to)" },
+        { sentence: "I _____ have told you, but I forgot. Sorry!", answer: "should", hint: "past regret (_____ have)" },
+        { sentence: "It _____ snow tomorrow — the forecast isn't sure.", answer: "might", hint: "possibility" },
+        { sentence: "If you had asked, I _____ have helped you.", answer: "could", hint: "past conditional (_____ have)" }
+    ]
+};
+
+// ─── RENDER EXERCISES ────────────────────────────────
+function renderExercise(containerId, key) {
+    const data = exerciseData[key];
+    const container = document.getElementById(containerId);
+    if (!container || !data) return;
+
+    let html = '';
+    data.forEach((item, i) => {
+        if (key === 'calls') {
+            // Multiple choice (letter)
+            html += `<div class="ex-row" style="flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
+                <span class="ex-num">${i+1}.</span>
+                <span class="ex-text" style="width:100%; margin-bottom:0.3rem;">${item.sentence}</span>`;
+            // show options as text
+            for (const [letter, text] of Object.entries(item.options)) {
+                html += `<span class="ex-text" style="width:100%; padding-left:1rem; opacity:0.78;">${letter}) ${text}</span>`;
+            }
+            html += `<span class="ex-text" style="padding-left:1rem;">Answer:</span>
+                <input type="text" class="ex-input" id="input-${key}-${i}" placeholder="${item.hint}" maxlength="1" style="width:60px; text-align:center; text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+                <span class="feedback" id="fb-${key}-${i}"></span>
+            </div>`;
+        } else {
+            html += `<div class="ex-row">
+                <span class="ex-num">${i+1}.</span>
+                <span class="ex-text">${item.sentence}</span>
+                <input type="text" class="ex-input" id="input-${key}-${i}" placeholder="${item.hint}">
+                <span class="feedback" id="fb-${key}-${i}"></span>
+            </div>`;
+        }
+    });
+    container.innerHTML = html;
+}
+
+// ─── CHECK & RESET ───────────────────────────────────
+function normalise(str) {
+    return str.trim().toLowerCase().replace(/[^a-z0-9\s]/g, '');
+}
+
+function checkExercise(key) {
+    const data = exerciseData[key];
+    data.forEach((item, i) => {
+        const input = document.getElementById(`input-${key}-${i}`);
+        const fb    = document.getElementById(`fb-${key}-${i}`);
+        if (!input || !fb) return;
+
+        const val = normalise(input.value);
+        const ans = normalise(item.answer);
+
+        if (val === '') {
+            fb.textContent = '';
+            fb.className   = 'feedback';
+            input.className = 'ex-input';
+            return;
+        }
+
+        if (val === ans) {
+            input.classList.add('correct');
+            input.classList.remove('incorrect');
+            fb.textContent = '✓ Correct!';
+            fb.className   = 'feedback correct';
+        } else {
+            input.classList.add('incorrect');
+            input.classList.remove('correct');
+            fb.textContent = '✗ Try again';
+            fb.className   = 'feedback incorrect';
+        }
+    });
+}
+
+function resetExercise(key) {
+    const data = exerciseData[key];
+    data.forEach((item, i) => {
+        const input = document.getElementById(`input-${key}-${i}`);
+        const fb    = document.getElementById(`fb-${key}-${i}`);
+        if (input) { input.value = ''; input.className = 'ex-input'; }
+        if (fb)    { fb.textContent = ''; fb.className = 'feedback'; }
+    });
+}
+
+// ─── INIT EXERCISES ON PAGE LOAD ─────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    renderExercise('ex-modals',  'modals');
+    renderExercise('ex-office',  'office');
+    renderExercise('ex-calls',   'calls');
+    renderExercise('ex-extra',   'extra');
+});
+</script>
+</body>
+</html>

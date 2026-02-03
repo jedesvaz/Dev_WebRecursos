@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción a la Biología Celular y Molecular</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: #0d1b2a;
+            color: #e8f0f2;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 4rem 7rem;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* ===== PORTADA ===== */
+        .cover {
+            background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 40%, #40916c 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -120px;
+            right: -120px;
+            width: 380px;
+            height: 380px;
+            border-radius: 50%;
+            background: rgba(95, 195, 153, 0.12);
+        }
+
+        .cover::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: rgba(95, 195, 153, 0.08);
+        }
+
+        .cover h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.6rem;
+            font-weight: 900;
+            margin-bottom: 1.2rem;
+            line-height: 1.2;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover .subtitle {
+            font-size: 1.35rem;
+            opacity: 0.88;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover .line {
+            width: 90px;
+            height: 3px;
+            background: #b7e4c7;
+            margin: 1.8rem auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover .help {
+            margin-top: 2.5rem;
+            font-size: 0.95rem;
+            opacity: 0.65;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cover .meta {
+            margin-top: 1rem;
+            font-size: 0.88rem;
+            opacity: 0.55;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== SLIDES NORMALES ===== */
+        .slide-header {
+            margin-bottom: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .slide-number {
+            color: #b7e4c7;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.3rem;
+            color: #e8f0f2;
+            margin-bottom: 0.6rem;
+        }
+
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.45rem;
+            color: #b7e4c7;
+            margin: 1.4rem 0 0.8rem 0;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 1.5rem;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: rgba(183, 228, 199, 0.08);
+            border-radius: 3px;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #52b788;
+            border-radius: 3px;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.75;
+            margin-bottom: 1.2rem;
+            opacity: 0.93;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0.8rem 0;
+        }
+
+        ul li {
+            font-size: 1rem;
+            line-height: 1.65;
+            margin-bottom: 0.7rem;
+            padding-left: 1.5rem;
+            position: relative;
+            opacity: 0.9;
+        }
+
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #52b788;
+            font-weight: bold;
+        }
+
+        /* ===== CAJAS DESTACADAS ===== */
+        .box {
+            background: rgba(82, 183, 136, 0.08);
+            border-left: 4px solid #52b788;
+            padding: 1.3rem 1.5rem;
+            margin: 1.3rem 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .box strong {
+            color: #b7e4c7;
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 1.05rem;
+        }
+
+        .box p {
+            margin-bottom: 0.4rem;
+        }
+
+        .box-warn {
+            background: rgba(255, 183, 77, 0.08);
+            border-left: 4px solid #ffb74d;
+        }
+
+        .box-warn strong {
+            color: #ffb74d;
+        }
+
+        /* ===== CARDS Y GRIDS ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin: 1.2rem 0;
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .card {
+            background: rgba(255,255,255,0.04);
+            padding: 1.3rem;
+            border-radius: 8px;
+            border: 1px solid rgba(82,183,136,0.2);
+        }
+
+        .card h4 {
+            color: #b7e4c7;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .card-accent {
+            border-color: rgba(82,183,136,0.45);
+            background: rgba(82,183,136,0.07);
+        }
+
+        .em {
+            color: #b7e4c7;
+            font-weight: 700;
+        }
+
+        .em-gold {
+            color: #ffb74d;
+            font-weight: 700;
+        }
+
+        /* ===== TABLAS ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+        }
+
+        th, td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(82,183,136,0.18);
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: rgba(82,183,136,0.1);
+            color: #b7e4c7;
+            font-weight: 700;
+            font-size: 0.92rem;
+            letter-spacing: 0.5px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* ===== BADGES / EJERCICIOS ===== */
+        .exercise-badge {
+            background: linear-gradient(135deg, #52b788 0%, #74c69d 100%);
+            color: #0d1b2a;
+            padding: 0.3rem 1.2rem;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: 800;
+            font-size: 0.82rem;
+            letter-spacing: 1.5px;
+            box-shadow: 0 3px 10px rgba(82, 183, 136, 0.3);
+        }
+
+        .section-badge {
+            background: linear-gradient(135deg, #1b4332, #2d6a4f);
+            color: #b7e4c7;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 700;
+            font-size: 0.78rem;
+            letter-spacing: 1.8px;
+            border: 1px solid rgba(183,228,199,0.3);
+        }
+
+        /* ===== EJERCICIOS INTERACTIVOS ===== */
+        .exercise-input {
+            width: 100%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(82,183,136,0.3);
+            border-radius: 6px;
+            padding: 0.6rem 0.9rem;
+            color: #e8f0f2;
+            font-size: 0.95rem;
+            font-family: 'Source Sans Pro', sans-serif;
+            margin-top: 0.3rem;
+            transition: border-color 0.25s;
+        }
+
+        .exercise-input:focus {
+            outline: none;
+            border-color: #52b788;
+            background: rgba(82,183,136,0.08);
+        }
+
+        .exercise-input.correct {
+            border-color: #52b788;
+            background: rgba(82,183,136,0.12);
+        }
+
+        .exercise-input.incorrect {
+            border-color: #e57373;
+            background: rgba(229,115,115,0.1);
+        }
+
+        .exercise-q {
+            margin-bottom: 0.9rem;
+        }
+
+        .exercise-q label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            display: block;
+        }
+
+        .exercise-q label span.qnum {
+            color: #52b788;
+            font-weight: 700;
+        }
+
+        .exercise-btns {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .ex-btn {
+            background: #52b788;
+            border: none;
+            color: #0d1b2a;
+            padding: 0.55rem 1.6rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-family: 'Source Sans Pro', sans-serif;
+            transition: background 0.25s, transform 0.15s;
+        }
+
+        .ex-btn:hover {
+            background: #74c69d;
+            transform: scale(1.04);
+        }
+
+        .ex-btn-sec {
+            background: transparent;
+            border: 1px solid rgba(82,183,136,0.4);
+            color: #b7e4c7;
+        }
+
+        .ex-btn-sec:hover {
+            background: rgba(82,183,136,0.1);
+            border-color: #52b788;
+        }
+
+        .feedback-msg {
+            margin-top: 1rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback-msg.show { display: block; }
+        .feedback-msg.success {
+            background: rgba(82,183,136,0.12);
+            border: 1px solid rgba(82,183,136,0.35);
+            color: #b7e4c7;
+        }
+        .feedback-msg.partial {
+            background: rgba(255,183,77,0.1);
+            border: 1px solid rgba(255,183,77,0.35);
+            color: #ffb74d;
+        }
+
+        /* ===== OPCIÓN MÚLTIPLE ===== */
+        .mc-option {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(82,183,136,0.2);
+            border-radius: 6px;
+            padding: 0.6rem 1rem;
+            margin: 0.35rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .mc-option:hover {
+            border-color: #52b788;
+            background: rgba(82,183,136,0.08);
+        }
+
+        .mc-option.selected {
+            border-color: #52b788;
+            background: rgba(82,183,136,0.12);
+        }
+
+        .mc-option.correct-sel {
+            border-color: #52b788;
+            background: rgba(82,183,136,0.2);
+        }
+
+        .mc-option.incorrect-sel {
+            border-color: #e57373;
+            background: rgba(229,115,115,0.15);
+        }
+
+        /* ===== DIAGRAMA FLECHA (DOGMA) ===== */
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 1.8rem 0;
+            flex-wrap: nowrap;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, #1b4332, #2d6a4f);
+            border: 1px solid rgba(183,228,199,0.35);
+            border-radius: 10px;
+            padding: 0.9rem 1.4rem;
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .flow-box .fb-label {
+            font-size: 0.78rem;
+            color: #b7e4c7;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.15rem;
+        }
+
+        .flow-box .fb-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #e8f0f2;
+        }
+
+        .flow-arrow-svg {
+            width: 60px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .flow-arrow-svg polygon {
+            fill: #52b788;
+        }
+
+        .flow-label {
+            font-size: 0.78rem;
+            color: #52b788;
+            text-align: center;
+            margin-top: 0.25rem;
+            font-weight: 600;
+        }
+
+        .flow-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== BARRA DE COMPOSICIÓN ===== */
+        .comp-bar {
+            display: flex;
+            height: 38px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1rem 0 0.5rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        }
+
+        .comp-seg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #fff;
+            white-space: nowrap;
+            transition: width 0.3s;
+        }
+
+        .comp-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.88rem;
+        }
+
+        .comp-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .comp-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        /* ===== NAVEGACIÓN ===== */
+        .nav {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .btn {
+            width: 56px;
+            height: 56px;
+            background: #52b788;
+            border: none;
+            border-radius: 50%;
+            color: #0d1b2a;
+            font-size: 1.4rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: scale(1.1);
+            background: #74c69d;
+        }
+
+        .btn:disabled {
+            opacity: 0.28;
+            cursor: not-allowed;
+        }
+
+        .counter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(13,27,42,0.9);
+            padding: 0.8rem 1.6rem;
+            border-radius: 28px;
+            border: 2px solid #52b788;
+            color: #b7e4c7;
+            font-weight: 700;
+            z-index: 1000;
+            font-size: 0.95rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .slide { padding: 2.5rem 3rem; }
+            .cover h1 { font-size: 2.4rem; }
+            h2 { font-size: 1.9rem; }
+            .grid-3 { grid-template-columns: repeat(2, 1fr); }
+            .flow-arrow { flex-wrap: wrap; gap: 0.5rem; }
+        }
+
+        @media (max-width: 680px) {
+            .slide { padding: 1.8rem 1.5rem; }
+            .grid-3, .grid-2 { grid-template-columns: 1fr; }
+            .flow-arrow { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 1 — PORTADA                       ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide cover active">
+    <h1>Introducción a la Biología<br>Celular y Molecular</h1>
+    <div class="line"></div>
+    <p class="subtitle">Tema 1.2 — Composición Química de los Seres Vivos</p>
+    <p class="meta">Dogma Central de la Biología Molecular</p>
+    <p class="help">👉 Usa las flechas del teclado o los botones para navegar →</p>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 2 — ÍNDICE / CONTENIDO            ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">CONTENIDO</div>
+        <h2>Temas de esta Unidad</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🧬 Biomoléculas</h4>
+                <p>Definición, clasificación y estructura general de las macromoléculas de los organismos vivos.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>⚗️ Bioelementos</h4>
+                <p>Macroelementos y microelementos que componen los organismos vivos.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🔬 Proteínas</h4>
+                <p>Aminoácidos, niveles estructurales, clasificación y funciones biológicas.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🍬 Carbohidratos</h4>
+                <p>Monosacáridos, oligosacáridos y polisacáridos: clasificación y funciones.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🧈 Lípidos</h4>
+                <p>Clasificación en simples, compuestos y asociados. Funciones en el organismo.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🧪 Ácidos Nucleicos</h4>
+                <p>Nucleótidos, ADN y los tipos de ARN.</p>
+            </div>
+            <div class="card" style="grid-column: 1 / -1; border-color: rgba(255,183,77,0.4); background: rgba(255,183,77,0.06);">
+                <h4 style="color:#ffb74d;">⚡ Dogma Central de la Biología Molecular</h4>
+                <p>Flujo de la información genética: ADN → ARN → Proteína.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 3 — ¿QUÉ SON LAS BIOMOLÉCULAS?   ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">01 — BIOMOLÉCULAS</div>
+        <h2>¿Qué son las Biomoléculas?</h2>
+    </div>
+    <div class="content">
+        <p>Se llaman <span class="em">biomoléculas</span> a todas las moléculas que intervienen en la estructura y funcionamiento del organismo vivo, tanto las grandes moléculas poliméricas (macromoléculas) como sus monómeros e intermediarios metabólicos.</p>
+
+        <div class="box">
+            <strong>📚 Clasificación en 7 categorías</strong>
+            <p>Desde un punto de vista práctico, las biomoléculas se agrupan en siete categorías que son los principales componentes de la dieta:</p>
+            <ul>
+                <li><strong>Carbohidratos</strong> — combustible metabólico principal</li>
+                <li><strong>Proteínas</strong> — moléculas más activas en la vida celular</li>
+                <li><strong>Lípidos</strong> — mayor reserva de energía</li>
+                <li><strong>Agua</strong> — componente más abundante (70 %)</li>
+                <li><strong>Iones (minerales)</strong> — ingresan como sales, se ionizan en los líquidos</li>
+                <li><strong>Vitaminas</strong> — cofactores esenciales</li>
+                <li><strong>Ácidos nucleicos</strong> — portadores de información genética</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 4 — COMPOSICIÓN QUÍMICA HUMANA    ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">01 — BIOMOLÉCULAS</div>
+        <h2>Composición Química del Organismo Humano</h2>
+    </div>
+    <div class="content">
+        <p>La composición química del organismo humano no difiere significativamente de la de otros mamíferos. Casi <span class="em">dos terceras partes</span> del peso corporal es agua, cerca de una tercera parte es materia orgánica y solo una pequeña fracción son minerales.</p>
+
+        <div class="comp-bar">
+            <div class="comp-seg" style="width:70%; background:linear-gradient(90deg,#2d6a4f,#40916c);">70% Agua</div>
+            <div class="comp-seg" style="width:15%; background:#52b788;">15% Prot.</div>
+            <div class="comp-seg" style="width:11%; background:#ffb74d; color:#0d1b2a;">11%</div>
+            <div class="comp-seg" style="width:3%; background:#e57373; color:#fff;">3%</div>
+            <div class="comp-seg" style="width:1%; background:#7986cb; color:#fff;">1%</div>
+        </div>
+        <div class="comp-legend">
+            <div class="comp-legend-item"><div class="comp-dot" style="background:#40916c;"></div> Agua (70 %)</div>
+            <div class="comp-legend-item"><div class="comp-dot" style="background:#52b788;"></div> Proteínas (15 %)</div>
+            <div class="comp-legend-item"><div class="comp-dot" style="background:#ffb74d;"></div> Grasas (11 %)</div>
+            <div class="comp-legend-item"><div class="comp-dot" style="background:#e57373;"></div> Minerales (3 %)</div>
+            <div class="comp-legend-item"><div class="comp-dot" style="background:#7986cb;"></div> Carbohidratos (1 %)</div>
+        </div>
+
+        <div class="box" style="margin-top:1.4rem;">
+            <strong>⚖️ Equilibrio Fundamental</strong>
+            <p>En todo organismo vivo existen tres balances clave: <strong>intercambio de materia</strong> (entrada = salida), <strong>intercambio de energía</strong> (energía que ingresa = energía que sale) y <strong>balance de información</strong> (la información del ambiente se procesa y se devuelve al ambiente).</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 5 — ESTRUCTURA DE LAS BIOMOLÉCULAS║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">01 — BIOMOLÉCULAS</div>
+        <h2>Estructura: Monómeros y enlaces</h2>
+    </div>
+    <div class="content">
+        <p>Cada macromoléculas se forma por el encadenamiento de monómeros unidos mediante <span class="em">enlaces característicos</span>. Los polisacáridos, proteínas y ácidos nucleicos tienen enlaces <strong>hidrolizables</strong>: se pueden romper con agua, liberando los monómeros.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Macromolécula</th>
+                    <th>Monómero</th>
+                    <th>Enlace característico</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="em">Carbohidratos</span></td>
+                    <td>Monosacáridos (glucosa)</td>
+                    <td>Glucosídico (α 1-4 y α 1-6)</td>
+                    <td>Hidrolizable</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Proteínas</span></td>
+                    <td>Aminoácidos</td>
+                    <td>Peptídico</td>
+                    <td>Hidrolizable</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Ácidos Nucleicos</span></td>
+                    <td>Nucleótidos</td>
+                    <td>Fosfodiéster</td>
+                    <td>Hidrolizable</td>
+                </tr>
+                <tr>
+                    <td><span class="em">Lípidos</span></td>
+                    <td>Ácidos grasos</td>
+                    <td>Hidrofóbico / Ester</td>
+                    <td>Variable</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box-warn">
+            <strong>💡 Moléculas informativas</strong>
+            <p>Las <strong>proteínas</strong> y los <strong>ácidos nucleicos</strong> requieren información detallada sobre la secuencia de monómeros, por lo que se distinguen como <em>"moléculas informativas"</em>. En los ácidos nucleicos, la lectura de la secuencia de nucleótidos es la base de la codificación de la información genética.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 6 — BIOELEMENTOS                  ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">02 — BIOELEMENTOS</div>
+        <h2>Macroelementos y Microelementos</h2>
+    </div>
+    <div class="content">
+        <p>Los elementos que componen los organismos vivos se clasifican según su proporción en el cuerpo humano en <span class="em">macroelementos</span> (los 10 más abundantes) y <span class="em">microelementos</span> (solo el 1.6 % del peso corporal).</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🟢 Macroelementos (98.4 %)</h4>
+                <table style="margin-top:0.6rem;">
+                    <thead><tr><th>Elemento</th><th>% peso corporal</th></tr></thead>
+                    <tbody>
+                        <tr><td>Oxígeno (O)</td><td class="em">62 %</td></tr>
+                        <tr><td>Carbono (C)</td><td class="em">19 %</td></tr>
+                        <tr><td>Hidrógeno (H)</td><td class="em">11 %</td></tr>
+                        <tr><td>Nitrógeno (N)</td><td class="em">3 %</td></tr>
+                        <tr><td>Calcio (Ca)</td><td>1.5 %</td></tr>
+                        <tr><td>Fósforo (P)</td><td>0.96 %</td></tr>
+                        <tr><td>Potasio (K)</td><td>0.38 %</td></tr>
+                        <tr><td>Azufre (S)</td><td>0.31 %</td></tr>
+                        <tr><td>Cloro (Cl)</td><td>0.15 %</td></tr>
+                        <tr><td>Sodio (Na)</td><td>0.15 %</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <h4>🟡 Microelementos (1.6 %)</h4>
+                <p style="margin-top:0.6rem;">Aunque representan solo el <strong>1.6 %</strong> del peso corporal, son indispensables para el funcionamiento celular.</p>
+                <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.8rem;">
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">Co</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">Cu</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">Cr</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">Fe</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">F</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">I</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">Mg</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">Mn</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">Mo</span>
+                    <span style="background:rgba(82,183,136,0.12);padding:0.25rem 0.7rem;border-radius:15px;font-size:0.9rem;color:#b7e4c7;">Zn</span>
+                </div>
+                <div class="box" style="margin-top:1rem;">
+                    <strong>📌 Nota</strong>
+                    <p>Los minerales ingresan al organismo como <strong>sales</strong>; al disolverse en los líquidos corporales se ionizan y actúan como <strong>iones</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 7 — PROTEÍNAS: AMINOÁCIDOS        ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">03 — PROTEÍNAS</div>
+        <h2>Aminoácidos: Unidades Básicas</h2>
+    </div>
+    <div class="content">
+        <p>Las <span class="em">proteínas</span> son macromoléculas formadas por los elementos C, H, O, N, S (y a veces P), de alto peso molecular. Están compuestas por <strong>alfa-aminoácidos</strong> en enlace peptídico, en un número que varía entre 50 y más de 1 000.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🧪 Estructura general del aminoácido</h4>
+                <p style="font-family:monospace; font-size:1.1rem; text-align:center; margin:0.8rem 0; color:#b7e4c7; line-height:1.9;">
+                    H &nbsp; O<br>
+                    | &nbsp;&nbsp; ‖<br>
+                    H₂N — C — C — OH<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; R
+                </p>
+                <p>Los aminoácidos difieren entre sí por la naturaleza de su <strong>grupo R</strong>.</p>
+            </div>
+            <div class="card">
+                <h4>📊 Datos clave</h4>
+                <ul>
+                    <li>Existen <strong>22 aminoácidos</strong> que forman todas las proteínas de los seres vivos.</li>
+                    <li>El cuerpo humano utiliza <strong>20</strong> de ellos.</li>
+                    <li>Puede sintetizar <strong>10</strong> a partir de carbohidratos y lípidos.</li>
+                    <li>Los otros <strong>10 aminoácidos esenciales</strong> deben ingerirse con la dieta.</li>
+                    <li>Son <strong>quirales</strong>: su imagen en el espejo no es superponible.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>🔗 Enlace Peptídico</strong>
+            <p>Se forma por una reacción de condensación entre el grupo <strong>carboxilo</strong> de un aminoácido y el grupo <strong>amino</strong> de otro. El aminoácido que aporta el grupo carboxilo se nombra primero con terminación <em>-il</em> (ejemplo: <strong>glicilalanina</strong>, abreviado Gly-Ala).</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 8 — NIVELES ESTRUCTURALES         ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">03 — PROTEÍNAS</div>
+        <h2>Niveles Estructurales de las Proteínas</h2>
+    </div>
+    <div class="content">
+        <p>Las proteínas son capaces de organizarse en el espacio para formar un número casi infinito de configuraciones, estudiar mediante cuatro niveles estructurales.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>① Estructura Primaria</h4>
+                <p>Secuencia lineal de aminoácidos estabilizada por el <strong>enlace peptídico</strong>. Es la <em>única estructura codificada en los genes</em>; de ella derivan los demás niveles.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>② Estructura Secundaria</h4>
+                <p>Plegamiento de la cadena en dos formas principales, estabilizadas por <strong>puentes de hidrógeno</strong> (enlace débil entre CO y NH):</p>
+                <ul>
+                    <li><strong>Alfa-hélice:</strong> giro a la derecha, conferye elasticidad (ej: tropomiosina, fibrina).</li>
+                    <li><strong>Hoja plegada:</strong> estructura en zig-zag, rígida (ej: fibroína de la seda).</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>③ Estructura Terciaria</h4>
+                <p>Forma global tridimensional (esférica) determinada por los recodos y giros de la alfa-hélice. Responsable de la <strong>función enzimática</strong> gracias a la afinidad del sitio activo con el sustrato.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>④ Estructura Cuaternaria</h4>
+                <p>Disposición espacial de múltiples cadenas polipeptídicas que forman una proteína de mayor jerarquía. Generalmente peso molecular &gt; 50 000. Ejemplo clásico: <strong>hemoglobina</strong>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 9 — CLASIFICACIÓN Y FUNCIONES     ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">03 — PROTEÍNAS</div>
+        <h2>Clasificación y Funciones</h2>
+    </div>
+    <div class="content">
+        <h3>Por conformación nativa</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🧵 Fibrosas</h4>
+                <p>Estructura secundaria dispuesta a lo largo de un eje. <strong>Insolubles en agua</strong>, gran resistencia física. Asociadas a acciones mecánicas.</p>
+                <p><em>Ejemplos: elastina, queratina, colágeno.</em></p>
+            </div>
+            <div class="card card-accent">
+                <h4>🔴 Globulares</h4>
+                <p>Cadenas plegadas en forma esférica compacta (estructura terciaria). <strong>Solubles en agua</strong>, papel muy dinámico.</p>
+                <p><em>Ejemplos: enzimas, algunas hormonas, proteínas transportadoras.</em></p>
+            </div>
+        </div>
+
+        <h3>Por composición química</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Simples</h4>
+                <p>Su hidrólisis produce <strong>solo aminoácidos</strong>. Ejemplo: insulina.</p>
+            </div>
+            <div class="card">
+                <h4>Compuestas</h4>
+                <p>La hidrólisis produce aminoácidos <strong>+ compuestos orgánicos o inorgánicos</strong>. Ejemplo: hemoglobina.</p>
+            </div>
+        </div>
+
+        <div class="box" style="margin-top:1rem;">
+            <strong>⚡ Funciones principales</strong>
+            <p><strong>Enzimas</strong> (catalizadores), <strong>hormonas</strong> (insulina, glucagón), <strong>transporte</strong> (hemoglobina transporta O₂, albúmina transporta ácidos grasos), <strong>inmunidad</strong> (anticuerpos: inmunoglobulinas G, M, A, D, E), <strong>estructura</strong> (colágeno, queratina) y <strong>nutrición</strong> (principal ingreso nitrogenado).</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 10 — CARBOHIDRATOS INTRO          ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">04 — CARBOHIDRATOS</div>
+        <h2>¿Qué son los Carbohidratos?</h2>
+    </div>
+    <div class="content">
+        <p>Los carbohidratos son moléculas formadas por <span class="em">C, H y O</span>. Desde el punto de vista químico son <strong>polihidroxi aldehídos o cetonas</strong> y sus polímeros. Se representan con la fórmula general <strong>Cₙ(H₂O)ₙ</strong>.</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>🔋 Combustible</h4>
+                <p>Fuente principal de energía metabólica. <strong>1 g de carbohidrato = 4 Kcal.</strong></p>
+            </div>
+            <div class="card card-accent">
+                <h4>🏗️ Precursores</h4>
+                <p>En la biosíntesis de ácidos grasos y algunos aminoácidos.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🧩 Componentes</h4>
+                <p>Constituyentes de glucolípidos, glucoproteínas, nucleótidos y ácidos nucleicos.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>🌍 Importancia en la biosfera</strong>
+            <p>La <strong>glucosa</strong> es universalmente utilizada por las células. El <strong>glucógeno</strong> (hígado y músculo) es la reserva de energía más accesible. La <strong>celulosa</strong> es la molécula orgánica <em>más abundante del planeta</em> (madera, algodón). La <strong>sacarosa</strong> (azúcar de mesa) es un disacárido producido en millones de toneladas anualmente.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 11 — CLASIFICACIÓN CARBOHIDRATOS  ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">04 — CARBOHIDRATOS</div>
+        <h2>Clasificación según el número de unidades</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>1️⃣ Monosacáridos</h4>
+                <p>Unidades mínimas. Cristalinos, solubles en agua y de sabor dulce. No se pueden hidrolizar más.</p>
+                <p><strong>Dos familias:</strong></p>
+                <ul>
+                    <li><strong>Aldosas</strong> (contienen grupo aldehído)</li>
+                    <li><strong>Cetosas</strong> (contienen grupo cetona)</li>
+                </ul>
+                <p style="font-size:0.88rem; margin-top:0.5rem;"><em>Ej: glucosa, galactosa, fructosa, ribosa, desoxirribosa.</em></p>
+            </div>
+            <div class="card card-accent">
+                <h4>2️⃣ Oligosacáridos</h4>
+                <p>Unión de 2 a 10 monosacáridos mediante <strong>enlace glucosídico</strong>. Los más importantes son los <strong>disacáridos</strong>:</p>
+                <table style="margin-top:0.5rem; font-size:0.88rem;">
+                    <tr><td><strong>Maltosa</strong></td><td>Glucosa + Glucosa</td></tr>
+                    <tr><td><strong>Sacarosa</strong></td><td>Glucosa + Fructosa</td></tr>
+                    <tr><td><strong>Lactosa</strong></td><td>Galactosa + Glucosa</td></tr>
+                    <tr><td><strong>Celobiosa</strong></td><td>Glucosa + Glucosa</td></tr>
+                </table>
+            </div>
+            <div class="card card-accent">
+                <h4>3️⃣ Polisacáridos</h4>
+                <p>Muchos monosacáridos unidos por enlaces glucosídicos. <strong>No cristalinos, insolubles</strong> en agua y sin sabor dulce.</p>
+                <ul>
+                    <li><strong>Glucógeno:</strong> reserva de energía animal</li>
+                    <li><strong>Almidón:</strong> reserva de energía vegetal</li>
+                    <li><strong>Celulosa:</strong> componente estructural vegetal</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn" style="margin-top:1rem;">
+            <strong>📌 Clasificación de monosacáridos por número de carbonos</strong>
+            <p><strong>Triosas (3C):</strong> gliceraldehído, dihidroxiacetona &nbsp;|&nbsp; <strong>Tetrosas (4C):</strong> eritrosa, eritrulosa &nbsp;|&nbsp; <strong>Pentosas (5C):</strong> ribosa, desoxirribosa &nbsp;|&nbsp; <strong>Hexosas (6C):</strong> glucosa, galactosa, fructosa</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 12 — LÍPIDOS INTRO               ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">05 — LÍPIDOS</div>
+        <h2>¿Qué son los Lípidos?</h2>
+    </div>
+    <div class="content">
+        <p>Los lípidos son un grupo <span class="em">heterogéneo</span> de sustancias orgánicas que comparten ser <strong>no polares, insolubles en agua</strong> y solubles en solventes orgánicos. Están formados por C, H, O y en ocasiones P, N y S.</p>
+
+        <h3>Funciones principales</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🏗️ Membranas celulares</h4>
+                <p>Aportan la <strong>bicapa de fosfolípidos</strong>: cabezas polares hacia fuera, colas no polares hacia dentro.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🔋 Reserva de energía</h4>
+                <p>Mayor reserva energética del organismo. <strong>1 g de grasa = 9 Kcal.</strong> Pueden mantener el gasto energético durante ~50 días de inanición.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🧊 Aislante térmico</h4>
+                <p>Proteccion del frío ambiental (gruesa capa subcutánea en animales de zonas frías).</p>
+            </div>
+            <div class="card card-accent">
+                <h4>⚡ Hormonas y vitaminas</h4>
+                <p>Hormonas esteroideas, prostaglandinas, vitaminas liposolubles A, D, E y K.</p>
+            </div>
+        </div>
+
+        <div class="box" style="margin-top:1rem;">
+            <strong>📊 Nutrición</strong>
+            <p>Los lípidos aportan alrededor del <strong>30 %</strong> de las kilocalorías de la dieta y son fuente de los ácidos grasos indispensables: <strong>linoleico, linolénico y araquidónico</strong>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 13 — CLASIFICACIÓN LÍPIDOS        ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">05 — LÍPIDOS</div>
+        <h2>Clasificación de los Lípidos</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>🟢 Lípidos Simples</h4>
+                <ul>
+                    <li><strong>Ácidos grasos:</strong> cadena lineal R-COOH. Los más abundantes son el <em>oleico</em> (~30 %) y el <em>palmítico</em> (10-50 %). Pueden ser saturados o insaturados.</li>
+                    <li><strong>Acilgliceroles:</strong> ésteres de glicerol + ácidos grasos. Los <em>triglicéridos</em> son los más abundantes: mayor reserva de energía.</li>
+                    <li><strong>Ceras:</strong> ácido graso de cadena larga + alcohol de cadena larga. No son asimilables. Ej: cera de abeja, lanolina.</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>🔵 Lípidos Compuestos</h4>
+                <ul>
+                    <li><strong>Glicerofosfolípidos:</strong> derivados del ácido fosfatídico, fundamentales en membranas (ej: lecitinas, cefalinas).</li>
+                    <li><strong>Esfingolípidos:</strong> derivados de la esfingosina; unidad base = ceramida.</li>
+                    <li><strong>Glucolípidos:</strong> cerebrósidos y gangliósidos, abundantes en tejido nervioso.</li>
+                    <li><strong>Lipoproteínas:</strong> solubles en agua; transportan sustancias no polares en el plasma.</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>🟡 Lípidos Asociados</h4>
+                <ul>
+                    <li><strong>Terpenoides:</strong> derivados del isopreno (5C). Incluyen fitol (clorofila), escualeno (precursor del colesterol), vitamina A.</li>
+                    <li><strong>Esteroides:</strong> estructura base = colesterol (27C). Comprenden hormonas sexuales, cortisol, vitamina D, ácidos biliares.</li>
+                    <li><strong>Eicosanoides:</strong> derivados del ácido araquidónico (20C). Actúan como hormonas locales: prostaglandinas, leucotrienos, tromboxanos.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 14 — ÁCIDOS GRASOS DETALLE        ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">05 — LÍPIDOS</div>
+        <h2>Ácidos Grasos: Saturados e Insaturados</h2>
+    </div>
+    <div class="content">
+        <p>Los ácidos grasos son ácidos monocarboxílicos de cadena lineal (<strong>R-COOH</strong>). La longitud de la cadena varía entre 4 y 24 carbonos, siendo los más comunes los de <span class="em">16 o 18 carbonos</span>.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🟤 Saturados</h4>
+                <p>Sin dobles enlaces C=C. <strong>Sólidos o semisólidos</strong> a temperatura ambiente.</p>
+                <p><em>Ejemplos: palmítico (16:0), esteárico (18:0), láurico, butírico.</em></p>
+                <p style="font-size:0.88rem; margin-top:0.5rem;"><em>Fuentes: sebo, manteca, mantequilla, margarina.</em></p>
+            </div>
+            <div class="card card-accent">
+                <h4>🟢 Insaturados</h4>
+                <p>Con 1 a 4 dobles enlaces C=C. <strong>Líquidos</strong> a temperatura ambiente (aceites). Tienen puntos de fusión más bajos.</p>
+                <p><em>Ejemplos: oleico (18:1 Δ9), linoleico (18:2 Δ9,12), linolénico, araquidónico.</em></p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>📝 Nomenclatura práctica</strong>
+            <p>Se indica: <strong>nº de carbonos : nº de dobles enlaces</strong>. Ejemplo: palmítico = <strong>16:0</strong> (16 carbonos, sin dobles enlaces); oleico = <strong>18:1</strong> (18 carbonos, 1 doble enlace). Si se añade <strong>Δ</strong> se indica la posición del doble enlace: oleico = 18:1 Δ9.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 15 — ÁCIDOS NUCLEICOS INTRO       ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">06 — ÁCIDOS NUCLEICOS</div>
+        <h2>Nucleótidos: los Monómeros</h2>
+    </div>
+    <div class="content">
+        <p>Los <span class="em">ácidos nucleicos</span> son macromoléculas resultantes de la polimerización lineal de <strong>nucleótidos</strong>, monómeros complejos formados por tres partes:</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>1️⃣ Fosfato inorgánico</h4>
+                <p>Grupo de fósforo con oxígenos (<strong>O-P-O</strong>). Forma los enlaces fosfodiéster entre nucleótidos.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>2️⃣ Pentosa</h4>
+                <p>Azúcar de 5 carbonos. Puede ser:</p>
+                <ul>
+                    <li><strong>Ribosa</strong> → forma parte del ARN</li>
+                    <li><strong>Desoxirribosa</strong> → forma parte del ADN</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>3️⃣ Base nitrogenada</h4>
+                <p>Anillos heterocíclicos formados por C, N e H. Dos clases:</p>
+                <ul>
+                    <li><strong>Purinas:</strong> adenina (A), guanina (G)</li>
+                    <li><strong>Pirimidinas:</strong> citosina (C), timina (T) / uracilo (U)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>⚡ ATP — La moneda de energía celular</strong>
+            <p>La <strong>adenosina-trifosfato (ATP)</strong> es un nucleótido que actúa como intermediario energético. Sus enlaces de alta energía (~) liberan energía cuando la célula la requiere:</p>
+            <p style="text-align:center; font-family:monospace; font-size:1.05rem; color:#b7e4c7; margin:0.6rem 0;"><strong>ATP → ADP + P + Energía</strong></p>
+            <p>Otros nucleótidos clave: <strong>NAD</strong> (nicotinamida-adenina-dinucleótido) y <strong>FAD</strong> (flavina-adenina-dinucleótido), cofactores enzimáticos.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 16 — ADN                          ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">06 — ÁCIDOS NUCLEICOS</div>
+        <h2>ADN: La Molécula de la Información</h2>
+    </div>
+    <div class="content">
+        <p>El <span class="em">ADN (ácido desoxirribonucleico)</span> es una molécula enorme (peso molecular entre 6 y 16 millones de uma). Se encuentra principalmente en el <strong>núcleo celular</strong>, guardando la información genética y regulando la producción de proteínas.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🔀 Estructura: Doble Hélice</h4>
+                <p>Dos cadenas enrolladas una en la otra, propuesta en <strong>1953 por Watson y Crick</strong>. Ambas cadenas se mantienen unidas por <strong>puentes de hidrógeno</strong> entre bases complementarias:</p>
+                <div style="text-align:center; margin:0.8rem 0; font-size:1.05rem;">
+                    <span class="em">A — T</span> &nbsp;(2 puentes de H)<br>
+                    <span class="em">C — G</span> &nbsp;(3 puentes de H)
+                </div>
+                <p>Las dos cadenas son <strong>complementarias</strong>, no idénticas.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🔁 Replicación</h4>
+                <p>Durante la división celular los filamentos de ADN se <strong>desenrollan</strong> y cada uno sirve como plantilla para sintetizar una cadena complementaria nueva.</p>
+                <p>Resultado: <strong>dos moléculas idénticas</strong> de ADN, una para cada célula hija.</p>
+                <div class="box" style="margin-top:0.7rem;">
+                    <strong>📌 Bases del ADN</strong>
+                    <p><strong>Adenina (A), Guanina (G), Timina (T), Citosina (C)</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 17 — ARN                          ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">06 — ÁCIDOS NUCLEICOS</div>
+        <h2>ARN: Tres Tipos, Tres Funciones</h2>
+    </div>
+    <div class="content">
+        <p>El <span class="em">ARN (ácido ribonucleico)</span> está formado por una sola cadena (simple) que puede ser lineal o adoptar estructuras particulares (horquillas o rizos). Sus bases son <strong>A, G, C y Uracilo (U)</strong> en lugar de timina.</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>🏭 ARN Ribosómico (ARNr)</h4>
+                <p>Forma parte de la estructura de los <strong>ribosomas</strong>, los sitios donde se sintetizan las proteínas.</p>
+                <p style="font-size:0.88rem; color:#b7e4c7; margin-top:0.4rem;"><em>El más abundante de los tres tipos de ARN.</em></p>
+            </div>
+            <div class="card card-accent">
+                <h4>📨 ARN Mensajero (ARNm)</h4>
+                <p>Lleva la información genética del ADN al ribosoma. <strong>Indica la secuencia de aminoácidos</strong> que formará la proteína a sintetizar.</p>
+                <p style="font-size:0.88rem; color:#b7e4c7; margin-top:0.4rem;"><em>Es la "copia" del gen.</em></p>
+            </div>
+            <div class="card card-accent">
+                <h4>🚚 ARN de Transferencia (ARNt)</h4>
+                <p>Estructura en <strong>"hoja de trébol"</strong>. Peso molecular relativamente bajo. Su función es <strong>transportar específicamente los aminoácidos</strong> al ribosoma para su acople en la secuencia.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn" style="margin-top:1rem;">
+            <strong>📌 Información que proporcionan juntos</strong>
+            <p>El ARNm y el ARNt permiten conocer: <strong>(1)</strong> qué aminoácidos componen la proteína, y <strong>(2)</strong> en qué orden o secuencia deben ubicarse.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 18 — EJERCICIO 1 (Fill-in-blank)  ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Biomoléculas y Bioelementos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco con la palabra correcta.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 19 — DOGMA CENTRAL INTRO          ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number" style="color:#ffb74d;">⚡ DOGMA CENTRAL</div>
+        <h2>Flujo de la Información Genética</h2>
+    </div>
+    <div class="content">
+        <p>El <span class="em-gold">Dogma Central de la Biología Molecular</span> indica que la información genética fluye de una manera específica y ordenada. Este flujo se denomina <strong>expresión génica</strong>: la información contenida en los <strong>genes</strong> (secuencias de nucleótidos del ADN) se manifiesta en algo funcional para la célula, como una proteína.</p>
+
+        <!-- Diagrama visual del flujo -->
+        <div class="flow-arrow">
+            <div class="flow-unit">
+                <div class="flow-box">
+                    <div class="fb-label">Almacena info</div>
+                    <div class="fb-name">ADN</div>
+                </div>
+            </div>
+            <svg class="flow-arrow-svg" viewBox="0 0 60 36"><polygon points="10,8 40,8 40,2 58,18 40,34 40,28 10,28"/></svg>
+            <div class="flow-unit">
+                <div class="flow-box">
+                    <div class="fb-label">Copia & transporta</div>
+                    <div class="fb-name">ARNm</div>
+                </div>
+                <div class="flow-label">Transcripción</div>
+            </div>
+            <svg class="flow-arrow-svg" viewBox="0 0 60 36"><polygon points="10,8 40,8 40,2 58,18 40,34 40,28 10,28"/></svg>
+            <div class="flow-unit">
+                <div class="flow-box">
+                    <div class="fb-label">Producto final</div>
+                    <div class="fb-name">Proteína</div>
+                </div>
+                <div class="flow-label">Traducción</div>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>🔁 Replicación del ADN</strong>
+            <p>Además del flujo ADN → ARN → Proteína, el ADN también se <strong>replica</strong> (genera una copia idéntica de sí mismo). Esto asegura que cuando las células se dividan, <strong>ambas células hijas</strong> tengan una copia de ADN idéntica capaz de llevar a cabo el flujo de información genética.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 20 — TRANSCRIPCIÓN Y TRADUCCIÓN   ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number" style="color:#ffb74d;">⚡ DOGMA CENTRAL</div>
+        <h2>Transcripción y Traducción</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent" style="border-color:rgba(255,183,77,0.4); background:rgba(255,183,77,0.06);">
+                <h4 style="color:#ffb74d;">📖 Transcripción: ADN → ARNm</h4>
+                <p>El ADN pasa por el proceso de <strong>transcripción</strong> para generar una copia llamada <strong>ARN mensajero (ARNm)</strong>.</p>
+                <ul>
+                    <li>Se realiza en el <strong>núcleo celular</strong>.</li>
+                    <li>El ARNm es una copia de la secuencia del gen.</li>
+                    <li>El ARNm sale del núcleo al citosol.</li>
+                </ul>
+            </div>
+            <div class="card card-accent" style="border-color:rgba(255,183,77,0.4); background:rgba(255,183,77,0.06);">
+                <h4 style="color:#ffb74d;">🏭 Traducción: ARNm → Proteína</h4>
+                <p>El ARNm se <strong>traduce</strong> en el <strong>citosol</strong> (en los ribosomas) para formar un <strong>polipéptido</strong> (secuencia de aminoácidos).</p>
+                <ul>
+                    <li>El <strong>ARNt</strong> transporta los aminoácidos.</li>
+                    <li>El <strong>ARNr</strong> forma parte del ribosoma.</li>
+                    <li>Si el polipéptido adquiere estructura 3D → se convierte en <strong>proteína</strong>.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box" style="margin-top:1rem;">
+            <strong>🔄 Retrotranscriptasa: una excepción importante</strong>
+            <p>Algunos <strong>retrovirus</strong> (como el VIH) poseen la enzima <strong>retrotranscriptasa</strong>, que permite el flujo <em>inverso</em>: <strong>ARN → ADN</strong>. Esta excepción permite que el material genético viral se integre al ADN de la célula infectada.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 21 — EXPERIMENTOS HISTÓRICOS      ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number" style="color:#ffb74d;">⚡ DOGMA CENTRAL</div>
+        <h2>Experimentos que Cambiaron la Biología</h2>
+    </div>
+    <div class="content">
+        <p>Varios experimentos históricos fueron clave para demostrar que el <span class="em">ADN es el material genético</span> y para entender el flujo de la información:</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🧫 Griffith (1928)</h4>
+                <p>Demostró que existe un <strong>"principio transformador"</strong> que puede cambiar una bacteria no virulenta en virulenta. Esto sugirió que hay información que se transfiere de un organismo a otro.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🧬 Avery, McLeod y McCarty (1944)</h4>
+                <p>Identificaron al <strong>ADN como el principio transformador</strong> de Griffith. Fue la primera evidencia directa de que el ADN porta la información genética.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🦠 Hershey y Chase (1952)</h4>
+                <p>Usando bacteriófagos (virus que infectan bacterias) y marcadores radioacitivos, confirmaron definitivamente que el <strong>ADN</strong> (no la proteína) es el material genético que ingresa a la célula.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🔬 Beadle y Tatum / Jacob y Monod</h4>
+                <p><strong>Beadle-Tatum:</strong> hipótesis "un gen – una enzima". <strong>Jacob-Monod:</strong> descubrieron el ARN mensajero y el concepto de <em>operon</em>, explicando la regulación de la expresión génica.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 22 — EJERCICIO 2 (Opción múltiple)║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Proteínas y Carbohidratos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta para cada pregunta.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 23 — EJERCICIO 3 (Lípidos y AN)   ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 3</div>
+        <h2>Práctica: Lípidos y Ácidos Nucleicos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex3-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx3()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx3()">↺ Limpiar</button>
+        </div>
+        <div id="ex3-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 24 — EJERCICIO 4 (Dogma Central)  ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 4</div>
+        <h2>Práctica: Dogma Central</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la opción correcta.</p>
+        </div>
+        <div id="ex4-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx4()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx4()">↺ Limpiar</button>
+        </div>
+        <div id="ex4-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 25 — RESUMEN                      ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">RESUMEN</div>
+        <h2>Puntos Clave de la Unidad</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🧬 Biomoléculas</h4>
+                <p>Las macromoléculas (proteínas, carbohidratos, lípidos, ácidos nucleicos) se forman por la unión de monómeros mediante enlaces característicos e hidrolizables.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>⚗️ Bioelementos</h4>
+                <p>10 macroelementos (O, C, H, N…) representan el 98.4 % del peso corporal; 10 microelementos el 1.6 % restante.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🔬 Proteínas</h4>
+                <p>Formadas por aminoácidos (20 utilizados por el cuerpo, 10 esenciales). Tienen 4 niveles estructurales y funciones enormemente diversas.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🍬 Carbohidratos</h4>
+                <p>Clasificados en monosacáridos, oligosacáridos y polisacáridos. La glucosa es el combustible metabólico universal; la celulosa la molécula orgánica más abundante del planeta.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🧈 Lípidos</h4>
+                <p>Grupo heterogéneo (simples, compuestos, asociados). Mayor reserva de energía (9 Kcal/g). Fundamentales en membranas, aislamiento y hormonas.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🧪 Ácidos Nucleicos & Dogma Central</h4>
+                <p>ADN (doble hélice, información genética) y ARN (mensajero, ribosómico, transferencia). El flujo ADN → ARN → Proteína es la base de la expresión génica.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 26 — BIBLIOGRAFÍA                 ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAFÍA</div>
+        <h2>Fuentes y Recursos</h2>
+    </div>
+    <div class="content">
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>📄 Documento escrito</h4>
+            <p>Universidad Nacional del Litoral — <em>Unidad 9: Biomoléculas: carbohidratos, proteínas, lípidos y ácidos nucleicos.</em> Programa de Ingreso UNL / Curso de Articulación Disciplinar: Físico-Química. Autora: Leandra Micocci.</p>
+            <p style="font-size:0.88rem; margin-top:0.3rem; color:#b7e4c7;">https://www.unl.edu.ar/ingreso/cursos/medicina/</p>
+        </div>
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>🎥 Video — Dogma Central de la Biología Molecular</h4>
+            <p>Explicación del flujo ADN → ARN → Proteína, experimentos históricos (Griffith, Avery, Hershey-Chase) y el papel de la retrotranscriptasa.</p>
+            <p style="font-size:0.88rem; margin-top:0.3rem; color:#b7e4c7;">YouTube — Dogma central de la biología molecular | ADN-ARN-Proteína</p>
+        </div>
+        <div class="card card-accent">
+            <h4>📚 Recursos complementarios</h4>
+            <ul>
+                <li>SlideShare — Biomoléculas orgánicas: carbohidratos, lípidos, proteínas, ácidos nucleicos</li>
+                <li>SlideShare — Biomoléculas inorgánicas</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ╔═══════════════════════════════════════════╗
+     ║  SLIDE 27 — PORTADA FINAL                ║
+     ╚═══════════════════════════════════════════╝ -->
+<div class="slide cover">
+    <h1>¿Preguntas?</h1>
+    <div class="line"></div>
+    <p class="subtitle">Gracias por tu atención</p>
+</div>
+
+</div><!-- /container -->
+
+<!-- Contador y Navegación -->
+<div class="counter">
+    <span id="current">1</span> / <span id="total">27</span>
+</div>
+
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════════ -->
+<script>
+// ──────────────────────────────────────────
+// NAVEGACIÓN
+// ──────────────────────────────────────────
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+
+function nav(dir) { show(current + dir); }
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+
+show(0);
+
+// ──────────────────────────────────────────
+// UTILIDADES DE EJERCICIOS
+// ──────────────────────────────────────────
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s]/g, '')
+        .replace(/\s+/g, ' ');
+}
+
+// ──────────────────────────────────────────
+// EJERCICIO 1 — Fill-in-blank: Biomoléculas y Bioelementos
+// ──────────────────────────────────────────
+const ex1Data = [
+    { q: "El componente más abundante del organismo humano es el _____ (representa el 70 % del peso corporal).", a: "agua" },
+    { q: "Las macromoléculas se forman por la unión de monómeros llamados _____.", a: "monomeros" },
+    { q: "El enlace que une los aminoácidos en las proteínas se llama enlace _____.", a: "peptidico" },
+    { q: "Los carbohidratos se unen mediante el enlace _____.", a: "glucosidico" },
+    { q: "El elemento más abundante en el organismo humano (62 %) es el _____.", a: "oxigeno" },
+    { q: "Los ácidos nucleicos se forman por la unión de nucleótidos mediante enlaces _____.", a: "fosfodiester" },
+    { q: "Las proteínas y los ácidos nucleicos se llaman 'moléculas _____' porque requieren información detallada sobre la secuencia.", a: "informativas" },
+    { q: "Los polisacáridos, proteínas y ácidos nucleicos tienen enlaces _____, es decir, se pueden romper con agua.", a: "hidrolizables" }
+];
+
+(function renderEx1() {
+    const c = document.getElementById('ex1-container');
+    c.innerHTML = ex1Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex1-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function checkEx1() {
+    let correct = 0;
+    ex1Data.forEach((item, i) => {
+        const inp = document.getElementById('ex1-inp-' + i);
+        if (normalise(inp.value) === normalise(item.a)) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById('ex1-feedback');
+    fb.classList.add('show');
+    if (correct === ex1Data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${ex1Data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+function resetEx1() {
+    ex1Data.forEach((_, i) => {
+        const inp = document.getElementById('ex1-inp-' + i);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    const fb = document.getElementById('ex1-feedback');
+    fb.className = 'feedback-msg'; fb.innerHTML = '';
+}
+
+// ──────────────────────────────────────────
+// EJERCICIO 2 — Opción múltiple: Proteínas y Carbohidratos
+// ──────────────────────────────────────────
+const ex2Data = [
+    {
+        q: "¿Cuántos aminoácidos utiliza el cuerpo humano para formar sus proteínas?",
+        opts: ["10", "20", "22", "50"],
+        correct: 1
+    },
+    {
+        q: "¿Cuál de las siguientes es una proteína globular?",
+        opts: ["Colágeno", "Queratina", "Elastina", "Enzimas"],
+        correct: 3
+    },
+    {
+        q: "La estructura primaria de las proteínas es la única que está codificada en los:",
+        opts: ["Ribosomas", "Lípidos", "Genes", "Mitocondrias"],
+        correct: 2
+    },
+    {
+        q: "¿Qué disacárido está formado por glucosa + fructosa?",
+        opts: ["Maltosa", "Lactosa", "Sacarosa", "Celobiosa"],
+        correct: 2
+    },
+    {
+        q: "La molécula orgánica más abundante del planeta es la:",
+        opts: ["Glucosa", "Celulosa", "Almidón", "Sacarosa"],
+        correct: 1
+    },
+    {
+        q: "¿Qué tipo de enlace estabiliza la estructura secundaria de las proteínas?",
+        opts: ["Enlace peptídico", "Enlace covalente", "Puente de hidrógeno", "Enlace glucosídico"],
+        correct: 2
+    }
+];
+
+(function renderEx2() {
+    const c = document.getElementById('ex2-container');
+    c.innerHTML = ex2Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1.1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex2-opt-${qi}-${oi}" onclick="selectMC2(${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+function selectMC2(qi, oi) {
+    // only allow one selection if not already checked
+    const opts = ex2Data[qi].opts;
+    opts.forEach((_, i) => {
+        const el = document.getElementById(`ex2-opt-${qi}-${i}`);
+        el.classList.remove('selected','correct-sel','incorrect-sel');
+    });
+    document.getElementById(`ex2-opt-${qi}-${oi}`).classList.add('selected');
+}
+
+function checkEx2() {
+    let correct = 0;
+    ex2Data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`ex2-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+        });
+        // find selected
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`ex2-opt-${qi}-${oi}`).classList.contains('selected') ||
+                document.getElementById(`ex2-opt-${qi}-${oi}`).classList.contains('correct-sel'))
+                selIdx = oi;
+        });
+        // Actually re-check: look for which had selected class before we cleared... 
+        // Let's redo: we need to store selections
+        // We'll use a data attribute approach
+    });
+    // Better approach: store selection in data attr
+    let c = 0;
+    ex2Data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`ex2-opt-${qi}-${oi}`);
+            if (el.dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`ex2-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById('ex2-feedback');
+    fb.classList.add('show');
+    if (c === ex2Data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${ex2Data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+function resetEx2() {
+    ex2Data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`ex2-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById('ex2-feedback').className = 'feedback-msg';
+    document.getElementById('ex2-feedback').innerHTML = '';
+}
+
+// Patch selectMC2 to use data-sel
+(function patchSelect2() {
+    window.selectMC2 = function(qi, oi) {
+        ex2Data[qi].opts.forEach((_, i) => {
+            const el = document.getElementById(`ex2-opt-${qi}-${i}`);
+            el.classList.remove('selected');
+            el.dataset.sel = 'false';
+        });
+        const el = document.getElementById(`ex2-opt-${qi}-${oi}`);
+        el.classList.add('selected');
+        el.dataset.sel = 'true';
+    };
+})();
+
+// ──────────────────────────────────────────
+// EJERCICIO 3 — Fill-in-blank: Lípidos y Ácidos Nucleicos
+// ──────────────────────────────────────────
+const ex3Data = [
+    { q: "Los lípidos son insolubles en agua y solubles en los solventes _____.", a: "organicos" },
+    { q: "Los triglicéridos son los lípidos más abundantes y la mayor reserva de energía. Cada gramo aporta _____ Kcal.", a: "9" },
+    { q: "Los ácidos grasos saturados son sólidos a temperatura ambiente, mientras que los insaturados son _____.", a: "liquidos" },
+    { q: "Los esteroides se derivan del colesterol, una molécula de _____ carbonos.", a: "27" },
+    { q: "Los nucleótidos están formados por tres partes: fosfato, pentosa y una base _____.", a: "nitrogenada" },
+    { q: "En el ADN la adenina se empareja con la timina y la citosina con la _____.", a: "guanina" },
+    { q: "El ADN tiene estructura de doble hélice propuesta por Watson y Crick en el año _____.", a: "1953" },
+    { q: "La enzima retrotranscriptasa permite el flujo inverso: ARN → _____.", a: "ADN" }
+];
+
+(function renderEx3() {
+    const c = document.getElementById('ex3-container');
+    c.innerHTML = ex3Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex3-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function checkEx3() {
+    let correct = 0;
+    ex3Data.forEach((item, i) => {
+        const inp = document.getElementById('ex3-inp-' + i);
+        if (normalise(inp.value) === normalise(item.a)) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById('ex3-feedback');
+    fb.classList.add('show');
+    if (correct === ex3Data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${ex3Data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+function resetEx3() {
+    ex3Data.forEach((_, i) => {
+        const inp = document.getElementById('ex3-inp-' + i);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById('ex3-feedback').className = 'feedback-msg';
+    document.getElementById('ex3-feedback').innerHTML = '';
+}
+
+// ──────────────────────────────────────────
+// EJERCICIO 4 — Opción múltiple: Dogma Central
+// ──────────────────────────────────────────
+const ex4Data = [
+    {
+        q: "¿Cuál es el orden correcto del flujo de información genética según el Dogma Central?",
+        opts: ["ARN → ADN → Proteína", "Proteína → ARN → ADN", "ADN → ARN → Proteína", "ADN → Proteína → ARN"],
+        correct: 2
+    },
+    {
+        q: "¿Cómo se llama el proceso en el que el ADN genera una copia de ARNm?",
+        opts: ["Traducción", "Replicación", "Transcripción", "Mutación"],
+        correct: 2
+    },
+    {
+        q: "¿Dónde tiene lugar la traducción (síntesis de proteínas)?",
+        opts: ["En el núcleo celular", "En el citosol (ribosomas)", "En la mitocondria", "En el retículo liso"],
+        correct: 1
+    },
+    {
+        q: "¿Qué tipo de ARN transporta los aminoácidos al ribosoma?",
+        opts: ["ARN ribosómico (ARNr)", "ARN mensajero (ARNm)", "ARN de transferencia (ARNt)", "ARN viral"],
+        correct: 2
+    },
+    {
+        q: "¿Qué experimento confirmó que el ADN (no la proteína) es el material genético?",
+        opts: ["Griffith (1928)", "Beadle y Tatum", "Hershey y Chase (1952)", "Watson y Crick (1953)"],
+        correct: 2
+    }
+];
+
+(function renderEx4() {
+    const c = document.getElementById('ex4-container');
+    c.innerHTML = ex4Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1.1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex4-opt-${qi}-${oi}" onclick="selectMC4(${qi},${oi})" data-sel="false">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+function selectMC4(qi, oi) {
+    ex4Data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`ex4-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`ex4-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+function checkEx4() {
+    let c = 0;
+    ex4Data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`ex4-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`ex4-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById('ex4-feedback');
+    fb.classList.add('show');
+    if (c === ex4Data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${ex4Data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+function resetEx4() {
+    ex4Data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`ex4-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById('ex4-feedback').className = 'feedback-msg';
+    document.getElementById('ex4-feedback').innerHTML = '';
+}
+
+// Initialize data-sel for ex2 on load
+(function initEx2Sel() {
+    ex2Data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`ex2-opt-${qi}-${oi}`);
+            if (el) el.dataset.sel = 'false';
+        });
+    });
+})();
+</script>
+</body>
+</html>

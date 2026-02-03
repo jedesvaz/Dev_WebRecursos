@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leyes de Newton del Movimiento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: #1a1a2e;
+            color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 5rem 8rem;
+            flex-direction: column;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* Slide de portada */
+        .cover {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .cover h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+        .cover .subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .cover .line {
+            width: 100px;
+            height: 3px;
+            background: #60a5fa;
+            margin: 2rem auto;
+        }
+
+        .cover .help {
+            margin-top: 3rem;
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .cover .metadata {
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            opacity: 0.85;
+        }
+
+        /* Slides normales */
+        .slide-header {
+            margin-bottom: 2rem;
+        }
+
+        .slide-number {
+            color: #60a5fa;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #f0f0f0;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: #60a5fa;
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 2rem;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #60a5fa;
+            border-radius: 3px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+        }
+
+        ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        ul li {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+            opacity: 0.9;
+        }
+
+        ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .box {
+            background: rgba(96, 165, 250, 0.1);
+            border-left: 4px solid #60a5fa;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .box strong {
+            color: #60a5fa;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(96,165,250,0.2);
+        }
+
+        .card h4 {
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .em {
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        /* Estilos especiales para ejercicios */
+        .exercise-badge {
+            background: linear-gradient(135deg, #60a5fa 0%, #93c5fd 100%);
+            color: #1a1a2e;
+            padding: 0.3rem 1.2rem;
+            border-radius: 25px;
+            display: inline-block;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 10px rgba(96, 165, 250, 0.3);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(96,165,250,0.2);
+        }
+
+        th {
+            background: rgba(96,165,250,0.1);
+            color: #60a5fa;
+            font-weight: 700;
+        }
+
+        .formula {
+            background: #0d1117;
+            padding: 1.5rem;
+            display: block;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border: 1px solid rgba(96,165,250,0.3);
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: center;
+            color: #93c5fd;
+        }
+
+        .diagram {
+            background: rgba(255,255,255,0.03);
+            border: 2px dashed rgba(96,165,250,0.3);
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            text-align: center;
+            font-style: italic;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Navegación */
+        .nav {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .btn {
+            background: rgba(96, 165, 250, 0.2);
+            color: #60a5fa;
+            border: 2px solid #60a5fa;
+            padding: 0.8rem 1.5rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 700;
+        }
+
+        .btn:hover:not(:disabled) {
+            background: #60a5fa;
+            color: #1a1a2e;
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .counter {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(96, 165, 250, 0.2);
+            border: 2px solid #60a5fa;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            color: #60a5fa;
+            font-size: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 3rem 2rem;
+            }
+
+            .cover h1 {
+                font-size: 2.5rem;
+            }
+
+            .cover .subtitle {
+                font-size: 1.2rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+            }
+
+            p, ul li {
+                font-size: 1rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav, .counter {
+                bottom: 1rem;
+            }
+
+            .nav {
+                right: 1rem;
+            }
+
+            .counter {
+                left: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slide {
+                padding: 2rem 1rem;
+            }
+
+            .cover h1 {
+                font-size: 2rem;
+            }
+
+            .cover .subtitle {
+                font-size: 1rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Slide 1: Portada -->
+        <div class="slide cover active">
+            <h1>Leyes de Newton del Movimiento</h1>
+            <div class="line"></div>
+            <p class="subtitle">Tema 6: Leyes de Newton | Tema 7: Aplicaciones</p>
+            <div class="metadata">
+                <p>Física: Cinemática y Dinámica</p>
+                <p>Nivel: Principiante</p>
+            </div>
+            <p class="help">Usa las flechas del teclado o los botones para navegar</p>
+        </div>
+
+        <!-- Slide 2: Introducción a la Dinámica -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">01 — INTRODUCCIÓN</div>
+                <h2>¿Qué es la Dinámica?</h2>
+            </div>
+            <div class="content">
+                <p>La dinámica es una rama de la física que estudia el movimiento de los objetos, considerando las causas que originan dicho movimiento. Estas causas involucran fuerzas y diferentes tipos de energía.</p>
+
+                <div class="box">
+                    <strong>Concepto Fundamental</strong>
+                    <p>La dinámica va más allá de describir el movimiento (cinemática), explicando el porqué de ese movimiento mediante el análisis de las fuerzas que actúan sobre los objetos.</p>
+                </div>
+
+                <h3>¿Qué es una Fuerza?</h3>
+                <p>Una fuerza es una cantidad física que mide la intensidad de la interacción entre dos o más objetos. Esta interacción puede ser por contacto o por distancia.</p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>Fuerzas de Contacto</h4>
+                        <p>Se producen cuando existe un contacto directo entre dos objetos. Ejemplo: la fuerza normal debido al contacto directo entre un objeto y una superficie.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Fuerzas a Distancia</h4>
+                        <p>Se producen por la interacción de un objeto con un campo físico vectorial (gravitacional, eléctrico o magnético). Ejemplo: el peso es la interacción entre una masa y el campo gravitacional terrestre.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Isaac Newton -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">02 — HISTORIA</div>
+                <h2>Isaac Newton (1642-1727)</h2>
+            </div>
+            <div class="content">
+                <p>Isaac Newton fue uno de los científicos más brillantes que ha tenido el mundo. Sus contribuciones revolucionaron la física y las matemáticas.</p>
+
+                <h3>Principales Contribuciones</h3>
+                <ul>
+                    <li>Formuló las leyes fundamentales de la mecánica (Leyes de Newton)</li>
+                    <li>Desarrolló la ley de la gravitación universal</li>
+                    <li>Inventó métodos matemáticos del cálculo para realizar sus postulados</li>
+                    <li>Descubrió el espectro de colores de la luz blanca al pasar por un prisma</li>
+                </ul>
+
+                <div class="box">
+                    <strong>Legado</strong>
+                    <p>Las leyes de Newton son la base de la mecánica clásica (también conocida como mecánica newtoniana) y siguen siendo fundamentales para entender el movimiento en nuestro universo cotidiano.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Objetivos del Tema -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">03 — OBJETIVOS</div>
+                <h2>Objetivos de Aprendizaje</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Objetivo General</strong>
+                    <p>Comprender y aplicar el conocimiento de las Leyes de Newton del movimiento para analizar y resolver problemas de dinámica en situaciones físicas reales.</p>
+                </div>
+
+                <h3>Al finalizar este tema serás capaz de:</h3>
+                <ul>
+                    <li>Comprender las tres leyes de Newton y su significado físico</li>
+                    <li>Identificar y diferenciar los distintos tipos de fuerzas que actúan sobre los objetos</li>
+                    <li>Construir diagramas de cuerpo libre para analizar sistemas físicos</li>
+                    <li>Aplicar las leyes de Newton para resolver problemas de movimiento</li>
+                    <li>Analizar situaciones con fuerzas específicas: peso, normal, fricción, tensión y fuerza elástica</li>
+                    <li>Resolver ejercicios prácticos de aplicación en sistemas reales</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: Primera Ley de Newton -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">04 — PRIMERA LEY</div>
+                <h2>Primera Ley de Newton: Ley de la Inercia</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Enunciado</strong>
+                    <p>En ausencia de fuerzas externas, todo cuerpo en reposo permanecerá siempre así. Lo mismo sucede si el cuerpo se encuentra en un estado de movimiento a velocidad constante.</p>
+                </div>
+
+                <h3>Condición de Equilibrio</h3>
+                <p>Cuando un cuerpo está en reposo o se mueve con velocidad constante (en línea recta), decimos que el cuerpo está en equilibrio. Para que un cuerpo esté en equilibrio, no deben actuar fuerzas sobre él, o tienen que actuar varias fuerzas cuya resultante (fuerza neta) sea cero.</p>
+
+                <div class="formula">
+                    ΣF = 0
+                </div>
+
+                <h3>Concepto de Inercia</h3>
+                <ul>
+                    <li>La inercia es la tendencia de un objeto a mantener su estado de movimiento</li>
+                    <li>Un objeto en reposo tiende a permanecer en reposo</li>
+                    <li>Un objeto en movimiento tiende a continuar moviéndose con velocidad constante</li>
+                    <li>La masa es la medida de la inercia de un objeto</li>
+                </ul>
+
+                <div class="card">
+                    <h4>Ejemplo Cotidiano</h4>
+                    <p>Cuando un autobús frena bruscamente, los pasajeros tienden a seguir moviéndose hacia adelante debido a su inercia, aunque el vehículo se detenga.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Segunda Ley de Newton -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">05 — SEGUNDA LEY</div>
+                <h2>Segunda Ley de Newton: Ley del Movimiento</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Enunciado</strong>
+                    <p>La aceleración que adquiere un cuerpo es directamente proporcional a la fuerza resultante aplicada, e inversamente proporcional a la masa de dicho cuerpo.</p>
+                </div>
+
+                <h3>Fórmula Fundamental</h3>
+                <div class="formula">
+                    F = m · a
+                </div>
+
+                <p>Donde:</p>
+                <ul>
+                    <li><span class="em">F</span> = Fuerza neta (resultante) en Newtons (N)</li>
+                    <li><span class="em">m</span> = Masa del objeto en kilogramos (kg)</li>
+                    <li><span class="em">a</span> = Aceleración en metros por segundo al cuadrado (m/s²)</li>
+                </ul>
+
+                <h3>Enunciado Alternativo</h3>
+                <p>La aceleración de un cuerpo es la misma que la fuerza neta que actúa sobre él, y es igual a la fuerza neta dividida entre la masa del cuerpo:</p>
+
+                <div class="formula">
+                    a = F / m
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>Interpretación</h4>
+                        <p>Si aumenta la fuerza aplicada, aumenta la aceleración. Si aumenta la masa, disminuye la aceleración para la misma fuerza.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Unidades en SI</h4>
+                        <p>1 Newton (N) = 1 kg·m/s²<br>Es la fuerza necesaria para acelerar 1 kg a 1 m/s²</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Tercera Ley de Newton -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">06 — TERCERA LEY</div>
+                <h2>Tercera Ley de Newton: Acción y Reacción</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Enunciado</strong>
+                    <p>Para toda fuerza de acción corresponde una fuerza de reacción, que es igual en magnitud, pero en sentido contrario.</p>
+                </div>
+
+                <h3>Características de las Fuerzas Acción-Reacción</h3>
+                <ul>
+                    <li>Siempre ocurren en pares</li>
+                    <li>Tienen la misma magnitud</li>
+                    <li>Tienen sentidos opuestos</li>
+                    <li>Actúan sobre objetos diferentes</li>
+                    <li>Son del mismo tipo de fuerza</li>
+                </ul>
+
+                <div class="formula">
+                    F₁₂ = -F₂₁
+                </div>
+
+                <p>Donde F₁₂ es la fuerza que el objeto 1 ejerce sobre el objeto 2, y F₂₁ es la fuerza que el objeto 2 ejerce sobre el objeto 1.</p>
+
+                <h3>Ejemplos Importantes</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Caminar</h4>
+                        <p>Empujas el suelo hacia atrás (acción), el suelo te empuja hacia adelante (reacción).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Nadar</h4>
+                        <p>Empujas el agua hacia atrás (acción), el agua te empuja hacia adelante (reacción).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Cohete</h4>
+                        <p>Los gases son expulsados hacia abajo (acción), el cohete es impulsado hacia arriba (reacción).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Diagramas de Cuerpo Libre -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">07 — HERRAMIENTAS</div>
+                <h2>Diagramas de Cuerpo Libre (DCL)</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Definición</strong>
+                    <p>Un diagrama de cuerpo libre es un diagrama que muestra únicamente el cuerpo elegido, "libre" de su entorno, con vectores que indican las magnitudes y direcciones de todas las fuerzas aplicadas sobre el cuerpo.</p>
+                </div>
+
+                <h3>¿Por qué son importantes?</h3>
+                <ul>
+                    <li>Permiten visualizar claramente todas las fuerzas que actúan sobre un objeto</li>
+                    <li>Son esenciales para aplicar correctamente las leyes de Newton</li>
+                    <li>Facilitan el planteamiento de ecuaciones de movimiento</li>
+                    <li>Ayudan a identificar fuerzas que podrían pasarse por alto</li>
+                </ul>
+
+                <h3>Regla Importante</h3>
+                <div class="card">
+                    <h4>Múltiples Cuerpos</h4>
+                    <p>Si en un problema interviene más de un cuerpo, hay que analizar cada uno y dibujar un diagrama de cuerpo libre para cada cuerpo.</p>
+                </div>
+
+                <h3>Pasos para Construir un DCL</h3>
+                <ul>
+                    <li>Identifica el objeto de estudio</li>
+                    <li>Aísla el objeto de su entorno</li>
+                    <li>Dibuja todas las fuerzas que actúan sobre el objeto como vectores</li>
+                    <li>Etiqueta cada fuerza claramente</li>
+                    <li>Establece un sistema de coordenadas</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Fuerza Peso -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">08 — FUERZAS ESPECÍFICAS</div>
+                <h2>Fuerza Peso (W)</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Definición</strong>
+                    <p>El peso es una fuerza a distancia debido a la interacción de la masa de un objeto con el campo gravitacional terrestre. Tiene la dirección del campo gravitacional, es decir, hacia el centro de la Tierra.</p>
+                </div>
+
+                <h3>Fórmula del Peso</h3>
+                <div class="formula">
+                    W = m · g
+                </div>
+
+                <p>Donde:</p>
+                <ul>
+                    <li><span class="em">W</span> = Peso en Newtons (N)</li>
+                    <li><span class="em">m</span> = Masa en kilogramos (kg)</li>
+                    <li><span class="em">g</span> = Aceleración de la gravedad = 9.8 m/s² (o 10 m/s² para fines prácticos)</li>
+                </ul>
+
+                <h3>Características Importantes</h3>
+                <ul>
+                    <li>El peso es una fuerza, no es lo mismo que la masa</li>
+                    <li>La masa es una propiedad intrínseca del objeto (constante)</li>
+                    <li>El peso varía según la gravedad del lugar</li>
+                    <li>Dirección: siempre hacia el centro de la Tierra (verticalmente hacia abajo)</li>
+                </ul>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>Ejemplo</h4>
+                        <p>Una persona de 70 kg tiene un peso de:<br>W = 70 kg × 10 m/s² = 700 N</p>
+                    </div>
+                    <div class="card">
+                        <h4>Diferencia Masa-Peso</h4>
+                        <p>Tu masa es igual en la Tierra y en la Luna, pero tu peso en la Luna es aproximadamente 1/6 del peso en la Tierra.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Fuerza Normal -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">09 — FUERZAS ESPECÍFICAS</div>
+                <h2>Fuerza Normal (N)</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Definición</strong>
+                    <p>La fuerza normal es una fuerza que se produce cuando un objeto y un plano entran en contacto. Su dirección es perpendicular a la superficie de contacto.</p>
+                </div>
+
+                <h3>Características de la Fuerza Normal</h3>
+                <ul>
+                    <li>Es una fuerza de contacto</li>
+                    <li>Siempre es perpendicular a la superficie</li>
+                    <li>Evita que los objetos se penetren entre sí</li>
+                    <li>Su magnitud varía según las otras fuerzas presentes</li>
+                    <li>No siempre es igual al peso del objeto</li>
+                </ul>
+
+                <div class="box">
+                    <strong>Importante</strong>
+                    <p>La fuerza normal NO siempre es igual al peso. Su valor depende de otras fuerzas que actúen sobre el objeto y de la inclinación de la superficie.</p>
+                </div>
+
+                <h3>Casos Comunes</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Superficie Horizontal</h4>
+                        <p>Si no hay otras fuerzas verticales:<br>N = W = m·g</p>
+                    </div>
+                    <div class="card">
+                        <h4>Plano Inclinado</h4>
+                        <p>En un plano inclinado de ángulo θ:<br>N = m·g·cos(θ)</p>
+                    </div>
+                    <div class="card">
+                        <h4>Con Fuerza Adicional</h4>
+                        <p>Si hay una fuerza empujando hacia abajo o jalando hacia arriba, N cambia en consecuencia.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Fuerza de Fricción -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">10 — FUERZAS ESPECÍFICAS</div>
+                <h2>Fuerza de Fricción (f)</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Definición</strong>
+                    <p>La fricción es una fuerza de contacto que se debe al rozamiento entre un objeto y una superficie. Se produce por las imperfecciones que poseen ambas superficies, generando cierto "agarre". Por lo general, la fricción se opone al movimiento del objeto y su dirección es paralela a la superficie de contacto.</p>
+                </div>
+
+                <h3>Fórmula de la Fricción</h3>
+                <div class="formula">
+                    f = μ · N
+                </div>
+
+                <p>Donde:</p>
+                <ul>
+                    <li><span class="em">f</span> = Fuerza de fricción (N)</li>
+                    <li><span class="em">μ</span> = Coeficiente de fricción (sin unidades, 0 ≤ μ ≤ 1)</li>
+                    <li><span class="em">N</span> = Fuerza normal (N)</li>
+                </ul>
+
+                <h3>Tipos de Fricción</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Fricción Estática (μₛ)</h4>
+                        <p>Actúa cuando el objeto está en reposo. Evita que el objeto comience a moverse. Es variable hasta alcanzar un máximo.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Fricción Cinética (μₖ)</h4>
+                        <p>Actúa cuando el objeto se está deslizando. Se opone al movimiento. Es constante y menor que la estática.</p>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <strong>Relación Importante</strong>
+                    <p>μₛ > μₖ → Es más difícil poner en movimiento un objeto que mantenerlo en movimiento.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Coeficiente de Fricción -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">11 — FUERZAS ESPECÍFICAS</div>
+                <h2>Coeficiente de Fricción (μ)</h2>
+            </div>
+            <div class="content">
+                <p>El coeficiente de fricción mide el grado de oposición o deslizamiento entre las superficies de contacto. Este valor varía desde cero hasta uno.</p>
+
+                <h3>Valores del Coeficiente</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>μ ≈ 0</h4>
+                        <p><span class="em">No hay oposición</span><br>Las superficies de contacto son completamente lisas. Ejemplo: dos bloques de hielo deslizándose uno con respecto al otro.</p>
+                    </div>
+                    <div class="card">
+                        <h4>μ ≈ 1</h4>
+                        <p><span class="em">Oposición máxima</span><br>Alta rugosidad entre las superficies de contacto. Ejemplo: goma sobre asfalto seco.</p>
+                    </div>
+                </div>
+
+                <h3>Ejemplos de Coeficientes (valores aproximados)</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Materiales</th>
+                            <th>μₛ (estático)</th>
+                            <th>μₖ (cinético)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Acero sobre acero</td>
+                            <td>0.74</td>
+                            <td>0.57</td>
+                        </tr>
+                        <tr>
+                            <td>Madera sobre madera</td>
+                            <td>0.40</td>
+                            <td>0.20</td>
+                        </tr>
+                        <tr>
+                            <td>Hielo sobre hielo</td>
+                            <td>0.10</td>
+                            <td>0.03</td>
+                        </tr>
+                        <tr>
+                            <td>Goma sobre asfalto seco</td>
+                            <td>0.90</td>
+                            <td>0.80</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 13: Tensión en una Cuerda -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">12 — FUERZAS ESPECÍFICAS</div>
+                <h2>Tensión en una Cuerda (T)</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Definición</strong>
+                    <p>La tensión es una fuerza que se manifiesta en cada punto de una cuerda, debido a la aplicación de dos fuerzas iguales en cada uno de los extremos de esta.</p>
+                </div>
+
+                <h3>Características de la Tensión</h3>
+                <ul>
+                    <li>Se transmite a lo largo de toda la cuerda</li>
+                    <li>La dirección es siempre a lo largo de la cuerda</li>
+                    <li>En una cuerda ideal (sin masa y sin fricción), la tensión es constante en todos sus puntos</li>
+                    <li>La tensión siempre "jala" nunca "empuja"</li>
+                </ul>
+
+                <h3>Aplicaciones Comunes</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Poleas</h4>
+                        <p>Sistemas con poleas donde la cuerda transmite fuerza de un objeto a otro.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Objetos Suspendidos</h4>
+                        <p>Cuando un objeto cuelga de una cuerda, la tensión equilibra el peso del objeto.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Remolque</h4>
+                        <p>Un vehículo jalando a otro mediante una cuerda o cable.</p>
+                    </div>
+                </div>
+
+                <div class="box">
+                    <strong>Equilibrio Estático</strong>
+                    <p>Si un objeto de masa m cuelga en equilibrio de una cuerda vertical, entonces: T = W = m·g</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Fuerza en un Resorte -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">13 — FUERZAS ESPECÍFICAS</div>
+                <h2>Fuerza en un Resorte: Ley de Hooke</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Ley de Hooke</strong>
+                    <p>Si un resorte de constante elástica "k" se estira o se comprime a una distancia x, se produce una fuerza que varía linealmente con dicha distancia.</p>
+                </div>
+
+                <h3>Fórmula de la Ley de Hooke</h3>
+                <div class="formula">
+                    F = -k · x
+                </div>
+
+                <p>Donde:</p>
+                <ul>
+                    <li><span class="em">F</span> = Fuerza elástica (N)</li>
+                    <li><span class="em">k</span> = Constante elástica del resorte (N/m)</li>
+                    <li><span class="em">x</span> = Deformación del resorte desde su posición de equilibrio (m)</li>
+                    <li>El signo negativo indica que la fuerza se opone a la deformación</li>
+                </ul>
+
+                <h3>Cálculo de la Constante del Resorte</h3>
+                <p>Para determinar k experimentalmente, se coloca el resorte en forma vertical, sujetando el extremo superior de un punto fijo. En el extremo inferior se coloca un objeto de masa m y se deja que el sistema esté en equilibrio estático.</p>
+
+                <p>El balance de fuerzas es:</p>
+                <div class="formula">
+                    k · x = m · g
+                </div>
+
+                <p>Por lo tanto, la constante es:</p>
+                <div class="formula">
+                    k = (m · g) / x
+                </div>
+
+                <p>Donde g = 9.8 m/s² es el valor de la gravedad.</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Aplicaciones Segunda Ley -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">14 — APLICACIONES</div>
+                <h2>Aplicaciones de la Segunda Ley de Newton</h2>
+            </div>
+            <div class="content">
+                <p>La segunda ley de Newton establece que la aceleración de un cuerpo varía de manera inversa con su masa y en forma directa con la fuerza resultante aplicada a dicho cuerpo.</p>
+
+                <h3>Ecuación General</h3>
+                <div class="formula">
+                    ΣF = m · a
+                </div>
+
+                <h3>Movimiento en el Eje X</h3>
+                <p>Si el movimiento es en el eje X, las expresiones de esta ley de Newton son:</p>
+
+                <div class="formula">
+                    ΣFₓ = m · aₓ
+                    <br><br>
+                    ΣFᵧ = 0
+                </div>
+
+                <p>Solo hay aceleración en el eje X, mientras que en Y la aceleración es cero (equilibrio en el eje vertical).</p>
+
+                <div class="box">
+                    <strong>Estrategia de Resolución</strong>
+                    <p>1) Dibuja el diagrama de cuerpo libre<br>
+                    2) Establece un sistema de coordenadas<br>
+                    3) Descompone las fuerzas en componentes x e y<br>
+                    4) Aplica ΣF = m·a en cada eje<br>
+                    5) Resuelve el sistema de ecuaciones</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Ejercicio 1 - Caso 1 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number exercise-badge">EJERCICIO 1 — CASO 1</div>
+                <h2>Bloque Empujado Horizontalmente</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Enunciado</strong>
+                    <p>Un bloque de 2 kg de masa es empujado por una fuerza de 16 N a lo largo de una mesa horizontal, en donde el coeficiente de fricción cinético entre la mesa y el bloque es de 0.2. Para fines prácticos se considera g = 10 m/s².</p>
+                </div>
+
+                <h3>Paso 1: Diagrama de Cuerpo Libre</h3>
+                <div class="diagram">
+                    [DCL del bloque]<br>
+                    ↑ N (Normal hacia arriba)<br>
+                    ↓ W = mg (Peso hacia abajo)<br>
+                    → F = 16 N (Fuerza aplicada hacia la derecha)<br>
+                    ← f = μN (Fricción hacia la izquierda)
+                </div>
+
+                <p>Observa cómo la dirección de la fuerza aplicada y la fuerza de fricción son contrarias, al igual que la fuerza normal y el peso del bloque.</p>
+
+                <h3>Paso 2: Análisis de Fuerzas</h3>
+                <p><span class="em">Eje Y (equilibrio):</span></p>
+                <div class="formula">
+                    N - W = 0<br>
+                    N = W = m·g = 2 kg × 10 m/s² = 20 N
+                </div>
+
+                <p><span class="em">Eje X (movimiento):</span></p>
+                <div class="formula">
+                    F - f = m·a<br>
+                    f = μ·N = 0.2 × 20 N = 4 N<br>
+                    16 N - 4 N = 2 kg × a<br>
+                    a = 12 N / 2 kg = 6 m/s²
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17: Ejercicio 1 - Caso 2 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number exercise-badge">EJERCICIO 1 — CASO 2</div>
+                <h2>Bloque Empujado con Ángulo</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Enunciado</strong>
+                    <p>El mismo bloque de 2 kg es ahora empujado por una fuerza de 16 N aplicada con un ángulo hacia abajo. El coeficiente de fricción cinético sigue siendo 0.2 y g = 10 m/s².</p>
+                </div>
+
+                <h3>Diagrama de Cuerpo Libre</h3>
+                <div class="diagram">
+                    [DCL del bloque]<br>
+                    ↑ N (Normal hacia arriba)<br>
+                    ↓ W = mg (Peso hacia abajo)<br>
+                    ↘ F = 16 N (Fuerza aplicada con ángulo hacia abajo)<br>
+                    ← f = μN (Fricción hacia la izquierda)
+                </div>
+
+                <h3>Análisis</h3>
+                <p>Cuando la fuerza está inclinada hacia abajo:</p>
+                <ul>
+                    <li>La componente vertical de F aumenta la fuerza normal</li>
+                    <li>Al aumentar N, aumenta también la fricción f = μN</li>
+                    <li>Esto dificulta el movimiento del bloque</li>
+                    <li>La aceleración resultante será menor que en el caso 1</li>
+                </ul>
+
+                <div class="card">
+                    <h4>Conclusión</h4>
+                    <p>Empujar hacia abajo aumenta la fricción y hace más difícil mover el objeto.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Ejercicio 1 - Caso 3 -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number exercise-badge">EJERCICIO 1 — CASO 3</div>
+                <h2>Bloque Jalado con Ángulo</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Enunciado</strong>
+                    <p>El bloque de 2 kg es ahora jalado por una fuerza de 16 N aplicada con un ángulo hacia arriba. El coeficiente de fricción cinético sigue siendo 0.2 y g = 10 m/s².</p>
+                </div>
+
+                <h3>Diagrama de Cuerpo Libre</h3>
+                <div class="diagram">
+                    [DCL del bloque]<br>
+                    ↑ N (Normal hacia arriba)<br>
+                    ↓ W = mg (Peso hacia abajo)<br>
+                    ↗ F = 16 N (Fuerza aplicada con ángulo hacia arriba)<br>
+                    ← f = μN (Fricción hacia la izquierda)
+                </div>
+
+                <h3>Análisis</h3>
+                <p>Cuando la fuerza está inclinada hacia arriba:</p>
+                <ul>
+                    <li>La componente vertical de F reduce la fuerza normal</li>
+                    <li>Al disminuir N, disminuye también la fricción f = μN</li>
+                    <li>Esto facilita el movimiento del bloque</li>
+                    <li>La aceleración resultante será mayor que en los casos anteriores</li>
+                </ul>
+
+                <div class="box">
+                    <strong>Conclusión Importante</strong>
+                    <p>De los resultados anteriores se concluye que cuando la fuerza está inclinada hacia arriba (como en el caso 3, donde el bloque es jalado), se facilita el movimiento, ya que disminuye la fricción.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Ejercicio 2 - Elevador -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number exercise-badge">EJERCICIO 2</div>
+                <h2>Bloque en un Elevador</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Enunciado</strong>
+                    <p>Considera un bloque de 200 N de peso, que está colocado dentro de un elevador que se mueve verticalmente hacia arriba. Si el valor de la fuerza normal es de 220 N, determina la aceleración del elevador.</p>
+                </div>
+
+                <h3>Concepto Importante: Peso Aparente</h3>
+                <p>La fuerza normal del bloque dentro del elevador es la fuerza de contacto entre el bloque y el piso del elevador. A esta fuerza también se le conoce como <span class="em">peso aparente</span>.</p>
+
+                <h3>Diagrama de Cuerpo Libre</h3>
+                <div class="diagram">
+                    [DCL del bloque en el elevador]<br>
+                    ↑ N = 220 N (Normal hacia arriba)<br>
+                    ↓ W = 200 N (Peso hacia abajo)
+                </div>
+
+                <p>Observa cómo la dirección de la fuerza normal es contraria al peso del bloque.</p>
+
+                <h3>Paso 2: Análisis del Movimiento en el Eje Y</h3>
+                <div class="formula">
+                    ΣFᵧ = m · a<br>
+                    N - W = m · a
+                </div>
+
+                <p>Despejando para la aceleración:</p>
+                <div class="formula">
+                    a = (N - W) / m
+                </div>
+
+                <p>Sabemos que W = m·g, entonces m = W/g:</p>
+                <div class="formula">
+                    a = (N - W) / (W/g) = (N - W) · g / W
+                </div>
+
+                <p>Sustituyendo N = 220 N, W = 200 N, y g = 10 m/s²:</p>
+                <div class="formula">
+                    a = (220 N - 200 N) × 10 m/s² / 200 N<br>
+                    a = 20 N × 10 m/s² / 200 N<br>
+                    a = 1 m/s²
+                </div>
+
+                <div class="box">
+                    <strong>Resultado</strong>
+                    <p>El elevador se está acelerando hacia arriba a 1 m/s². Por eso la fuerza normal (peso aparente) es mayor que el peso real del bloque.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Interpretación Física -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">15 — INTERPRETACIÓN</div>
+                <h2>Peso Aparente en Elevadores</h2>
+            </div>
+            <div class="content">
+                <h3>¿Por qué cambia el peso aparente?</h3>
+                <p>El peso real de un objeto (W = m·g) es constante, pero la fuerza normal (peso aparente) que sentimos puede cambiar según la aceleración del sistema.</p>
+
+                <div class="grid">
+                    <div class="card">
+                        <h4>Elevador en Reposo o Velocidad Constante</h4>
+                        <p>a = 0<br>N = W<br>Peso aparente = Peso real</p>
+                    </div>
+                    <div class="card">
+                        <h4>Elevador Acelerando Hacia Arriba</h4>
+                        <p>a > 0<br>N > W<br>Te sientes más pesado</p>
+                    </div>
+                    <div class="card">
+                        <h4>Elevador Acelerando Hacia Abajo</h4>
+                        <p>a < 0<br>N < W<br>Te sientes más ligero</p>
+                    </div>
+                    <div class="card">
+                        <h4>Caída Libre</h4>
+                        <p>a = -g<br>N = 0<br>Ingravidez aparente</p>
+                    </div>
+                </div>
+
+                <h3>Aplicaciones Cotidianas</h3>
+                <ul>
+                    <li>Sensación de pesadez al arrancar un elevador hacia arriba</li>
+                    <li>Sensación de ligereza cuando el elevador frena al subir</li>
+                    <li>Astronautas en órbita experimentan ingravidez aparente (no ausencia de gravedad)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 21: Práctica Adicional -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number exercise-badge">PRÁCTICA SUGERIDA</div>
+                <h2>Experimentos y Recursos</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Recurso Multimedia Recomendado</strong>
+                    <p>Para profundizar en el tema de fricción, observa la siguiente videolección:</p>
+                </div>
+
+                <h3>Video: Static and Kinetic Friction Forces</h3>
+                <ul>
+                    <li>Sitio: MIT BLOSSOMS (blossoms.mit.edu/videos)</li>
+                    <li>Sección: Physics</li>
+                    <li>Título: "Static and Kinetic Friction Forces: Similarities and Differences"</li>
+                </ul>
+
+                <div class="card">
+                    <h4>Actividad Experimental</h4>
+                    <p>Puedes seguir las instrucciones que se indican en el video para realizar experimentos prácticos sobre fricción estática y cinética con materiales simples.</p>
+                </div>
+
+                <h3>Conceptos a Explorar</h3>
+                <ul>
+                    <li>Diferencias entre fricción estática y cinética</li>
+                    <li>Medición experimental de coeficientes de fricción</li>
+                    <li>Factores que afectan la fricción</li>
+                    <li>Aplicaciones prácticas de la fricción en la vida diaria</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 22: Resumen de Fuerzas -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">16 — RESUMEN</div>
+                <h2>Tabla Resumen de Fuerzas</h2>
+            </div>
+            <div class="content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fuerza</th>
+                            <th>Símbolo</th>
+                            <th>Fórmula</th>
+                            <th>Dirección</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Peso</td>
+                            <td>W</td>
+                            <td>W = m·g</td>
+                            <td>Hacia abajo (centro de la Tierra)</td>
+                            <td>A distancia</td>
+                        </tr>
+                        <tr>
+                            <td>Normal</td>
+                            <td>N</td>
+                            <td>Varía según el caso</td>
+                            <td>Perpendicular a la superficie</td>
+                            <td>Contacto</td>
+                        </tr>
+                        <tr>
+                            <td>Fricción</td>
+                            <td>f</td>
+                            <td>f = μ·N</td>
+                            <td>Paralela a la superficie, opuesta al movimiento</td>
+                            <td>Contacto</td>
+                        </tr>
+                        <tr>
+                            <td>Tensión</td>
+                            <td>T</td>
+                            <td>Varía según el caso</td>
+                            <td>A lo largo de la cuerda</td>
+                            <td>Contacto</td>
+                        </tr>
+                        <tr>
+                            <td>Elástica</td>
+                            <td>F</td>
+                            <td>F = -k·x</td>
+                            <td>Opuesta a la deformación</td>
+                            <td>Contacto</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Recordatorios Importantes</h3>
+                <ul>
+                    <li>Siempre dibuja el diagrama de cuerpo libre antes de resolver</li>
+                    <li>Identifica claramente el sistema de coordenadas</li>
+                    <li>Aplica las leyes de Newton en cada eje por separado</li>
+                    <li>Verifica que las unidades sean consistentes (SI)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 23: Resumen Leyes de Newton -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">17 — RESUMEN</div>
+                <h2>Las Tres Leyes de Newton</h2>
+            </div>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <h4>Primera Ley: Inercia</h4>
+                        <p>Un objeto en reposo permanece en reposo, y un objeto en movimiento permanece en movimiento con velocidad constante, a menos que actúe sobre él una fuerza neta externa.</p>
+                        <div class="formula">ΣF = 0 → a = 0</div>
+                    </div>
+
+                    <div class="card">
+                        <h4>Segunda Ley: F = m·a</h4>
+                        <p>La aceleración de un objeto es directamente proporcional a la fuerza neta que actúa sobre él e inversamente proporcional a su masa.</p>
+                        <div class="formula">ΣF = m·a</div>
+                    </div>
+
+                    <div class="card">
+                        <h4>Tercera Ley: Acción-Reacción</h4>
+                        <p>Para toda acción hay una reacción igual en magnitud pero opuesta en dirección. Las fuerzas siempre ocurren en pares.</p>
+                        <div class="formula">F₁₂ = -F₂₁</div>
+                    </div>
+                </div>
+
+                <h3>Estrategia General de Resolución</h3>
+                <ul>
+                    <li><span class="em">Paso 1:</span> Identifica el objeto o sistema de estudio</li>
+                    <li><span class="em">Paso 2:</span> Dibuja el diagrama de cuerpo libre</li>
+                    <li><span class="em">Paso 3:</span> Establece el sistema de coordenadas</li>
+                    <li><span class="em">Paso 4:</span> Descompone las fuerzas en componentes</li>
+                    <li><span class="em">Paso 5:</span> Aplica ΣF = m·a en cada eje</li>
+                    <li><span class="em">Paso 6:</span> Resuelve las ecuaciones resultantes</li>
+                    <li><span class="em">Paso 7:</span> Verifica que la solución tenga sentido físico</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 24: Actividad Evaluable -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number exercise-badge">🎯 ACTIVIDAD EVALUABLE</div>
+                <h2>Ejercicio Integrador</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Objetivo</strong>
+                    <p>Aplicar los conocimientos adquiridos sobre las leyes de Newton y las fuerzas específicas para resolver un problema completo.</p>
+                </div>
+
+                <h3>Problema</h3>
+                <p>Un bloque de 5 kg está en reposo sobre un plano inclinado de 30° con respecto a la horizontal. El coeficiente de fricción estático entre el bloque y el plano es μₛ = 0.4.</p>
+
+                <h3>Preguntas</h3>
+                <ul>
+                    <li><strong>a)</strong> Dibuja el diagrama de cuerpo libre del bloque mostrando todas las fuerzas que actúan sobre él.</li>
+                    <li><strong>b)</strong> Descompón el peso del bloque en componentes paralela y perpendicular al plano inclinado.</li>
+                    <li><strong>c)</strong> Determina si el bloque permanecerá en reposo o comenzará a deslizarse por el plano.</li>
+                    <li><strong>d)</strong> Calcula la fuerza mínima paralela al plano (hacia arriba) que se requiere para que el bloque comience a moverse hacia arriba del plano.</li>
+                </ul>
+
+                <h3>Datos</h3>
+                <ul>
+                    <li>m = 5 kg</li>
+                    <li>θ = 30°</li>
+                    <li>μₛ = 0.4</li>
+                    <li>g = 10 m/s²</li>
+                </ul>
+
+                <div class="box">
+                    <strong>Entregable</strong>
+                    <p>Documento con el desarrollo completo: diagramas, ecuaciones, cálculos y respuestas justificadas para cada inciso.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 25: Recursos Bibliográficos -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">18 — RECURSOS</div>
+                <h2>Bibliografía y Recursos</h2>
+            </div>
+            <div class="content">
+                <h3>Bibliografía Principal</h3>
+                <div class="box">
+                    <strong>Libro de Texto</strong>
+                    <p>Serway, R., y Jewett, J. (2018). <em>Física para ciencias e ingeniería, Vol. 1</em> (10ª ed.). México: CENGAGE Learning.</p>
+                    <p>ISBN: 9786075266695</p>
+                </div>
+
+                <h3>Recursos Complementarios</h3>
+                <ul>
+                    <li>Young, H. D., y Freedman, R. A. (2018). <em>Física Universitaria</em>. Pearson.</li>
+                    <li>Halliday, D., Resnick, R., y Walker, J. <em>Fundamentos de Física</em>. Wiley.</li>
+                    <li>MIT BLOSSOMS - Videos educativos de física</li>
+                    <li>PhET Interactive Simulations - Universidad de Colorado</li>
+                </ul>
+
+                <h3>Recursos Digitales</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Canva Universidad Tecmilenio</h4>
+                        <p>Plataforma institucional con recursos adicionales y materiales didácticos.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Simulaciones Interactivas</h4>
+                        <p>Herramientas en línea para visualizar fuerzas y movimiento en tiempo real.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 26: Conceptos Clave -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">19 — CONCEPTOS CLAVE</div>
+                <h2>Glosario de Términos Importantes</h2>
+            </div>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <h4>Dinámica</h4>
+                        <p>Rama de la física que estudia las causas del movimiento (fuerzas y energía).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Fuerza</h4>
+                        <p>Cantidad física vectorial que mide la interacción entre objetos. Unidad: Newton (N).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Masa</h4>
+                        <p>Medida de la inercia de un objeto. Propiedad intrínseca. Unidad: kilogramo (kg).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Peso</h4>
+                        <p>Fuerza gravitacional que actúa sobre una masa. W = m·g. Unidad: Newton (N).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Inercia</h4>
+                        <p>Tendencia de un objeto a mantener su estado de movimiento (reposo o velocidad constante).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Equilibrio</h4>
+                        <p>Estado en el que la suma de fuerzas sobre un objeto es cero (ΣF = 0).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Fuerza Neta</h4>
+                        <p>Suma vectorial de todas las fuerzas que actúan sobre un objeto.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Diagrama de Cuerpo Libre</h4>
+                        <p>Representación gráfica de todas las fuerzas que actúan sobre un objeto aislado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 27: Errores Comunes -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">20 — ERRORES COMUNES</div>
+                <h2>Errores Frecuentes y Cómo Evitarlos</h2>
+            </div>
+            <div class="content">
+                <h3>Errores Conceptuales</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>❌ Confundir Masa y Peso</h4>
+                        <p><span class="em">✓ Correcto:</span> La masa es constante, el peso varía con la gravedad. La masa se mide en kg, el peso en N.</p>
+                    </div>
+                    <div class="card">
+                        <h4>❌ Normal Siempre Igual al Peso</h4>
+                        <p><span class="em">✓ Correcto:</span> La fuerza normal depende del contexto y puede ser mayor, menor o igual al peso.</p>
+                    </div>
+                    <div class="card">
+                        <h4>❌ Olvidar el Signo Negativo en Hooke</h4>
+                        <p><span class="em">✓ Correcto:</span> F = -k·x indica que la fuerza se opone a la deformación.</p>
+                    </div>
+                    <div class="card">
+                        <h4>❌ Aplicar μₛ Cuando Hay Movimiento</h4>
+                        <p><span class="em">✓ Correcto:</span> Usa μₛ solo en reposo, μₖ cuando hay deslizamiento.</p>
+                    </div>
+                </div>
+
+                <h3>Errores Procedimentales</h3>
+                <ul>
+                    <li>No dibujar el diagrama de cuerpo libre completo</li>
+                    <li>No descomponer fuerzas en componentes correctamente</li>
+                    <li>Olvidar que μₛ > μₖ siempre</li>
+                    <li>No verificar la consistencia de unidades</li>
+                    <li>Confundir las fuerzas acción-reacción (actúan sobre objetos diferentes)</li>
+                </ul>
+
+                <div class="box">
+                    <strong>Consejo</strong>
+                    <p>Siempre verifica que tu respuesta tenga sentido físico. Si obtienes una aceleración negativa cuando esperabas positiva, revisa tus ecuaciones.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 28: Aplicaciones en la Vida Real -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">21 — APLICACIONES</div>
+                <h2>Leyes de Newton en la Vida Cotidiana</h2>
+            </div>
+            <div class="content">
+                <h3>Primera Ley (Inercia)</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Cinturones de Seguridad</h4>
+                        <p>Previenen que los pasajeros continúen moviéndose hacia adelante cuando el auto frena bruscamente.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Sacudir una Toalla</h4>
+                        <p>Las gotas de agua tienden a permanecer en reposo relativo mientras la toalla se mueve.</p>
+                    </div>
+                </div>
+
+                <h3>Segunda Ley (F = m·a)</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Deportes</h4>
+                        <p>Una pelota de golf acelera más que una de boliche con la misma fuerza (menor masa, mayor aceleración).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Vehículos</h4>
+                        <p>Un auto deportivo ligero acelera más rápido que un camión con el mismo motor.</p>
+                    </div>
+                </div>
+
+                <h3>Tercera Ley (Acción-Reacción)</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Remar en un Bote</h4>
+                        <p>Empujas el agua hacia atrás, el agua empuja el bote hacia adelante.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Cohetes Espaciales</h4>
+                        <p>Los gases se expulsan hacia abajo, el cohete es impulsado hacia arriba.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 29: Conclusiones -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">22 — CONCLUSIONES</div>
+                <h2>Puntos Clave del Tema</h2>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <strong>Síntesis</strong>
+                    <p>Las leyes de Newton son fundamentales para entender cómo y por qué se mueven los objetos en nuestro universo cotidiano.</p>
+                </div>
+
+                <h3>Lo que Hemos Aprendido</h3>
+                <ul>
+                    <li>Las tres leyes de Newton y su interpretación física</li>
+                    <li>Identificación y análisis de diferentes tipos de fuerzas</li>
+                    <li>Construcción y uso de diagramas de cuerpo libre</li>
+                    <li>Aplicación de las leyes de Newton para resolver problemas reales</li>
+                    <li>Análisis de sistemas con fricción, tensión y fuerzas elásticas</li>
+                </ul>
+
+                <h3>Habilidades Desarrolladas</h3>
+                <ul>
+                    <li>Pensamiento analítico para descomponer problemas complejos</li>
+                    <li>Representación gráfica de fuerzas mediante DCL</li>
+                    <li>Aplicación de ecuaciones matemáticas a situaciones físicas</li>
+                    <li>Interpretación de resultados en contexto físico</li>
+                </ul>
+
+                <div class="box">
+                    <strong>Próximos Pasos</strong>
+                    <p>Con este conocimiento, estás preparado para abordar problemas más complejos que involucren movimiento circular, trabajo, energía y sistemas de múltiples cuerpos.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 30: Preguntas Frecuentes -->
+        <div class="slide">
+            <div class="slide-header">
+                <div class="slide-number">23 — FAQ</div>
+                <h2>Preguntas Frecuentes</h2>
+            </div>
+            <div class="content">
+                <div class="card">
+                    <h4>¿Por qué se llama "Segunda Ley" si es la más usada?</h4>
+                    <p>El orden refleja la construcción lógica de la teoría. La primera ley define el concepto de fuerza, la segunda lo cuantifica, y la tercera establece su naturaleza de interacción.</p>
+                </div>
+
+                <div class="card">
+                    <h4>¿Las leyes de Newton funcionan a cualquier velocidad?</h4>
+                    <p>Las leyes de Newton son muy precisas a velocidades cotidianas. A velocidades cercanas a la luz se requiere la relatividad de Einstein, y a escalas atómicas, la mecánica cuántica.</p>
+                </div>
+
+                <div class="card">
+                    <h4>¿Por qué μₛ > μₖ siempre?</h4>
+                    <p>A nivel microscópico, cuando las superficies están en reposo, las irregularidades tienen tiempo para "engranar" mejor. Al moverse, hay menos contacto efectivo.</p>
+                </div>
+
+                <div class="card">
+                    <h4>¿Puede haber fuerza sin movimiento?</h4>
+                    <p>Sí. Cuando las fuerzas están en equilibrio (ΣF = 0), hay fuerzas presentes pero no hay aceleración. Ejemplo: un libro en reposo sobre una mesa.</p>
+                </div>
+
+                <div class="card">
+                    <h4>¿Por qué el signo negativo en la Ley de Hooke?</h4>
+                    <p>El signo negativo indica que la fuerza del resorte siempre se opone a la deformación, intentando restaurar la posición de equilibrio.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Final: Cierre -->
+        <div class="slide cover">
+            <h1>¡Gracias por tu Atención!</h1>
+            <div class="line"></div>
+            <p class="subtitle">Continúa Practicando y Explorando</p>
+            <div class="metadata">
+                <p>Física: Cinemática y Dinámica</p>
+                <p>Leyes de Newton del Movimiento</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="counter">
+        <span id="current">1</span> / <span id="total">31</span>
+    </div>
+
+    <div class="nav">
+        <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+        <button class="btn" id="next" onclick="nav(1)">▶</button>
+    </div>
+
+    <script>
+        let current = 0;
+        const slides = document.querySelectorAll('.slide');
+        const total = slides.length;
+
+        document.getElementById('total').textContent = total;
+
+        function show(n) {
+            if (n < 0) n = 0;
+            if (n >= total) n = total - 1;
+
+            slides.forEach(s => s.classList.remove('active'));
+            slides[n].classList.add('active');
+            
+            current = n;
+            document.getElementById('current').textContent = n + 1;
+            
+            document.getElementById('prev').disabled = (n === 0);
+            document.getElementById('next').disabled = (n === total - 1);
+        }
+
+        function nav(dir) {
+            show(current + dir);
+        }
+
+        // Teclado
+        document.addEventListener('keydown', e => {
+            if (e.key === 'ArrowLeft') nav(-1);
+            if (e.key === 'ArrowRight') nav(1);
+            if (e.key === ' ') { e.preventDefault(); nav(1); }
+        });
+
+        show(0);
+    </script>
+</body>
+</html>
