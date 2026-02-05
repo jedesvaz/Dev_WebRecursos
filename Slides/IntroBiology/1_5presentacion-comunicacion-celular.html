@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comunicación Celular y Transducción de Señales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:#0d1b2a;
+            color:#e8f0f2;
+            overflow:hidden;
+        }
+
+        .container { width:100vw; height:100vh; position:relative; }
+
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.8rem 6.5rem;
+            flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* ─── PORTADA ─── */
+        .cover {
+            background:linear-gradient(135deg,#4a148c 0%,#7b1fa2 40%,#c2185b 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-120px; right:-120px;
+            width:380px; height:380px; border-radius:50%;
+            background:rgba(240,98,146,0.12);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-80px; left:-80px;
+            width:280px; height:280px; border-radius:50%;
+            background:rgba(240,98,146,0.08);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.6rem; font-weight:900;
+            line-height:1.2; margin-bottom:1.2rem;
+            position:relative; z-index:1;
+        }
+        .cover .subtitle {
+            font-size:1.35rem; opacity:0.88;
+            position:relative; z-index:1;
+        }
+        .cover .line {
+            width:90px; height:3px;
+            background:#f8bbd0; margin:1.8rem auto;
+            position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            opacity:0.65; position:relative; z-index:1;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            opacity:0.55; position:relative; z-index:1;
+        }
+
+        /* ─── SLIDES NORMALES ─── */
+        .slide-header { margin-bottom:1.5rem; flex-shrink:0; }
+
+        .slide-number {
+            color:#e91e63; font-size:0.82rem;
+            font-weight:700; letter-spacing:2.8px;
+            text-transform:uppercase; margin-bottom:0.4rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.3rem; color:#e8f0f2;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.4rem; color:#e91e63;
+            margin:1.3rem 0 0.75rem;
+        }
+
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(233,30,99,0.08); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#e91e63; border-radius:3px; }
+
+        p { font-size:1.04rem; line-height:1.75; margin-bottom:1.15rem; opacity:0.93; }
+
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:0.99rem; line-height:1.65;
+            margin-bottom:0.65rem; padding-left:1.5rem;
+            position:relative; opacity:0.91;
+        }
+        ul li::before {
+            content:'▸'; position:absolute;
+            left:0; color:#e91e63; font-weight:bold;
+        }
+
+        /* ─── CAJAS ─── */
+        .box {
+            background:rgba(233,30,99,0.08);
+            border-left:4px solid #e91e63;
+            padding:1.3rem 1.5rem;
+            margin:1.3rem 0; border-radius:0 7px 7px 0;
+        }
+        .box strong { color:#e91e63; display:block; margin-bottom:0.4rem; font-size:1.04rem; }
+        .box p { margin-bottom:0.35rem; }
+
+        .box-warn { background:rgba(255,183,77,0.09); border-left-color:#ffb74d; }
+        .box-warn strong { color:#ffb74d; }
+
+        .box-info { background:rgba(100,181,246,0.09); border-left-color:#64b5f6; }
+        .box-info strong { color:#64b5f6; }
+
+        /* ─── CARDS / GRIDS ─── */
+        .grid { display:grid; gap:1.2rem; margin:1.2rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+
+        .card {
+            background:rgba(255,255,255,0.045);
+            padding:1.3rem; border-radius:9px;
+            border:1px solid rgba(233,30,99,0.2);
+        }
+        .card h4 { color:#e91e63; margin-bottom:0.5rem; font-size:1.08rem; }
+        .card p { font-size:0.96rem; margin-bottom:0.3rem; }
+
+        .card-accent { border-color:rgba(233,30,99,0.4); background:rgba(233,30,99,0.07); }
+
+        .em { color:#e91e63; font-weight:700; }
+        .em-warn { color:#ffb74d; font-weight:700; }
+        .em-info { color:#64b5f6; font-weight:700; }
+
+        /* ─── TABLAS ─── */
+        table { width:100%; border-collapse:collapse; margin:1.1rem 0; }
+        th,td { padding:0.75rem 1rem; text-align:left; border-bottom:1px solid rgba(233,30,99,0.16); font-size:0.95rem; }
+        th { background:rgba(233,30,99,0.12); color:#e91e63; font-weight:700; font-size:0.9rem; letter-spacing:0.45px; }
+        tr:last-child td { border-bottom:none; }
+
+        /* ─── DIAGRAMA FLUJO ─── */
+        .flow-diagram {
+            display:flex; align-items:center;
+            justify-content:center; gap:1.2rem;
+            margin:1.2rem 0; flex-wrap:wrap;
+        }
+        .flow-box {
+            background:rgba(233,30,99,0.12);
+            border:2px solid #e91e63;
+            border-radius:10px; padding:1.2rem 1.8rem;
+            text-align:center; min-width:140px;
+        }
+        .flow-box h4 { color:#e91e63; font-size:1rem; margin-bottom:0.3rem; }
+        .flow-box p { font-size:0.88rem; margin:0; opacity:0.85; }
+        .flow-arrow {
+            font-size:1.8rem; color:#e91e63; font-weight:bold;
+        }
+
+        /* ─── STEPS (pasos numerados) ─── */
+        .step {
+            display:flex; gap:1rem; align-items:flex-start;
+            margin-bottom:0.9rem;
+        }
+        .step-num {
+            background:#e91e63; color:#fff;
+            width:28px; height:28px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:0.85rem; font-weight:700; flex-shrink:0;
+            margin-top:3px;
+        }
+        .step-text { font-size:0.97rem; line-height:1.65; }
+
+        /* ─── BADGES ─── */
+        .exercise-badge {
+            background:linear-gradient(135deg,#c2185b,#e91e63);
+            color:#fff; padding:0.3rem 1.2rem;
+            border-radius:24px; display:inline-block;
+            font-weight:800; font-size:0.82rem;
+            letter-spacing:1.5px;
+            box-shadow:0 3px 10px rgba(233,30,99,0.35);
+        }
+
+        /* ─── EJERCICIOS ─── */
+        .exercise-input {
+            width:100%; background:rgba(255,255,255,0.055);
+            border:1px solid rgba(233,30,99,0.3);
+            border-radius:7px; padding:0.6rem 0.9rem;
+            color:#e8f0f2; font-size:0.96rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#e91e63; background:rgba(233,30,99,0.08); }
+        .exercise-input.correct { border-color:#81c784; background:rgba(129,199,132,0.12); }
+        .exercise-input.incorrect { border-color:#e57373; background:rgba(229,115,115,0.12); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.96rem; opacity:0.91; display:block; }
+        .exercise-q .qnum { color:#e91e63; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#c2185b; border:none; color:#fff;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#e91e63; transform:scale(1.05); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(233,30,99,0.4); color:#e91e63; }
+        .ex-btn-sec:hover { background:rgba(233,30,99,0.12); border-color:#e91e63; }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(129,199,132,0.12); border:1px solid rgba(129,199,132,0.35); color:#81c784; }
+        .feedback-msg.partial { background:rgba(255,183,77,0.09); border:1px solid rgba(255,183,77,0.35); color:#ffb74d; }
+
+        /* ─── OPCIÓN MÚLTIPLE ─── */
+        .mc-option {
+            background:rgba(255,255,255,0.045);
+            border:1px solid rgba(233,30,99,0.22);
+            border-radius:7px; padding:0.6rem 1rem;
+            margin:0.35rem 0; cursor:pointer;
+            transition:all 0.22s; font-size:0.96rem;
+        }
+        .mc-option:hover { border-color:#e91e63; background:rgba(233,30,99,0.08); }
+        .mc-option.selected { border-color:#e91e63; background:rgba(233,30,99,0.13); }
+        .mc-option.correct-sel { border-color:#81c784; background:rgba(129,199,132,0.2); }
+        .mc-option.incorrect-sel { border-color:#e57373; background:rgba(229,115,115,0.15); }
+
+        /* ─── NAV ─── */
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; background:#c2185b;
+            border:none; border-radius:50%; color:#fff;
+            font-size:1.35rem; font-weight:bold; cursor:pointer;
+            transition:all 0.3s; box-shadow:0 4px 15px rgba(0,0,0,0.35);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); background:#e91e63; }
+        .btn:disabled { opacity:0.28; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(13,27,42,0.92);
+            padding:0.8rem 1.6rem; border-radius:28px;
+            border:2px solid #e91e63; color:#f8bbd0;
+            font-weight:700; z-index:1000; font-size:0.95rem;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.4rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+            .flow-diagram{flex-wrap:wrap; gap:0.6rem;}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+            .flow-diagram{flex-direction:column;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════ SLIDE 1 — PORTADA ══════════ -->
+<div class="slide cover active">
+    <h1>Comunicación Celular y<br>Transducción de Señales</h1>
+    <div class="line"></div>
+    <p class="subtitle">Tema 1.5 — Segundos Mensajeros y Cascadas de Señalización</p>
+    <p class="meta">Introducción a la Biología Celular y Molecular | Nivel: Principiante</p>
+    <p class="help">👉 Usa las flechas del teclado o los botones para navegar →</p>
+</div>
+
+<!-- ══════════ SLIDE 2 — ÍNDICE ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">CONTENIDO</div>
+        <h2>Temas de esta Clase</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📡 Comunicación Celular</h4>
+                <ul>
+                    <li>Componentes: emisor, mensaje, receptor</li>
+                    <li>Tipos: parácrina, autócrina, endócrina</li>
+                    <li>Especificidad del receptor</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>🔄 Transducción de Señales</h4>
+                <ul>
+                    <li>6 pasos de la transducción</li>
+                    <li>Segundos mensajeros (AMPc, Ca²⁺, DAG, IP₃)</li>
+                    <li>Tipos de receptores y cascadas</li>
+                </ul>
+            </div>
+        </div>
+        <div class="box box-info" style="margin-top:1.2rem;">
+            <strong>💡 Concepto clave</strong>
+            <p><strong>Señalización celular</strong> = comunicación entre células mediante mensajes químicos. <strong>Transducción de señales</strong> = el proceso de interpretación y transformación de ese mensaje en una respuesta específica dentro de la célula.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 3 — HOMEOSTASIS Y COMUNICACIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — COMUNICACIÓN CELULAR</div>
+        <h2>¿Por qué Necesitan Comunicarse las Células?</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">homeostasis</span> es el equilibrio del medio interno que se logra gracias a la interacción continua de múltiples procesos de regulación corporal. Para mantenerla, todos estos procesos deben estar <strong>relacionados y regulados mutuamente</strong>.</p>
+
+        <div class="box box-warn">
+            <strong>🔬 Ejemplos de comunicación esencial</strong>
+            <p>• ¿Cómo informan los <strong>receptores de la piel</strong> al cerebro que nos pinchamos con un alfiler?<br>
+            • ¿Cómo logra el <strong>páncreas</strong> que las células musculares capten glucosa?</p>
+        </div>
+
+        <p>Las células se comunican constantemente enviando y recibiendo <strong>señales químicas</strong>, generando respuestas específicas coordinadas.</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>🔁 Regulación continua</h4>
+                <p>Los sistemas corporales están en constante comunicación para ajustar funciones.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>⚖️ Balance homeostático</h4>
+                <p>El equilibrio interno depende de la integración de señales.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>📶 Coordinación</h4>
+                <p>Sin comunicación, los procesos biológicos serían caóticos.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 4 — COMPONENTES DE LA COMUNICACIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — COMUNICACIÓN CELULAR</div>
+        <h2>Componentes de la Comunicación Intercelular</h2>
+    </div>
+    <div class="content">
+        <p>Como en todo proceso de comunicación, existen tres elementos esenciales:</p>
+
+        <div class="flow-diagram">
+            <div class="flow-box">
+                <h4>🔵 Célula Emisora</h4>
+                <p>Genera y emite el mensaje</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>📩 Mensaje (Ligando)</h4>
+                <p>Molécula química señal</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>🔴 Célula Receptora</h4>
+                <p>Recibe y ejecuta el mensaje</p>
+            </div>
+        </div>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>Célula emisora</h4>
+                <p>Es la célula encargada de generar y liberar el mensaje químico al medio extracelular o a la sangre.</p>
+            </div>
+            <div class="card">
+                <h4>Primer mensajero (ligando)</h4>
+                <p>Molécula química (aminoácido, proteína, amina, esteroide, gas) que se une al receptor y genera una respuesta.</p>
+                <p style="font-size:0.88rem; color:#e91e63; margin-top:0.4rem;">Ejemplos: hormonas, neurotransmisores, citocinas</p>
+            </div>
+            <div class="card">
+                <h4>Célula receptora</h4>
+                <p>Tiene un <strong>receptor específico</strong> para el ligando. Puede estar en la membrana o dentro de la célula.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 5 — TIPOS DE COMUNICACIÓN (parte 1) ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — COMUNICACIÓN CELULAR</div>
+        <h2>Tipos de Comunicación: Parácrina y Autócrina</h2>
+    </div>
+    <div class="content">
+        <h3>Comunicación parácrina</h3>
+        <p>Se produce entre dos células <strong>cercanas</strong> en un mismo tejido. La célula emisora libera el ligando al medio extracelular, y este encuentra su receptor en las <strong>células vecinas</strong>.</p>
+
+        <div class="box box-info">
+            <strong>🏥 Ejemplos clínicos</strong>
+            <p>• Células intestinales se comunican entre sí mediante señales parácrinas.<br>
+            • Osteoclastos y osteoblastos en el hueso.<br>
+            • Miocitos cardíacos con células de la matriz extracelular.</p>
+        </div>
+
+        <h3>Comunicación autócrina</h3>
+        <p>Una célula secreta el ligando y tiene en su <strong>propia membrana</strong> el receptor para ese ligando, generando una respuesta ante su propia señal.</p>
+
+        <div class="box box-info">
+            <strong>🏥 Ejemplo clínico</strong>
+            <p>Activación de <strong>linfocitos</strong> durante la respuesta inmune. El linfocito secreta interleuquinas que actúan sobre sí mismo para amplificar su activación.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 6 — COMUNICACIÓN ENDÓCRINA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — COMUNICACIÓN CELULAR</div>
+        <h2>Comunicación Endócrina</h2>
+    </div>
+    <div class="content">
+        <p>Una célula secreta mensajeros llamados <span class="em">hormonas</span> que son volcados a la <strong>sangre</strong>, viajando a <strong>grandes distancias</strong> hasta sus células diana (células objetivo).</p>
+
+        <div class="flow-diagram">
+            <div class="flow-box">
+                <h4>🔵 Glándula</h4>
+                <p>Secreta hormona</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#e57373; background:rgba(229,115,115,0.1);">
+                <h4 style="color:#e57373;">🩸 Sangre</h4>
+                <p>Transporte a distancia</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>🔴 Célula diana</h4>
+                <p>Tiene receptor específico</p>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📍 Ejemplos de hormonas</h4>
+                <ul>
+                    <li><strong>Estrógenos</strong> — producidos en ovarios, actúan en glándulas mamarias y útero</li>
+                    <li><strong>Hormonas tiroideas</strong> — actúan en células de todo el cuerpo</li>
+                    <li><strong>Aldosterona</strong> — regula riñones</li>
+                    <li><strong>Leptina</strong> — señal de saciedad al cerebro</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>❓ ¿Por qué no afecta a todas las células?</h4>
+                <p>Aunque la hormona viaja por toda la sangre, solo produce efecto en células con el <strong>receptor específico</strong> para ella.</p>
+                <p style="font-size:0.88rem; color:#e91e63; margin-top:0.5rem;">La especificidad está dada por el receptor, no por el mensaje.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 7 — ESPECIFICIDAD DEL RECEPTOR ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — COMUNICACIÓN CELULAR</div>
+        <h2>Especificidad del Receptor</h2>
+    </div>
+    <div class="content">
+        <p>Si un mensajero se libera a la sangre, ¿por qué no se une a todas las células que encuentra en su camino? Los <span class="em">receptores</span> tienen un papel fundamental: cada mensaje tiene un <strong>receptor específico</strong>.</p>
+
+        <div class="box">
+            <strong>🔑 Principio llave-cerradura</strong>
+            <p>El ligando (llave) solo se une al receptor específico (cerradura). Un ligando <span class="em-info">verde</span> solo interactúa con receptores <span class="em-info">verdes</span>. Un ligando <span class="em-warn">naranja</span> solo con receptores <span class="em-warn">naranjas</span>.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>✅ Respuesta específica</h4>
+                <p>Solo las células con el receptor apropiado responden al mensaje. El resto de las células ignoran la señal.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🎯 Célula diana</h4>
+                <p>Se llama <strong>célula diana o célula blanco</strong> a aquella que tiene el receptor específico para un ligando determinado.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Importante</strong>
+            <p>A la hora de generar una respuesta, el <strong>receptor</strong> tiene mayor relevancia que el ligando. La respuesta celular depende del tipo de receptor y del tipo celular donde se encuentre, no tanto del ligando que se le una.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 8 — TRANSDUCCIÓN: DEFINICIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>¿Qué es la Transducción de Señales?</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">transducción de señales</span> implica <strong>convertir un tipo de señal en otro tipo de señal</strong> (respuesta). Es el proceso de <strong>interpretación</strong> del mensaje por parte de la célula receptora.</p>
+
+        <div class="flow-diagram">
+            <div class="flow-box">
+                <h4>1er Mensajero</h4>
+                <p>Señal extracelular</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#ffb74d; background:rgba(255,183,77,0.1);">
+                <h4 style="color:#ffb74d;">Receptor</h4>
+                <p>Reconoce y traduce</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>2do Mensajero</h4>
+                <p>Señal intracelular</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#81c784; background:rgba(129,199,132,0.1);">
+                <h4 style="color:#81c784;">Respuesta</h4>
+                <p>Efecto celular</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📌 Definición completa</strong>
+            <p>El <strong>primer mensajero</strong> se une al receptor, activando una <strong>cascada de señalización</strong> que genera <strong>segundos mensajeros</strong> dentro de la célula, los cuales amplifican la señal y activan proteínas efectoras que producen la <strong>respuesta específica</strong>.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>🔬 Amplificación</h4>
+                <p>Un solo ligando puede generar cientos de segundos mensajeros, amplificando la señal recibida.</p>
+            </div>
+            <div class="card">
+                <h4>⚡ Cascada</h4>
+                <p>Cada proteína activada puede activar a muchas otras, generando una cascada de eventos.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 9 — 6 PASOS DE LA TRANSDUCCIÓN (parte 1) ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Los 6 Pasos de la Transducción (I)</h2>
+    </div>
+    <div class="content">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text"><strong>Reconocimiento de la señal por su receptor.</strong> La unión del ligando a su receptor es específica. Un mismo ligando puede unirse a más de un tipo de receptor, desencadenando respuestas diferentes en distintas células.</div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text"><strong>Transducción del mensaje extracelular en un segundo mensajero.</strong> La unión ligando-receptor produce un cambio conformacional que desencadena:
+            <ul style="margin-top:0.4rem;">
+                <li>Actividades catalíticas intrínsecas del receptor, o</li>
+                <li>Interacción del receptor con enzimas citoplásmáticas/membrana</li>
+            </ul>
+            Resultado: generación de <span class="em">segundo mensajero</span> o activación de cascada catalítica.</div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text"><strong>Transmisión de la señal a los efectores.</strong> El segundo mensajero amplifica la señal activando quinasas y fosfatasas que modifican otras proteínas, liberan iones, o regulan vías que generan ATP.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 10 — 6 PASOS DE LA TRANSDUCCIÓN (parte 2) ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Los 6 Pasos de la Transducción (II)</h2>
+    </div>
+    <div class="content">
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text"><strong>Modulación de los efectores.</strong> El segundo mensajero modula enzimas, canales iónicos, componentes del citoesqueleto y factores de transcripción.</div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-text"><strong>Respuesta de la célula al estímulo inicial.</strong> Tipos de respuesta:
+            <ul style="margin-top:0.4rem;">
+                <li>Proliferación celular</li>
+                <li>Expresión de genes</li>
+                <li>Supervivencia / muerte (apoptosis)</li>
+                <li>Cambios metabólicos</li>
+                <li>Diferenciación</li>
+                <li>Movimiento</li>
+                <li>Cambios en permeabilidad de membrana</li>
+            </ul></div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-text"><strong>Finalización de la respuesta.</strong> Mecanismos:
+            <ul style="margin-top:0.4rem;">
+                <li>Endocitosis del receptor</li>
+                <li>Proteínas bloqueadoras del receptor</li>
+                <li>Inactivación de proteínas intermediarias</li>
+                <li>Producción de proteínas inhibitorias</li>
+                <li>Degradación del segundo mensajero</li>
+                <li>Degradación de la molécula de señal</li>
+            </ul></div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 11 — SEGUNDOS MENSAJEROS ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Segundos Mensajeros</h2>
+    </div>
+    <div class="content">
+        <p>Los <span class="em">segundos mensajeros</span> son <strong>moléculas de bajo peso molecular</strong> que pueden difundir y transmitir la señal dentro de la célula. Su función principal es <strong>amplificar la señal recibida</strong>.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>AMPc (Adenosín monofosfato cíclico)</h4>
+                <p>Se genera a partir de ATP por la enzima <strong>adenilato ciclasa</strong>.</p>
+                <p style="margin-top:0.4rem;">Activa la <strong>PKA</strong> (proteína quinasa dependiente de AMPc).</p>
+            </div>
+            <div class="card card-accent">
+                <h4>GMPc (Guanosín monofosfato cíclico)</h4>
+                <p>Se genera a partir de GTP.</p>
+                <p style="margin-top:0.4rem;">Activa la <strong>PKG</strong> (proteína quinasa dependiente de GMPc).</p>
+            </div>
+            <div class="card card-accent">
+                <h4>DAG (Diacilglicerol) e IP₃ (Inositol trifosfato)</h4>
+                <p>Lípidos derivados de la membrana plasmática por la enzima <strong>fosfolipasa C (PLC)</strong>.</p>
+                <p style="margin-top:0.4rem;">Se encargan de abrir canales de calcio y activar PKC.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Ca²⁺ (Calcio)</h4>
+                <p>Ion que interactúa con proteínas intracelulares como <strong>calmodulina</strong>.</p>
+                <p style="margin-top:0.4rem;">Regula contracción muscular, secreción, metabolismo.</p>
+            </div>
+        </div>
+
+        <div class="box box-info">
+            <strong>💡 Amplificación de señal</strong>
+            <p>Un solo receptor activado puede generar cientos de moléculas de segundo mensajero. Cada una puede activar múltiples proteínas efectoras, amplificando la señal miles de veces.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 12 — TIPOS DE RECEPTORES: GENERAL ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Tipos de Receptores</h2>
+    </div>
+    <div class="content">
+        <p>Los receptores son estructuras proteicas que <strong>decodifican el mensaje</strong> y lo transforman en una respuesta intracelular. Se clasifican según la naturaleza química del ligando en dos grandes grupos:</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🔵 Receptores intracelulares</h4>
+                <p>Ubicación: <strong>citosol o núcleo celular</strong>.</p>
+                <p>Ligandos: deben ser <strong>liposolubles</strong> para atravesar la membrana (esteroides, hormonas tiroideas).</p>
+                <p style="margin-top:0.5rem;">Mecanismo: el ligando entra a la célula, se une al receptor, y el complejo migra al núcleo para <strong>regular la transcripción de genes</strong>.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🟢 Receptores de membrana</h4>
+                <p>Ubicación: <strong>membrana plasmática</strong>.</p>
+                <p>Ligandos: no pueden atravesar la membrana (proteínas, péptidos, aminoácidos).</p>
+                <p style="margin-top:0.5rem;">Se dividen en:</p>
+                <ul style="margin-top:0.3rem;">
+                    <li><strong>Ionotrópicos</strong> — canales ligando-dependientes</li>
+                    <li><strong>Metabotrópicos</strong> — generan cascadas intracelulares</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 13 — RECEPTORES IONOTRÓPICOS Y METABOTRÓPICOS ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Receptores Ionotrópicos vs Metabotrópicos</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>⚡ Receptores ionotrópicos</h4>
+                <p>Son <strong>canales ligando-dependientes</strong>. Al unirse el ligando, el receptor cambia su conformación (abierto/cerrado), modificando el flujo de iones a través de la membrana.</p>
+                <div class="box" style="margin-top:0.7rem;">
+                    <strong>🏥 Ejemplo clínico</strong>
+                    <p>Receptor <strong>nicotínico de acetilcolina</strong> en la unión neuromuscular. Es un canal de Na⁺ que se abre tras la unión de acetilcolina, permitiendo la entrada de sodio y despolarizando la fibra muscular.</p>
+                </div>
+            </div>
+            <div class="card card-accent">
+                <h4>🔄 Receptores metabotrópicos</h4>
+                <p>Al unirse el ligando, desencadenan una <strong>cascada de señalización intracelular</strong>, generando segundos mensajeros y activando proteínas efectoras.</p>
+                <p style="margin-top:0.5rem;">Tipos principales:</p>
+                <ul style="margin-top:0.3rem;">
+                    <li>Acoplados a proteína G</li>
+                    <li>Con actividad catalítica (tirosina-quinasa)</li>
+                    <li>Integrinas (adhesión)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-info">
+            <strong>⚡ vs 🔄 Diferencia clave</strong>
+            <p><strong>Ionotrópicos:</strong> respuesta rápida y directa (apertura del canal). <strong>Metabotrópicos:</strong> respuesta más lenta pero amplificada (cascada de señalización).</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 14 — RECEPTORES ACOPLADOS A PROTEÍNA G: INTRO ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Receptores Acoplados a Proteína G (GPCR)</h2>
+    </div>
+    <div class="content">
+        <p>Están unidos a una <span class="em">proteína G</span>, compuesta por tres subunidades (α, β, γ). Tienen la capacidad de unirse a <strong>GTP</strong> (guanosín trifosfato) y activarse.</p>
+
+        <div class="box">
+            <strong>🔄 Mecanismo de activación</strong>
+            <p><strong>1.</strong> El primer mensajero se une al receptor.<br>
+            <strong>2.</strong> Cambio conformacional en la proteína G.<br>
+            <strong>3.</strong> La proteína G une GTP y se activa.<br>
+            <strong>4.</strong> La subunidad α se desprende de β y γ.<br>
+            <strong>5.</strong> La subunidad α activa enzimas específicas.</p>
+        </div>
+
+        <p>Existen tres tipos principales de proteínas G, cada una con efectos diferentes:</p>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <h4 class="em">Proteína Gs</h4>
+                <p style="font-size:0.88rem;">Estimulatoria</p>
+            </div>
+            <div class="card">
+                <h4 class="em-warn">Proteína Gq</h4>
+                <p style="font-size:0.88rem;">Activadora de PLC</p>
+            </div>
+            <div class="card">
+                <h4 class="em-info">Proteína Gi</h4>
+                <p style="font-size:0.88rem;">Inhibitoria</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 15 — PROTEÍNA Gs ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Proteína Gs — Vía del AMPc</h2>
+    </div>
+    <div class="content">
+        <p>La subunidad α de la proteína Gs activa la enzima <span class="em">adenilato ciclasa</span>, que convierte ATP en <strong>AMPc</strong> (segundo mensajero).</p>
+
+        <div class="flow-diagram">
+            <div class="flow-box">
+                <h4>Ligando + Receptor</h4>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>Activación Proteína Gs</h4>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#ffb74d; background:rgba(255,183,77,0.1);">
+                <h4 style="color:#ffb74d;">Adenilato ciclasa</h4>
+                <p>ATP → AMPc</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>AMPc activa PKA</h4>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#81c784; background:rgba(129,199,132,0.1);">
+                <h4 style="color:#81c784;">Fosforilación proteínas</h4>
+                <p>Respuesta celular</p>
+            </div>
+        </div>
+
+        <div class="box box-info">
+            <strong>🏥 Ejemplo clínico: Receptores β-adrenérgicos en el corazón</strong>
+            <p>La <strong>noradrenalina</strong> se une a receptores β-adrenérgicos acoplados a proteína Gs en el músculo cardíaco. Esto genera AMPc, que activa PKA. La PKA fosforila canales de calcio, permitiendo la entrada de Ca²⁺ y aumentando la <strong>contractilidad cardíaca</strong>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 16 — PROTEÍNA Gq ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Proteína Gq — Vía del IP₃ y DAG</h2>
+    </div>
+    <div class="content">
+        <p>La subunidad α activa la enzima <span class="em">fosfolipasa C (PLC)</span>, que escinde un fosfolípido de membrana (PIP₂) produciendo dos segundos mensajeros: <strong>IP₃</strong> y <strong>DAG</strong>.</p>
+
+        <div class="flow-diagram">
+            <div class="flow-box">
+                <h4>Ligando + Receptor</h4>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>Activación Proteína Gq</h4>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#ffb74d; background:rgba(255,183,77,0.1);">
+                <h4 style="color:#ffb74d;">Fosfolipasa C (PLC)</h4>
+                <p>PIP₂ → IP₃ + DAG</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#81c784; background:rgba(129,199,132,0.1);">
+                <h4 style="color:#81c784;">↑ Ca²⁺ intracelular</h4>
+                <p>Respuesta celular</p>
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>IP₃ (Inositol trifosfato)</h4>
+                <p>Se une a receptores en el <strong>retículo endoplásmico</strong>, liberando Ca²⁺ almacenado al citoplasma.</p>
+            </div>
+            <div class="card">
+                <h4>DAG (Diacilglicerol)</h4>
+                <p>Permanece en la membrana y activa la <strong>proteína quinasa C (PKC)</strong>, que fosforila proteínas diana.</p>
+            </div>
+        </div>
+
+        <div class="box box-info">
+            <strong>🏥 Ejemplo clínico: Receptores α₁-adrenérgicos en músculo liso vascular</strong>
+            <p>La noradrenalina activa receptores α₁ acoplados a Gq en el músculo liso de los vasos sanguíneos, generando IP₃ y DAG. El aumento de Ca²⁺ produce <strong>vasoconstricción</strong>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 17 — PROTEÍNA Gi ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Proteína Gi — Vía Inhibitoria</h2>
+    </div>
+    <div class="content">
+        <p>Se llama Gi porque tiene acción <span class="em-info">inhibitoria</span> sobre la vía de producción de AMPc. La subunidad α <strong>inhibe</strong> la adenilato ciclasa, disminuyendo los niveles de AMPc.</p>
+
+        <div class="flow-diagram">
+            <div class="flow-box">
+                <h4>Ligando + Receptor</h4>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>Activación Proteína Gi</h4>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#e57373; background:rgba(229,115,115,0.1);">
+                <h4 style="color:#e57373;">Inhibición adenilato ciclasa</h4>
+                <p>↓ AMPc</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>↓ Fosforilación proteínas</h4>
+                <p>Atenuación respuesta</p>
+            </div>
+        </div>
+
+        <div class="box box-info">
+            <strong>🏥 Ejemplo clínico: Receptores muscarínicos M₂ en el corazón</strong>
+            <p>La <strong>acetilcolina</strong> del sistema parasimpático se une a receptores muscarínicos M acoplados a Gi en el corazón. Esto inhibe la adenilato ciclasa, reduce AMPc, y disminuye la frecuencia y contractilidad cardíaca (efecto <strong>bradicárdico</strong>).</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ ¿Sabías qué?</strong>
+            <p>Un mismo neurotransmisor (como la noradrenalina) puede activar receptores β (Gs) en el corazón causando contracción, y receptores β en músculo bronquial causando relajación. La diferencia está en las <strong>proteínas finalmente fosforiladas</strong> en cada tipo celular.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 18 — RECEPTORES CATALÍTICOS ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Receptores con Actividad Catalítica</h2>
+    </div>
+    <div class="content">
+        <p>Estos receptores tienen actividad <span class="em">quinasa</span> intrínseca. Cuando el ligando se une, el receptor se <strong>autofosforila</strong> (se fosforila a sí mismo) y luego fosforila otras proteínas, activando cascadas de señalización.</p>
+
+        <div class="box">
+            <strong>🔬 Fosforilación de proteínas</strong>
+            <p>• <strong>Fosforilación:</strong> agregar un grupo fosfato (PO₄³⁻) a una molécula usando ATP.<br>
+            • <strong>Quinasas:</strong> enzimas que fosforilan.<br>
+            • <strong>Fosfatasas:</strong> enzimas que desfosforilan (remueven fosfatos).</p>
+        </div>
+
+        <div class="flow-diagram">
+            <div class="flow-box">
+                <h4>Ligando + Receptor</h4>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#ffb74d; background:rgba(255,183,77,0.1);">
+                <h4 style="color:#ffb74d;">Autofosforilación</h4>
+                <p>Receptor se activa</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box">
+                <h4>Fosforilación cascada</h4>
+                <p>Activa proteínas diana</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-box" style="border-color:#81c784; background:rgba(129,199,132,0.1);">
+                <h4 style="color:#81c784;">Respuesta celular</h4>
+            </div>
+        </div>
+
+        <div class="box box-info">
+            <strong>🏥 Ejemplo clínico: Receptor de insulina</strong>
+            <p>El receptor de <strong>insulina</strong> es un receptor tirosina-quinasa. Al unirse la insulina, el receptor se autofosforila en residuos de tirosina, activando cascadas que promueven la captación de glucosa y síntesis de glucógeno en células musculares y adiposas.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 19 — TIPOS DE RESPUESTAS CELULARES ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1.5 — TRANSDUCCIÓN DE SEÑALES</div>
+        <h2>Tipos de Respuestas Celulares</h2>
+    </div>
+    <div class="content">
+        <p>Una vez que la señal es transducida, la célula puede generar diversos tipos de respuestas:</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>🔄 Cambios metabólicos</h4>
+                <p>Activación o inhibición de rutas metabólicas. Ejemplo: activación de glucólisis por insulina.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>📈 Crecimiento</h4>
+                <p>Promoción de proliferación celular o diferenciación. Ejemplo: factores de crecimiento.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🛡️ Supervivencia</h4>
+                <p>Activación de mecanismos de desintoxicación o detención del ciclo celular.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>📡 Liberación de señales</h4>
+                <p>La señal provoca la liberación de otras señales (efecto en cascada).</p>
+            </div>
+            <div class="card card-accent">
+                <h4>💀 Muerte celular (Apoptosis)</h4>
+                <p>Activación de programas de muerte celular programada.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>🧬 Expresión génica</h4>
+                <p>Cambios en la transcripción de genes específicos.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Nota importante</strong>
+            <p>Liberación de calcio, fosforilación de proteínas, y translocación de proteínas NO son respuestas finales, sino <strong>partes de la transmisión de la señal</strong>. Las respuestas reales son cambios funcionales en la célula.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 20 — TABLA RESUMEN RECEPTORES ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">RESUMEN</div>
+        <h2>Resumen: Tipos de Receptores</h2>
+    </div>
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de Receptor</th>
+                    <th>Ubicación</th>
+                    <th>Segundo Mensajero</th>
+                    <th>Ejemplo de Ligando</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Intracelular</strong></td>
+                    <td>Citosol / Núcleo</td>
+                    <td>—</td>
+                    <td>Esteroides, hormonas tiroideas</td>
+                </tr>
+                <tr>
+                    <td><strong>Ionotrópico</strong></td>
+                    <td>Membrana</td>
+                    <td>—</td>
+                    <td>Acetilcolina (receptor nicotínico)</td>
+                </tr>
+                <tr>
+                    <td><strong>GPCR — Gs</strong></td>
+                    <td>Membrana</td>
+                    <td>AMPc</td>
+                    <td>Noradrenalina (β-adrenérgico), Glucagón</td>
+                </tr>
+                <tr>
+                    <td><strong>GPCR — Gq</strong></td>
+                    <td>Membrana</td>
+                    <td>IP₃, DAG, Ca²⁺</td>
+                    <td>Noradrenalina (α₁-adrenérgico), Angiotensina II</td>
+                </tr>
+                <tr>
+                    <td><strong>GPCR — Gi</strong></td>
+                    <td>Membrana</td>
+                    <td>↓ AMPc</td>
+                    <td>Acetilcolina (muscarínico M₂)</td>
+                </tr>
+                <tr>
+                    <td><strong>Tirosina-quinasa</strong></td>
+                    <td>Membrana</td>
+                    <td>Cascada de fosforilación</td>
+                    <td>Insulina, IGF-1</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box" style="margin-top:1rem;">
+            <strong>🔑 Mensaje clave</strong>
+            <p>El <strong>receptor</strong> determina la vía de señalización y la respuesta celular, más que el ligando mismo. El mismo ligando puede generar respuestas opuestas en diferentes células dependiendo del tipo de receptor expresado.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 21 — EJERCICIO 1 ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Comunicación Celular</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta para cada pregunta.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 22 — EJERCICIO 2 ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Segundos Mensajeros</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 23 — EJERCICIO 3 ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 3</div>
+        <h2>Práctica: Proteínas G</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta.</p>
+        </div>
+        <div id="ex3-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx3()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx3()">↺ Limpiar</button>
+        </div>
+        <div id="ex3-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 24 — EJERCICIO 4 ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 4</div>
+        <h2>Práctica: Tipos de Receptores</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex4-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx4()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx4()">↺ Limpiar</button>
+        </div>
+        <div id="ex4-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 25 — BIBLIOGRAFÍA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAFÍA</div>
+        <h2>Fuentes y Recursos</h2>
+    </div>
+    <div class="content">
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>📚 Libro — Fisiología Humana (UNLP)</h4>
+            <p><em>Capítulo 5: Comunicación Celular.</em> De Giusti, V.C. & Yeves, A.M. (Coord.). Cubre homeostasis, componentes de la comunicación, tipos de comunicación celular, transducción de señales, segundos mensajeros, y tipos de receptores con ejemplos clínicos.</p>
+            <p style="font-size:0.85rem; color:#e91e63; margin-top:0.35rem;">https://sedici.unlp.edu.ar/bitstream/handle/10915/186572/Documento_completo.pdf-PDFA.pdf</p>
+        </div>
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>🌐 Artículo — Clínica Universidad de Navarra</h4>
+            <p><em>Segundo mensajero.</em> Definición médica de segundo mensajero, funciones de AMPc, cGMP, Ca²⁺, IP₃ y DAG en la fisiología celular.</p>
+            <p style="font-size:0.85rem; color:#e91e63; margin-top:0.35rem;">https://www.cun.es/diccionario-medico/terminos/segundo-mensajero</p>
+        </div>
+        <div class="card card-accent">
+            <h4>🎥 Video — Transducción de Señales</h4>
+            <p><em>Señalización celular y transducción de señales.</em> Explicación didáctica de los conceptos de señalización vs transducción, tipos de respuesta celular, y cascadas de señalización.</p>
+            <p style="font-size:0.85rem; color:#e91e63; margin-top:0.35rem;">https://youtu.be/_GFL6cjUn6E</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 26 — PORTADA FINAL ══════════ -->
+<div class="slide cover">
+    <h1>¿Preguntas?</h1>
+    <div class="line"></div>
+    <p class="subtitle">Gracias por tu atención</p>
+</div>
+
+</div><!-- /container -->
+
+<!-- ─── CONTADOR Y NAV ─── -->
+<div class="counter"><span id="current">1</span> / <span id="total">26</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════ -->
+<script>
+// ── NAVEGACIÓN ──
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+// ── UTIL ──
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9.,\-\s]/g,'')
+        .replace(/\s+/g,' ');
+}
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 1 — Opción múltiple: Comunicación Celular
+// ══════════════════════════════════════════════════
+const ex1Data = [
+    {
+        q: "¿Cuál es el nombre del proceso por el cual una señal extracelular se convierte en una respuesta intracelular?",
+        opts: ["Señalización celular", "Transducción de señales", "Homeostasis", "Fosforilación"],
+        correct: 1
+    },
+    {
+        q: "En la comunicación parácrina, la célula emisora y la célula receptora están:",
+        opts: ["En órganos distantes", "Cercanas en el mismo tejido", "Es la misma célula", "Conectadas por sangre"],
+        correct: 1
+    },
+    {
+        q: "¿Cuál tipo de comunicación requiere que el mensaje viaje por la sangre?",
+        opts: ["Parácrina", "Autócrina", "Endócrina", "Yuxtácrina"],
+        correct: 2
+    },
+    {
+        q: "En la comunicación autócrina:",
+        opts: ["La célula secreta un ligando que actúa sobre células vecinas", "La célula secreta un ligando que actúa sobre sí misma", "El ligando viaja por la sangre", "No se requiere receptor"],
+        correct: 1
+    },
+    {
+        q: "¿Por qué una hormona que viaja por la sangre no afecta a todas las células del cuerpo?",
+        opts: ["Porque se degrada rápidamente", "Porque solo las células con receptor específico responden", "Porque la sangre no llega a todos los tejidos", "Porque las células la bloquean"],
+        correct: 1
+    },
+    {
+        q: "¿Qué determina principalmente el tipo de respuesta celular a un ligando?",
+        opts: ["La concentración del ligando", "El tipo de receptor y la célula donde está", "El tamaño del ligando", "El tiempo de exposición"],
+        correct: 1
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 2 — Fill-in-blank: Segundos Mensajeros
+// ══════════════════════════════════════════════════
+const ex2Data = [
+    { q: "El segundo mensajero AMPc se genera a partir de ATP por la enzima __________ __________.", a: "adenilato ciclasa" },
+    { q: "El AMPc activa la proteína quinasa llamada __________ (siglas).", a: "PKA" },
+    { q: "La fosfolipasa C (PLC) produce dos segundos mensajeros: IP₃ y __________ (siglas).", a: "DAG" },
+    { q: "El IP₃ libera iones de __________ desde el retículo endoplásmico.", a: "calcio" },
+    { q: "El DAG activa la proteína quinasa __________ (letra).", a: "C" },
+    { q: "Los segundos mensajeros tienen como función principal __________ la señal recibida.", a: "amplificar" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 3 — Opción múltiple: Proteínas G
+// ══════════════════════════════════════════════════
+const ex3Data = [
+    {
+        q: "¿Qué enzima activa la proteína Gs?",
+        opts: ["Fosfolipasa C", "Adenilato ciclasa", "Proteína quinasa A", "Tirosina quinasa"],
+        correct: 1
+    },
+    {
+        q: "La proteína Gq activa a la enzima:",
+        opts: ["Adenilato ciclasa", "Fosfolipasa C", "Fosfatasa", "Guanilato ciclasa"],
+        correct: 1
+    },
+    {
+        q: "¿Cuál es el efecto de la proteína Gi sobre la adenilato ciclasa?",
+        opts: ["La activa", "La inhibe", "No tiene efecto", "La fosforila"],
+        correct: 1
+    },
+    {
+        q: "Los receptores β-adrenérgicos del corazón están acoplados a proteína:",
+        opts: ["Gi", "Gq", "Gs", "No tienen proteína G"],
+        correct: 2
+    },
+    {
+        q: "La acetilcolina en el corazón (receptores muscarínicos M₂) activa proteína Gi, lo que produce:",
+        opts: ["Aumento de la frecuencia cardíaca", "Disminución de la frecuencia cardíaca", "Vasodilatación", "Broncodilatación"],
+        correct: 1
+    }
+];
+
+(function renderEx3() {
+    document.getElementById('ex3-container').innerHTML = ex3Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex3-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex3',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 4 — Fill-in-blank: Tipos de Receptores
+// ══════════════════════════════════════════════════
+const ex4Data = [
+    { q: "Los receptores intracelulares están ubicados en el __________ o el núcleo celular.", a: "citosol" },
+    { q: "Los ligandos de receptores intracelulares deben ser __________ para atravesar la membrana.", a: "liposolubles" },
+    { q: "Los receptores ionotrópicos son canales __________-dependientes.", a: "ligando" },
+    { q: "El receptor nicotínico de acetilcolina en la unión neuromuscular es un receptor __________.", a: "ionotropico" },
+    { q: "El receptor de insulina tiene actividad __________ quinasa.", a: "tirosina" },
+    { q: "Cuando un receptor tirosina-quinasa se activa, se __________ a sí mismo.", a: "autofosforila" }
+];
+
+(function renderEx4() {
+    document.getElementById('ex4-container').innerHTML = ex4Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex4-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// FUNCIONES GENÉRICOS DE EJERCICIOS
+// ══════════════════════════════════════════════════
+
+// ── Selección múltiple genérica ──
+function selMC(prefix, qi, oi) {
+    const data = prefix === 'ex1' ? ex1Data : ex3Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+// ── Check opción múltiple genérica ──
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+// ── Reset opción múltiple genérica ──
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+// ── Check fill-in-blank genérico ──
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        if (normalise(inp.value) === normalise(item.a)) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+// ── Reset fill-in-blank genérico ──
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+// ══════════════════════════════════════════════════
+// CONECTAR EJERCICIOS A FUNCIONES
+// ══════════════════════════════════════════════════
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+function checkEx3()  { checkMC('ex3', ex3Data, 'ex3-feedback'); }
+function resetEx3()  { resetMC('ex3', ex3Data, 'ex3-feedback'); }
+function checkEx4()  { checkFill('ex4', ex4Data, 'ex4-feedback'); }
+function resetEx4()  { resetFill('ex4', ex4Data, 'ex4-feedback'); }
+</script>
+</body>
+</html>
