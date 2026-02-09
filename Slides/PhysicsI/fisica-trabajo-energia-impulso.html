@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajo, Energía e Impulso - Física I</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:linear-gradient(135deg,#2d5016 0%,#4a7c28 40%,#6b9b3a 100%);
+            color:#f5f5dc; overflow:hidden;
+        }
+        .container { width:100vw; height:100vh; position:relative; }
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.5rem 6rem; flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* PORTADA */
+        .cover {
+            background:linear-gradient(135deg,#3d6d1f 0%,#558b2f 40%,#7cb342 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-100px; right:-100px; width:350px; height:350px;
+            border-radius:50%; background:rgba(205,133,63,0.12);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-70px; left:-70px; width:250px; height:250px;
+            border-radius:50%; background:rgba(255,215,0,0.08);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.6rem; font-weight:900; line-height:1.2;
+            margin-bottom:1.2rem; position:relative; z-index:1;
+            color:#ffd700;
+        }
+        .cover .subtitle {
+            font-size:1.35rem; opacity:0.9; color:#f5f5dc;
+            position:relative; z-index:1;
+        }
+        .cover .line {
+            width:90px; height:3px; background:#ffd700;
+            margin:1.8rem auto; position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            opacity:0.7; position:relative; z-index:1; color:#f5f5dc;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            opacity:0.6; position:relative; z-index:1; color:#f5f5dc;
+        }
+
+        /* SLIDES */
+        .slide-header { margin-bottom:1.3rem; flex-shrink:0; }
+        .slide-number {
+            color:#ffd700; font-size:0.8rem; font-weight:700;
+            letter-spacing:2.5px; text-transform:uppercase; margin-bottom:0.4rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.2rem; color:#ffd700;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.35rem; color:#f4e285; margin:1.2rem 0 0.7rem;
+        }
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(205,133,63,0.15); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#cd853f; border-radius:3px; }
+
+        p { font-size:1.02rem; line-height:1.7; margin-bottom:1.1rem; color:#f5f5dc; }
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:0.98rem; line-height:1.6; margin-bottom:0.6rem;
+            padding-left:1.5rem; position:relative; color:#f5f5dc;
+        }
+        ul li::before {
+            content:'▸'; position:absolute; left:0;
+            color:#ffd700; font-weight:bold;
+        }
+
+        /* CAJAS */
+        .box {
+            background:rgba(205,133,63,0.15); border-left:4px solid #cd853f;
+            padding:1.2rem 1.4rem; margin:1.2rem 0; border-radius:0 7px 7px 0;
+        }
+        .box strong { color:#ffd700; display:block; margin-bottom:0.4rem; font-size:1.02rem; }
+        .box p { margin-bottom:0.35rem; }
+        .box-warn { background:rgba(255,140,0,0.15); border-left-color:#ff8c00; }
+        .box-warn strong { color:#ffa500; }
+        .box-success { background:rgba(124,179,66,0.15); border-left-color:#7cb342; }
+        .box-success strong { color:#9ccc65; }
+
+        /* GRIDS */
+        .grid { display:grid; gap:1.1rem; margin:1.1rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+        .card {
+            background:rgba(45,80,22,0.6); padding:1.2rem;
+            border-radius:9px; border:1px solid rgba(205,133,63,0.3);
+            box-shadow:0 2px 8px rgba(0,0,0,0.2);
+        }
+        .card h4 { color:#ffd700; margin-bottom:0.5rem; font-size:1.06rem; }
+        .card p { font-size:0.95rem; margin-bottom:0.3rem; }
+        .card-accent { border-color:rgba(255,215,0,0.5); background:rgba(85,139,47,0.5); }
+
+        .em { color:#ffd700; font-weight:700; }
+        .em-warn { color:#ffa500; font-weight:700; }
+        .em-success { color:#9ccc65; font-weight:700; }
+
+        /* TABLAS */
+        table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+        th,td { padding:0.7rem 0.9rem; text-align:left; border-bottom:1px solid rgba(205,133,63,0.3); }
+        th { background:rgba(205,133,63,0.2); color:#ffd700; font-weight:700; font-size:0.88rem; letter-spacing:0.4px; }
+        tr:last-child td { border-bottom:none; }
+
+        /* FORMULA */
+        .formula {
+            background:rgba(45,80,22,0.7); padding:1.2rem 1.8rem;
+            border-radius:8px; border:2px solid rgba(255,215,0,0.4);
+            font-family:'Courier New',monospace; font-size:1.2rem; text-align:center;
+            margin:1.2rem 0; color:#ffd700; font-weight:600;
+            box-shadow:0 2px 8px rgba(0,0,0,0.25);
+        }
+
+        /* BADGES */
+        .exercise-badge {
+            background:linear-gradient(135deg,#cd853f,#daa520);
+            color:#2d5016; padding:0.3rem 1.2rem; border-radius:24px;
+            display:inline-block; font-weight:800; font-size:0.8rem;
+            letter-spacing:1.5px; box-shadow:0 3px 10px rgba(205,133,63,0.4);
+        }
+
+        /* EJERCICIOS */
+        .exercise-input {
+            width:100%; background:rgba(45,80,22,0.5);
+            border:1px solid rgba(205,133,63,0.4); border-radius:7px;
+            padding:0.6rem 0.9rem; color:#f5f5dc; font-size:0.95rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#ffd700; background:rgba(45,80,22,0.7); }
+        .exercise-input.correct { border-color:#9ccc65; background:rgba(124,179,66,0.2); }
+        .exercise-input.incorrect { border-color:#ff6347; background:rgba(255,99,71,0.2); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.95rem; color:#f5f5dc; display:block; }
+        .exercise-q .qnum { color:#ffd700; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#cd853f; border:none; color:#2d5016;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#daa520; transform:scale(1.05); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(205,133,63,0.6); color:#ffd700; }
+        .ex-btn-sec:hover { background:rgba(205,133,63,0.2); border-color:#ffd700; }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(124,179,66,0.2); border:1px solid rgba(156,204,101,0.5); color:#9ccc65; }
+        .feedback-msg.partial { background:rgba(255,140,0,0.15); border:1px solid rgba(255,165,0,0.5); color:#ffa500; }
+
+        .mc-option {
+            background:rgba(45,80,22,0.5); border:1px solid rgba(205,133,63,0.35);
+            border-radius:7px; padding:0.6rem 1rem; margin:0.35rem 0;
+            cursor:pointer; transition:all 0.22s; font-size:0.95rem; color:#f5f5dc;
+        }
+        .mc-option:hover { border-color:#ffd700; background:rgba(85,139,47,0.5); }
+        .mc-option.selected { border-color:#ffd700; background:rgba(85,139,47,0.6); }
+        .mc-option.correct-sel { border-color:#9ccc65; background:rgba(124,179,66,0.3); }
+        .mc-option.incorrect-sel { border-color:#ff6347; background:rgba(255,99,71,0.25); }
+
+        /* NAV */
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; background:#cd853f; border:none;
+            border-radius:50%; color:#2d5016; font-size:1.35rem;
+            font-weight:bold; cursor:pointer; transition:all 0.3s;
+            box-shadow:0 4px 15px rgba(0,0,0,0.4);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); background:#daa520; }
+        .btn:disabled { opacity:0.35; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(45,80,22,0.9); padding:0.8rem 1.6rem;
+            border-radius:28px; border:2px solid #cd853f;
+            color:#ffd700; font-weight:700; z-index:1000; font-size:0.95rem;
+            box-shadow:0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.6rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 — PORTADA -->
+<div class="slide cover active">
+    <h1>Trabajo y Energía<br>Impulso y Momentum</h1>
+    <div class="line"></div>
+    <p class="subtitle">Principios de conservación y teoremas fundamentales</p>
+    <p class="meta">Física I: Dinámica y Cinemática | Nivel: Medio</p>
+    <p class="help">👉 Usa las flechas del teclado o los botones para navegar →</p>
+</div>
+
+<!-- SLIDE 2 — INTRODUCCIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">INTRODUCCIÓN</div>
+        <h2>Conceptos Fundamentales</h2>
+    </div>
+    <div class="content">
+        <p>En el estudio de la mecánica, son de gran relevancia los conceptos de <span class="em">trabajo y energía</span>. La importancia de este último concepto surge del <strong>principio de conservación de la energía</strong>:</p>
+
+        <div class="box box-success">
+            <strong>⚡ Principio de conservación de la energía</strong>
+            <p>La energía es una cantidad que se <strong>convierte de una forma a otra</strong>, pero <span class="em-success">no se crea ni se destruye</span>.</p>
+        </div>
+
+        <h3>Objetivos de aprendizaje</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Trabajo y Energía</h4>
+                <ul>
+                    <li>Energía cinética (movimiento)</li>
+                    <li>Teorema trabajo-energía</li>
+                    <li>Cambios en rapidez, no velocidad</li>
+                    <li>Conservación de energía mecánica</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Impulso y Momentum</h4>
+                <ul>
+                    <li>Cantidad de movimiento (momentum)</li>
+                    <li>Impulso de una fuerza</li>
+                    <li>Teorema impulso-momentum</li>
+                    <li>Conservación del momentum</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📌 Importancia</strong>
+            <p>Estos conceptos nos permiten resolver problemas de mecánica que no podríamos haber resuelto aplicando directamente las leyes de Newton.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 — TRABAJO DEFINICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">8.1 — TRABAJO</div>
+        <h2>Definición de Trabajo</h2>
+    </div>
+    <div class="content">
+        <p>Consideremos un cuerpo que experimenta un desplazamiento de magnitud <strong>s</strong> en línea recta. Mientras el cuerpo se mueve, una fuerza <strong>F</strong> (vector) actúa sobre él.</p>
+
+        <h3>Caso 1: Fuerza paralela al desplazamiento</h3>
+        <p>Si la fuerza actúa <span class="em-success">en la dirección del desplazamiento</span>, el trabajo W es:</p>
+
+        <div class="formula">
+            W = F · s
+        </div>
+
+        <div class="box">
+            <strong>📏 Unidades</strong>
+            <p>• <strong>SI:</strong> Joules (J)<br>
+            • <strong>Equivalencia:</strong> 1 J = 1 N·m (newton-metro)</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Nota importante</strong>
+            <p>No confundas la <strong>W mayúscula</strong> (trabajo) con la <strong>w minúscula</strong> (peso). Aunque los símbolos son similares, trabajo y peso son cantidades <span class="em-warn">distintas</span>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4 — TRABAJO CON ÁNGULO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">8.1 — TRABAJO</div>
+        <h2>Trabajo con Fuerza en Ángulo</h2>
+    </div>
+    <div class="content">
+        <p>Sin embargo, si la fuerza se aplica con un ángulo <strong>θ</strong> (theta) respecto al desplazamiento, la fuerza <strong>F</strong> tiene:</p>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Componente paralela</h4>
+                <div class="formula" style="font-size:1rem;">
+                    F<sub>paralela</sub> = F cos θ
+                </div>
+                <p style="margin-top:0.5rem;">Esta componente <span class="em-success">realiza trabajo</span></p>
+            </div>
+            <div class="card">
+                <h4>Componente perpendicular</h4>
+                <div class="formula" style="font-size:1rem;">
+                    F<sub>perpendicular</sub> = F sen θ
+                </div>
+                <p style="margin-top:0.5rem;">Esta componente <span class="em-warn">NO realiza trabajo</span></p>
+            </div>
+        </div>
+
+        <h3>Fórmula general del trabajo</h3>
+        <p>Como solo nos interesa el trabajo realizado por la componente paralela:</p>
+
+        <div class="formula">
+            W = F s cos θ
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Casos especiales</strong>
+            <p>• <strong>θ = 0°:</strong> W = Fs (fuerza paralela, trabajo positivo máximo)<br>
+            • <strong>θ = 90°:</strong> W = 0 (fuerza perpendicular, sin trabajo)<br>
+            • <strong>θ = 180°:</strong> W = −Fs (fuerza opuesta, trabajo negativo)</p>
+        </div>
+
+        <div class="box">
+            <strong>📌 Conclusión</strong>
+            <p>Una fuerza constante puede hacer trabajo <span class="em-success">positivo</span>, <span class="em-warn">negativo</span> o <span class="em">cero</span>, dependiendo del ángulo entre F y el desplazamiento.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5 — ENERGÍA CINÉTICA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">8.2 — ENERGÍA</div>
+        <h2>Energía Cinética</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>⚡ Definición de energía</strong>
+            <p>La energía es una <strong>cantidad física</strong> que produce un trabajo y a su vez movimiento.</p>
+        </div>
+
+        <p>La <span class="em">energía cinética</span> está presente cuando un objeto tiene movimiento.</p>
+
+        <div class="formula">
+            K = ½ m v²
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Variables</h4>
+                <ul>
+                    <li><strong>K:</strong> energía cinética</li>
+                    <li><strong>m:</strong> masa del objeto</li>
+                    <li><strong>v:</strong> rapidez del objeto</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Unidades</h4>
+                <p>La energía cinética tiene unidades:</p>
+                <div class="formula" style="font-size:0.95rem;">
+                    kg·m²/s² = J (Joules)
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Observación importante</strong>
+            <p>La energía cinética depende de la <strong>rapidez</strong> (magnitud de la velocidad), no de la dirección. Por lo tanto, <span class="em-warn">es una cantidad escalar</span>, no vectorial.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6 — TIPOS DE ENERGÍA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">8.2 — ENERGÍA</div>
+        <h2>Tipos de Energía y Trabajo</h2>
+    </div>
+    <div class="content">
+        <p>De los conceptos de energía y trabajo, se obtienen los siguientes tipos:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Símbolo</th>
+                    <th>Fórmula</th>
+                    <th>Descripción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Energía potencial</strong></td>
+                    <td>U</td>
+                    <td>U = mgh</td>
+                    <td>Energía debida a la posición en un campo gravitacional</td>
+                </tr>
+                <tr>
+                    <td><strong>Energía elástica</strong></td>
+                    <td>U<sub>R</sub></td>
+                    <td>U<sub>R</sub> = ½kx²</td>
+                    <td>Energía almacenada en un resorte comprimido/estirado</td>
+                </tr>
+                <tr>
+                    <td><strong>Energía cinética rotacional</strong></td>
+                    <td>K<sub>R</sub></td>
+                    <td>K<sub>R</sub> = ½Iω²</td>
+                    <td>Energía de un objeto en rotación</td>
+                </tr>
+                <tr>
+                    <td><strong>Trabajo de fricción</strong></td>
+                    <td>W<sub>f</sub></td>
+                    <td>W<sub>f</sub> = −f<sub>r</sub>·d = −μNd</td>
+                    <td>Trabajo realizado por la fuerza de fricción (siempre negativo)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box">
+            <strong>📌 Notas sobre las fórmulas</strong>
+            <p>• <strong>g:</strong> aceleración de la gravedad (9.8 m/s²)<br>
+            • <strong>h:</strong> altura sobre un nivel de referencia<br>
+            • <strong>k:</strong> constante del resorte (N/m)<br>
+            • <strong>x:</strong> deformación del resorte<br>
+            • <strong>I:</strong> momento de inercia<br>
+            • <strong>ω:</strong> velocidad angular<br>
+            • <strong>μ:</strong> coeficiente de fricción<br>
+            • <strong>N:</strong> fuerza normal</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 — TEOREMA TRABAJO-ENERGÍA DEDUCCIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">8.3 — TEOREMA TRABAJO-ENERGÍA</div>
+        <h2>Deducción del Teorema</h2>
+    </div>
+    <div class="content">
+        <p>El trabajo es una forma de energía que se puede analizar con base en la <strong>segunda Ley de Newton</strong>.</p>
+
+        <h3>Paso 1: Segunda Ley de Newton</h3>
+        <p>Para un movimiento horizontal con fuerza F<sub>x</sub>:</p>
+        <div class="formula">
+            F<sub>x</sub> = m a<sub>x</sub>
+        </div>
+
+        <h3>Paso 2: Expresar aceleración en términos de velocidades</h3>
+        <p>Usando cinemática, la aceleración se puede expresar como:</p>
+        <div class="formula">
+            a<sub>x</sub> = (v<sub>f</sub>² − v<sub>o</sub>²) / (2s)
+        </div>
+        <p style="font-size:0.9rem;">Donde v<sub>o</sub> es la velocidad inicial, v<sub>f</sub> es la velocidad final, y s es la distancia recorrida.</p>
+
+        <h3>Paso 3: Sustitución</h3>
+        <p>Al sustituir esta ecuación en la segunda Ley de Newton:</p>
+        <div class="formula" style="font-size:1rem;">
+            F<sub>x</sub> = m · (v<sub>f</sub>² − v<sub>o</sub>²) / (2s)
+        </div>
+
+        <p>Multiplicando ambos lados por s:</p>
+        <div class="formula" style="font-size:1rem;">
+            F<sub>x</sub> s = ½ m v<sub>f</sub>² − ½ m v<sub>o</sub>²
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 — TEOREMA TRABAJO-ENERGÍA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">8.3 — TEOREMA TRABAJO-ENERGÍA</div>
+        <h2>Enunciado del Teorema</h2>
+    </div>
+    <div class="content">
+        <p>De la deducción anterior, identificamos:</p>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Trabajo neto</h4>
+                <div class="formula" style="font-size:1rem;">
+                    W<sub>neto</sub> = F<sub>x</sub> s
+                </div>
+            </div>
+            <div class="card">
+                <h4>Energía cinética</h4>
+                <div class="formula" style="font-size:1rem;">
+                    K = ½ m v²
+                </div>
+            </div>
+        </div>
+
+        <h3>Forma general del teorema</h3>
+        <div class="formula">
+            W<sub>neto</sub> = ΔK = K<sub>f</sub> − K<sub>i</sub>
+        </div>
+
+        <p>O equivalentemente:</p>
+
+        <div class="formula">
+            W<sub>neto</sub> = ½ m v<sub>f</sub>² − ½ m v<sub>o</sub>²
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Teorema trabajo-energía</strong>
+            <p>El <strong>trabajo neto o resultante</strong> aplicado a un cuerpo produce un <strong>cambio en la energía cinética</strong> de dicho cuerpo.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Caso especial</strong>
+            <p>En caso de que la velocidad sea <strong>constante</strong> (v<sub>f</sub> = v<sub>o</sub>), el trabajo neto debe ser <span class="em-warn">cero</span>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9 — EJEMPLO BLOQUE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">8.3 — EJEMPLO</div>
+        <h2>Aplicación del Teorema Trabajo-Energía</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>Un bloque de <strong>6.5 kg</strong>, inicialmente en reposo, se jala hacia la derecha a lo largo de una superficie horizontal <strong>sin fricción</strong>, mediante una fuerza horizontal constante de <strong>12 N</strong>. Encuentra la rapidez del bloque después de que se ha movido <strong>4 metros</strong>.</p>
+        </div>
+
+        <h3>Solución</h3>
+
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>Paso 1: Calcular el trabajo</h4>
+            <div class="formula" style="font-size:1rem;">
+                W = F · s = (12 N)(4 m) = 48 J
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>Paso 2: Aplicar teorema trabajo-energía</h4>
+            <p>Como el bloque parte del reposo, K<sub>i</sub> = 0:</p>
+            <div class="formula" style="font-size:0.95rem;">
+                W = K<sub>f</sub> − K<sub>i</sub><br>
+                48 J = ½ m v<sub>f</sub>² − 0
+            </div>
+        </div>
+
+        <div class="card card-accent">
+            <h4>Paso 3: Despejar v<sub>f</sub></h4>
+            <div class="formula" style="font-size:0.9rem;">
+                v<sub>f</sub> = √(2W/m) = √(2 × 48 J / 6.5 kg)
+            </div>
+            <div class="formula" style="font-size:1.1rem;">
+                v<sub>f</sub> = 3.8 m/s
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>La rapidez del bloque después de 4 metros es <span class="em-success">3.8 m/s</span>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10 — CONSERVACIÓN DE ENERGÍA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">CONSERVACIÓN DE ENERGÍA</div>
+        <h2>Principio de Conservación de la Energía</h2>
+    </div>
+    <div class="content">
+        <div class="box box-success">
+            <strong>⚡ Principio fundamental</strong>
+            <p>La energía <span class="em-success">no se crea ni se destruye, solo se transforma</span>.</p>
+        </div>
+
+        <h3>Ecuación general</h3>
+        <div class="formula">
+            E<sub>inicial</sub> = E<sub>final</sub>
+        </div>
+
+        <p>Para sistemas mecánicos conservativos (sin fricción):</p>
+
+        <div class="formula">
+            K<sub>i</sub> + U<sub>i</sub> = K<sub>f</sub> + U<sub>f</sub>
+        </div>
+
+        <h3>Caso: Resorte con fricción</h3>
+        <p>En el caso de conservación de la energía entre un resorte y el trabajo de fricción:</p>
+
+        <div class="formula" style="font-size:1rem;">
+            ½ k x² = ½ m v² + μ m g d
+        </div>
+
+        <div class="box">
+            <strong>📌 Variables</strong>
+            <p>• <strong>k:</strong> constante del resorte<br>
+            • <strong>x:</strong> distancia comprimida en el resorte<br>
+            • <strong>m:</strong> masa del objeto<br>
+            • <strong>μ:</strong> coeficiente de fricción<br>
+            • <strong>d:</strong> distancia recorrida hasta detenerse<br>
+            • <strong>g:</strong> gravedad</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11 — TRABAJO VARIABLE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">TRABAJO CON FUERZA VARIABLE</div>
+        <h2>Cálculo mediante Integral</h2>
+    </div>
+    <div class="content">
+        <p>En el caso de que la fuerza sea <span class="em-warn">variable</span>, el trabajo debe calcularse como:</p>
+
+        <div class="formula">
+            W = ∫<sub>x<sub>o</sub></sub><sup>x<sub>f</sub></sup> F<sub>x</sub> dx
+        </div>
+
+        <div class="box">
+            <strong>📌 Interpretación</strong>
+            <p>• <strong>F<sub>x</sub>:</strong> fuerza horizontal (que varía con la posición)<br>
+            • <strong>x<sub>o</sub>:</strong> posición inicial<br>
+            • <strong>x<sub>f</sub>:</strong> posición final<br>
+            • La integral representa el <span class="em">área bajo la curva</span> F vs x</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Método geométrico</strong>
+            <p>Recordemos que una integral representa el <strong>área bajo la curva</strong>. Por lo tanto, se puede calcular de manera geométrica el trabajo si se conoce la gráfica de F<sub>x</sub> vs x.</p>
+        </div>
+
+        <div class="card card-accent">
+            <h4>Ejemplo importante: Resorte</h4>
+            <p>Para un resorte con fuerza F = −kx:</p>
+            <div class="formula" style="font-size:0.95rem;">
+                W = ∫<sub>0</sub><sup>x</sup> kx dx = ½ k x²
+            </div>
+            <p style="margin-top:0.5rem;">Esto corresponde a la energía elástica almacenada.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12 — EJEMPLO PELOTA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">EJEMPLO — CONSERVACIÓN</div>
+        <h2>Pelota Lanzada Verticalmente</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>Una pelota se lanza verticalmente hacia arriba a una velocidad de <strong>6 m/s</strong>. Determinar la altura alcanzada.</p>
+        </div>
+
+        <h3>Solución por conservación de energía</h3>
+
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>Energía inicial (en el lanzamiento)</h4>
+            <div class="formula" style="font-size:1rem;">
+                E<sub>i</sub> = K<sub>i</sub> + U<sub>i</sub> = ½ m v<sub>o</sub>² + 0
+            </div>
+            <p style="margin-top:0.5rem; font-size:0.9rem;">La energía potencial inicial es cero (nivel de referencia)</p>
+        </div>
+
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>Energía final (en altura máxima)</h4>
+            <div class="formula" style="font-size:1rem;">
+                E<sub>f</sub> = K<sub>f</sub> + U<sub>f</sub> = 0 + mgh
+            </div>
+            <p style="margin-top:0.5rem; font-size:0.9rem;">En altura máxima, la velocidad es cero</p>
+        </div>
+
+        <div class="card card-accent">
+            <h4>Conservación de energía</h4>
+            <div class="formula" style="font-size:0.95rem;">
+                ½ m v<sub>o</sub>² = mgh
+            </div>
+            <p style="margin-top:0.5rem;">Observa que la masa <strong>se cancela</strong>:</p>
+            <div class="formula" style="font-size:0.95rem;">
+                h = v<sub>o</sub>² / (2g) = (6 m/s)² / (2 × 9.8 m/s²)
+            </div>
+            <div class="formula" style="font-size:1.1rem;">
+                h = 1.84 m
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>La pelota alcanza una altura de <span class="em-success">1.84 metros</span>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13 — MOMENTUM INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">10.1 — MOMENTUM</div>
+        <h2>Cantidad de Movimiento (Momentum)</h2>
+    </div>
+    <div class="content">
+        <p>Vamos a revisar dos conceptos nuevos: <span class="em">cantidad de movimiento</span> e <span class="em">impulso</span>, y una nueva ley de conservación tan importante como la de conservación de la energía.</p>
+
+        <h3>Deducción desde la Segunda Ley de Newton</h3>
+        <p>Consideremos una partícula de masa constante <strong>m</strong>. La segunda ley de Newton establece:</p>
+
+        <div class="formula">
+            F = m a
+        </div>
+
+        <p>Puesto que a = dv/dt, podemos reescribir:</p>
+
+        <div class="formula">
+            F = m (dv/dt) = d(m v)/dt
+        </div>
+
+        <h3>Definición de momentum</h3>
+        <p>Definimos la <span class="em-success">cantidad de movimiento</span> o <strong>momentum</strong> como:</p>
+
+        <div class="formula">
+            p = m v
+        </div>
+
+        <div class="box">
+            <strong>📏 Características</strong>
+            <p>• Es una <strong>cantidad vectorial</strong><br>
+            • Unidades en SI: <strong>kg·m/s</strong><br>
+            • Depende de la masa y la velocidad<br>
+            • Tiene la misma dirección que la velocidad</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14 — IMPULSO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">10.2 — IMPULSO</div>
+        <h2>Impulso de una Fuerza</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>El <span class="em">impulso (I)</span> es una cantidad física vectorial que se produce cuando una fuerza se aplica a un objeto por un <strong>determinado tiempo</strong>.</p>
+        </div>
+
+        <div class="formula">
+            I = F × Δt
+        </div>
+
+        <div class="box">
+            <strong>📏 Unidades</strong>
+            <p>• En el SI: <strong>newton-segundo (N·s)</strong><br>
+            • Puesto que 1 N = 1 kg·m/s², también: <strong>kg·m/s</strong><br>
+            • <span class="em-success">Las mismas unidades que la cantidad de movimiento</span></p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Consecuencia</strong>
+            <p>La aplicación de un impulso produce un <strong>cambio en el momentum</strong> o cantidad de movimiento del objeto.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15 — TEOREMA IMPULSO-MOMENTUM DEDUCCIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">10.3 — TEOREMA IMPULSO-MOMENTUM</div>
+        <h2>Deducción del Teorema</h2>
+    </div>
+    <div class="content">
+        <h3>Paso 1: Segunda Ley de Newton</h3>
+        <div class="formula">
+            F = m a
+        </div>
+
+        <h3>Paso 2: Definición de aceleración</h3>
+        <div class="formula">
+            a = (v<sub>f</sub> − v<sub>o</sub>) / Δt
+        </div>
+
+        <h3>Paso 3: Sustitución</h3>
+        <p>Al sustituir en la segunda Ley de Newton:</p>
+        <div class="formula" style="font-size:1rem;">
+            F = m · (v<sub>f</sub> − v<sub>o</sub>) / Δt
+        </div>
+
+        <p>Multiplicando ambos lados por Δt:</p>
+        <div class="formula" style="font-size:1rem;">
+            F × Δt = m v<sub>f</sub> − m v<sub>o</sub>
+        </div>
+
+        <h3>Identificación de términos</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Impulso</h4>
+                <div class="formula" style="font-size:1rem;">
+                    I = F × Δt
+                </div>
+            </div>
+            <div class="card">
+                <h4>Cambio de momentum</h4>
+                <div class="formula" style="font-size:1rem;">
+                    Δp = p<sub>f</sub> − p<sub>o</sub>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16 — TEOREMA IMPULSO-MOMENTUM -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">10.3 — TEOREMA IMPULSO-MOMENTUM</div>
+        <h2>Enunciado del Teorema</h2>
+    </div>
+    <div class="content">
+        <div class="formula">
+            I = Δp
+        </div>
+
+        <p>O de forma expandida:</p>
+
+        <div class="formula">
+            F × Δt = m v<sub>f</sub> − m v<sub>o</sub>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Teorema del impulso y el momentum</strong>
+            <p>El <strong>impulso aplicado a un cuerpo</strong> produce un <strong>cambio en el momentum</strong> (cantidad de movimiento) de dicho cuerpo.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Si F × Δt aumenta...</h4>
+                <p>El cambio de momentum aumenta.<br>
+                Ejemplos:</p>
+                <ul style="margin-top:0.3rem;">
+                    <li>Mayor fuerza → mayor cambio</li>
+                    <li>Mayor tiempo → mayor cambio</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Aplicaciones</h4>
+                <ul>
+                    <li>Airbags (↑Δt → ↓F)</li>
+                    <li>Colchones de caída</li>
+                    <li>Golpes deportivos</li>
+                    <li>Colisiones</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Principio de seguridad</strong>
+            <p>Para un mismo cambio de momentum, si <strong>aumentamos el tiempo</strong> de impacto, <strong>disminuimos la fuerza</strong> necesaria. Por eso los airbags y cinturones de seguridad son efectivos.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17 — CONSERVACIÓN MOMENTUM -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">CONSERVACIÓN DEL MOMENTUM</div>
+        <h2>Ley de Conservación de la Cantidad de Movimiento</h2>
+    </div>
+    <div class="content">
+        <div class="box box-success">
+            <strong>⚡ Principio de conservación</strong>
+            <p>En ausencia de fuerzas externas, el <strong>momentum total de un sistema</strong> permanece <span class="em-success">constante</span>.</p>
+        </div>
+
+        <div class="formula">
+            p<sub>total inicial</sub> = p<sub>total final</sub>
+        </div>
+
+        <p>Para un sistema de dos partículas:</p>
+
+        <div class="formula">
+            m₁ v₁ᵢ + m₂ v₂ᵢ = m₁ v₁f + m₂ v₂f
+        </div>
+
+        <div class="box">
+            <strong>📌 Condiciones de aplicación</strong>
+            <p>Este principio aplica cuando:</p>
+            <ul style="margin-top:0.5rem;">
+                <li>No hay fuerzas externas (sistema aislado)</li>
+                <li>Las fuerzas externas son despreciables</li>
+                <li>Las fuerzas externas se cancelan entre sí</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <strong>🎯 Aplicaciones importantes</strong>
+            <ul>
+                <li>Colisiones (elásticas e inelásticas)</li>
+                <li>Explosiones y fragmentaciones</li>
+                <li>Propulsión de cohetes</li>
+                <li>Retroceso de armas de fuego</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 18 — COMPARACIÓN TEOREMAS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">RESUMEN</div>
+        <h2>Comparación de Teoremas</h2>
+    </div>
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Aspecto</th>
+                    <th>Teorema Trabajo-Energía</th>
+                    <th>Teorema Impulso-Momentum</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Ecuación</strong></td>
+                    <td>W<sub>neto</sub> = ΔK</td>
+                    <td>I = Δp</td>
+                </tr>
+                <tr>
+                    <td><strong>Forma expandida</strong></td>
+                    <td>Fs = ½mv<sub>f</sub>² − ½mv<sub>o</sub>²</td>
+                    <td>F × Δt = mv<sub>f</sub> − mv<sub>o</sub></td>
+                </tr>
+                <tr>
+                    <td><strong>Variable clave</strong></td>
+                    <td>Desplazamiento (s)</td>
+                    <td>Tiempo (Δt)</td>
+                </tr>
+                <tr>
+                    <td><strong>Tipo de cantidad</strong></td>
+                    <td>Escalar</td>
+                    <td>Vectorial</td>
+                </tr>
+                <tr>
+                    <td><strong>Depende de</strong></td>
+                    <td>Rapidez (magnitud)</td>
+                    <td>Velocidad (vector)</td>
+                </tr>
+                <tr>
+                    <td><strong>Unidades</strong></td>
+                    <td>Joules (J)</td>
+                    <td>N·s = kg·m/s</td>
+                </tr>
+                <tr>
+                    <td><strong>Conservación</strong></td>
+                    <td>Energía mecánica (sistemas conservativos)</td>
+                    <td>Momentum (sistemas aislados)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box-success">
+            <strong>✅ Complementariedad</strong>
+            <p>Ambos teoremas son <strong>herramientas complementarias</strong>. Algunos problemas se resuelven más fácilmente con uno que con otro, dependiendo de los datos disponibles.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 19 — EJERCICIO 1 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Conceptos Fundamentales</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta para cada pregunta.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 20 — EJERCICIO 2 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Cálculos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Resuelve los siguientes problemas. Escribe solo el número con un decimal (ej: 12.5)</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 21 — BIBLIOGRAFÍA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAFÍA</div>
+        <h2>Referencias en Formato APA</h2>
+    </div>
+    <div class="content">
+        <div class="box box-success">
+            <strong>📚 Libro de texto principal</strong>
+            <p>Serway, R., y Jewett, J. (2018). <em>Física para ciencias e ingeniería, Vol. 1</em> (10ª ed.). México: CENGAGE Learning. ISBN: 9786075266695</p>
+        </div>
+
+        <div class="box">
+            <strong>📖 Libro de apoyo</strong>
+            <p>Young, H., y Freedman, R. (2018). <em>SEARS Y ZEMANSKY FÍSICA UNIVERSITARIA con Física Moderna</em>. México: Pearson. ISBN: 9786073244404</p>
+        </div>
+
+        <div class="box">
+            <strong>💡 Contenidos basados en</strong>
+            <ul style="margin-top:0.5rem;">
+                <li>Capítulo 8: Trabajo y energía cinética</li>
+                <li>Conservación de la energía mecánica</li>
+                <li>Capítulo 10: Impulso y cantidad de movimiento</li>
+                <li>Teoremas trabajo-energía e impulso-momentum</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 22 — CIERRE -->
+<div class="slide cover">
+    <h1>Conclusiones</h1>
+    <div class="line"></div>
+    <p class="subtitle">El trabajo total realizado sobre una partícula es igual al cambio en su energía cinética</p>
+    <p class="meta" style="margin-top:2rem;">La conservación de la energía y del momentum son principios fundamentales de la física</p>
+    <p class="help" style="margin-top:2rem;">¿Preguntas?</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">22</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9.]/g,'');
+}
+
+// EJERCICIO 1
+const ex1Data = [
+    {
+        q: "¿Cuál es la unidad del trabajo en el SI?",
+        opts: ["Newton (N)", "Joule (J)", "Watt (W)", "Pascal (Pa)"],
+        correct: 1
+    },
+    {
+        q: "Si una fuerza es perpendicular al desplazamiento (θ = 90°), el trabajo es:",
+        opts: ["Positivo máximo", "Negativo", "Cero", "Igual a Fs"],
+        correct: 2
+    },
+    {
+        q: "La energía cinética depende de:",
+        opts: ["La velocidad (vector)", "La rapidez (escalar)", "La aceleración", "La fuerza aplicada"],
+        correct: 1
+    },
+    {
+        q: "El teorema trabajo-energía establece que:",
+        opts: ["W = F·s siempre", "W_neto = ΔK", "W = ½mv²", "K = mgh"],
+        correct: 1
+    },
+    {
+        q: "El momentum (cantidad de movimiento) es:",
+        opts: ["Una cantidad escalar", "Una cantidad vectorial", "Igual a la energía cinética", "Siempre constante"],
+        correct: 1
+    },
+    {
+        q: "Las unidades del impulso son:",
+        opts: ["Joules (J)", "Newton-metro (N·m)", "Newton-segundo (N·s)", "Watt (W)"],
+        correct: 2
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// EJERCICIO 2
+const ex2Data = [
+    { q: "Calcula el trabajo realizado por una fuerza de 20 N que mueve un objeto 5 metros en su misma dirección (en Joules)", a: "100" },
+    { q: "Una masa de 2 kg tiene una rapidez de 4 m/s. ¿Cuál es su energía cinética? (en Joules)", a: "16" },
+    { q: "Un objeto de 5 kg pasa de 0 a 10 m/s. ¿Cuál es el cambio de energía cinética? (en Joules)", a: "250" },
+    { q: "Una fuerza de 15 N actúa durante 3 segundos sobre un objeto. ¿Cuál es el impulso? (en N·s)", a: "45" },
+    { q: "Un objeto de 3 kg tiene una velocidad de 8 m/s. ¿Cuál es su momentum? (en kg·m/s)", a: "24" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function selMC(prefix, qi, oi) {
+    const data = ex1Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        const userVal = normalise(inp.value);
+        const correctVal = normalise(item.a);
+        if (userVal === correctVal) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+</script>
+</body>
+</html>
