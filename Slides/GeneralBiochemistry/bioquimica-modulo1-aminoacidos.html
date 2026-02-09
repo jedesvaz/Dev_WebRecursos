@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioquímica - Aminoácidos (Módulo 1)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:#0a1929; color:#e3f2fd; overflow:hidden;
+        }
+        .container { width:100vw; height:100vh; position:relative; }
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.5rem 6rem; flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* PORTADA */
+        .cover {
+            background:linear-gradient(135deg,#01579b 0%,#0277bd 40%,#0288d1 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-120px; right:-120px; width:380px; height:380px;
+            border-radius:50%; background:rgba(41,182,246,0.12);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-80px; left:-80px; width:280px; height:280px;
+            border-radius:50%; background:rgba(41,182,246,0.08);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.4rem; font-weight:900; line-height:1.2;
+            margin-bottom:1.2rem; position:relative; z-index:1;
+        }
+        .cover .subtitle {
+            font-size:1.3rem; opacity:0.88;
+            position:relative; z-index:1;
+        }
+        .cover .line {
+            width:90px; height:3px; background:#81d4fa;
+            margin:1.8rem auto; position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            opacity:0.65; position:relative; z-index:1;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            opacity:0.55; position:relative; z-index:1;
+        }
+
+        /* SLIDES */
+        .slide-header { margin-bottom:1.3rem; flex-shrink:0; }
+        .slide-number {
+            color:#29b6f6; font-size:0.8rem; font-weight:700;
+            letter-spacing:2.5px; text-transform:uppercase; margin-bottom:0.4rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.2rem; color:#e3f2fd;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.35rem; color:#29b6f6; margin:1.2rem 0 0.7rem;
+        }
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(41,182,246,0.08); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#29b6f6; border-radius:3px; }
+
+        p { font-size:1.02rem; line-height:1.7; margin-bottom:1.1rem; opacity:0.93; }
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:0.98rem; line-height:1.6; margin-bottom:0.6rem;
+            padding-left:1.5rem; position:relative; opacity:0.91;
+        }
+        ul li::before {
+            content:'▸'; position:absolute; left:0;
+            color:#29b6f6; font-weight:bold;
+        }
+
+        /* CAJAS */
+        .box {
+            background:rgba(41,182,246,0.08); border-left:4px solid #29b6f6;
+            padding:1.2rem 1.4rem; margin:1.2rem 0; border-radius:0 7px 7px 0;
+        }
+        .box strong { color:#29b6f6; display:block; margin-bottom:0.4rem; font-size:1.02rem; }
+        .box p { margin-bottom:0.35rem; }
+        .box-warn { background:rgba(255,167,38,0.09); border-left-color:#ffa726; }
+        .box-warn strong { color:#ffa726; }
+        .box-success { background:rgba(102,187,106,0.09); border-left-color:#66bb6a; }
+        .box-success strong { color:#66bb6a; }
+
+        /* GRIDS */
+        .grid { display:grid; gap:1.1rem; margin:1.1rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+        .card {
+            background:rgba(255,255,255,0.045); padding:1.2rem;
+            border-radius:9px; border:1px solid rgba(41,182,246,0.2);
+        }
+        .card h4 { color:#29b6f6; margin-bottom:0.5rem; font-size:1.06rem; }
+        .card p { font-size:0.95rem; margin-bottom:0.3rem; }
+        .card-accent { border-color:rgba(41,182,246,0.4); background:rgba(41,182,246,0.07); }
+
+        .em { color:#29b6f6; font-weight:700; }
+        .em-warn { color:#ffa726; font-weight:700; }
+        .em-success { color:#66bb6a; font-weight:700; }
+
+        /* TABLAS */
+        table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+        th,td { padding:0.7rem 0.9rem; text-align:left; border-bottom:1px solid rgba(41,182,246,0.16); }
+        th { background:rgba(41,182,246,0.12); color:#29b6f6; font-weight:700; font-size:0.88rem; letter-spacing:0.4px; }
+        tr:last-child td { border-bottom:none; }
+
+        /* FORMULA */
+        .formula {
+            background:rgba(255,255,255,0.05); padding:1rem 1.5rem;
+            border-radius:8px; border:1px solid rgba(41,182,246,0.25);
+            font-family:monospace; font-size:1.1rem; text-align:center;
+            margin:1rem 0; color:#81d4fa;
+        }
+
+        /* BADGES */
+        .exercise-badge {
+            background:linear-gradient(135deg,#0277bd,#29b6f6);
+            color:#fff; padding:0.3rem 1.2rem; border-radius:24px;
+            display:inline-block; font-weight:800; font-size:0.8rem;
+            letter-spacing:1.5px; box-shadow:0 3px 10px rgba(41,182,246,0.35);
+        }
+
+        /* EJERCICIOS */
+        .exercise-input {
+            width:100%; background:rgba(255,255,255,0.055);
+            border:1px solid rgba(41,182,246,0.3); border-radius:7px;
+            padding:0.6rem 0.9rem; color:#e3f2fd; font-size:0.95rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#29b6f6; background:rgba(41,182,246,0.08); }
+        .exercise-input.correct { border-color:#66bb6a; background:rgba(102,187,106,0.12); }
+        .exercise-input.incorrect { border-color:#ef5350; background:rgba(239,83,80,0.12); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.95rem; opacity:0.91; display:block; }
+        .exercise-q .qnum { color:#29b6f6; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#0277bd; border:none; color:#fff;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#29b6f6; transform:scale(1.05); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(41,182,246,0.4); color:#29b6f6; }
+        .ex-btn-sec:hover { background:rgba(41,182,246,0.12); border-color:#29b6f6; }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(102,187,106,0.12); border:1px solid rgba(102,187,106,0.35); color:#66bb6a; }
+        .feedback-msg.partial { background:rgba(255,167,38,0.09); border:1px solid rgba(255,167,38,0.35); color:#ffa726; }
+
+        .mc-option {
+            background:rgba(255,255,255,0.045); border:1px solid rgba(41,182,246,0.22);
+            border-radius:7px; padding:0.6rem 1rem; margin:0.35rem 0;
+            cursor:pointer; transition:all 0.22s; font-size:0.95rem;
+        }
+        .mc-option:hover { border-color:#29b6f6; background:rgba(41,182,246,0.08); }
+        .mc-option.selected { border-color:#29b6f6; background:rgba(41,182,246,0.13); }
+        .mc-option.correct-sel { border-color:#66bb6a; background:rgba(102,187,106,0.2); }
+        .mc-option.incorrect-sel { border-color:#ef5350; background:rgba(239,83,80,0.15); }
+
+        /* NAV */
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; background:#0277bd; border:none;
+            border-radius:50%; color:#fff; font-size:1.35rem;
+            font-weight:bold; cursor:pointer; transition:all 0.3s;
+            box-shadow:0 4px 15px rgba(0,0,0,0.35);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); background:#29b6f6; }
+        .btn:disabled { opacity:0.28; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(10,25,41,0.92); padding:0.8rem 1.6rem;
+            border-radius:28px; border:2px solid #29b6f6;
+            color:#81d4fa; font-weight:700; z-index:1000; font-size:0.95rem;
+        }
+
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.4rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 — PORTADA -->
+<div class="slide cover active">
+    <h1>Aminoácidos<br>Módulo 1</h1>
+    <div class="line"></div>
+    <p class="subtitle">Estructura, Estereoquímica y Propiedades Ácido-Base</p>
+    <p class="meta">Bioquímica General | Nivel: Intermedio | Horas 1-2</p>
+    <p class="help">👉 Usa las flechas o botones para navegar →</p>
+</div>
+
+<!-- SLIDE 2 — ÍNDICE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">MÓDULO 1</div>
+        <h2>Contenidos</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>2.1 Estructura General</h4>
+                <ul>
+                    <li>Componentes del α-aminoácido</li>
+                    <li>Carbono α y su importancia</li>
+                    <li>Estereoquímica: quiralidad</li>
+                    <li>Configuración L vs D</li>
+                    <li>Sistema R/S vs L/D</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>2.2 Clasificación</h4>
+                <ul>
+                    <li>Alifáticos (Gly, Ala, Val, Leu, Ile)</li>
+                    <li>Aromáticos (Phe, Tyr, Trp)</li>
+                    <li>Azufrados (Cys, Met)</li>
+                    <li>Hidroxilados (Ser, Thr)</li>
+                    <li>Básicos y ácidos</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card card-accent" style="margin-top:1rem;">
+            <h4>2.3 Propiedades Ácido-Base</h4>
+            <ul>
+                <li>Estructura zwitteriónica</li>
+                <li>Punto isoeléctrico (pI)</li>
+                <li>Cálculo de pI para aminoácidos simples, ácidos y básicos</li>
+                <li>Curvas de titulación</li>
+                <li>Electroforesis</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 — ESTRUCTURA GENERAL -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.1 — ESTRUCTURA</div>
+        <h2>Estructura General de α-L Aminoácidos</h2>
+    </div>
+    <div class="content">
+        <p>Los <span class="em">aminoácidos</span> son las unidades monoméricas que forman las proteínas. Existen <strong>20 aminoácidos</strong> diferentes que forman parte de las proteínas naturales.</p>
+
+        <div class="box">
+            <strong>📌 Todos son α-aminoácidos</strong>
+            <p>Constan de cuatro grupos unidos a un mismo carbono denominado <span class="em">carbono-α</span>:</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Componentes del α-aminoácido</h4>
+                <ul>
+                    <li><strong>Grupo amino</strong> (−NH₂)</li>
+                    <li><strong>Grupo carboxilo</strong> (−COOH)</li>
+                    <li><strong>Átomo de hidrógeno</strong> (−H)</li>
+                    <li><strong>Cadena lateral R</strong> (grupo distintivo)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Fórmula general</h4>
+                <div class="formula">
+                    H₂N — CH — COOH<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R
+                </div>
+                <p style="font-size:0.88rem; margin-top:0.5rem;">El carbono-α recibe este nombre por ser el carbono <strong>adyacente</strong> al carbono del grupo carboxilo.</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Diferenciación</strong>
+            <p>Los aminoácidos difieren entre sí únicamente por su <strong>cadena lateral R</strong>. Es el grupo R el que determina las propiedades químicas y funcionales de cada aminoácido.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4 — QUIRALIDAD -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.1 — ESTEREOQUÍMICA</div>
+        <h2>Quiralidad de los Aminoácidos</h2>
+    </div>
+    <div class="content">
+        <p>Todos los aminoácidos son <span class="em">quirales</span> (tienen un centro estereogénico), con excepción de la <strong>glicina</strong> cuya cadena lateral es simplemente H.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🔬 Centro quiral</h4>
+                <p>El carbono-α tiene cuatro sustituyentes diferentes:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>−NH₂ (amino)</li>
+                    <li>−COOH (carboxilo)</li>
+                    <li>−H (hidrógeno)</li>
+                    <li>−R (cadena lateral)</li>
+                </ul>
+                <p style="margin-top:0.5rem; font-size:0.88rem; color:#ffa726;"><strong>Excepción:</strong> Glicina (R = H) no es quiral</p>
+            </div>
+            <div class="card">
+                <h4>⚗️ Enantiómeros</h4>
+                <p>Cada aminoácido quiral puede existir en dos formas especulares no superponibles: <strong>L</strong> y <strong>D</strong>.</p>
+                <p style="margin-top:0.5rem;">Todos los aminoácidos naturales que forman parte de proteínas en organismos vivos son de configuración <span class="em-success">L</span>.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📐 Proyección de Fischer</strong>
+            <p>En la proyección de Fischer, los aminoácidos L se representan con:</p>
+            <ul>
+                <li>COOH apuntando a la izquierda</li>
+                <li>NH₂ (o NH₃⁺) apuntando hacia arriba</li>
+                <li>R apuntando a la derecha</li>
+                <li>H apuntando hacia atrás (línea vertical)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5 — L vs D y R vs S -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.1 — ESTEREOQUÍMICA</div>
+        <h2>Nomenclatura L/D vs R/S</h2>
+    </div>
+    <div class="content">
+        <h3>Sistema L/D</h3>
+        <p>La configuración <strong>L</strong> o <strong>D</strong> se determina por comparación con <span class="em">L-gliceraldehído</span>. Es el sistema tradicional usado en bioquímica.</p>
+
+        <div class="box box-success">
+            <strong>✅ Todos los aminoácidos naturales son L</strong>
+            <p>Tienen la <strong>misma configuración relativa</strong> que el L-gliceraldehído cuando se escriben en proyección de Fischer.</p>
+        </div>
+
+        <h3>Sistema R/S (Cahn-Ingold-Prelog)</h3>
+        <p>Se basa en reglas de prioridad absolutas. Aunque es más riguroso, puede llevar a confusiones en bioquímica.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🔑 Caso general</h4>
+                <p>La mayoría de los aminoácidos L tienen configuración <strong>S</strong> en el sistema R/S.</p>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">Ejemplos: Alanina-L es (S), Valina-L es (S), Leucina-L es (S)</p>
+            </div>
+            <div class="card">
+                <h4>⚠️ Excepción: Cisteína</h4>
+                <p>La <strong>cisteína-L</strong> tiene configuración <span class="em-warn">(R)</span> debido a que el azufre tiene mayor prioridad que el carbono en las reglas de Cahn-Ingold-Prelog.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 ¿Por qué bioquímicos siguen usando L/D?</strong>
+            <p>El sistema L/D refleja mejor la realidad estructural en series regulares de moléculas como aminoácidos y azúcares. El sistema R/S puede cambiar sin que haya un cambio real en la configuración (como en el caso de cisteína), lo que resulta confuso para moléculas biológicas.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6 — ANAGRAMA CORN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.1 — ESTEREOQUÍMICA</div>
+        <h2>Mnemotecnia: CORN</h2>
+    </div>
+    <div class="content">
+        <p>Para recordar la configuración absoluta de los aminoácidos L, se utiliza el anagrama <span class="em">CORN</span>:</p>
+
+        <div class="box box-success">
+            <strong>🌽 CORN</strong>
+            <div class="formula" style="text-align:left; font-family:'Source Sans Pro',sans-serif; font-size:1.05rem;">
+                <strong>C</strong>OOH — apunta a la izquierda<br>
+                <strong>O</strong> (no se usa)<br>
+                <strong>R</strong> — apunta a la derecha<br>
+                <strong>N</strong>H₂ — apunta hacia arriba
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📝 Visualización</h4>
+                <p>Con el <strong>H apuntando hacia atrás</strong> (hacia ti, si estás mirando la proyección de Fischer), los otros tres grupos forman las letras CORN en sentido antihorario empezando desde arriba:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Arriba: <strong>N</strong>H₂</li>
+                    <li>Derecha: <strong>R</strong></li>
+                    <li>Izquierda: <strong>C</strong>OOH</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>🎯 Aplicación práctica</h4>
+                <p>Al dibujar un aminoácido L:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Coloca el H hacia atrás (línea vertical)</li>
+                    <li>Sigue CORN desde arriba en sentido antihorario</li>
+                    <li>Esto garantiza la configuración L correcta</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 — CLASIFICACIÓN INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.2 — CLASIFICACIÓN</div>
+        <h2>Clasificación de Aminoácidos</h2>
+    </div>
+    <div class="content">
+        <p>Los 20 aminoácidos se clasifican según las <span class="em">propiedades de su cadena lateral R</span>:</p>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>⚪ Alifáticos</h4>
+                <p>Cadena hidrocarbonada</p>
+                <p style="font-size:0.85rem; margin-top:0.3rem;">Gly, Ala, Val, Leu, Ile</p>
+            </div>
+            <div class="card">
+                <h4>⭕ Aromáticos</h4>
+                <p>Anillo aromático</p>
+                <p style="font-size:0.85rem; margin-top:0.3rem;">Phe, Tyr, Trp</p>
+            </div>
+            <div class="card">
+                <h4>🔵 Prolina</h4>
+                <p>Caso especial cíclico</p>
+                <p style="font-size:0.85rem; margin-top:0.3rem;">Pro</p>
+            </div>
+            <div class="card">
+                <h4>🟡 Azufrados</h4>
+                <p>Contienen azufre</p>
+                <p style="font-size:0.85rem; margin-top:0.3rem;">Cys, Met</p>
+            </div>
+            <div class="card">
+                <h4>🟢 Hidroxilados</h4>
+                <p>Grupo −OH</p>
+                <p style="font-size:0.85rem; margin-top:0.3rem;">Ser, Thr</p>
+            </div>
+            <div class="card">
+                <h4>🔴 Básicos</h4>
+                <p>Cadena lateral básica</p>
+                <p style="font-size:0.85rem; margin-top:0.3rem;">Lys, Arg, His</p>
+            </div>
+            <div class="card">
+                <h4>🟠 Ácidos</h4>
+                <p>Grupo carboxilo</p>
+                <p style="font-size:0.85rem; margin-top:0.3rem;">Asp, Glu</p>
+            </div>
+            <div class="card">
+                <h4>🟤 Amidas</h4>
+                <p>Derivados amida</p>
+                <p style="font-size:0.85rem; margin-top:0.3rem;">Asn, Gln</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📋 Abreviaturas</strong>
+            <p>Cada aminoácido tiene una abreviatura de <strong>tres letras</strong> y una de <strong>una letra</strong>.</p>
+            <p style="margin-top:0.4rem;">Ejemplo: Alanina = <strong>Ala</strong> = <strong>A</strong> | Glicina = <strong>Gly</strong> = <strong>G</strong></p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 — ALIFÁTICOS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.2 — CLASIFICACIÓN</div>
+        <h2>Aminoácidos Alifáticos</h2>
+    </div>
+    <div class="content">
+        <p>Aminoácidos cuya cadena lateral R es una <span class="em">cadena hidrocarbonada</span> (alifática).</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Abreviatura (3)</th>
+                    <th>Símbolo (1)</th>
+                    <th>Cadena lateral R</th>
+                    <th>Características</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Glicina</strong></td>
+                    <td>Gly</td>
+                    <td>G</td>
+                    <td>−H</td>
+                    <td>El más simple. <span class="em-warn">No quiral</span>. Flexible.</td>
+                </tr>
+                <tr>
+                    <td><strong>Alanina</strong></td>
+                    <td>Ala</td>
+                    <td>A</td>
+                    <td>−CH₃</td>
+                    <td>Pequeño, hidrofóbico, no reactivo.</td>
+                </tr>
+                <tr>
+                    <td><strong>Valina</strong></td>
+                    <td>Val</td>
+                    <td>V</td>
+                    <td>−CH(CH₃)₂</td>
+                    <td>Ramificado, hidrofóbico. <span class="em-success">Esencial</span>.</td>
+                </tr>
+                <tr>
+                    <td><strong>Leucina</strong></td>
+                    <td>Leu</td>
+                    <td>L</td>
+                    <td>−CH₂CH(CH₃)₂</td>
+                    <td>Cadena más larga, muy hidrofóbico. <span class="em-success">Esencial</span>.</td>
+                </tr>
+                <tr>
+                    <td><strong>Isoleucina</strong></td>
+                    <td>Ile</td>
+                    <td>I</td>
+                    <td>−CH(CH₃)CH₂CH₃</td>
+                    <td>Isómero de Leu, dos centros quirales. <span class="em-success">Esencial</span>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box-success">
+            <strong>✅ Propiedades comunes</strong>
+            <p>• Todos son <strong>hidrofóbicos</strong> (no polares)<br>
+            • Tienden a ubicarse en el <strong>interior</strong> de las proteínas globulares<br>
+            • Val, Leu e Ile son <span class="em-success">aminoácidos esenciales</span> (deben obtenerse de la dieta)</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9 — AROMÁTICOS Y PROLINA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.2 — CLASIFICACIÓN</div>
+        <h2>Aminoácidos Aromáticos y Prolina</h2>
+    </div>
+    <div class="content">
+        <h3>Aminoácidos aromáticos</h3>
+        <p>Contienen un <span class="em">anillo aromático</span> en su cadena lateral.</p>
+
+        <table style="margin-bottom:1.2rem;">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Cadena lateral</th>
+                    <th>Características</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Fenilalanina</strong></td>
+                    <td>Phe, F</td>
+                    <td>−CH₂−C₆H₅</td>
+                    <td>Grupo fenilo. Muy hidrofóbico. <span class="em-success">Esencial</span>.</td>
+                </tr>
+                <tr>
+                    <td><strong>Tirosina</strong></td>
+                    <td>Tyr, Y</td>
+                    <td>−CH₂−C₆H₄−OH</td>
+                    <td>Fenol. Menos hidrofóbico que Phe. Más reactivo (−OH).</td>
+                </tr>
+                <tr>
+                    <td><strong>Triptófano</strong></td>
+                    <td>Trp, W</td>
+                    <td>Indol</td>
+                    <td>Grupo indol (bicíclico). Hidrofóbico. <span class="em-success">Esencial</span>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Prolina — caso especial</h3>
+        <div class="box box-warn">
+            <strong>⚠️ Prolina (Pro, P)</strong>
+            <p>• Su cadena lateral está unida <strong>tanto al carbono-α como al nitrógeno</strong> del grupo amino<br>
+            • Forma un <strong>heterociclo de 5 miembros</strong><br>
+            • Es un <span class="em-warn">iminoácido</span> (no aminoácido primario)<br>
+            • Introduce <strong>rigidez</strong> en la cadena polipeptídica<br>
+            • Interrumpe estructuras α-hélice</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10 — AZUFRADOS E HIDROXILADOS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.2 — CLASIFICACIÓN</div>
+        <h2>Aminoácidos Azufrados e Hidroxilados</h2>
+    </div>
+    <div class="content">
+        <h3>Aminoácidos azufrados</h3>
+        <p>Contienen <span class="em">átomos de azufre</span> en su cadena lateral.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Cisteína (Cys, C)</h4>
+                <p><strong>R = −CH₂−SH</strong></p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Grupo <strong>sulfhidrilo</strong> (−SH)</li>
+                    <li>Puede formar <span class="em">puentes disulfuro</span> (−S−S−) con otra Cys</li>
+                    <li>Muy importante para estructura terciaria de proteínas</li>
+                    <li>Polar, reactivo</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Metionina (Met, M)</h4>
+                <p><strong>R = −CH₂−CH₂−S−CH₃</strong></p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Enlace <strong>tioéter</strong></li>
+                    <li>Hidrofóbico, no reactivo</li>
+                    <li><span class="em-success">Aminoácido esencial</span></li>
+                    <li>Codón de inicio (AUG) en síntesis proteica</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Aminoácidos hidroxilados</h3>
+        <p>Contienen un <span class="em">grupo hidroxilo</span> (−OH) en su cadena lateral alifática.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Serina (Ser, S)</h4>
+                <p><strong>R = −CH₂−OH</strong></p>
+                <p style="margin-top:0.5rem;">Polar, hidrofílico. El −OH puede formar puentes de H y ser fosforilado (regulación).</p>
+            </div>
+            <div class="card">
+                <h4>Treonina (Thr, T)</h4>
+                <p><strong>R = −CH(OH)−CH₃</strong></p>
+                <p style="margin-top:0.5rem;">Polar. Dos centros quirales. <span class="em-success">Esencial</span>. También puede ser fosforilado.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11 — BÁSICOS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.2 — CLASIFICACIÓN</div>
+        <h2>Aminoácidos Básicos</h2>
+    </div>
+    <div class="content">
+        <p>Aminoácidos con cadenas laterales de <span class="em">naturaleza básica</span> que contienen grupos amino adicionales.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Código</th>
+                    <th>Cadena lateral R</th>
+                    <th>pKa (R)</th>
+                    <th>Carga a pH 7</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Lisina</strong></td>
+                    <td>Lys, K</td>
+                    <td>−(CH₂)₄−NH₃⁺</td>
+                    <td>~10.5</td>
+                    <td><span class="em-success">+1</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Arginina</strong></td>
+                    <td>Arg, R</td>
+                    <td>−(CH₂)₃−NH−C(NH₂)₂⁺</td>
+                    <td>~12.5</td>
+                    <td><span class="em-success">+1</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Histidina</strong></td>
+                    <td>His, H</td>
+                    <td>Imidazol</td>
+                    <td>~6.0</td>
+                    <td>Parcialmente cargado</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box-success">
+            <strong>✅ Características</strong>
+            <p>• A <strong>pH fisiológico (7.4)</strong>, Lys y Arg están <span class="em">cargadas positivamente</span><br>
+            • Muy <strong>polares e hidrofílicos</strong><br>
+            • Se ubican en la <strong>superficie</strong> de proteínas globulares<br>
+            • Participan en interacciones electrostáticas con grupos ácidos</p>
+        </div>
+
+        <div class="box">
+            <strong>🔬 Histidina — caso especial</strong>
+            <p>Su pKa (~6.0) está cerca del pH fisiológico, lo que significa que puede actuar como <strong>amortiguador</strong>. Fundamental en sitios activos de enzimas. <span class="em-success">Aminoácido esencial</span>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12 — ÁCIDOS Y AMIDAS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.2 — CLASIFICACIÓN</div>
+        <h2>Aminoácidos Ácidos y sus Amidas</h2>
+    </div>
+    <div class="content">
+        <p>Aminoácidos con <span class="em">grupo carboxilo adicional</span> en su cadena lateral y sus derivados amida.</p>
+
+        <h3>Aminoácidos ácidos</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Ácido aspártico (Asp, D)</h4>
+                <p><strong>R = −CH₂−COO⁻</strong></p>
+                <p style="margin-top:0.5rem;">• A pH 7: cargado negativamente (<strong>aspartato</strong>)<br>
+                • pKa (R) ~3.9<br>
+                • Polar, hidrofílico</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Ácido glutámico (Glu, E)</h4>
+                <p><strong>R = −CH₂−CH₂−COO⁻</strong></p>
+                <p style="margin-top:0.5rem;">• A pH 7: cargado negativamente (<strong>glutamato</strong>)<br>
+                • pKa (R) ~4.2<br>
+                • Neurotransmisor en el SNC</p>
+            </div>
+        </div>
+
+        <h3>Amidas (derivados sin carga)</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Asparagina (Asn, N)</h4>
+                <p><strong>R = −CH₂−CO−NH₂</strong></p>
+                <p style="margin-top:0.5rem;">Derivado amida del Asp. Grupo amida terminal en lugar de carboxilo libre. Polar, sin carga.</p>
+            </div>
+            <div class="card">
+                <h4>Glutamina (Gln, Q)</h4>
+                <p><strong>R = −CH₂−CH₂−CO−NH₂</strong></p>
+                <p style="margin-top:0.5rem;">Derivado amida del Glu. Polar, sin carga. Muy abundante en proteínas.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📌 Nota sobre nomenclatura</strong>
+            <p>A pH fisiológico, Asp y Glu están desprotonados (−COO⁻), por lo que se les llama <strong>aspartato</strong> y <strong>glutamato</strong> para resaltar su carga negativa.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13 — ZWITTERION INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — PROPIEDAD ANFÓTERA</div>
+        <h2>Estructura Zwitteriónica</h2>
+    </div>
+    <div class="content">
+        <p>Los aminoácidos contienen un <strong>grupo ácido</strong> (−COOH) y un <strong>grupo básico</strong> (−NH₂). Son moléculas <span class="em">anfóteras</span>: pueden actuar como ácido o como base.</p>
+
+        <div class="box box-warn">
+            <strong>⚠️ La estructura simple es incorrecta</strong>
+            <p>Aunque frecuentemente dibujamos: H₂N−CH(R)−COOH<br>
+            Esta representación NO refleja las propiedades físicas reales de los aminoácidos.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>❌ Forma "neutra" (incorrecta a pH fisiológico)</h4>
+                <div class="formula">H₂N — CH(R) — COOH</div>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">• Soluble en solventes orgánicos<br>
+                • Punto de fusión bajo<br>
+                • pKa ~4.5 para COOH</p>
+            </div>
+            <div class="card card-accent">
+                <h4>✅ Forma zwitteriónica (correcta)</h4>
+                <div class="formula">⁺H₃N — CH(R) — COO⁻</div>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">• <strong>Sal interna</strong><br>
+                • Insoluble en solventes orgánicos<br>
+                • Punto de fusión muy alto (~300°C con descomposición)<br>
+                • pKa ~9-10</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>🔬 Evidencia experimental</strong>
+            <p>La estructura zwitteriónica se confirma por:<br>
+            • <strong>Punto de fusión alto</strong> (>250°C con descomposición)<br>
+            • <strong>Insolubilidad en éter</strong> y otros solventes orgánicos<br>
+            • <strong>Alta solubilidad en agua</strong><br>
+            • <strong>Propiedades espectroscópicas</strong> consistentes con sal interna</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14 — TRANSFERENCIA PROTÓNICA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — PROPIEDAD ANFÓTERA</div>
+        <h2>Formación del Zwitterion</h2>
+    </div>
+    <div class="content">
+        <p>La estructura zwitteriónica se forma por <span class="em">transferencia de protón</span> del grupo carboxilo (ácido débil) al grupo amino (base débil).</p>
+
+        <div class="formula" style="font-size:1.05rem;">
+            H₂N−CH(R)−COOH → ⁺H₃N−CH(R)−COO⁻
+        </div>
+
+        <div class="box">
+            <strong>⚡ Reacción ácido-base intramolecular</strong>
+            <p>• El grupo <strong>−COOH</strong> (pKa ~4.5) es suficientemente ácido<br>
+            • El grupo <strong>−NH₂</strong> (base conjugada con pKa ~9-10) es suficientemente básico<br>
+            • La transferencia de protón es <span class="em-success">termodinámicamente favorable</span></p>
+        </div>
+
+        <h3>Comportamiento ácido-base</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Adición de ácido (H⁺)</h4>
+                <div class="formula" style="font-size:0.95rem;">
+                    ⁺H₃N−CH(R)−COO⁻ + H⁺<br>
+                    ↓<br>
+                    ⁺H₃N−CH(R)−COOH
+                </div>
+                <p style="margin-top:0.5rem;">El grupo <strong>carboxilato</strong> captura H⁺. El aminoácido se vuelve <span class="em-success">catión</span> (carga +1).</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Adición de base (OH⁻)</h4>
+                <div class="formula" style="font-size:0.95rem;">
+                    ⁺H₃N−CH(R)−COO⁻ + OH⁻<br>
+                    ↓<br>
+                    H₂N−CH(R)−COO⁻
+                </div>
+                <p style="margin-top:0.5rem;">El grupo <strong>amonio</strong> libera H⁺. El aminoácido se vuelve <span class="em-warn">anión</span> (carga −1).</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Función amortiguadora</strong>
+            <p>Los aminoácidos actúan como <strong>amortiguadores</strong>: remueven H⁺ o OH⁻ del medio, ayudando a mantener el pH estable.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15 — PUNTO ISOELÉCTRICO INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — PUNTO ISOELÉCTRICO</div>
+        <h2>Punto Isoeléctrico (pI)</h2>
+    </div>
+    <div class="content">
+        <p>El <span class="em">punto isoeléctrico</span> (pI) es el pH al cual un aminoácido (o proteína) tiene <strong>carga neta cero</strong>.</p>
+
+        <div class="box">
+            <strong>📐 Definición</strong>
+            <p>A ese pH, las cargas positivas y negativas del aminoácido están <strong>balanceadas</strong>. El aminoácido existe predominantemente en su forma zwitteriónica.</p>
+        </div>
+
+        <h3>Estados de carga según pH</h3>
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>pH muy bajo (ácido)</h4>
+                <div class="formula" style="font-size:0.85rem;">
+                    ⁺H₃N−CH(R)−COOH
+                </div>
+                <p style="margin-top:0.4rem; color:#ef5350;">Carga neta: <strong>+1</strong></p>
+            </div>
+            <div class="card card-accent">
+                <h4>pH = pI</h4>
+                <div class="formula" style="font-size:0.85rem;">
+                    ⁺H₃N−CH(R)−COO⁻
+                </div>
+                <p style="margin-top:0.4rem; color:#66bb6a;">Carga neta: <strong>0</strong></p>
+            </div>
+            <div class="card">
+                <h4>pH muy alto (básico)</h4>
+                <div class="formula" style="font-size:0.85rem;">
+                    H₂N−CH(R)−COO⁻
+                </div>
+                <p style="margin-top:0.4rem; color:#29b6f6;">Carga neta: <strong>−1</strong></p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚡ Importancia del pI</strong>
+            <p>• En <strong>electroforesis</strong>, un aminoácido no migrará en un campo eléctrico cuando el pH = pI<br>
+            • Es útil para <strong>separar y purificar</strong> aminoácidos y proteínas<br>
+            • Cada aminoácido tiene un pI característico</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16 — CÁLCULO pI SIMPLE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — PUNTO ISOELÉCTRICO</div>
+        <h2>Cálculo de pI: Aminoácidos Simples</h2>
+    </div>
+    <div class="content">
+        <p>Para aminoácidos <strong>sin cadena lateral ionizable</strong> (cadena lateral no ácida ni básica), el cálculo del pI es simple.</p>
+
+        <div class="box box-success">
+            <strong>✅ Fórmula para aminoácidos simples</strong>
+            <div class="formula" style="font-size:1.15rem;">
+                pI = (pKa₁ + pKa₂) / 2
+            </div>
+            <p style="margin-top:0.5rem;">Donde:<br>
+            • <strong>pKa₁</strong> = pKa del grupo carboxilo (~2-2.5)<br>
+            • <strong>pKa₂</strong> = pKa del grupo amonio (~9-10)</p>
+        </div>
+
+        <h3>Ejemplo: Glicina</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Valores de pKa</h4>
+                <p>• pKa₁ (−COOH) = <strong>2.34</strong><br>
+                • pKa₂ (−NH₃⁺) = <strong>9.60</strong></p>
+            </div>
+            <div class="card card-accent">
+                <h4>Cálculo del pI</h4>
+                <div class="formula" style="font-size:1rem;">
+                    pI = (2.34 + 9.60) / 2<br>
+                    pI = <strong>5.97</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📝 Otros ejemplos</strong>
+            <p>• <strong>Alanina:</strong> pKa₁ = 2.34, pKa₂ = 9.69 → pI = <strong>6.02</strong><br>
+            • <strong>Triptófano:</strong> pKa₁ = 2.38, pKa₂ = 9.39 → pI = <strong>5.89</strong></p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Interpretación</strong>
+            <p>El pI está en el <strong>punto medio</strong> entre los dos pKa porque ahí es donde la forma zwitteriónica (carga neta 0) predomina.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17 — pI CADENA LATERAL ÁCIDA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — PUNTO ISOELÉCTRICO</div>
+        <h2>Cálculo de pI: Cadenas Laterales Ácidas</h2>
+    </div>
+    <div class="content">
+        <p>Para aminoácidos con <span class="em-warn">cadena lateral ácida</span> (Asp, Glu), existen <strong>tres pKa</strong> valores.</p>
+
+        <h3>Ejemplo: Ácido aspártico (Asp)</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Valores de pKa</h4>
+                <p>• pKa₁ (α-COOH) = <strong>1.88</strong><br>
+                • pKa₂ (R-COOH) = <strong>3.65</strong><br>
+                • pKa₃ (α-NH₃⁺) = <strong>9.60</strong></p>
+            </div>
+            <div class="card">
+                <h4>Formas según pH</h4>
+                <p style="font-size:0.85rem;">
+                pH bajo: ⁺H₃N−CH(CH₂COOH)−COOH (+1)<br>
+                pH intermedio: ⁺H₃N−CH(CH₂COO⁻)−COO⁻ (0)<br>
+                pH alto: H₂N−CH(CH₂COO⁻)−COO⁻ (−1)<br>
+                pH muy alto: H₂N−CH(CH₂COO⁻)−COO⁻ (−2)
+                </p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Fórmula para aminoácidos ácidos</strong>
+            <div class="formula">
+                pI = (pKa₁ + pKa₂) / 2
+            </div>
+            <p style="margin-top:0.5rem;">Se promedian los <strong>dos pKa más ácidos</strong> (los dos grupos carboxilo).</p>
+        </div>
+
+        <div class="card card-accent" style="margin-top:1rem;">
+            <h4>Cálculo del pI de Asp</h4>
+            <div class="formula" style="font-size:1rem;">
+                pI = (1.88 + 3.65) / 2 = <strong>2.77</strong>
+            </div>
+            <p style="margin-top:0.5rem;">El pI es <strong>ácido</strong> (< 7) debido al segundo grupo carboxilo.</p>
+        </div>
+
+        <div class="box">
+            <strong>📝 Ácido glutámico (Glu)</strong>
+            <p>pKa₁ = 2.19, pKa₂ = 4.25, pKa₃ = 9.67 → pI = <strong>3.22</strong></p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 18 — pI CADENA LATERAL BÁSICA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — PUNTO ISOELÉCTRICO</div>
+        <h2>Cálculo de pI: Cadenas Laterales Básicas</h2>
+    </div>
+    <div class="content">
+        <p>Para aminoácidos con <span class="em-success">cadena lateral básica</span> (Lys, Arg, His), también existen <strong>tres pKa</strong> valores.</p>
+
+        <h3>Ejemplo: Lisina (Lys)</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Valores de pKa</h4>
+                <p>• pKa₁ (α-COOH) = <strong>2.18</strong><br>
+                • pKa₂ (α-NH₃⁺) = <strong>8.95</strong><br>
+                • pKa₃ (R-NH₃⁺) = <strong>10.53</strong></p>
+            </div>
+            <div class="card">
+                <h4>Formas según pH</h4>
+                <p style="font-size:0.85rem;">
+                pH bajo: ⁺H₃N−CH((CH₂)₄NH₃⁺)−COOH (+2)<br>
+                pH intermedio: ⁺H₃N−CH((CH₂)₄NH₃⁺)−COO⁻ (+1)<br>
+                pH neutro: ⁺H₃N−CH((CH₂)₄NH₂)−COO⁻ (0)<br>
+                pH alto: H₂N−CH((CH₂)₄NH₂)−COO⁻ (−1)
+                </p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Fórmula para aminoácidos básicos</strong>
+            <div class="formula">
+                pI = (pKa₂ + pKa₃) / 2
+            </div>
+            <p style="margin-top:0.5rem;">Se promedian los <strong>dos pKa más altos</strong> (los dos grupos amonio).</p>
+        </div>
+
+        <div class="card card-accent" style="margin-top:1rem;">
+            <h4>Cálculo del pI de Lys</h4>
+            <div class="formula" style="font-size:1rem;">
+                pI = (8.95 + 10.53) / 2 = <strong>9.74</strong>
+            </div>
+            <p style="margin-top:0.5rem;">El pI es <strong>básico</strong> (> 7) debido al segundo grupo amino.</p>
+        </div>
+
+        <div class="box">
+            <strong>📝 Otros ejemplos</strong>
+            <p>• <strong>Arginina:</strong> pI = <strong>10.76</strong> (muy básico)<br>
+            • <strong>Histidina:</strong> pI = <strong>7.59</strong> (cercano a neutro)</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 19 — TITULACIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — TITULACIÓN</div>
+        <h2>Curvas de Titulación de Aminoácidos</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">titulación</span> de un aminoácido con base (NaOH) produce una curva característica que muestra los puntos de desprotonación.</p>
+
+        <div class="box">
+            <strong>📊 Curva de titulación típica (aminoácido simple)</strong>
+            <p>Partiendo de pH bajo (aminoácido completamente protonado) y añadiendo base:</p>
+            <ul style="margin-top:0.5rem;">
+                <li><strong>Primera meseta:</strong> pH ≈ pKa₁ (desprotonación de α-COOH)</li>
+                <li><strong>Punto medio:</strong> pH ≈ pI (carga neta = 0)</li>
+                <li><strong>Segunda meseta:</strong> pH ≈ pKa₂ (desprotonación de α-NH₃⁺)</li>
+            </ul>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Capacidad amortiguadora</h4>
+                <p>Los aminoácidos tienen <strong>máxima capacidad amortiguadora</strong> cuando pH = pKa.</p>
+                <p style="margin-top:0.5rem;">En esos puntos, el ácido y su base conjugada están en <strong>concentraciones iguales</strong>.</p>
+            </div>
+            <div class="card">
+                <h4>Ecuación de Henderson-Hasselbalch</h4>
+                <div class="formula" style="font-size:0.95rem;">
+                    pH = pKa + log([A⁻]/[HA])
+                </div>
+                <p style="margin-top:0.5rem;">Cuando [A⁻] = [HA], entonces pH = pKa.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Para aminoácidos con tres pKa</strong>
+            <p>• Aminoácidos <strong>ácidos:</strong> tendrán tres mesetas (dos grupos −COOH, un grupo −NH₃⁺)<br>
+            • Aminoácidos <strong>básicos:</strong> tendrán tres mesetas (un grupo −COOH, dos grupos −NH₃⁺)</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 20 — ELECTROFORESIS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.3 — APLICACIÓN</div>
+        <h2>Electroforesis y Separación por pI</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">electroforesis</span> es una técnica que separa moléculas cargadas aplicando un <strong>campo eléctrico</strong>.</p>
+
+        <div class="box">
+            <strong>⚡ Principio</strong>
+            <p>• Moléculas con <strong>carga positiva</strong> migran hacia el <span class="em-warn">cátodo</span> (−)<br>
+            • Moléculas con <strong>carga negativa</strong> migran hacia el <span class="em-success">ánodo</span> (+)<br>
+            • Moléculas con <strong>carga neta cero</strong> (pH = pI) no migran</p>
+        </div>
+
+        <h3>Separación de aminoácidos según pI</h3>
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>pH < pI</h4>
+                <p>El aminoácido tiene <strong>carga neta positiva</strong>.</p>
+                <p style="margin-top:0.4rem; color:#ef5350;">Migra al cátodo (−)</p>
+            </div>
+            <div class="card card-accent">
+                <h4>pH = pI</h4>
+                <p>El aminoácido tiene <strong>carga neta cero</strong>.</p>
+                <p style="margin-top:0.4rem; color:#66bb6a;">No migra</p>
+            </div>
+            <div class="card">
+                <h4>pH > pI</h4>
+                <p>El aminoácido tiene <strong>carga neta negativa</strong>.</p>
+                <p style="margin-top:0.4rem; color:#29b6f6;">Migra al ánodo (+)</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Aplicación práctica</strong>
+            <p>Ajustando el pH del buffer de electroforesis, se pueden <strong>separar</strong> aminoácidos (o proteínas) con diferentes pI. Aquellos con pI más bajo migrarán más hacia el ánodo, mientras que aquellos con pI más alto migrarán hacia el cátodo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 21 — EJERCICIO 1 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Estructura y Clasificación</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta para cada pregunta.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 22 — EJERCICIO 2 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Punto Isoeléctrico</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 23 — RESUMEN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">RESUMEN MÓDULO 1</div>
+        <h2>Puntos Clave</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Estructura</h4>
+                <ul>
+                    <li>20 aminoácidos naturales, todos α-aminoácidos</li>
+                    <li>Carbono-α quiral (excepto Gly)</li>
+                    <li>Configuración L (relacionada con L-gliceraldehído)</li>
+                    <li>Anagrama CORN para recordar configuración</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Clasificación por R</h4>
+                <ul>
+                    <li>Alifáticos: Gly, Ala, Val, Leu, Ile</li>
+                    <li>Aromáticos: Phe, Tyr, Trp</li>
+                    <li>Azufrados: Cys, Met</li>
+                    <li>Hidroxilados: Ser, Thr</li>
+                    <li>Básicos: Lys, Arg, His</li>
+                    <li>Ácidos: Asp, Glu (+ Asn, Gln)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card card-accent" style="margin-top:1rem;">
+            <h4>Propiedad Anfótera</h4>
+            <ul>
+                <li>Estructura <strong>zwitteriónica</strong>: ⁺H₃N−CH(R)−COO⁻</li>
+                <li>Punto isoeléctrico (pI): pH donde carga neta = 0</li>
+                <li>pI simple: (pKa₁ + pKa₂) / 2</li>
+                <li>pI ácidos: promedio de dos pKa más ácidos</li>
+                <li>pI básicos: promedio de dos pKa más básicos</li>
+                <li>Electroforesis: separación según carga a diferentes pH</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 24 — CIERRE -->
+<div class="slide cover">
+    <h1>Fin del Módulo 1</h1>
+    <div class="line"></div>
+    <p class="subtitle">Próximo: Módulo 2 — Enlace Peptídico y Estructura de Proteínas</p>
+    <p class="meta">¿Preguntas?</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">24</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+// NAVEGACIÓN
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9.,\-\s]/g,'')
+        .replace(/\s+/g,' ');
+}
+
+// EJERCICIO 1
+const ex1Data = [
+    {
+        q: "¿Cuál aminoácido NO es quiral?",
+        opts: ["Alanina", "Glicina", "Valina", "Leucina"],
+        correct: 1
+    },
+    {
+        q: "La configuración L de los aminoácidos se relaciona con:",
+        opts: ["D-gliceraldehído", "L-gliceraldehído", "D-glucosa", "L-fructosa"],
+        correct: 1
+    },
+    {
+        q: "¿Cuál aminoácido es aromático?",
+        opts: ["Leucina", "Serina", "Fenilalanina", "Metionina"],
+        correct: 2
+    },
+    {
+        q: "¿Cuál es el aminoácido con grupo sulfhidrilo que puede formar puentes disulfuro?",
+        opts: ["Metionina", "Serina", "Cisteína", "Treonina"],
+        correct: 2
+    },
+    {
+        q: "Los aminoácidos básicos incluyen:",
+        opts: ["Asp, Glu", "Lys, Arg, His", "Ser, Thr", "Phe, Tyr, Trp"],
+        correct: 1
+    },
+    {
+        q: "La prolina es especial porque:",
+        opts: ["Es aromática", "No tiene carbono α", "Su cadena lateral forma un ciclo con el N", "Es el único aminoácido ácido"],
+        correct: 2
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// EJERCICIO 2
+const ex2Data = [
+    { q: "La forma iónica de un aminoácido con cargas balanceadas (+1 y −1) se llama __________.", a: "zwitterion" },
+    { q: "El pH al cual un aminoácido tiene carga neta cero se llama punto __________.", a: "isoelectrico" },
+    { q: "Para un aminoácido simple, el pI se calcula como el __________ de los dos pKa.", a: "promedio" },
+    { q: "Si la glicina tiene pKa₁ = 2.34 y pKa₂ = 9.60, su pI es __________ (número, dos decimales).", a: "5.97" },
+    { q: "Los aminoácidos con cadena lateral ácida tienen pI __________ que 7 (mayor/menor).", a: "menor" },
+    { q: "A pH = pI, un aminoácido no __________ en un campo eléctrico.", a: "migra" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function selMC(prefix, qi, oi) {
+    const data = ex1Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        const userVal = normalise(inp.value);
+        const correctVal = normalise(item.a);
+        // Handle numeric answers
+        if (!isNaN(parseFloat(userVal)) && !isNaN(parseFloat(correctVal))) {
+            if (Math.abs(parseFloat(userVal) - parseFloat(correctVal)) < 0.02) {
+                inp.classList.remove('incorrect'); inp.classList.add('correct');
+                correct++;
+            } else {
+                inp.classList.remove('correct'); inp.classList.add('incorrect');
+            }
+        } else if (userVal === correctVal) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+</script>
+</body>
+</html>

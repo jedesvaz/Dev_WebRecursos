@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioquímica - Purificación (Módulo 3)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:#0a1929; color:#e3f2fd; overflow:hidden;
+        }
+        .container { width:100vw; height:100vh; position:relative; }
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.5rem 6rem; flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        .cover {
+            background:linear-gradient(135deg,#01579b 0%,#0277bd 40%,#0288d1 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-120px; right:-120px; width:380px; height:380px;
+            border-radius:50%; background:rgba(41,182,246,0.12);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-80px; left:-80px; width:280px; height:280px;
+            border-radius:50%; background:rgba(41,182,246,0.08);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.4rem; font-weight:900; line-height:1.2;
+            margin-bottom:1.2rem; position:relative; z-index:1;
+        }
+        .cover .subtitle {
+            font-size:1.3rem; opacity:0.88;
+            position:relative; z-index:1;
+        }
+        .cover .line {
+            width:90px; height:3px; background:#81d4fa;
+            margin:1.8rem auto; position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            opacity:0.65; position:relative; z-index:1;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            opacity:0.55; position:relative; z-index:1;
+        }
+
+        .slide-header { margin-bottom:1.3rem; flex-shrink:0; }
+        .slide-number {
+            color:#29b6f6; font-size:0.8rem; font-weight:700;
+            letter-spacing:2.5px; text-transform:uppercase; margin-bottom:0.4rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.2rem; color:#e3f2fd;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.35rem; color:#29b6f6; margin:1.2rem 0 0.7rem;
+        }
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(41,182,246,0.08); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#29b6f6; border-radius:3px; }
+
+        p { font-size:1.02rem; line-height:1.7; margin-bottom:1.1rem; opacity:0.93; }
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:0.98rem; line-height:1.6; margin-bottom:0.6rem;
+            padding-left:1.5rem; position:relative; opacity:0.91;
+        }
+        ul li::before {
+            content:'▸'; position:absolute; left:0;
+            color:#29b6f6; font-weight:bold;
+        }
+
+        .box {
+            background:rgba(41,182,246,0.08); border-left:4px solid #29b6f6;
+            padding:1.2rem 1.4rem; margin:1.2rem 0; border-radius:0 7px 7px 0;
+        }
+        .box strong { color:#29b6f6; display:block; margin-bottom:0.4rem; font-size:1.02rem; }
+        .box p { margin-bottom:0.35rem; }
+        .box-warn { background:rgba(255,167,38,0.09); border-left-color:#ffa726; }
+        .box-warn strong { color:#ffa726; }
+        .box-success { background:rgba(102,187,106,0.09); border-left-color:#66bb6a; }
+        .box-success strong { color:#66bb6a; }
+
+        .grid { display:grid; gap:1.1rem; margin:1.1rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+        .card {
+            background:rgba(255,255,255,0.045); padding:1.2rem;
+            border-radius:9px; border:1px solid rgba(41,182,246,0.2);
+        }
+        .card h4 { color:#29b6f6; margin-bottom:0.5rem; font-size:1.06rem; }
+        .card p { font-size:0.95rem; margin-bottom:0.3rem; }
+        .card-accent { border-color:rgba(41,182,246,0.4); background:rgba(41,182,246,0.07); }
+
+        .em { color:#29b6f6; font-weight:700; }
+        .em-warn { color:#ffa726; font-weight:700; }
+        .em-success { color:#66bb6a; font-weight:700; }
+
+        table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+        th,td { padding:0.7rem 0.9rem; text-align:left; border-bottom:1px solid rgba(41,182,246,0.16); }
+        th { background:rgba(41,182,246,0.12); color:#29b6f6; font-weight:700; font-size:0.88rem; letter-spacing:0.4px; }
+        tr:last-child td { border-bottom:none; }
+
+        .formula {
+            background:rgba(255,255,255,0.05); padding:1rem 1.5rem;
+            border-radius:8px; border:1px solid rgba(41,182,246,0.25);
+            font-family:monospace; font-size:1.05rem; text-align:center;
+            margin:1rem 0; color:#81d4fa;
+        }
+
+        .exercise-badge {
+            background:linear-gradient(135deg,#0277bd,#29b6f6);
+            color:#fff; padding:0.3rem 1.2rem; border-radius:24px;
+            display:inline-block; font-weight:800; font-size:0.8rem;
+            letter-spacing:1.5px; box-shadow:0 3px 10px rgba(41,182,246,0.35);
+        }
+
+        .exercise-input {
+            width:100%; background:rgba(255,255,255,0.055);
+            border:1px solid rgba(41,182,246,0.3); border-radius:7px;
+            padding:0.6rem 0.9rem; color:#e3f2fd; font-size:0.95rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#29b6f6; background:rgba(41,182,246,0.08); }
+        .exercise-input.correct { border-color:#66bb6a; background:rgba(102,187,106,0.12); }
+        .exercise-input.incorrect { border-color:#ef5350; background:rgba(239,83,80,0.12); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.95rem; opacity:0.91; display:block; }
+        .exercise-q .qnum { color:#29b6f6; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#0277bd; border:none; color:#fff;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#29b6f6; transform:scale(1.05); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(41,182,246,0.4); color:#29b6f6; }
+        .ex-btn-sec:hover { background:rgba(41,182,246,0.12); border-color:#29b6f6; }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(102,187,106,0.12); border:1px solid rgba(102,187,106,0.35); color:#66bb6a; }
+        .feedback-msg.partial { background:rgba(255,167,38,0.09); border:1px solid rgba(255,167,38,0.35); color:#ffa726; }
+
+        .mc-option {
+            background:rgba(255,255,255,0.045); border:1px solid rgba(41,182,246,0.22);
+            border-radius:7px; padding:0.6rem 1rem; margin:0.35rem 0;
+            cursor:pointer; transition:all 0.22s; font-size:0.95rem;
+        }
+        .mc-option:hover { border-color:#29b6f6; background:rgba(41,182,246,0.08); }
+        .mc-option.selected { border-color:#29b6f6; background:rgba(41,182,246,0.13); }
+        .mc-option.correct-sel { border-color:#66bb6a; background:rgba(102,187,106,0.2); }
+        .mc-option.incorrect-sel { border-color:#ef5350; background:rgba(239,83,80,0.15); }
+
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; background:#0277bd; border:none;
+            border-radius:50%; color:#fff; font-size:1.35rem;
+            font-weight:bold; cursor:pointer; transition:all 0.3s;
+            box-shadow:0 4px 15px rgba(0,0,0,0.35);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); background:#29b6f6; }
+        .btn:disabled { opacity:0.28; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(10,25,41,0.92); padding:0.8rem 1.6rem;
+            border-radius:28px; border:2px solid #29b6f6;
+            color:#81d4fa; font-weight:700; z-index:1000; font-size:0.95rem;
+        }
+
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.4rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 — PORTADA -->
+<div class="slide cover active">
+    <h1>Desnaturalización<br>y Purificación<br>Módulo 3</h1>
+    <div class="line"></div>
+    <p class="subtitle">Estabilidad, Precipitación Selectiva y Métodos Cromatográficos</p>
+    <p class="meta">Bioquímica General | Nivel: Intermedio | Hora 5</p>
+    <p class="help">👉 Usa las flechas o botones para navegar →</p>
+</div>
+
+<!-- SLIDE 2 — ÍNDICE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">MÓDULO 3</div>
+        <h2>Contenidos</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>2.6 Desnaturalización</h4>
+                <ul>
+                    <li>Definición y pérdida de función</li>
+                    <li>Agentes desnaturalizantes:
+                        <ul style="margin-left:1.5rem; margin-top:0.3rem;">
+                            <li>Calor</li>
+                            <li>pH extremo (ácidos/bases)</li>
+                            <li>Urea y guanidinio</li>
+                            <li>Solventes orgánicos</li>
+                            <li>Agentes reductores</li>
+                        </ul>
+                    </li>
+                    <li>Renaturalización vs irreversible</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>2.7 Precipitación Selectiva</h4>
+                <ul>
+                    <li>Salting out (precipitación)</li>
+                    <li>Mecanismo molecular</li>
+                    <li>Serie de Hofmeister</li>
+                    <li>Salting in (solubilización)</li>
+                    <li>Teoría de Debye-Hückel</li>
+                    <li>Fuerza iónica</li>
+                    <li>Sulfato de amonio</li>
+                </ul>
+            </div>
+        </div>
+        <div class="grid grid-2" style="margin-top:1rem;">
+            <div class="card card-accent">
+                <h4>2.8 Métodos de Separación</h4>
+                <ul>
+                    <li>Cromatografía — principios</li>
+                    <li>Exclusión molecular (SEC)</li>
+                    <li>Intercambio iónico</li>
+                    <li>Fase reversa (RPC/HIC)</li>
+                    <li>Afinidad</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>2.9 Tecnología Médica</h4>
+                <p>Investigación de aplicaciones médicas de aminoácidos, péptidos y proteínas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 — DESNATURALIZACIÓN INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.6 — DESNATURALIZACIÓN</div>
+        <h2>¿Qué es la Desnaturalización?</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">desnaturalización</span> es la <strong>pérdida de la estructura tridimensional</strong> (secundaria, terciaria y/o cuaternaria) de una proteína, generalmente resultando en la pérdida de su función biológica.</p>
+
+        <div class="box">
+            <strong>🔬 Características clave</strong>
+            <p>• La <span class="em-success">estructura primaria</span> (secuencia de aminoácidos) <strong>permanece intacta</strong><br>
+            • Se rompen las interacciones <strong>no covalentes</strong>: puentes de H, interacciones hidrofóbicas, electrostáticas<br>
+            • La proteína se <strong>despliega</strong> (unfolds)<br>
+            • Pérdida de <strong>actividad biológica</strong> (enzimática, hormonal, etc.)</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>✅ Proteína nativa</h4>
+                <p>• Estructura 3D bien definida<br>
+                • Función biológica activa<br>
+                • Solubilidad característica<br>
+                • Sitio activo funcional</p>
+            </div>
+            <div class="card">
+                <h4>❌ Proteína desnaturalizada</h4>
+                <p>• Estructura desordenada<br>
+                • <span class="em-warn">Sin función biológica</span><br>
+                • Frecuentemente insoluble<br>
+                • Sitio activo destruido</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Ejemplo cotidiano</strong>
+            <p>Cocinar un huevo: el <strong>calor desnaturaliza</strong> las proteínas de la clara (ovoalbúmina), haciéndola pasar de transparente y líquida a blanca y sólida. Este cambio es <span class="em-warn">irreversible</span>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4 — AGENTE: CALOR -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.6 — AGENTES DESNATURALIZANTES</div>
+        <h2>Calor</h2>
+    </div>
+    <div class="content">
+        <p>El <span class="em-warn">aumento de temperatura</span> es uno de los agentes desnaturalizantes más comunes.</p>
+
+        <div class="box">
+            <strong>🔥 Mecanismo</strong>
+            <p>El calor incrementa la <strong>energía cinética</strong> de las moléculas, provocando:<br>
+            • Ruptura de <strong>puentes de hidrógeno</strong><br>
+            • Ruptura de <strong>interacciones hidrofóbicas</strong><br>
+            • Incremento de movimiento molecular que desestabiliza la estructura 3D</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Proteínas sensibles</h4>
+                <p>La mayoría de las proteínas se desnaturalizan a temperaturas > <strong>50-60°C</strong>.</p>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">Ejemplo: Enzimas digestivas humanas pierden actividad a >65°C</p>
+            </div>
+            <div class="card">
+                <h4>Proteínas resistentes</h4>
+                <p>Algunas proteínas pequeñas son muy estables:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li><strong>Ribonucleasa:</strong> resiste 90°C por períodos cortos</li>
+                    <li><strong>Proteínas termófilas:</strong> bacterias de fuentes termales (>100°C)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Irreversibilidad</strong>
+            <p>La desnaturalización por calor suele ser <strong>irreversible</strong>, especialmente a temperaturas muy altas. El enfriamiento no restaura la estructura nativa.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5 — AGENTES: pH Y QUÍMICOS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.6 — AGENTES DESNATURALIZANTES</div>
+        <h2>pH Extremo y Agentes Químicos</h2>
+    </div>
+    <div class="content">
+        <h3>pH extremo (ácidos y bases)</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Mecanismo</h4>
+                <p>• Altera el <strong>estado de protonación</strong> de grupos ionizables (Asp, Glu, Lys, Arg, His)<br>
+                • Rompe <strong>puentes salinos</strong> (interacciones electrostáticas)<br>
+                • Cambia la carga neta de la proteína</p>
+            </div>
+            <div class="card">
+                <h4>Aplicación</h4>
+                <p>• <strong>Hidrólisis ácida:</strong> HCl 6M a 110°C (rompe enlaces peptídicos)<br>
+                • <strong>Hidrólisis básica:</strong> NaOH concentrado<br>
+                • Útil para análisis de aminoácidos</p>
+            </div>
+        </div>
+
+        <h3>Urea y cloruro de guanidinio</h3>
+        <div class="box">
+            <strong>🔬 Agentes caotrópicos</strong>
+            <p>• <strong>Urea (6-8 M)</strong> y <strong>Guanidinio-HCl (6 M)</strong> son muy efectivos<br>
+            • Rompen <strong>puentes de hidrógeno</strong> entre grupos peptídicos<br>
+            • Rompen <strong>puentes salinos</strong> entre cadenas laterales<br>
+            • Alta afinidad por enlaces peptídicos → compiten con interacciones intramoleculares<br>
+            • <span class="em-success">No afectan la estructura primaria</span></p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Renaturalización posible</strong>
+            <p>Al <strong>eliminar</strong> urea o guanidinio por diálisis, muchas proteínas pueden <strong>renaturalizar</strong> (recuperar su estructura nativa). Esto demuestra que la información para el plegamiento está en la secuencia primaria.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6 — OTROS AGENTES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.6 — AGENTES DESNATURALIZANTES</div>
+        <h2>Agentes Reductores y Solventes Orgánicos</h2>
+    </div>
+    <div class="content">
+        <h3>Agentes reductores (reducción de puentes disulfuro)</h3>
+        <div class="box">
+            <strong>🔬 Reducción de −S−S−</strong>
+            <p>Agentes como <strong>β-mercaptoetanol</strong> o <strong>ditiotreitol (DTT)</strong> reducen puentes disulfuro:</p>
+            <div class="formula" style="font-size:0.9rem;">
+                −S−S− + 2 [H] → 2 −SH
+            </div>
+            <p style="margin-top:0.5rem;">• Convierte <strong>cistina</strong> (puente disulfuro) en dos <strong>cisteínas</strong><br>
+            • Desnaturaliza proteínas que dependen de puentes disulfuro para estabilidad<br>
+            • La <strong>reoxidación por aire</strong> puede regenerar puentes, pero a veces forman enlaces incorrectos</p>
+        </div>
+
+        <h3>Solventes orgánicos</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Mecanismo</h4>
+                <p>• <strong>Etanol, acetona, metanol</strong><br>
+                • Interfieren con <strong>interacciones hidrofóbicas</strong><br>
+                • Modifican la constante dieléctrica del medio<br>
+                • Alteran la capa de hidratación de la proteína</p>
+            </div>
+            <div class="card">
+                <h4>Aplicaciones</h4>
+                <p>• <strong>Precipitación:</strong> etanol al 70% precipita proteínas<br>
+                • <strong>Desinfección:</strong> etanol desnaturaliza proteínas de microorganismos<br>
+                • <strong>Fijación:</strong> formol (formaldehído) en histología</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Ejemplo: formación de espuma</strong>
+            <p>Batir clara de huevo introduce <strong>aire</strong> (interfaz aire-agua). Las proteínas migran a la interfaz y se desnaturalizan parcialmente, formando una <strong>espuma permanente</strong> (irreversible).</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 — RENATURALIZACIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.6 — DESNATURALIZACIÓN</div>
+        <h2>Renaturalización</h2>
+    </div>
+    <div class="content">
+        <p>Algunos procesos de desnaturalización son <span class="em-success">reversibles</span>. Al eliminar el agente desnaturalizante, la proteína puede recuperar su estructura nativa.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>✅ Desnaturalización reversible</h4>
+                <p><strong>Condiciones suaves:</strong></p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Urea o guanidinio (eliminables por diálisis)</li>
+                    <li>pH moderadamente extremo</li>
+                    <li>Calor moderado (<70°C)</li>
+                    <li>Algunos detergentes</li>
+                </ul>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">La proteína puede <strong>replegarse</strong> correctamente si no hay daño químico.</p>
+            </div>
+            <div class="card">
+                <h4>❌ Desnaturalización irreversible</h4>
+                <p><strong>Condiciones severas:</strong></p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Calor alto (>80-90°C)</li>
+                    <li>Ácidos/bases muy fuertes con calor</li>
+                    <li>Solventes orgánicos</li>
+                    <li>Formación de agregados</li>
+                </ul>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">Daño químico o agregación impiden la renaturalización.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>🔬 Experimento clásico de Anfinsen</strong>
+            <p>Christian Anfinsen demostró con <strong>ribonucleasa</strong> que:<br>
+            1. La desnaturalización con urea + β-mercaptoetanol elimina actividad<br>
+            2. Al remover estos agentes, la proteína <strong>se repliega espontáneamente</strong><br>
+            3. La estructura nativa se recupera completamente<br>
+            <br>
+            <span class="em-success">Conclusión:</span> La información para el plegamiento está codificada en la <strong>secuencia primaria</strong>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 — SALTING OUT INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.7 — PRECIPITACIÓN SELECTIVA</div>
+        <h2>Salting Out</h2>
+    </div>
+    <div class="content">
+        <p>El <span class="em">salting out</span> es un método de purificación que utiliza la <strong>reducción de solubilidad</strong> de proteínas en soluciones de muy alta fuerza iónica.</p>
+
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>En contraste con salting in, el salting out ocurre en soluciones acuosas de <strong>alta fuerza iónica</strong> que reducen la solubilidad de biomoléculas, causando que ciertas proteínas <strong>precipiten</strong>.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Principio</strong>
+            <p>Idealmente, el <strong>tipo de sal</strong> y la <strong>concentración</strong> pueden variarse para precipitar selectivamente una molécula específica. En realidad, es efectivo para purificación inicial, pero carece de precisión para aislar una proteína específica.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Aplicación práctica</h4>
+                <p>• <strong>Purificación inicial</strong> de proteínas<br>
+                • Separación por tamaño, carga, área superficial<br>
+                • Concentración de proteínas diluidas<br>
+                • Paso previo a cromatografía</p>
+            </div>
+            <div class="card">
+                <h4>Sal más común</h4>
+                <p><strong>Sulfato de amonio (NH₄)₂SO₄</strong></p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Iones altos en serie de Hofmeister</li>
+                    <li>Interacción baja con proteína</li>
+                    <li>Muy soluble en agua</li>
+                    <li>Barato y disponible</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9 — MECANISMO SALTING OUT -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.7 — PRECIPITACIÓN SELECTIVA</div>
+        <h2>Mecanismo del Salting Out</h2>
+    </div>
+    <div class="content">
+        <p>La conformación de proteínas in vivo está controlada por interacciones <strong>hidrofóbicas e hidrofílicas</strong> con el ambiente celular.</p>
+
+        <div class="box">
+            <strong>🔬 Plegamiento proteico</strong>
+            <p>La proteína se pliega de modo que:<br>
+            • Los grupos <strong>hidrofóbicos</strong> se agrupan en el <strong>interior</strong>, evitando agua<br>
+            • Los grupos <strong>hidrofílicos</strong> (polares, cargados) quedan en la <strong>superficie</strong>, interactuando con agua<br>
+            • Aminoácidos cargados (Glu, Asp, Lys, Arg) requieren <strong>moléculas de agua</strong> rodeándolos para permanecer disueltos</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚡ ¿Qué ocurre a alta fuerza iónica?</strong>
+            <p>En solución acuosa con <strong>alta concentración de sales</strong>:<br>
+            1. Las moléculas de agua rodean las <strong>cargas de los iones</strong> de la sal<br>
+            2. Las moléculas de agua rodean las <strong>cargas de las proteínas</strong><br>
+            3. A cierta fuerza iónica, <span class="em-warn">el agua no puede soportar ambas cargas</span><br>
+            4. El soluto <strong>menos soluble</strong> (la proteína) precipita</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Resultado</strong>
+            <p>Las proteínas pierden su <strong>capa de hidratación</strong> y se agregan entre sí, formando un <strong>precipitado</strong> que puede separarse por centrifugación o filtración.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10 — SERIE HOFMEISTER -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.7 — PRECIPITACIÓN SELECTIVA</div>
+        <h2>Serie de Hofmeister</h2>
+    </div>
+    <div class="content">
+        <p>La capacidad de diferentes sales para inducir precipitación selectiva depende de las <span class="em">interacciones con agua y solutos</span>. Franz Hofmeister ordenó aniones y cationes por su capacidad de precipitar proteínas.</p>
+
+        <div class="box">
+            <strong>📊 Orden de cationes (mayor → menor capacidad de salting out)</strong>
+            <div class="formula" style="font-size:0.95rem; text-align:left;">
+                NH₄⁺ > K⁺ > Na⁺ > Li⁺ > Mg²⁺ > Ca²⁺ > guanidinio⁺
+            </div>
+            <p style="margin-top:0.5rem;"><strong>Amonio (NH₄⁺)</strong> tiene la mayor capacidad de precipitar proteínas.</p>
+        </div>
+
+        <div class="box">
+            <strong>📊 Orden de aniones (mayor → menor capacidad de salting out)</strong>
+            <div class="formula" style="font-size:0.9rem; text-align:left;">
+                SO₄²⁻ > HPO₄²⁻ > CH₃COO⁻ > Cl⁻ > Br⁻ > NO₃⁻ > ClO₄⁻ > I⁻ > SCN⁻
+            </div>
+            <p style="margin-top:0.5rem;"><strong>Sulfato (SO₄²⁻)</strong> es el anión más efectivo.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Importancia relativa</strong>
+            <p>Entre cationes y aniones en solución, la concentración del <strong>anión</strong> típicamente tiene el mayor efecto en la precipitación proteica.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ No todas las sales son apropiadas</strong>
+            <p>Algunos iones como <strong>yoduro (I⁻)</strong> son buenos para precipitar, pero <span class="em-warn">no se usan</span> porque tienden a <strong>desnaturalizar o modificar</strong> la proteína.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11 — SALTING IN Y TEORÍA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.7 — PRECIPITACIÓN SELECTIVA</div>
+        <h2>Salting In y Teoría de Debye-Hückel</h2>
+    </div>
+    <div class="content">
+        <h3>Salting in</h3>
+        <div class="box">
+            <strong>📌 Fenómeno opuesto</strong>
+            <p>A <strong>baja fuerza iónica</strong>, agregar sal puede <span class="em-success">aumentar la solubilidad</span> de proteínas. Los iones:<br>
+            • Estabilizan las cargas superficiales de la proteína<br>
+            • Reducen interacciones proteína-proteína<br>
+            • Aumentan la solubilidad<br>
+            <br>
+            Este efecto domina a fuerzas iónicas <strong>< 0.5-1 M</strong>.</p>
+        </div>
+
+        <h3>Teoría de Debye-Hückel</h3>
+        <p>La solubilidad de un soluto acuoso puede describirse matemáticamente usando la teoría de Debye-Hückel.</p>
+
+        <div class="box box-success">
+            <strong>🔬 Fuerza iónica (I)</strong>
+            <div class="formula" style="font-size:1rem;">
+                I = ½ Σ cᵢ zᵢ²
+            </div>
+            <p style="margin-top:0.5rem;">Donde:<br>
+            • <strong>cᵢ</strong> = concentración del ion i (mol/L)<br>
+            • <strong>zᵢ</strong> = carga del ion i<br>
+            • Σ = suma sobre todos los iones en solución</p>
+        </div>
+
+        <div class="box">
+            <strong>📐 Solubilidad (S)</strong>
+            <div class="formula" style="font-size:0.95rem;">
+                log(S/S₀) = β I
+            </div>
+            <p style="margin-top:0.5rem;">Donde:<br>
+            • <strong>S</strong> = solubilidad en solución salina<br>
+            • <strong>S₀</strong> = solubilidad en solvente puro<br>
+            • <strong>β</strong> = constante (depende del tamaño del soluto y los iones)<br>
+            • <strong>I</strong> = fuerza iónica</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12 — CROMATOGRAFÍA INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.8 — MÉTODOS DE SEPARACIÓN</div>
+        <h2>Cromatografía</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">cromatografía</span> es una familia de técnicas de laboratorio para la <strong>separación de mezclas</strong> de compuestos.</p>
+
+        <div class="box">
+            <strong>🔬 Principio</strong>
+            <p>Involucra pasar una mezcla a través de una <strong>fase estacionaria</strong>, permitiendo que los componentes se separen de acuerdo a sus propiedades físicas o químicas.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Fase estacionaria (fija)</h4>
+                <p>Material que permanece inmóvil:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li><strong>Alúmina</strong></li>
+                    <li><strong>Sílice</strong></li>
+                    <li><strong>Resinas de intercambio iónico</strong> (matrices con sitios cargados)</li>
+                    <li><strong>Geles de exclusión molecular</strong></li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Fase móvil (fluye)</h4>
+                <p>Líquido que transporta la muestra:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li><strong>Acuosos:</strong> soluciones amortiguadoras (buffers)</li>
+                    <li><strong>Orgánicos:</strong> acetonitrilo, metanol, isopropanol</li>
+                    <li><strong>Isocrática:</strong> composición constante</li>
+                    <li><strong>Gradiente:</strong> composición variable</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Separación</strong>
+            <p>Sustancias con <strong>mayor afinidad</strong> por la fase estacionaria avanzan <strong>más lentamente</strong>. Sustancias con <strong>menor afinidad</strong> avanzan <strong>más rápidamente</strong> con la fase móvil.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13 — CROMATOGRAMA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.8 — MÉTODOS DE SEPARACIÓN</div>
+        <h2>Cromatograma y Parámetros</h2>
+    </div>
+    <div class="content">
+        <p>Un <span class="em">cromatograma</span> es la representación gráfica de la señal del detector en función del tiempo una vez que la muestra es inyectada.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Tiempo de retención (tᴿ)</h4>
+                <p>Tiempo que transcurre desde la inyección hasta que el <strong>pico del analito</strong> alcanza el detector.</p>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">Característico de cada compuesto en condiciones dadas.</p>
+            </div>
+            <div class="card">
+                <h4>Tiempo muerto (tᴹ)</h4>
+                <p>Tiempo para que una especie <strong>no retenida</strong> alcance el detector.</p>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">Representa el volumen vacío de la columna.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📊 Factor de capacidad (k')</strong>
+            <div class="formula" style="font-size:1rem;">
+                k' = (tᴿ − tᴹ) / tᴹ
+            </div>
+            <p style="margin-top:0.5rem;">Describe las velocidades de migración de analitos. <strong>Mayor k'</strong> → menor velocidad de migración.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Selección del modo de separación</strong>
+            <p>Para proteínas y péptidos, considerar:<br>
+            • Diferencias en <strong>peso molecular</strong> → cromatografía de exclusión molecular<br>
+            • Diferencias en <strong>punto isoeléctrico</strong> → intercambio iónico<br>
+            • Diferencias en <strong>hidrofobicidad</strong> → fase reversa<br>
+            • <strong>Afinidad específica</strong> → cromatografía de afinidad</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14 — EXCLUSIÓN MOLECULAR -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.8 — CROMATOGRAFÍA</div>
+        <h2>Exclusión Molecular (SEC)</h2>
+    </div>
+    <div class="content">
+        <p>También llamada <strong>filtración en gel</strong> o <strong>cromatografía de permeación en gel</strong>. Se basa en la diferencia de penetración de moléculas en poros según su <span class="em">tamaño</span>.</p>
+
+        <div class="box">
+            <strong>🔬 Principio</strong>
+            <p>• Fase estacionaria: partículas poliméricas o de sílice con <strong>red uniforme de poros</strong><br>
+            • Moléculas <strong>grandes</strong> se excluyen de los poros → eluyen <span class="em-success">primero</span><br>
+            • Moléculas <strong>pequeñas</strong> acceden a todo el volumen poroso → eluyen <span class="em-warn">último</span><br>
+            • El tiempo de elución es <strong>proporcional al peso molecular</strong></p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Factores de separación</h4>
+                <ul>
+                    <li><strong>Tamaño del poro</strong> de la resina</li>
+                    <li><strong>Tamaño de partícula</strong> (menor tamaño → mayor resolución)</li>
+                    <li><strong>Flujo de elución</strong> (más lento → mejor separación)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Materiales comunes</h4>
+                <ul>
+                    <li><strong>Sephadex:</strong> derivados de dextranos</li>
+                    <li><strong>Sepharosa:</strong> derivados de agarosa</li>
+                    <li><strong>Biogel P:</strong> derivados de acrilamidas</li>
+                    <li><strong>Esferas de vidrio</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Aplicación</strong>
+            <p>Útil como <strong>primer screening</strong> de separación para proteínas desconocidas porque:<br>
+            • El eluyente se selecciona fácilmente (buffer simple)<br>
+            • Se separa solo por tamaño<br>
+            • No requiere optimización compleja</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15 — INTERCAMBIO IÓNICO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.8 — CROMATOGRAFÍA</div>
+        <h2>Intercambio Iónico</h2>
+    </div>
+    <div class="content">
+        <p>Permite la separación de <span class="em">iones y moléculas polares</span> basada en las propiedades de carga de las moléculas.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Intercambio catiónico</h4>
+                <p>• Fase estacionaria con grupos <strong>ácidos</strong> (−COO⁻, −SO₃⁻)<br>
+                • Carga negativa<br>
+                • Retiene <strong>cationes</strong> (proteínas cargadas positivamente)<br>
+                • Ejemplo: matriz <strong>CM</strong> (carboximetil)</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Intercambio aniónico</h4>
+                <p>• Fase estacionaria con grupos <strong>básicos</strong> (−NH₃⁺, amonio cuaternario)<br>
+                • Carga positiva<br>
+                • Retiene <strong>aniones</strong> (proteínas cargadas negativamente)<br>
+                • Ejemplo: matriz <strong>DEAE</strong> (dietilaminoetil)</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>🔬 Estrategia</strong>
+            <p>1. <strong>Equilibrio:</strong> ajustar pH para que proteína tenga carga neta opuesta a la matriz<br>
+            2. <strong>Adsorción:</strong> proteína se une a la matriz<br>
+            3. <strong>Lavado:</strong> eliminar contaminantes no unidos<br>
+            4. <strong>Elución:</strong> aumentar fuerza iónica (gradiente de sal) o cambiar pH<br>
+            5. <strong>Regeneración:</strong> lavar columna para siguiente uso</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Elución</strong>
+            <p>Los <strong>contra-iones</strong> (Na⁺, Cl⁻) en alta concentración compiten con la proteína por sitios de unión, desplazándola de la columna. Proteínas con diferente carga neta eluyen a diferentes concentraciones de sal.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16 — FASE REVERSA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.8 — CROMATOGRAFÍA</div>
+        <h2>Fase Reversa (RPC / HIC)</h2>
+    </div>
+    <div class="content">
+        <p>Separa moléculas en base a su <span class="em">polaridad / hidrofobicidad</span>.</p>
+
+        <div class="box">
+            <strong>🔬 Principio</strong>
+            <p>• Fase estacionaria: <strong>partículas de sílica modificadas</strong> con cadenas hidrocarbonadas (C8, C18) → matriz <span class="em-warn">apolar</span><br>
+            • Fase móvil: <strong>solventes polares</strong> (agua, acetonitrilo, metanol, acetona)<br>
+            • También llamada <strong>HIC</strong> (cromatografía de interacción hidrofóbica) cuando se usan condiciones compatibles con biomoléculas</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Mecanismo de retención</h4>
+                <p>• Moléculas se retienen por <strong>interacciones hidrofóbicas</strong> con la sílica modificada<br>
+                • Proteínas más <strong>hidrofóbicas</strong> → mayor retención<br>
+                • Para eluir: <strong>disminuir polaridad</strong> de la fase móvil</p>
+            </div>
+            <div class="card">
+                <h4>Elución</h4>
+                <p>Gradiente de solvente orgánico:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Inicio: <strong>100% agua</strong></li>
+                    <li>Final: <strong>100% acetonitrilo</strong></li>
+                </ul>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">A medida que aumenta acetonitrilo, las proteínas eluyen según su hidrofobicidad.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Terminología</strong>
+            <p>• <strong>RPC (Reverse Phase Chromatography):</strong> término general<br>
+            • <strong>HIC (Hydrophobic Interaction Chromatography):</strong> aplicado a purificación de proteínas con sustituyentes y buffers compatibles</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17 — AFINIDAD -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.8 — CROMATOGRAFÍA</div>
+        <h2>Cromatografía de Afinidad</h2>
+    </div>
+    <div class="content">
+        <p>Utiliza la <span class="em">alta especificidad</span> de reacciones biológicas tipo antígeno-anticuerpo, enzima-sustrato, hormona-receptor.</p>
+
+        <div class="box">
+            <strong>🔬 Principio</strong>
+            <p>• Un <strong>ligando de afinidad</strong> se une covalentemente al soporte (fase estacionaria)<br>
+            • Cuando la muestra atraviesa la columna, solo se retiene la sustancia capaz de <strong>reaccionar específicamente</strong> con dicho ligando<br>
+            • Todas las demás proteínas pasan sin retención</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Proceso</h4>
+                <p>1. <strong>Equilibrio:</strong> preparar columna con ligando inmovilizado<br>
+                2. <strong>Carga:</strong> aplicar muestra (proteína de interés se une al ligando)<br>
+                3. <strong>Lavado:</strong> eliminar contaminantes<br>
+                4. <strong>Elución específica:</strong> cambiar condiciones para liberar proteína de interés<br>
+                5. <strong>Regeneración</strong></p>
+            </div>
+            <div class="card">
+                <h4>Estrategias de elución</h4>
+                <ul>
+                    <li>Agregar <strong>ligando libre</strong> (competencia)</li>
+                    <li>Cambiar <strong>pH</strong></li>
+                    <li>Cambiar <strong>fuerza iónica</strong></li>
+                    <li>Agregar <strong>agentes desnaturalizantes</strong> suaves</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Ventajas</strong>
+            <p>• <strong>Altamente específica</strong> (purificación en un solo paso posible)<br>
+            • <strong>Alta capacidad</strong> y rendimiento<br>
+            • Ejemplos: anticuerpos monoclonales, proteínas con etiqueta His-tag, proteínas de fusión con GST</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 18 — COMBINACIÓN MÉTODOS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.8 — MÉTODOS DE SEPARACIÓN</div>
+        <h2>Combinación de Métodos</h2>
+    </div>
+    <div class="content">
+        <p>Usualmente es necesario <span class="em">combinar varios métodos</span> de separación para obtener pureza adecuada.</p>
+
+        <div class="box box-success">
+            <strong>✅ Estrategia típica de purificación</strong>
+            <p>1. <strong>Salting out:</strong> precipitación con (NH₄)₂SO₄ para concentrar y purificación inicial<br>
+            2. <strong>Cromatografía de exclusión molecular:</strong> separación por tamaño<br>
+            3. <strong>Cromatografía de intercambio iónico:</strong> separación por carga<br>
+            4. <strong>Cromatografía de afinidad:</strong> purificación específica final<br>
+            5. <strong>Cromatografía de fase reversa:</strong> pulido final (opcional)</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Consideraciones</h4>
+                <ul>
+                    <li><strong>pH:</strong> debe estar dentro del rango de estabilidad de la proteína</li>
+                    <li><strong>Termoestabilidad:</strong> trabajar a 4°C si es necesario</li>
+                    <li><strong>Concentración:</strong> evitar dilución excesiva</li>
+                    <li><strong>Actividad:</strong> monitorear actividad en cada paso</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Evaluación</h4>
+                <p>En cada paso evaluar:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li><strong>Pureza:</strong> SDS-PAGE, espectrometría</li>
+                    <li><strong>Rendimiento:</strong> % de proteína recuperada</li>
+                    <li><strong>Actividad específica:</strong> unidades/mg proteína</li>
+                    <li><strong>Factor de purificación</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📊 Ejemplo de secuencia</strong>
+            <p>Purificación de hexoquinasa de levadura:<br>
+            Homogenizado → Salting out 40-60% → Diálisis → SEC (Sephadex G-200) → Intercambio aniónico (DEAE) → Cromatografía de afinidad (glucosa-6-P inmobilizado)</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 19 — TECNOLOGÍA MÉDICA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.9 — TECNOLOGÍA MÉDICA</div>
+        <h2>Rol en Tecnología Médica</h2>
+    </div>
+    <div class="content">
+        <p>Los <span class="em">aminoácidos, péptidos y proteínas</span> juegan roles fundamentales en numerosas tecnologías médicas modernas.</p>
+
+        <div class="box box-warn">
+            <strong>📚 Actividad de investigación</strong>
+            <p>Para profundizar en este tema, se te asigna <strong>investigar</strong> al menos tres ejemplos de tecnologías médicas que utilicen aminoácidos, péptidos o proteínas. Considera las siguientes áreas:</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Áreas de aplicación</h4>
+                <ul>
+                    <li><strong>Terapia proteica:</strong> insulina recombinante, factor VIII, eritropoyetina</li>
+                    <li><strong>Anticuerpos monoclonales:</strong> tratamiento de cáncer, enfermedades autoinmunes</li>
+                    <li><strong>Vacunas peptídicas:</strong> basadas en antígenos sintéticos</li>
+                    <li><strong>Diagnóstico:</strong> ELISA, Western blot, inmunofluorescencia</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Más aplicaciones</h4>
+                <ul>
+                    <li><strong>Biomateriales:</strong> colágeno, fibrina en ingeniería de tejidos</li>
+                    <li><strong>Nutrición clínica:</strong> suplementos de aminoácidos</li>
+                    <li><strong>Biosensores:</strong> detección de biomarcadores</li>
+                    <li><strong>Terapia génica:</strong> proteínas como vehículos de entrega</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>💡 Ejemplos específicos a investigar</strong>
+            <ul>
+                <li><strong>Insulina humana recombinante:</strong> producción, purificación, aplicación en diabetes</li>
+                <li><strong>Anticuerpos anti-TNF:</strong> infliximab, adalimumab para artritis reumatoide</li>
+                <li><strong>Péptidos antimicrobianos:</strong> nuevas alternativas a antibióticos</li>
+                <li><strong>Matrices de colágeno:</strong> cicatrización de heridas y regeneración ósea</li>
+                <li><strong>Enzimas terapéuticas:</strong> asparaginasa en leucemia, DNasa en fibrosis quística</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 20 — EJERCICIO 1 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Desnaturalización y Precipitación</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta para cada pregunta.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 21 — EJERCICIO 2 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Métodos de Separación</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 22 — RESUMEN MÓDULO 3 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">RESUMEN MÓDULO 3</div>
+        <h2>Puntos Clave</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Desnaturalización</h4>
+                <ul>
+                    <li>Pérdida de estructura 2ª, 3ª, 4ª (primaria intacta)</li>
+                    <li>Agentes: calor, pH extremo, urea, guanidinio, solventes orgánicos, reductores</li>
+                    <li>Reversible (urea) vs irreversible (calor alto)</li>
+                    <li>Pérdida de función biológica</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Precipitación Selectiva</h4>
+                <ul>
+                    <li>Salting out: alta fuerza iónica precipita proteínas</li>
+                    <li>Serie de Hofmeister: SO₄²⁻ y NH₄⁺ más efectivos</li>
+                    <li>Salting in: baja fuerza iónica aumenta solubilidad</li>
+                    <li>Debye-Hückel: I = ½ Σ cᵢzᵢ²</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card card-accent" style="margin-top:1rem;">
+            <h4>Cromatografía</h4>
+            <ul>
+                <li><strong>SEC:</strong> separación por tamaño molecular</li>
+                <li><strong>Intercambio iónico:</strong> separación por carga (catiónico vs aniónico)</li>
+                <li><strong>Fase reversa (RPC/HIC):</strong> separación por hidrofobicidad</li>
+                <li><strong>Afinidad:</strong> separación por interacción específica ligando-proteína</li>
+                <li>Combinación de métodos para purificación completa</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 23 — BIBLIOGRAFÍA IEEE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAFÍA</div>
+        <h2>Referencias en Formato IEEE</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>[1] Estructura y propiedades de aminoácidos</strong>
+            <p>"Structure and Stereochemistry of the Amino Acids," in <em>Organic Chemistry</em> (Wade), Chem LibreTexts. [Online]. Available: https://chem.libretexts.org/Bookshelves/Organic_Chemistry/Map:_Organic_Chemistry_%28Wade%29_Complete_and_Semesters_I_and_II/Map:_Organic_Chemistry_%28Wade%29/25:_Amino_Acids_Peptides_and_Proteins/25.02:_Structure_and_Stereochemistry_of_the_Amino_Acids</p>
+        </div>
+
+        <div class="box">
+            <strong>[2] Clasificación de aminoácidos</strong>
+            <p>"Aminoácidos," Universitat Rovira i Virgili. [Online]. Available: https://www.urv.cat/html/consellsocial/PQDocent/CD%20LLibre%20Qualitat/material/cap06/contenido/av_biomo/Mat2.html</p>
+        </div>
+
+        <div class="box">
+            <strong>[3] Estructura de proteínas</strong>
+            <p>"Estructura y Propiedades de las Proteínas," Universitat de València, 2009. [Online]. Available: https://www.uv.es/tunon/pdf_doc/proteinas_09.pdf</p>
+        </div>
+
+        <div class="box">
+            <strong>[4] Desnaturalización de proteínas</strong>
+            <p>D. E. Koshland and Britannica Editors, "Protein denaturation," <em>Encyclopædia Britannica</em>, Feb. 3, 2026. [Online]. Available: https://www.britannica.com/science/protein/Conformation-of-proteins-in-interfaces</p>
+        </div>
+
+        <div class="box">
+            <strong>[5] Salting out</strong>
+            <p>"Salting Out," in <em>Physical and Theoretical Chemistry Textbook Maps</em>, Chem LibreTexts. [Online]. Available: https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Supplemental_Modules_%28Physical_and_Theoretical_Chemistry%29/Thermodynamics/Real_%28Non-Ideal%29_Systems/Salting_Out</p>
+        </div>
+
+        <div class="box">
+            <strong>[6] Métodos de separación y purificación</strong>
+            <p>J. P. Reyes Grajeda, "Métodos de Separación y Purificación de proteínas," Instituto Nacional de Medicina Genómica (INMEGEN), 2018. [Online]. Available: https://sae.inmegen.gob.mx/tema/formacion/upload/2018/8_M%C3%A9todos_de_Separaci%C3%B3n_y_Purificaci%C3%B3n_de_prote%C3%ADnas.pdf</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 24 — CIERRE CURSO -->
+<div class="slide cover">
+    <h1>Fin del Curso</h1>
+    <div class="line"></div>
+    <p class="subtitle">Aminoácidos, Péptidos y Proteínas</p>
+    <p class="meta">5 Horas Completadas | Bioquímica General</p>
+    <p class="help" style="margin-top:3rem;">¡Gracias por tu participación!</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">24</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9.,\-\s]/g,'')
+        .replace(/\s+/g,' ');
+}
+
+const ex1Data = [
+    {
+        q: "En la desnaturalización, ¿qué nivel estructural permanece intacto?",
+        opts: ["Secundaria", "Terciaria", "Primaria", "Cuaternaria"],
+        correct: 2
+    },
+    {
+        q: "¿Cuál agente rompe puentes de hidrógeno sin afectar la estructura primaria?",
+        opts: ["Calor extremo", "Urea", "Ácido clorhídrico concentrado", "Tripsina"],
+        correct: 1
+    },
+    {
+        q: "El salting out ocurre a:",
+        opts: ["Baja fuerza iónica", "Alta fuerza iónica", "pH neutro siempre", "Temperatura baja"],
+        correct: 1
+    },
+    {
+        q: "Según la serie de Hofmeister, el anión más efectivo para salting out es:",
+        opts: ["Cl⁻", "SO₄²⁻", "I⁻", "NO₃⁻"],
+        correct: 1
+    },
+    {
+        q: "La cromatografía de exclusión molecular separa proteínas por:",
+        opts: ["Carga", "Tamaño", "Hidrofobicidad", "Afinidad específica"],
+        correct: 1
+    },
+    {
+        q: "¿Qué tipo de cromatografía usa un ligando específico inmovilizado?",
+        opts: ["Exclusión molecular", "Intercambio iónico", "Fase reversa", "Afinidad"],
+        correct: 3
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+const ex2Data = [
+    { q: "La sal más comúnmente usada para salting out es sulfato de __________.", a: "amonio" },
+    { q: "La fuerza iónica se calcula como I = ½ Σ cᵢ __________² (completar con símbolo).", a: "zi" },
+    { q: "La cromatografía de __________ molecular separa por tamaño (SEC).", a: "exclusion" },
+    { q: "En intercambio iónico, la matriz DEAE tiene carga __________ (positiva/negativa).", a: "positiva" },
+    { q: "La cromatografía de fase reversa separa moléculas según su __________.", a: "hidrofobicidad" },
+    { q: "Para purificar una proteína completamente se suelen __________ varios métodos cromatográficos.", a: "combinar" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function selMC(prefix, qi, oi) {
+    const data = ex1Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        const userVal = normalise(inp.value);
+        const correctVal = normalise(item.a);
+        if (userVal === correctVal) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+</script>
+</body>
+</html>

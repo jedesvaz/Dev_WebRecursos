@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bioquímica - Proteínas (Módulo 2)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:#0a1929; color:#e3f2fd; overflow:hidden;
+        }
+        .container { width:100vw; height:100vh; position:relative; }
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.5rem 6rem; flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* PORTADA */
+        .cover {
+            background:linear-gradient(135deg,#01579b 0%,#0277bd 40%,#0288d1 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-120px; right:-120px; width:380px; height:380px;
+            border-radius:50%; background:rgba(41,182,246,0.12);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-80px; left:-80px; width:280px; height:280px;
+            border-radius:50%; background:rgba(41,182,246,0.08);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.4rem; font-weight:900; line-height:1.2;
+            margin-bottom:1.2rem; position:relative; z-index:1;
+        }
+        .cover .subtitle {
+            font-size:1.3rem; opacity:0.88;
+            position:relative; z-index:1;
+        }
+        .cover .line {
+            width:90px; height:3px; background:#81d4fa;
+            margin:1.8rem auto; position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            opacity:0.65; position:relative; z-index:1;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            opacity:0.55; position:relative; z-index:1;
+        }
+
+        /* SLIDES */
+        .slide-header { margin-bottom:1.3rem; flex-shrink:0; }
+        .slide-number {
+            color:#29b6f6; font-size:0.8rem; font-weight:700;
+            letter-spacing:2.5px; text-transform:uppercase; margin-bottom:0.4rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.2rem; color:#e3f2fd;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.35rem; color:#29b6f6; margin:1.2rem 0 0.7rem;
+        }
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(41,182,246,0.08); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#29b6f6; border-radius:3px; }
+
+        p { font-size:1.02rem; line-height:1.7; margin-bottom:1.1rem; opacity:0.93; }
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:0.98rem; line-height:1.6; margin-bottom:0.6rem;
+            padding-left:1.5rem; position:relative; opacity:0.91;
+        }
+        ul li::before {
+            content:'▸'; position:absolute; left:0;
+            color:#29b6f6; font-weight:bold;
+        }
+
+        .box {
+            background:rgba(41,182,246,0.08); border-left:4px solid #29b6f6;
+            padding:1.2rem 1.4rem; margin:1.2rem 0; border-radius:0 7px 7px 0;
+        }
+        .box strong { color:#29b6f6; display:block; margin-bottom:0.4rem; font-size:1.02rem; }
+        .box p { margin-bottom:0.35rem; }
+        .box-warn { background:rgba(255,167,38,0.09); border-left-color:#ffa726; }
+        .box-warn strong { color:#ffa726; }
+        .box-success { background:rgba(102,187,106,0.09); border-left-color:#66bb6a; }
+        .box-success strong { color:#66bb6a; }
+
+        .grid { display:grid; gap:1.1rem; margin:1.1rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+        .card {
+            background:rgba(255,255,255,0.045); padding:1.2rem;
+            border-radius:9px; border:1px solid rgba(41,182,246,0.2);
+        }
+        .card h4 { color:#29b6f6; margin-bottom:0.5rem; font-size:1.06rem; }
+        .card p { font-size:0.95rem; margin-bottom:0.3rem; }
+        .card-accent { border-color:rgba(41,182,246,0.4); background:rgba(41,182,246,0.07); }
+
+        .em { color:#29b6f6; font-weight:700; }
+        .em-warn { color:#ffa726; font-weight:700; }
+        .em-success { color:#66bb6a; font-weight:700; }
+
+        table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+        th,td { padding:0.7rem 0.9rem; text-align:left; border-bottom:1px solid rgba(41,182,246,0.16); }
+        th { background:rgba(41,182,246,0.12); color:#29b6f6; font-weight:700; font-size:0.88rem; letter-spacing:0.4px; }
+        tr:last-child td { border-bottom:none; }
+
+        .formula {
+            background:rgba(255,255,255,0.05); padding:1rem 1.5rem;
+            border-radius:8px; border:1px solid rgba(41,182,246,0.25);
+            font-family:monospace; font-size:1.05rem; text-align:center;
+            margin:1rem 0; color:#81d4fa;
+        }
+
+        .exercise-badge {
+            background:linear-gradient(135deg,#0277bd,#29b6f6);
+            color:#fff; padding:0.3rem 1.2rem; border-radius:24px;
+            display:inline-block; font-weight:800; font-size:0.8rem;
+            letter-spacing:1.5px; box-shadow:0 3px 10px rgba(41,182,246,0.35);
+        }
+
+        .exercise-input {
+            width:100%; background:rgba(255,255,255,0.055);
+            border:1px solid rgba(41,182,246,0.3); border-radius:7px;
+            padding:0.6rem 0.9rem; color:#e3f2fd; font-size:0.95rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#29b6f6; background:rgba(41,182,246,0.08); }
+        .exercise-input.correct { border-color:#66bb6a; background:rgba(102,187,106,0.12); }
+        .exercise-input.incorrect { border-color:#ef5350; background:rgba(239,83,80,0.12); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.95rem; opacity:0.91; display:block; }
+        .exercise-q .qnum { color:#29b6f6; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#0277bd; border:none; color:#fff;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#29b6f6; transform:scale(1.05); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(41,182,246,0.4); color:#29b6f6; }
+        .ex-btn-sec:hover { background:rgba(41,182,246,0.12); border-color:#29b6f6; }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(102,187,106,0.12); border:1px solid rgba(102,187,106,0.35); color:#66bb6a; }
+        .feedback-msg.partial { background:rgba(255,167,38,0.09); border:1px solid rgba(255,167,38,0.35); color:#ffa726; }
+
+        .mc-option {
+            background:rgba(255,255,255,0.045); border:1px solid rgba(41,182,246,0.22);
+            border-radius:7px; padding:0.6rem 1rem; margin:0.35rem 0;
+            cursor:pointer; transition:all 0.22s; font-size:0.95rem;
+        }
+        .mc-option:hover { border-color:#29b6f6; background:rgba(41,182,246,0.08); }
+        .mc-option.selected { border-color:#29b6f6; background:rgba(41,182,246,0.13); }
+        .mc-option.correct-sel { border-color:#66bb6a; background:rgba(102,187,106,0.2); }
+        .mc-option.incorrect-sel { border-color:#ef5350; background:rgba(239,83,80,0.15); }
+
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; background:#0277bd; border:none;
+            border-radius:50%; color:#fff; font-size:1.35rem;
+            font-weight:bold; cursor:pointer; transition:all 0.3s;
+            box-shadow:0 4px 15px rgba(0,0,0,0.35);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); background:#29b6f6; }
+        .btn:disabled { opacity:0.28; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(10,25,41,0.92); padding:0.8rem 1.6rem;
+            border-radius:28px; border:2px solid #29b6f6;
+            color:#81d4fa; font-weight:700; z-index:1000; font-size:0.95rem;
+        }
+
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.4rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 — PORTADA -->
+<div class="slide cover active">
+    <h1>Péptidos y Proteínas<br>Módulo 2</h1>
+    <div class="line"></div>
+    <p class="subtitle">Enlace Peptídico, Funciones y Niveles Estructurales</p>
+    <p class="meta">Bioquímica General | Nivel: Intermedio | Horas 3-4</p>
+    <p class="help">👉 Usa las flechas o botones para navegar →</p>
+</div>
+
+<!-- SLIDE 2 — ÍNDICE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">MÓDULO 2</div>
+        <h2>Contenidos</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>2.4 Enlace Peptídico</h4>
+                <ul>
+                    <li>Reacción de condensación</li>
+                    <li>Carácter parcial de doble enlace</li>
+                    <li>Planaridad y rigidez</li>
+                    <li>Resonancia y estabilidad</li>
+                    <li>Extremos N y C-terminal</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>2.5 Funciones Fisiológicas</h4>
+                <ul>
+                    <li>Estructural</li>
+                    <li>Enzimática (catálisis)</li>
+                    <li>Hormonal y defensiva</li>
+                    <li>Transporte y reserva</li>
+                    <li>Reguladora, contráctil, homeostática</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card card-accent" style="margin-top:1rem;">
+            <h4>2.5 Estructura de Proteínas</h4>
+            <ul>
+                <li><strong>Primaria:</strong> secuencia de aminoácidos</li>
+                <li><strong>Secundaria:</strong> α-hélice, hoja β, giros, hélice de colágeno</li>
+                <li><strong>Terciaria:</strong> plegamiento 3D, proteínas fibrosas vs globulares, fuerzas estabilizadoras</li>
+                <li><strong>Cuaternaria:</strong> oligómeros, subunidades</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 — ENLACE PEPTÍDICO INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — ENLACE PEPTÍDICO</div>
+        <h2>Formación de Polipéptidos</h2>
+    </div>
+    <div class="content">
+        <p>Los aminoácidos se unen linealmente mediante <span class="em">enlaces peptídicos</span> para formar cadenas polipeptídicas.</p>
+
+        <div class="box">
+            <strong>🔗 Reacción de condensación</strong>
+            <p>El enlace peptídico se forma por la reacción entre el <strong>grupo carboxilo (−COOH)</strong> de un aminoácido y el <strong>grupo amino (−NH₂)</strong> del siguiente aminoácido.</p>
+        </div>
+
+        <div class="formula" style="font-size:0.95rem; text-align:left;">
+            R₁−CH(NH₂)−COOH + H−NH−CH(R₂)−COOH<br>
+            ↓ (+ activación por ATP)<br>
+            R₁−CH(NH₂)−CO−<span style="color:#ffa726;">NH</span>−CH(R₂)−COOH + <span style="color:#66bb6a;">H₂O</span>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>✅ Características</h4>
+                <ul>
+                    <li>Es una <strong>reacción de síntesis</strong> (vía deshidratación)</li>
+                    <li>Se <span class="em-success">libera una molécula de agua</span></li>
+                    <li>Requiere <strong>activación</strong> del grupo carboxilo (por ATP in vivo)</li>
+                    <li>El producto es un enlace <span class="em">amida</span> (−CO−NH−)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>🔄 Reacción inversa: hidrólisis</h4>
+                <p>El enlace peptídico puede romperse por <strong>hidrólisis</strong> (adición de agua):</p>
+                <div class="formula" style="font-size:0.85rem; margin-top:0.5rem;">
+                    −CO−NH− + H₂O → −COOH + H₂N−
+                </div>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">Catalizada por enzimas proteolíticas (tripsina, pepsina, etc.)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4 — NOMENCLATURA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — ENLACE PEPTÍDICO</div>
+        <h2>Nomenclatura de Péptidos</h2>
+    </div>
+    <div class="content">
+        <p>Según el número de aminoácidos unidos:</p>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>Dipéptido</h4>
+                <p><strong>2 aminoácidos</strong> unidos por 1 enlace peptídico</p>
+            </div>
+            <div class="card">
+                <h4>Tripéptido</h4>
+                <p><strong>3 aminoácidos</strong> unidos por 2 enlaces peptídicos</p>
+            </div>
+            <div class="card">
+                <h4>Tetrapéptido</h4>
+                <p><strong>4 aminoácidos</strong> unidos por 3 enlaces peptídicos</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Oligopéptido</h4>
+                <p>Cadena <strong>corta</strong> (generalmente <10 aminoácidos)</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Polipéptido</h4>
+                <p>Cadena <strong>larga</strong> (10-100 aminoácidos)</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Proteína</h4>
+                <p>Cadena muy larga (>100 aminoácidos) o varios polipéptidos asociados</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📌 Extremos de la cadena</strong>
+            <p>• <span class="em-success">Extremo N-terminal:</span> aminoácido con grupo amino libre (−NH₂)<br>
+            • <span class="em-warn">Extremo C-terminal:</span> aminoácido con grupo carboxilo libre (−COOH)</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Convención de escritura</strong>
+            <p>Las secuencias de péptidos siempre se escriben del <strong>extremo N-terminal al C-terminal</strong> (izquierda a derecha).<br>
+            Ejemplo: Gly-Ala-Ser-Val significa que Gly es el N-terminal y Val es el C-terminal.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5 — ENLACE PEPTÍDICO ESTRUCTURA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — ENLACE PEPTÍDICO</div>
+        <h2>Estructura del Enlace Peptídico</h2>
+    </div>
+    <div class="content">
+        <p>El enlace peptídico (−C−N−) tiene características especiales debido a la <span class="em">resonancia</span>.</p>
+
+        <div class="box box-warn">
+            <strong>⚡ Carácter parcial de doble enlace</strong>
+            <p>El enlace C−N del enlace peptídico tiene aproximadamente <strong>40% de carácter de doble enlace</strong> debido a la resonancia entre las formas:</p>
+            <div class="formula" style="font-size:0.9rem; margin-top:0.5rem;">
+                −C(=O)−NH− ↔ −C(−O⁻)=NH⁺−
+            </div>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Consecuencias estructurales</h4>
+                <ul>
+                    <li><strong>Planaridad:</strong> los 6 átomos (C=O, N-H y los dos Cα) están en el mismo plano</li>
+                    <li><strong>Rigidez:</strong> rotación restringida alrededor del enlace C−N</li>
+                    <li><strong>Distancia C−N acortada:</strong> 1.32 Å (vs 1.49 Å en aminas)</li>
+                    <li><strong>Configuración trans preferida:</strong> los Cα están en lados opuestos</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Implicaciones funcionales</h4>
+                <ul>
+                    <li>Limita las conformaciones posibles de la cadena</li>
+                    <li>Define la <strong>geometría local</strong> de la proteína</li>
+                    <li>Solo permite rotación libre alrededor de los enlaces Cα−C y Cα−N</li>
+                    <li>Importante para estructuras secundarias</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📐 Geometría del enlace peptídico</strong>
+            <p>• Longitud C−N: <strong>1.32 Å</strong><br>
+            • Ángulo del enlace: <strong>~123°</strong><br>
+            • Configuración: <strong>trans</strong> (>99% de los casos)<br>
+            • Excepción: Pro puede adoptar configuración <em>cis</em></p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6 — DIVERSIDAD PROTEICA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.4 — DIVERSIDAD</div>
+        <h2>Diversidad de Proteínas</h2>
+    </div>
+    <div class="content">
+        <p>Tanto la <span class="em">secuencia</span> como la <span class="em">longitud total</span> diferencian una proteína de otra.</p>
+
+        <div class="box box-success">
+            <strong>🔢 Cálculo combinatorio</strong>
+            <p>Para un octapéptido (8 aminoácidos):<br>
+            Número de secuencias posibles = <strong>20⁸ = 25,600,000,000</strong> (>25 mil millones)</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Proteínas (20 aa)</h4>
+                <p>• <strong>20 aminoácidos</strong> diferentes naturales<br>
+                • Secuencia define función<br>
+                • Octapéptido: <strong>20⁸ = 2.56 × 10¹⁰</strong> posibilidades<br>
+                • Diversidad <span class="em-success">enorme</span></p>
+            </div>
+            <div class="card">
+                <h4>Ácidos nucleicos (4 nucleótidos)</h4>
+                <p>• <strong>4 nucleótidos</strong> diferentes (A, T/U, G, C)<br>
+                • Octámero: <strong>4⁸ = 65,536</strong> posibilidades<br>
+                • Diversidad mucho menor</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>💡 Implicación biológica</strong>
+            <p>La enorme diversidad de secuencias proteicas permite la <strong>especialización funcional</strong>. Cada proteína tiene una secuencia única optimizada para su función específica.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>📝 Secuencia primaria</strong>
+            <p>La <strong>secuencia de aminoácidos</strong> (estructura primaria) está codificada genéticamente en el ADN. Un cambio de un solo aminoácido puede alterar completamente la función de una proteína (ej: anemia falciforme).</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 — FUNCIONES INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — FUNCIONES</div>
+        <h2>Funciones Fisiológicas de las Proteínas</h2>
+    </div>
+    <div class="content">
+        <p>Las proteínas son las <span class="em">moléculas más versátiles</span> de los seres vivos. Determinan la forma y estructura de las células y dirigen casi todos los procesos vitales.</p>
+
+        <div class="box">
+            <strong>🎯 Principio común</strong>
+            <p>Todas las proteínas realizan su función mediante <strong>unión selectiva a moléculas</strong>. La especificidad de unión determina la función.</p>
+        </div>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>🏗️ Estructural</h4>
+                <p>Soporte y forma</p>
+            </div>
+            <div class="card">
+                <h4>⚗️ Enzimática</h4>
+                <p>Catálisis</p>
+            </div>
+            <div class="card">
+                <h4>📡 Hormonal</h4>
+                <p>Señalización</p>
+            </div>
+            <div class="card">
+                <h4>🛡️ Defensiva</h4>
+                <p>Inmunidad</p>
+            </div>
+            <div class="card">
+                <h4>🚚 Transporte</h4>
+                <p>Movimiento de moléculas</p>
+            </div>
+            <div class="card">
+                <h4>📦 Reserva</h4>
+                <p>Almacenamiento</p>
+            </div>
+            <div class="card">
+                <h4>⚙️ Reguladora</h4>
+                <p>Control de procesos</p>
+            </div>
+            <div class="card">
+                <h4>💪 Contráctil</h4>
+                <p>Movimiento celular</p>
+            </div>
+            <div class="card">
+                <h4>⚖️ Homeostática</h4>
+                <p>Balance pH y osmótico</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 — FUNCIÓN ESTRUCTURAL -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — FUNCIONES</div>
+        <h2>Función Estructural</h2>
+    </div>
+    <div class="content">
+        <p>Las proteínas estructurales forman <strong>tejidos de sostén y relleno</strong> que confieren elasticidad y resistencia a órganos y tejidos.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Colágeno</h4>
+                <p>• Proteína <strong>más abundante</strong> en vertebrados (~30% del total)<br>
+                • Tejido conjuntivo fibroso<br>
+                • Tendones, ligamentos, piel, huesos<br>
+                • Estructura de triple hélice<br>
+                • Confiere <strong>resistencia mecánica</strong></p>
+            </div>
+            <div class="card card-accent">
+                <h4>Queratina</h4>
+                <p>• Tejido epitelial<br>
+                • Cabello, uñas, plumas, cuernos<br>
+                • Rica en cisteína (puentes disulfuro)<br>
+                • Confiere <strong>dureza y protección</strong><br>
+                • Tipos α y β</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📝 Otras proteínas estructurales</strong>
+            <p>• <strong>Elastina:</strong> tejido conjuntivo elástico (arterias, ligamentos, pulmones)<br>
+            • <strong>Reticulina:</strong> fibras reticulares en órganos linfoides<br>
+            • <strong>Histonas:</strong> estructura de cromosomas, regulación génica<br>
+            • <strong>Glucoproteínas de membrana:</strong> receptores, transporte</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Adaptación estructura-función</strong>
+            <p>Las proteínas estructurales poseen mayor cantidad de aminoácidos <strong>rígidos</strong> (Pro, Val) y que establecen <strong>enlaces fuertes</strong> (Cys con puentes disulfuro) para dar dureza.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9 — FUNCIÓN ENZIMÁTICA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — FUNCIONES</div>
+        <h2>Función Enzimática</h2>
+    </div>
+    <div class="content">
+        <p>Las <span class="em">enzimas</span> son las proteínas más especializadas y numerosas. Actúan como <strong>biocatalizadores</strong> que aceleran las reacciones químicas del metabolismo.</p>
+
+        <div class="box">
+            <strong>⚡ Mecanismo enzimático</strong>
+            <p>1. El <strong>sustrato</strong> se une al <span class="em">sitio activo</span> de la enzima<br>
+            2. La enzima estabiliza el <strong>estado de transición</strong><br>
+            3. Se reduce la <strong>energía de activación</strong><br>
+            4. La reacción se acelera varios órdenes de magnitud<br>
+            5. El producto se libera y la enzima queda intacta</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Características</h4>
+                <ul>
+                    <li><strong>Especificidad:</strong> transforman solo un sustrato o grupo funcional específico</li>
+                    <li><strong>Estereoespecificidad:</strong> distinguen entre enantiómeros</li>
+                    <li><strong>Eficiencia:</strong> aumentan velocidad 10⁶ - 10¹⁹ veces</li>
+                    <li><strong>Regulación:</strong> su actividad puede modularse</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Nomenclatura</h4>
+                <p>Generalmente terminan en <strong>"-asa"</strong>:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li><strong>Oxigenasas:</strong> transfieren O₂</li>
+                    <li><strong>Deshidrogenasas:</strong> transfieren H</li>
+                    <li><strong>Quinasas:</strong> transfieren fosfato (de ATP)</li>
+                    <li><strong>ADN polimerasa:</strong> sintetiza ADN</li>
+                    <li><strong>Proteasas:</strong> hidrolizan proteínas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Ejemplo específico</strong>
+            <p><strong>Glucoquinasa:</strong> fosforila glucosa en C6 para formar glucosa-6-fosfato (primera etapa de glucólisis).</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10 — FUNCIÓN HORMONAL Y DEFENSIVA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — FUNCIONES</div>
+        <h2>Función Hormonal y Defensiva</h2>
+    </div>
+    <div class="content">
+        <h3>Función hormonal</h3>
+        <p>Algunas hormonas son de naturaleza proteica y regulan procesos metabólicos.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Insulina</h4>
+                <p>• Hormona peptídica (51 aa, 2 cadenas)<br>
+                • Secretada por células β del páncreas<br>
+                • Regula <strong>niveles de glucosa</strong> en sangre<br>
+                • Promueve captación celular de glucosa<br>
+                • Estimula síntesis de glucógeno</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Glucagón</h4>
+                <p>• Hormona peptídica (29 aa)<br>
+                • Secretada por células α del páncreas<br>
+                • <strong>Antagonista</strong> de la insulina<br>
+                • Aumenta glucosa en sangre<br>
+                • Estimula glucogenólisis</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📝 Otras hormonas proteicas</strong>
+            <p>• <strong>Hormona del crecimiento (GH):</strong> crecimiento de tejidos y músculos<br>
+            • <strong>Calcitonina:</strong> regula metabolismo del calcio<br>
+            • <strong>ACTH, TSH, FSH, LH:</strong> hormonas de la hipófisis</p>
+        </div>
+
+        <h3>Función defensiva</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Anticuerpos (Inmunoglobulinas)</h4>
+                <p>Reconocen y neutralizan antígenos específicos (patógenos, toxinas)</p>
+            </div>
+            <div class="card">
+                <h4>Otras proteínas defensivas</h4>
+                <p>• <strong>Fibrinógeno/Trombina:</strong> coagulación<br>
+                • <strong>Mucinas:</strong> protección de mucosas<br>
+                • <strong>Toxinas bacterianas:</strong> defensa de bacterias</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11 — OTRAS FUNCIONES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — FUNCIONES</div>
+        <h2>Transporte, Reserva y Otras Funciones</h2>
+    </div>
+    <div class="content">
+        <h3>Función de transporte</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Hemoglobina</h4>
+                <p>Transporta <strong>O₂</strong> en la sangre de vertebrados (4 subunidades, grupo hemo)</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Mioglobina</h4>
+                <p>Almacena <strong>O₂</strong> en músculos (1 subunidad, grupo hemo)</p>
+            </div>
+            <div class="card">
+                <h4>Hemocianina</h4>
+                <p>Transporta O₂ en invertebrados (usa Cu en lugar de Fe)</p>
+            </div>
+            <div class="card">
+                <h4>Lipoproteínas</h4>
+                <p>Transportan <strong>lípidos</strong> por la sangre (HDL, LDL, VLDL)</p>
+            </div>
+        </div>
+
+        <h3>Función de reserva</h3>
+        <div class="box">
+            <strong>📦 Almacenamiento de aminoácidos</strong>
+            <p>• <strong>Ovoalbúmina:</strong> clara de huevo (reserva para embrión)<br>
+            • <strong>Lactoalbúmina:</strong> leche (nutrición del lactante)<br>
+            • <strong>Gliadina:</strong> trigo (reserva para germinación)<br>
+            • <strong>Hordeína:</strong> cebada</p>
+        </div>
+
+        <h3>Función reguladora, contráctil y homeostática</h3>
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>Reguladora</h4>
+                <p>• Ciclina (división celular)<br>
+                • Factores de transcripción</p>
+            </div>
+            <div class="card">
+                <h4>Contráctil</h4>
+                <p>• <strong>Actina y miosina</strong> (contracción muscular)<br>
+                • Dineína (movimiento de cilios)</p>
+            </div>
+            <div class="card">
+                <h4>Homeostática</h4>
+                <p>Mantienen pH y equilibrio osmótico como <strong>amortiguadores</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12 — ESTRUCTURA PRIMARIA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA</div>
+        <h2>Estructura Primaria</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">estructura primaria</span> es la <strong>secuencia lineal de aminoácidos</strong> en la cadena polipeptídica.</p>
+
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>Está determinada por el <strong>número de aminoácidos</strong> presentes y el <strong>orden</strong> en que están enlazados mediante enlaces peptídicos.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Características</h4>
+                <ul>
+                    <li>Codificada genéticamente en el <strong>ADN</strong></li>
+                    <li>Especificada por el <strong>código genético</strong></li>
+                    <li>Enlaces <strong>covalentes</strong> (enlaces peptídicos)</li>
+                    <li>Unidad repetitiva: (−NH−Cα−CO−)</li>
+                    <li>Cadena principal + cadenas laterales (R)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Importancia</h4>
+                <ul>
+                    <li>Determina la <strong>función</strong> de la proteína</li>
+                    <li>Determina el <strong>plegamiento</strong> (estructura 3D)</li>
+                    <li>Esencial para entender enfermedades genéticas</li>
+                    <li>Un cambio puede alterar completamente la función</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Enfermedades genéticas</strong>
+            <p><strong>Anemia falciforme:</strong> mutación Glu → Val en posición 6 de la β-globina<br>
+            Este único cambio causa deformación de eritrocitos y graves problemas de salud.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Posibilidades ilimitadas</strong>
+            <p>Para una proteína de <strong>n</strong> aminoácidos: <strong>20ⁿ</strong> secuencias posibles.<br>
+            Ejemplo: proteína de 100 aa → 20¹⁰⁰ ≈ 10¹³⁰ posibilidades (más que átomos en el universo).</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13 — ESTRUCTURA SECUNDARIA INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA</div>
+        <h2>Estructura Secundaria</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">estructura secundaria</span> es el <strong>plegamiento regular y local</strong> que adopta la cadena polipeptídica debido a la formación de puentes de hidrógeno entre átomos del enlace peptídico.</p>
+
+        <div class="box">
+            <strong>🔗 Puentes de hidrógeno</strong>
+            <p>Se establecen entre:<br>
+            • Grupo <strong>−C=O</strong> (aceptor de H)<br>
+            • Grupo <strong>−NH−</strong> (donador de H)</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Tipos principales</h4>
+                <ul>
+                    <li><strong>α-hélice</strong> — enrollamiento helicoidal</li>
+                    <li><strong>Hoja β (β-plegada)</strong> — conformación extendida</li>
+                    <li><strong>Giros β</strong> — cambios de dirección</li>
+                    <li><strong>Hélice de colágeno</strong> — caso especial</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Características</h4>
+                <ul>
+                    <li>Conformaciones de <strong>mínima energía</strong></li>
+                    <li>Estabilizadas por <strong>puentes de H</strong> (no covalentes)</li>
+                    <li>Periódicas y regulares</li>
+                    <li>No involucran cadenas laterales (solo esqueleto)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Nota importante</strong>
+            <p>La estructura secundaria solo involucra interacciones entre átomos de la <strong>cadena principal</strong> (esqueleto), no las cadenas laterales R (excepto Pro que restringe conformación).</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14 — ALFA HÉLICE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA SECUNDARIA</div>
+        <h2>α-Hélice</h2>
+    </div>
+    <div class="content">
+        <p>La cadena polipeptídica se <span class="em">enrolla en espiral</span> sobre sí misma debido a giros producidos en el carbono-α.</p>
+
+        <div class="box box-success">
+            <strong>✅ Características de la α-hélice</strong>
+            <p>• Cada vuelta de hélice: <strong>3.6 aminoácidos</strong><br>
+            • Paso de rosca: <strong>0.54 nm</strong> (5.4 Å)<br>
+            • Puente de H entre aa en posición <strong>n</strong> y aa en posición <strong>n+4</strong><br>
+            • Configuración: generalmente <strong>dextrógira</strong> (mano derecha)<br>
+            • Cadenas laterales R apuntan hacia <strong>fuera</strong> de la hélice</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Estabilización</h4>
+                <p>Cada enlace peptídico participa en <strong>dos puentes de H</strong>:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>−CO de aa(n) con −NH de aa(n+4)</li>
+                    <li>−NH de aa(n) con −CO de aa(n-4)</li>
+                </ul>
+                <p style="margin-top:0.5rem;">Esto maximiza la estabilidad.</p>
+            </div>
+            <div class="card">
+                <h4>Aminoácidos compatibles</h4>
+                <p>Puede albergar <strong>cualquier aminoácido</strong>, excepto:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li><span class="em-warn">Prolina:</span> su Cα integrado en heterociclo no permite rotación libre</li>
+                    <li><span class="em-warn">Lys, Glu</span> (a ciertos pH): repulsiones electrostáticas desestabilizan</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📐 Geometría</strong>
+            <p>• Ángulo φ (phi) ≈ −60°<br>
+            • Ángulo ψ (psi) ≈ −45 a −50°<br>
+            • Estructura muy compacta y estable</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15 — HOJA BETA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA SECUNDARIA</div>
+        <h2>Hoja β (β-plegada)</h2>
+    </div>
+    <div class="content">
+        <p>La cadena principal se <span class="em">estira al máximo</span>, adoptando una configuración espacial extendida llamada estructura β.</p>
+
+        <div class="box">
+            <strong>📏 Conformación β</strong>
+            <p>• Cadena polipeptídica <strong>extendida</strong> (casi lineal)<br>
+            • Cadenas laterales R alternan <strong>arriba y abajo</strong> del plano<br>
+            • Se representa como una <strong>flecha</strong> en diagramas<br>
+            • Varias hebras β se asocian formando <strong>hojas plegadas</strong></p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Hoja β paralela</h4>
+                <p>• Las hebras β tienen el <strong>mismo sentido</strong> (N→C en misma dirección)<br>
+                • Puentes de H <strong>menos lineales</strong><br>
+                • Menos estable que antiparalela</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Hoja β antiparalela</h4>
+                <p>• Las hebras β tienen <strong>sentidos opuestos</strong><br>
+                • Puentes de H <strong>más lineales y fuertes</strong><br>
+                • Más estable<br>
+                • Más común en proteínas</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Estabilización</strong>
+            <p>Los puentes de hidrógeno se forman <strong>entre</strong> diferentes hebras β (interacciones intercatenarias), no dentro de la misma hebra como en α-hélice.</p>
+        </div>
+
+        <div class="box">
+            <strong>💡 Ejemplos</strong>
+            <p>• <strong>Fibroína de la seda:</strong> estructura β antiparalela le da resistencia y flexibilidad<br>
+            • <strong>Inmunoglobulinas:</strong> dominios β abundantes</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16 — GIROS Y COLÁGENO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA SECUNDARIA</div>
+        <h2>Giros β y Hélice de Colágeno</h2>
+    </div>
+    <div class="content">
+        <h3>Giros β (β-turns)</h3>
+        <p>Secuencias cortas que conectan segmentos de α-hélice o hoja β, imponiendo un <strong>giro brusco de 180°</strong> a la cadena.</p>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Características</h4>
+                <ul>
+                    <li>Involucran típicamente <strong>4 aminoácidos</strong></li>
+                    <li>Puente de H entre residuos <strong>1 y 4</strong></li>
+                    <li>Permiten que la cadena cambie de dirección</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Aminoácidos frecuentes</h4>
+                <p><strong>Gly, Asn, Pro</strong> son comunes en giros β porque:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Se acomodan mal en α o β</li>
+                    <li>Pro introduce quiebres</li>
+                    <li>Gly es muy flexible</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Hélice de colágeno</h3>
+        <div class="box box-warn">
+            <strong>🔬 Estructura especial del colágeno</strong>
+            <p>• Secuencia repetitiva: <strong>(Gly-Pro-X)ₙ</strong> o <strong>(Gly-X-Hyp)ₙ</strong><br>
+            • Cada cadena forma una <strong>hélice levógira</strong> (izquierda)<br>
+            • <strong>Tres</strong> hélices levógiras se enrollan formando una <strong>superhélice dextrógira</strong><br>
+            • Gly (sin cadena lateral) permite proximidad entre hélices<br>
+            • Pro y Hyp (hidroxiprolina) estabilizan la estructura<br>
+            • Muy rígida → función estructural</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17 — ESTRUCTURA TERCIARIA INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA</div>
+        <h2>Estructura Terciaria</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">estructura terciaria</span> es la <strong>disposición tridimensional de todos los átomos</strong> que componen la proteína. Es la conformación absoluta de la proteína.</p>
+
+        <div class="box">
+            <strong>🎯 Importancia</strong>
+            <p>La estructura terciaria es <strong>responsable directa de las propiedades biológicas</strong> de la proteína, ya que la disposición espacial de los grupos funcionales determina su interacción con ligandos.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Proteínas fibrosas</h4>
+                <p>• Una dimensión >> otras dos<br>
+                • Forma alargada (hebra, fibra)<br>
+                • Función principalmente <strong>estructural</strong><br>
+                • Ejemplos: colágeno, queratina, fibroína<br>
+                • Insolubles en agua<br>
+                • Resistentes mecánicamente</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Proteínas globulares</h4>
+                <p>• Forma aproximadamente <strong>esférica</strong><br>
+                • No hay dimensión predominante<br>
+                • Función <strong>dinámica</strong> (enzimas, transporte, etc.)<br>
+                • Ejemplos: hemoglobina, enzimas, anticuerpos<br>
+                • Solubles en agua<br>
+                • Centro hidrofóbico, superficie polar</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Organización en proteínas globulares</strong>
+            <p>• Cadenas laterales <strong>apolares</strong> → interior (núcleo hidrofóbico)<br>
+            • Cadenas laterales <strong>polares</strong> → superficie (contacto con agua)<br>
+            • Sucesión de: α-hélice, hoja β, giros, regiones al azar</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 18 — FUERZAS ESTABILIZADORAS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA TERCIARIA</div>
+        <h2>Fuerzas Estabilizadoras</h2>
+    </div>
+    <div class="content">
+        <p>La estructura terciaria se mantiene por interacciones entre las <span class="em">cadenas laterales</span> de los aminoácidos.</p>
+
+        <h3>Enlaces covalentes</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Puentes disulfuro (−S−S−)</h4>
+                <p>• Entre dos residuos de <strong>cisteína</strong><br>
+                • Enlace covalente fuerte<br>
+                • Aporta gran estabilidad<br>
+                • Común en proteínas extracelulares</p>
+            </div>
+            <div class="card">
+                <h4>Enlaces amida</h4>
+                <p>• Entre −COOH de Asp/Glu y −NH₂ de Lys<br>
+                • Menos frecuentes<br>
+                • Contribuyen a estabilidad</p>
+            </div>
+        </div>
+
+        <h3>Enlaces no covalentes</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de interacción</th>
+                    <th>Descripción</th>
+                    <th>Fuerza relativa</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Fuerzas electrostáticas</strong></td>
+                    <td>Entre cadenas ionizadas con cargas opuestas (Lys⁺ con Asp⁻)</td>
+                    <td>Media</td>
+                </tr>
+                <tr>
+                    <td><strong>Puentes de hidrógeno</strong></td>
+                    <td>Entre cadenas laterales polares (Ser-OH con Asn-NH₂)</td>
+                    <td>Media</td>
+                </tr>
+                <tr>
+                    <td><strong>Interacciones hidrofóbicas</strong></td>
+                    <td>Entre cadenas apolares en el núcleo (Leu, Val, Phe)</td>
+                    <td><span class="em-success">Más importante</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Fuerzas de van der Waals</strong></td>
+                    <td>Dipolo-dipolo entre grupos próximos</td>
+                    <td>Débil (individualmente)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box-success">
+            <strong>✅ Contribución relativa</strong>
+            <p>Las <strong>interacciones hidrofóbicas</strong> son las más importantes porque exigen gran proximidad entre grupos apolares, colapsando el centro de la proteína.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 19 — DOMINIOS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA TERCIARIA</div>
+        <h2>Dominios Proteicos</h2>
+    </div>
+    <div class="content">
+        <p>Existen <span class="em">regiones diferenciadas</span> dentro de la estructura terciaria que actúan como <strong>unidades autónomas</strong> de plegamiento.</p>
+
+        <div class="box">
+            <strong>📌 Definición de dominio</strong>
+            <p>Un <strong>dominio</strong> es una región de la proteína que:<br>
+            • Se pliega de forma <strong>independiente</strong><br>
+            • Tiene estructura y función <strong>semi-autónoma</strong><br>
+            • Puede conservarse evolutivamente en diferentes proteínas<br>
+            • Representa un nivel estructural intermedio entre estructura 2ª y 3ª</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Características</h4>
+                <ul>
+                    <li>Típicamente 40-350 aminoácidos</li>
+                    <li>Se pliegan <strong>durante la síntesis</strong> de la cadena</li>
+                    <li>Pueden tener función específica</li>
+                    <li>Conectados por regiones flexibles</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Ejemplos</h4>
+                <p>• <strong>Inmunoglobulinas:</strong> múltiples dominios β<br>
+                • <strong>Kinasas:</strong> dominio catalítico + dominio regulador<br>
+                • <strong>Receptores:</strong> dominio extracelular + transmembrana + intracelular</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Ventaja evolutiva</strong>
+            <p>Los dominios pueden <strong>mezclarse y combinarse</strong> (shuffling de dominios) para crear nuevas proteínas con funciones combinadas.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 20 — ESTRUCTURA CUATERNARIA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA</div>
+        <h2>Estructura Cuaternaria</h2>
+    </div>
+    <div class="content">
+        <p>Cuando una proteína consta de <strong>más de una cadena polipeptídica</strong> (proteína oligomérica), decimos que tiene <span class="em">estructura cuaternaria</span>.</p>
+
+        <div class="box">
+            <strong>📌 Elementos de la estructura cuaternaria</strong>
+            <p>1. <strong>Número y naturaleza</strong> de las subunidades o monómeros<br>
+            2. <strong>Forma de asociación</strong> espacial para formar el oligómero</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Nomenclatura</h4>
+                <ul>
+                    <li><strong>Monómero:</strong> una subunidad</li>
+                    <li><strong>Dímero:</strong> dos subunidades</li>
+                    <li><strong>Tetrámero:</strong> cuatro subunidades</li>
+                    <li><strong>Oligómero:</strong> varias subunidades</li>
+                    <li><strong>Homodímero:</strong> subunidades iguales</li>
+                    <li><strong>Heterodímero:</strong> subunidades diferentes</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Estabilización</h4>
+                <p>Interacciones <strong>no covalentes</strong> principalmente:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Puentes de hidrógeno</li>
+                    <li>Interacciones hidrofóbicas</li>
+                    <li>Puentes salinos</li>
+                    <li>Ocasionalmente: puentes disulfuro (inmunoglobulinas)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Ejemplo: Hemoglobina</strong>
+            <p>• <strong>Tetrámero:</strong> 2 subunidades α + 2 subunidades β (α₂β₂)<br>
+            • Cada subunidad tiene un grupo hemo (transporta O₂)<br>
+            • Cooperatividad entre subunidades (alosterismo)<br>
+            • Estructura cuaternaria esencial para su función</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 21 — CUATERNARIA EJEMPLOS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2.5 — ESTRUCTURA CUATERNARIA</div>
+        <h2>Tipos de Asociación en Oligómeros</h2>
+    </div>
+    <div class="content">
+        <h3>Proteínas fibrosas</h3>
+        <div class="box">
+            <strong>🧵 Asociación de hebras</strong>
+            <p>• <strong>Miosina, tropomiosina:</strong> 2 hebras α en fibra levógira<br>
+            • <strong>α-queratina, fibrinógeno:</strong> 3 hebras en fibra levógira<br>
+            • <strong>Colágeno:</strong> 3 hélices levógiras forman superhélice dextrógira<br>
+            • <strong>Fibroína (seda):</strong> varias hebras β antiparalelas</p>
+        </div>
+
+        <h3>Proteínas globulares</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de subunidades</th>
+                    <th>Características</th>
+                    <th>Ejemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Exactamente iguales</strong></td>
+                    <td>Homomultímero, misma secuencia</td>
+                    <td>Fosfoglucoisomerasa, hexoquinasa</td>
+                </tr>
+                <tr>
+                    <td><strong>Muy parecidas</strong></td>
+                    <td>Isoformas con función similar</td>
+                    <td>Lactato deshidrogenasa (LDH)</td>
+                </tr>
+                <tr>
+                    <td><strong>Diferentes, misma función</strong></td>
+                    <td>Heteromultímero con función común</td>
+                    <td>Hemoglobina (α₂β₂)</td>
+                </tr>
+                <tr>
+                    <td><strong>Estructural y funcionalmente distintas</strong></td>
+                    <td>Forman unidad funcional compleja</td>
+                    <td>Aspartato transcarbamilasa (6 catalíticas + 6 reguladoras)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box-warn">
+            <strong>💡 Importancia funcional</strong>
+            <p>La estructura cuaternaria <strong>modula la actividad biológica</strong>. La separación de subunidades a menudo conduce a la <strong>pérdida de funcionalidad</strong>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 22 — EJERCICIO 1 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Enlace Peptídico y Funciones</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta para cada pregunta.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 23 — EJERCICIO 2 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Estructura de Proteínas</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 24 — RESUMEN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">RESUMEN MÓDULO 2</div>
+        <h2>Puntos Clave</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Enlace Peptídico</h4>
+                <ul>
+                    <li>Reacción de condensación (libera H₂O)</li>
+                    <li>Carácter parcial de doble enlace (40%)</li>
+                    <li>Planaridad y rigidez</li>
+                    <li>Configuración trans preferida</li>
+                    <li>Extremos N y C-terminal</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Funciones</h4>
+                <ul>
+                    <li>Estructural (colágeno, queratina)</li>
+                    <li>Enzimática (catálisis)</li>
+                    <li>Hormonal (insulina, glucagón)</li>
+                    <li>Defensiva (anticuerpos)</li>
+                    <li>Transporte (hemoglobina)</li>
+                    <li>Otras: reserva, reguladora, contráctil, homeostática</li>
+                </ul>
+            </div>
+        </div>
+        <div class="grid grid-2" style="margin-top:1rem;">
+            <div class="card card-accent">
+                <h4>Estructura 1ª y 2ª</h4>
+                <p><strong>Primaria:</strong> secuencia de aa (enlaces peptídicos covalentes)</p>
+                <p style="margin-top:0.5rem;"><strong>Secundaria:</strong> plegamiento local (puentes H)</p>
+                <ul style="margin-top:0.3rem;">
+                    <li>α-hélice (3.6 aa/vuelta)</li>
+                    <li>Hoja β (paralela/antiparalela)</li>
+                    <li>Giros β, hélice de colágeno</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Estructura 3ª y 4ª</h4>
+                <p><strong>Terciaria:</strong> plegamiento 3D completo</p>
+                <ul style="margin-top:0.3rem;">
+                    <li>Fibrosas vs globulares</li>
+                    <li>Fuerzas: puentes disulfuro, hidrofóbicas, electrostáticas, puentes H</li>
+                    <li>Dominios</li>
+                </ul>
+                <p style="margin-top:0.5rem;"><strong>Cuaternaria:</strong> asociación de subunidades (oligómeros)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 25 — CIERRE -->
+<div class="slide cover">
+    <h1>Fin del Módulo 2</h1>
+    <div class="line"></div>
+    <p class="subtitle">Próximo: Módulo 3 — Desnaturalización, Purificación y Aplicaciones</p>
+    <p class="meta">¿Preguntas?</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">25</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9.,\-\s]/g,'')
+        .replace(/\s+/g,' ');
+}
+
+const ex1Data = [
+    {
+        q: "El enlace peptídico se forma entre:",
+        opts: ["Grupo amino y grupo amino", "Grupo carboxilo y grupo carboxilo", "Grupo carboxilo de un aa y grupo amino del siguiente", "Cadenas laterales R"],
+        correct: 2
+    },
+    {
+        q: "¿Qué se libera en la formación del enlace peptídico?",
+        opts: ["CO₂", "H₂O", "NH₃", "ATP"],
+        correct: 1
+    },
+    {
+        q: "El enlace peptídico tiene carácter parcial de doble enlace debido a:",
+        opts: ["Puentes de hidrógeno", "Resonancia", "Enlaces iónicos", "Fuerzas de van der Waals"],
+        correct: 1
+    },
+    {
+        q: "¿Cuál es la principal función de las enzimas?",
+        opts: ["Transporte de oxígeno", "Catálisis (acelerar reacciones)", "Estructura celular", "Almacenar energía"],
+        correct: 1
+    },
+    {
+        q: "La hemoglobina cumple función de:",
+        opts: ["Estructura", "Transporte", "Defensa", "Catálisis"],
+        correct: 1
+    },
+    {
+        q: "El colágeno es una proteína con función:",
+        opts: ["Enzimática", "Estructural", "Hormonal", "Defensiva"],
+        correct: 1
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+const ex2Data = [
+    { q: "La secuencia de aminoácidos de una proteína se llama estructura __________.", a: "primaria" },
+    { q: "La α-hélice tiene aproximadamente __________ aminoácidos por vuelta.", a: "3.6" },
+    { q: "Los puentes de hidrógeno en la α-hélice se forman entre aminoácidos en posición n y n+__________.", a: "4" },
+    { q: "La hoja β más estable es la __________ (paralela/antiparalela).", a: "antiparalela" },
+    { q: "La fuerza más importante que estabiliza la estructura terciaria son las interacciones __________.", a: "hidrofobicas" },
+    { q: "Una proteína formada por varias subunidades tiene estructura __________.", a: "cuaternaria" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function selMC(prefix, qi, oi) {
+    const data = ex1Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        const userVal = normalise(inp.value);
+        const correctVal = normalise(item.a);
+        if (!isNaN(parseFloat(userVal)) && !isNaN(parseFloat(correctVal))) {
+            if (Math.abs(parseFloat(userVal) - parseFloat(correctVal)) < 0.2) {
+                inp.classList.remove('incorrect'); inp.classList.add('correct');
+                correct++;
+            } else {
+                inp.classList.remove('correct'); inp.classList.add('incorrect');
+            }
+        } else if (userVal === correctVal) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+</script>
+</body>
+</html>
