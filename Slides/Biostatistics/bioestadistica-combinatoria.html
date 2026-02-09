@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combinatoria - Bioestadística</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:linear-gradient(135deg,#e8f4f8 0%,#f0f8ff 50%,#ffffff 100%);
+            color:#2c3e50; overflow:hidden;
+        }
+        .container { width:100vw; height:100vh; position:relative; }
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.5rem 6rem; flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* PORTADA */
+        .cover {
+            background:linear-gradient(135deg,#a8d8ea 0%,#d4e9f7 40%,#f0f8ff 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-100px; right:-100px; width:350px; height:350px;
+            border-radius:50%; background:rgba(168,216,234,0.15);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-70px; left:-70px; width:250px; height:250px;
+            border-radius:50%; background:rgba(168,216,234,0.1);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.6rem; font-weight:900; line-height:1.2;
+            margin-bottom:1.2rem; position:relative; z-index:1;
+            color:#2c3e50;
+        }
+        .cover .subtitle {
+            font-size:1.35rem; opacity:0.85; color:#34495e;
+            position:relative; z-index:1;
+        }
+        .cover .line {
+            width:90px; height:3px; background:#5dade2;
+            margin:1.8rem auto; position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            opacity:0.65; position:relative; z-index:1; color:#34495e;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            opacity:0.55; position:relative; z-index:1; color:#34495e;
+        }
+
+        /* SLIDES */
+        .slide-header { margin-bottom:1.3rem; flex-shrink:0; }
+        .slide-number {
+            color:#5dade2; font-size:0.8rem; font-weight:700;
+            letter-spacing:2.5px; text-transform:uppercase; margin-bottom:0.4rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.2rem; color:#2c3e50;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.35rem; color:#5dade2; margin:1.2rem 0 0.7rem;
+        }
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(93,173,226,0.1); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#5dade2; border-radius:3px; }
+
+        p { font-size:1.02rem; line-height:1.7; margin-bottom:1.1rem; color:#34495e; }
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:0.98rem; line-height:1.6; margin-bottom:0.6rem;
+            padding-left:1.5rem; position:relative; color:#34495e;
+        }
+        ul li::before {
+            content:'▸'; position:absolute; left:0;
+            color:#5dade2; font-weight:bold;
+        }
+
+        /* CAJAS */
+        .box {
+            background:rgba(93,173,226,0.08); border-left:4px solid #5dade2;
+            padding:1.2rem 1.4rem; margin:1.2rem 0; border-radius:0 7px 7px 0;
+        }
+        .box strong { color:#5dade2; display:block; margin-bottom:0.4rem; font-size:1.02rem; }
+        .box p { margin-bottom:0.35rem; }
+        .box-warn { background:rgba(230,126,34,0.08); border-left-color:#e67e22; }
+        .box-warn strong { color:#e67e22; }
+        .box-success { background:rgba(46,204,113,0.08); border-left-color:#2ecc71; }
+        .box-success strong { color:#2ecc71; }
+
+        /* GRIDS */
+        .grid { display:grid; gap:1.1rem; margin:1.1rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+        .card {
+            background:rgba(255,255,255,0.7); padding:1.2rem;
+            border-radius:9px; border:1px solid rgba(93,173,226,0.25);
+            box-shadow:0 2px 8px rgba(168,216,234,0.15);
+        }
+        .card h4 { color:#5dade2; margin-bottom:0.5rem; font-size:1.06rem; }
+        .card p { font-size:0.95rem; margin-bottom:0.3rem; }
+        .card-accent { border-color:rgba(93,173,226,0.5); background:rgba(168,216,234,0.12); }
+
+        .em { color:#5dade2; font-weight:700; }
+        .em-warn { color:#e67e22; font-weight:700; }
+        .em-success { color:#2ecc71; font-weight:700; }
+
+        /* TABLAS */
+        table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+        th,td { padding:0.7rem 0.9rem; text-align:left; border-bottom:1px solid rgba(93,173,226,0.2); }
+        th { background:rgba(93,173,226,0.15); color:#2c3e50; font-weight:700; font-size:0.88rem; letter-spacing:0.4px; }
+        tr:last-child td { border-bottom:none; }
+
+        /* FORMULA */
+        .formula {
+            background:rgba(255,255,255,0.8); padding:1.2rem 1.8rem;
+            border-radius:8px; border:2px solid rgba(93,173,226,0.3);
+            font-family:'Courier New',monospace; font-size:1.15rem; text-align:center;
+            margin:1.2rem 0; color:#2c3e50; font-weight:600;
+            box-shadow:0 2px 8px rgba(168,216,234,0.2);
+        }
+
+        /* BADGES */
+        .exercise-badge {
+            background:linear-gradient(135deg,#5dade2,#85c1e9);
+            color:#fff; padding:0.3rem 1.2rem; border-radius:24px;
+            display:inline-block; font-weight:800; font-size:0.8rem;
+            letter-spacing:1.5px; box-shadow:0 3px 10px rgba(93,173,226,0.3);
+        }
+
+        /* EJERCICIOS */
+        .exercise-input {
+            width:100%; background:rgba(255,255,255,0.9);
+            border:1px solid rgba(93,173,226,0.35); border-radius:7px;
+            padding:0.6rem 0.9rem; color:#2c3e50; font-size:0.95rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#5dade2; background:#fff; }
+        .exercise-input.correct { border-color:#2ecc71; background:rgba(46,204,113,0.1); }
+        .exercise-input.incorrect { border-color:#e74c3c; background:rgba(231,76,60,0.1); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.95rem; color:#34495e; display:block; }
+        .exercise-q .qnum { color:#5dade2; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#5dade2; border:none; color:#fff;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#3498db; transform:scale(1.05); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(93,173,226,0.5); color:#5dade2; }
+        .ex-btn-sec:hover { background:rgba(93,173,226,0.1); border-color:#5dade2; }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(46,204,113,0.15); border:1px solid rgba(46,204,113,0.4); color:#27ae60; }
+        .feedback-msg.partial { background:rgba(230,126,34,0.1); border:1px solid rgba(230,126,34,0.4); color:#d68910; }
+
+        .mc-option {
+            background:rgba(255,255,255,0.7); border:1px solid rgba(93,173,226,0.3);
+            border-radius:7px; padding:0.6rem 1rem; margin:0.35rem 0;
+            cursor:pointer; transition:all 0.22s; font-size:0.95rem; color:#34495e;
+        }
+        .mc-option:hover { border-color:#5dade2; background:rgba(93,173,226,0.12); }
+        .mc-option.selected { border-color:#5dade2; background:rgba(93,173,226,0.18); }
+        .mc-option.correct-sel { border-color:#2ecc71; background:rgba(46,204,113,0.2); }
+        .mc-option.incorrect-sel { border-color:#e74c3c; background:rgba(231,76,60,0.15); }
+
+        /* NAV */
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; background:#5dade2; border:none;
+            border-radius:50%; color:#fff; font-size:1.35rem;
+            font-weight:bold; cursor:pointer; transition:all 0.3s;
+            box-shadow:0 4px 15px rgba(93,173,226,0.35);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); background:#3498db; }
+        .btn:disabled { opacity:0.35; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(255,255,255,0.9); padding:0.8rem 1.6rem;
+            border-radius:28px; border:2px solid #5dade2;
+            color:#2c3e50; font-weight:700; z-index:1000; font-size:0.95rem;
+            box-shadow:0 2px 8px rgba(93,173,226,0.2);
+        }
+
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.4rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 — PORTADA -->
+<div class="slide cover active">
+    <h1>Combinatoria</h1>
+    <div class="line"></div>
+    <p class="subtitle">Técnicas de Conteo para Cálculo de Probabilidades</p>
+    <p class="meta">Bioestadística Aplicada | Nivel: Medio</p>
+    <p class="help">👉 Usa las flechas del teclado o los botones para navegar →</p>
+</div>
+
+<!-- SLIDE 2 — OBJETIVOS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">INTRODUCCIÓN</div>
+        <h2>Objetivos de la Sesión</h2>
+    </div>
+    <div class="content">
+        <div class="box box-success">
+            <strong>🎯 Objetivo principal</strong>
+            <p>Aprender <span class="em-success">técnicas de conteo</span> para ser aplicadas en el <strong>cálculo de probabilidades</strong>.</p>
+        </div>
+
+        <h3>¿Por qué es importante?</h3>
+        <p>En muchos problemas de probabilidades debemos:</p>
+        <ul>
+            <li><strong>Citar todas las alternativas posibles</strong> en una situación dada</li>
+            <li><strong>Determinar cuántas posibilidades diferentes existen</strong></li>
+        </ul>
+
+        <div class="box">
+            <strong>📊 La combinatoria proporciona...</strong>
+            <p>Los <strong>procedimientos y fórmulas necesarias</strong> para contar las posibilidades que hay de elegir un conjunto de elementos con determinadas características.</p>
+        </div>
+
+        <h3>Contenidos del tema</h3>
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>1. Regla de la multiplicación</h4>
+            </div>
+            <div class="card">
+                <h4>2-3. Permutaciones</h4>
+            </div>
+            <div class="card">
+                <h4>4-5. Variaciones</h4>
+            </div>
+            <div class="card">
+                <h4>6-7. Combinaciones</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 — REGLA MULTIPLICACIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1 — TÉCNICAS DE CONTEO</div>
+        <h2>Regla de la Multiplicación</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📌 Principio fundamental</strong>
+            <p>Si una operación consta de <strong>2 pasos</strong>, de los cuales:</p>
+            <ul style="margin-top:0.5rem;">
+                <li>El primer paso puede efectuarse de <strong>n₁ formas</strong></li>
+                <li>Para cada una de éstas, el segundo puede realizarse de <strong>n₂ formas</strong></li>
+            </ul>
+            <p style="margin-top:0.5rem;">Entonces toda la operación se lleva a cabo de:</p>
+        </div>
+
+        <div class="formula">
+            n₁ × n₂ maneras
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Generalización</strong>
+            <p>Si la operación consta de <strong>k pasos</strong> que pueden realizarse de n₁, n₂, n₃, ..., nₖ formas respectivamente, entonces el total de maneras es:</p>
+            <div class="formula" style="margin-top:0.5rem;">
+                n₁ × n₂ × n₃ × ... × nₖ
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4 — EJEMPLO VIAJE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1 — REGLA DE LA MULTIPLICACIÓN</div>
+        <h2>Ejemplo 1: Viaje de Vacaciones</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>Supóngase que alguien desea viajar en <strong>3 tipos de vehículos diferentes</strong> para un periodo de vacaciones, a una de <strong>5 ciudades de la costa</strong>. Determine el número de formas diferentes en que se logra esto.</p>
+        </div>
+
+        <h3>Solución</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Paso 1: Vehículo</h4>
+                <p>El vehículo se puede escoger de:</p>
+                <div class="formula" style="font-size:1rem;">
+                    n₁ = 3 formas
+                </div>
+            </div>
+            <div class="card card-accent">
+                <h4>Paso 2: Ciudad</h4>
+                <p>Las ciudades a visitar se pueden escoger de:</p>
+                <div class="formula" style="font-size:1rem;">
+                    n₂ = 5 formas
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Aplicando la regla de la multiplicación</strong>
+            <div class="formula">
+                Total = n₁ × n₂ = 3 × 5 = 15
+            </div>
+            <p style="margin-top:0.5rem;">Existen <span class="em-success">15 maneras diferentes</span> de visitar una ciudad en un tipo de vehículo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5 — EJEMPLO ALMUERZO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1 — REGLA DE LA MULTIPLICACIÓN</div>
+        <h2>Ejemplo 2: Menú de Almuerzo</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>¿Cuántos almuerzos diferentes se pueden formar si se componen de: <strong>sopa, plato de fondo, postre y bebida</strong>, pudiendo elegir entre:</p>
+            <ul style="margin-top:0.5rem;">
+                <li>4 tipos de sopas</li>
+                <li>3 clases de plato de fondo</li>
+                <li>5 tipos de postres</li>
+                <li>4 tipos de bebidas diferentes</li>
+            </ul>
+        </div>
+
+        <h3>Solución</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Identificación de pasos</h4>
+                <ul>
+                    <li>Sopas: <strong>n₁ = 4</strong></li>
+                    <li>Platos: <strong>n₂ = 3</strong></li>
+                    <li>Postres: <strong>n₃ = 5</strong></li>
+                    <li>Bebidas: <strong>n₄ = 4</strong></li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Cálculo</h4>
+                <div class="formula" style="font-size:1rem;">
+                    Total = 4 × 3 × 5 × 4
+                </div>
+                <div class="formula" style="font-size:1.2rem; margin-top:0.5rem;">
+                    = 240
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>Se pueden formar <span class="em-success">240 almuerzos diferentes</span>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6 — PERMUTACIONES SIN REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2 — PERMUTACIONES</div>
+        <h2>Permutaciones sin Elementos Repetidos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>Al tomar <strong>todos los elementos</strong> de un conjunto finito y ordenarlos de todas las maneras posibles, tendremos una <span class="em">permutación</span>.</p>
+            <p style="margin-top:0.5rem;">Con <strong>n elementos</strong>, se ordenan de todas las maneras, <strong>sin dejar ninguno fuera</strong>.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Ejemplo conceptual</strong>
+            <p>Si se tienen las letras <strong>a, b, c</strong>, sus ordenaciones son:</p>
+            <div class="formula" style="font-size:1rem;">
+                abc, acb, bac, bca, cab, cba
+            </div>
+            <p style="margin-top:0.5rem;">En total, <strong>6 maneras</strong> de ordenar las 3 letras.</p>
+        </div>
+
+        <h3>Fórmulas según tipo de ordenación</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Ordenación lineal (en fila)</h4>
+                <div class="formula" style="font-size:1.1rem;">
+                    Pₙ = n!
+                </div>
+                <p style="margin-top:0.5rem;">Donde:</p>
+                <div class="formula" style="font-size:0.95rem;">
+                    n! = 1 × 2 × 3 × ... × n
+                </div>
+            </div>
+            <div class="card card-accent">
+                <h4>Ordenación circular (mesa redonda)</h4>
+                <div class="formula" style="font-size:1.1rem;">
+                    Pₙ = (n − 1)!
+                </div>
+                <p style="margin-top:0.5rem;">Donde:</p>
+                <div class="formula" style="font-size:0.95rem;">
+                    (n−1)! = 1 × 2 × 3 × ... × (n−1)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 — EJEMPLO PERMUTACIÓN LINEAL -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2 — PERMUTACIONES</div>
+        <h2>Ejemplo: Ordenación Lineal</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>Ordenar <strong>7 personas en una fila</strong>.</p>
+        </div>
+
+        <h3>Solución</h3>
+        <p>Como se trata de ordenar <strong>todos</strong> los elementos (7 personas) en forma lineal, usamos:</p>
+
+        <div class="formula">
+            P₇ = 7!
+        </div>
+
+        <div class="card" style="margin-top:1rem;">
+            <h4>Cálculo paso a paso</h4>
+            <div class="formula" style="font-size:1rem;">
+                7! = 1 × 2 × 3 × 4 × 5 × 6 × 7
+            </div>
+            <div class="formula" style="font-size:1.1rem; margin-top:0.5rem;">
+                = 5040
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>Hay <span class="em-success">5040 maneras diferentes</span> de ordenar 7 personas en una fila.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Observación</strong>
+            <p>El número de permutaciones crece <strong>muy rápidamente</strong> con n. Por ejemplo:<br>
+            • 5! = 120<br>
+            • 10! = 3,628,800<br>
+            • 15! = 1,307,674,368,000</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 — EJEMPLO PERMUTACIÓN CIRCULAR -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2 — PERMUTACIONES</div>
+        <h2>Ejemplo: Ordenación Circular</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>¿De cuántas maneras distintas se pueden sentar <strong>7 personas en una mesa redonda</strong>?</p>
+        </div>
+
+        <h3>Solución</h3>
+        <p>En una ordenación <strong>circular</strong>, no hay un "primer" lugar fijo. Usamos:</p>
+
+        <div class="formula">
+            Pₙ = (n − 1)!
+        </div>
+
+        <p>Para n = 7:</p>
+
+        <div class="card" style="margin-top:1rem;">
+            <h4>Cálculo</h4>
+            <div class="formula" style="font-size:1rem;">
+                P₇ = (7 − 1)! = 6!
+            </div>
+            <div class="formula" style="font-size:1rem; margin-top:0.5rem;">
+                6! = 1 × 2 × 3 × 4 × 5 × 6 = 720
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>Hay <span class="em-success">720 maneras diferentes</span> de sentar 7 personas en una mesa redonda.</p>
+        </div>
+
+        <div class="box">
+            <strong>🔍 ¿Por qué (n−1)! en vez de n!?</strong>
+            <p>En una mesa redonda, las rotaciones de una misma disposición se consideran <strong>iguales</strong>. Por ejemplo, si A está a la izquierda de B, da igual si están en la "posición 1 y 2" o en la "posición 3 y 4".</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9 — PERMUTACIONES CON REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">3 — PERMUTACIONES</div>
+        <h2>Permutaciones con Elementos Repetidos</h2>
+    </div>
+    <div class="content">
+        <p>En variadas situaciones se deben ordenar <strong>n elementos</strong> dentro de los cuales hay <span class="em-warn">algunos repetidos</span>.</p>
+
+        <div class="box">
+            <strong>📌 Supuestos</strong>
+            <p>De <strong>n elementos totales</strong>, hay:</p>
+            <ul style="margin-top:0.5rem;">
+                <li><strong>p</strong> elementos iguales entre sí</li>
+                <li><strong>q</strong> elementos iguales entre sí</li>
+                <li><strong>r</strong> elementos iguales entre sí</li>
+            </ul>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Fórmula</strong>
+            <div class="formula">
+                Pₙ⁽ᵖ'ᵍ'ʳ⁾ = n! / (p! × q! × r!)
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Intuición</strong>
+            <p>Dividimos n! entre los factoriales de las repeticiones porque las <strong>permutaciones internas</strong> de elementos idénticos no generan ordenaciones diferentes.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10 — EJEMPLO PERMUTACIÓN REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">3 — PERMUTACIONES CON REPETICIÓN</div>
+        <h2>Ejemplo: Fichas de Colores</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>Ordenar en fila <strong>7 fichas</strong>, de las cuales hay:</p>
+            <ul style="margin-top:0.5rem;">
+                <li><strong>2 fichas rojas</strong></li>
+                <li><strong>4 fichas azules</strong></li>
+                <li><strong>1 ficha amarilla</strong></li>
+            </ul>
+        </div>
+
+        <h3>Solución</h3>
+        <p>Como deben ordenarse las 7 fichas y hay elementos repetidos, usamos:</p>
+
+        <div class="formula">
+            Pₙ⁽ᵖ'ᵍ'ʳ⁾ = n! / (p! × q! × r!)
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Identificación</h4>
+                <ul>
+                    <li>n = <strong>7</strong> (total fichas)</li>
+                    <li>p = <strong>2</strong> (rojas)</li>
+                    <li>q = <strong>4</strong> (azules)</li>
+                    <li>r = <strong>1</strong> (amarilla)</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Cálculo</h4>
+                <div class="formula" style="font-size:0.95rem;">
+                    P₇⁽²'⁴'¹⁾ = 7! / (2! × 4! × 1!)
+                </div>
+                <div class="formula" style="font-size:0.9rem;">
+                    = 5040 / (2 × 24 × 1)
+                </div>
+                <div class="formula" style="font-size:1rem;">
+                    = 5040 / 48 = 105
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>Hay <span class="em-success">105 maneras diferentes</span> de ordenar las 7 fichas.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11 — VARIACIONES SIN REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4 — VARIACIONES</div>
+        <h2>Variaciones sin Elementos Repetidos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>Se dispone de <strong>n elementos</strong>, pero se escogen <strong>k</strong> (algunos) de ellos.</p>
+            <p style="margin-top:0.5rem;">Se llama <span class="em">variación de orden k</span> a cada grupo que se forma de k elementos escogidos de un total de n, donde:</p>
+            <ul style="margin-top:0.5rem;">
+                <li>Los grupos tienen algún <strong>elemento distinto</strong>, O</li>
+                <li>El <strong>orden</strong> en que están ubicados es diferente</li>
+            </ul>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Fórmula</strong>
+            <div class="formula">
+                Vₙᵏ = n! / (n − k)!
+            </div>
+            <p style="margin-top:0.5rem; text-align:center;">con <strong>n ≥ k</strong></p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Diferencia clave con permutaciones</strong>
+            <p>• <strong>Permutaciones:</strong> se usan <strong>todos</strong> los n elementos<br>
+            • <strong>Variaciones:</strong> se usan solo <strong>k de los n</strong> elementos<br>
+            • En variaciones, <span class="em-warn">el orden importa</span></p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12 — EJEMPLO VARIACIONES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4 — VARIACIONES SIN REPETICIÓN</div>
+        <h2>Ejemplo: Cargos en un Club</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>Se toman <strong>4 nombres</strong> de los <strong>24 miembros</strong> de un club para ocupar los cargos de:</p>
+            <ul style="margin-top:0.5rem;">
+                <li>Presidente</li>
+                <li>Vicepresidente</li>
+                <li>Tesorero</li>
+                <li>Secretario</li>
+            </ul>
+            <p style="margin-top:0.5rem;">¿En cuántas formas diferentes puede hacerse?</p>
+        </div>
+
+        <h3>Análisis</h3>
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>¿Por qué es una variación?</h4>
+            <p>• De <strong>24 personas</strong>, se escogen grupos de <strong>4</strong><br>
+            • El <span class="em-warn">orden importa</span>: Pedro como presidente ≠ Pedro como secretario<br>
+            • Ejemplo: si se escogen Pedro, Juan, Diego, José, hay múltiples combinatorias diferentes según quién ocupe cada cargo</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Datos</h4>
+                <ul>
+                    <li>n = <strong>24</strong> (total miembros)</li>
+                    <li>k = <strong>4</strong> (cargos a llenar)</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Cálculo</h4>
+                <div class="formula" style="font-size:0.95rem;">
+                    V₂₄⁴ = 24! / (24−4)!
+                </div>
+                <div class="formula" style="font-size:0.95rem;">
+                    = 24! / 20! = 255,024
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>Hay <span class="em-success">255,024 maneras diferentes</span>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13 — VARIACIONES CON REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5 — VARIACIONES</div>
+        <h2>Variaciones con Elementos Repetidos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>De un total de <strong>n elementos</strong>, se deben escoger <strong>k</strong> de ellos para formar un grupo, pero en este caso, <span class="em-warn">algunos elementos están repetidos</span> (o pueden repetirse).</p>
+            <p style="margin-top:0.5rem;">Cada grupo difiere de otro por los elementos que lo componen o por el orden. <strong>Interesa el orden</strong>.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Fórmula</strong>
+            <div class="formula">
+                VRₙᵏ = nᵏ
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 ¿Cuándo usar esta fórmula?</strong>
+            <p>Cuando los elementos <strong>pueden repetirse</strong> en la selección. Por ejemplo:</p>
+            <ul style="margin-top:0.5rem;">
+                <li>Números de teléfono (los dígitos se pueden repetir)</li>
+                <li>Contraseñas con caracteres repetibles</li>
+                <li>Códigos donde un símbolo puede aparecer varias veces</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14 — EJEMPLO VARIACIONES REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5 — VARIACIONES CON REPETICIÓN</div>
+        <h2>Ejemplo: Números de 6 Cifras</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>¿Cuántos números de <strong>6 cifras</strong> existen si se eligen de entre los dígitos <strong>1, 2, 3, 4, 5, 6, 7</strong> y todos comienzan con <strong>3</strong>?</p>
+        </div>
+
+        <h3>Análisis</h3>
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>Estructura del número</h4>
+            <div class="formula" style="font-size:1.1rem;">
+                3 _ _ _ _ _
+            </div>
+            <p style="margin-top:0.5rem;">• Primera posición: fija (<strong>3</strong>)<br>
+            • Restantes 5 posiciones: pueden ser cualquiera de los 7 dígitos (con repetición permitida)</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Datos</h4>
+                <ul>
+                    <li>n = <strong>7</strong> (dígitos disponibles)</li>
+                    <li>k = <strong>5</strong> (posiciones a llenar)</li>
+                    <li>Se permite repetición</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Cálculo</h4>
+                <div class="formula" style="font-size:1rem;">
+                    VR₇⁵ = 7⁵
+                </div>
+                <div class="formula" style="font-size:1.1rem;">
+                    = 16,807
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>Existen <span class="em-success">16,807 números diferentes</span> de 6 cifras que comienzan con 3.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15 — COMBINACIONES SIN REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">6 — COMBINACIONES</div>
+        <h2>Combinaciones sin Elementos Repetidos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>De un total de <strong>n elementos</strong> se escogen <strong>k</strong> formando grupos de orden k.</p>
+            <p style="margin-top:0.5rem;">Cada grupo se diferencia de otro si tienen <strong>elementos distintos</strong>, pero <span class="em-success">NO por el orden</span> en que están dispuestos.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Fórmula</strong>
+            <div class="formula">
+                Cₙᵏ = n! / (k! × (n−k)!)
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Diferencia clave: Variaciones vs Combinaciones</strong>
+            <p>• <strong>Variaciones:</strong> el orden <span class="em-warn">SÍ importa</span> (AB ≠ BA)<br>
+            • <strong>Combinaciones:</strong> el orden <span class="em-success">NO importa</span> (AB = BA)<br>
+            <br>
+            Por eso: <strong>Cₙᵏ < Vₙᵏ</strong> (siempre hay menos combinaciones que variaciones)</p>
+        </div>
+
+        <div class="box">
+            <strong>💡 Ejemplos de uso</strong>
+            <ul>
+                <li>Seleccionar un comité (el orden de selección no importa)</li>
+                <li>Escoger un equipo deportivo</li>
+                <li>Elegir ingredientes para una receta</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16 — EJEMPLO COMBINACIONES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">6 — COMBINACIONES SIN REPETICIÓN</div>
+        <h2>Ejemplo: Comité de 3 Personas</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>De un grupo de <strong>20 personas</strong>, se designa un comité de <strong>3</strong>. ¿De cuántas maneras es posible hacerlo?</p>
+        </div>
+
+        <h3>Análisis</h3>
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>¿Por qué es una combinación?</h4>
+            <p>• Se eligen <strong>3 de 20</strong> personas<br>
+            • <span class="em-success">No interesa el orden</span>: {Ana, Juan, Pedro} = {Pedro, Ana, Juan}<br>
+            • Solo importa <strong>quiénes</strong> están en el comité, no en qué orden fueron elegidos</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Datos</h4>
+                <ul>
+                    <li>n = <strong>20</strong> (total personas)</li>
+                    <li>k = <strong>3</strong> (tamaño del comité)</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Cálculo</h4>
+                <div class="formula" style="font-size:0.9rem;">
+                    C₂₀³ = 20! / (3! × (20−3)!)
+                </div>
+                <div class="formula" style="font-size:0.9rem;">
+                    = 20! / (3! × 17!)
+                </div>
+                <div class="formula" style="font-size:1rem;">
+                    = (20×19×18) / (3×2×1) = 1140
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Respuesta</strong>
+            <p>Hay <span class="em-success">1,140 maneras diferentes</span> de formar el comité.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17 — COMBINACIONES CON REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">7 — COMBINACIONES</div>
+        <h2>Combinaciones con Elementos Repetidos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>De un total de <strong>n elementos</strong> se escogen <strong>k</strong> de ellos, de los cuales <span class="em-warn">algunos están repetidos</span> (o pueden repetirse).</p>
+            <p style="margin-top:0.5rem;">El orden en que están dispuestos los elementos dentro de un grupo <span class="em-success">NO interesa</span>.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Fórmula</strong>
+            <div class="formula">
+                CRₙᵏ = C⁽ⁿ⁺ᵏ⁻¹⁾ₖ = (n+k−1)! / (k! × (n−1)!)
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 ¿Cuándo usar?</strong>
+            <p>Cuando se pueden <strong>repetir elementos</strong> en la selección y <strong>no importa el orden</strong>. Por ejemplo:</p>
+            <ul style="margin-top:0.5rem;">
+                <li>Elegir bolas de colores (con reemplazo)</li>
+                <li>Seleccionar ingredientes donde puede haber varios del mismo tipo</li>
+                <li>Distribuir objetos idénticos en categorías</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 18 — EJEMPLO COMBINACIONES REPETICIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">7 — COMBINACIONES CON REPETICIÓN</div>
+        <h2>Ejemplo: Letras con Repetición</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Problema</strong>
+            <p>Se tienen las letras <strong>a, b, c</strong>. ¿De cuántas maneras se pueden escoger <strong>2 letras</strong>, pudiendo repetirlas y sin importar el orden en que se dispongan?</p>
+        </div>
+
+        <h3>Solución</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Datos</h4>
+                <ul>
+                    <li>n = <strong>3</strong> (letras disponibles: a, b, c)</li>
+                    <li>k = <strong>2</strong> (letras a escoger)</li>
+                    <li>Se permite repetición</li>
+                    <li>Orden no importa</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Cálculo</h4>
+                <div class="formula" style="font-size:0.9rem;">
+                    CR₃² = C₄² = 4! / (2! × 2!)
+                </div>
+                <div class="formula" style="font-size:1rem;">
+                    = 24 / (2 × 2) = 6
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Las 6 maneras son:</strong>
+            <div class="formula" style="font-size:1.1rem;">
+                aa, ab, ac, bb, bc, cc
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Nota importante</strong>
+            <p>La dupla <strong>ab</strong> es la misma que <strong>ba</strong>, por lo tanto se cuenta <span class="em-warn">una sola vez</span>. Esto confirma que estamos ante una <strong>combinación</strong> (orden no importa).</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 19 — RESUMEN FÓRMULAS -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">RESUMEN</div>
+        <h2>Tabla de Fórmulas de Combinatoria</h2>
+    </div>
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Técnica</th>
+                    <th>¿Importa orden?</th>
+                    <th>¿Se usan todos?</th>
+                    <th>¿Hay repetición?</th>
+                    <th>Fórmula</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Regla de multiplicación</strong></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>n₁ × n₂ × ... × nₖ</td>
+                </tr>
+                <tr>
+                    <td><strong>Permutación lineal</strong></td>
+                    <td>Sí</td>
+                    <td>Sí</td>
+                    <td>No</td>
+                    <td>Pₙ = n!</td>
+                </tr>
+                <tr>
+                    <td><strong>Permutación circular</strong></td>
+                    <td>Sí</td>
+                    <td>Sí</td>
+                    <td>No</td>
+                    <td>Pₙ = (n−1)!</td>
+                </tr>
+                <tr>
+                    <td><strong>Permutación c/ repetición</strong></td>
+                    <td>Sí</td>
+                    <td>Sí</td>
+                    <td>Sí</td>
+                    <td>n! / (p!×q!×r!)</td>
+                </tr>
+                <tr>
+                    <td><strong>Variación s/ repetición</strong></td>
+                    <td>Sí</td>
+                    <td>No (k de n)</td>
+                    <td>No</td>
+                    <td>n! / (n−k)!</td>
+                </tr>
+                <tr>
+                    <td><strong>Variación c/ repetición</strong></td>
+                    <td>Sí</td>
+                    <td>No (k de n)</td>
+                    <td>Sí</td>
+                    <td>nᵏ</td>
+                </tr>
+                <tr>
+                    <td><strong>Combinación s/ repetición</strong></td>
+                    <td>No</td>
+                    <td>No (k de n)</td>
+                    <td>No</td>
+                    <td>n! / (k!×(n−k)!)</td>
+                </tr>
+                <tr>
+                    <td><strong>Combinación c/ repetición</strong></td>
+                    <td>No</td>
+                    <td>No (k de n)</td>
+                    <td>Sí</td>
+                    <td>(n+k−1)! / (k!×(n−1)!)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SLIDE 20 — ÁRBOL DE DECISIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">GUÍA PRÁCTICA</div>
+        <h2>¿Qué Técnica Usar?</h2>
+    </div>
+    <div class="content">
+        <div class="box box-success">
+            <strong>🌳 Árbol de decisión</strong>
+        </div>
+
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>¿Se trata de operaciones en pasos consecutivos?</h4>
+            <p>→ Sí: <span class="em-success">Regla de la multiplicación</span></p>
+        </div>
+
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>¿Se ordenan TODOS los n elementos?</h4>
+            <p>→ Sí, sin repetición lineal: <span class="em-success">Permutación (n!)</span><br>
+            → Sí, sin repetición circular: <span class="em-success">Permutación circular ((n−1)!)</span><br>
+            → Sí, con repetición: <span class="em-success">Permutación con repetición</span></p>
+        </div>
+
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>¿Se escogen solo K de N elementos?</h4>
+            <p>Pregunta adicional: <strong>¿Importa el orden?</strong></p>
+            <ul style="margin-top:0.5rem;">
+                <li>SÍ importa orden, sin repetición → <span class="em-success">Variación</span></li>
+                <li>SÍ importa orden, con repetición → <span class="em-success">Variación con repetición</span></li>
+                <li>NO importa orden, sin repetición → <span class="em-success">Combinación</span></li>
+                <li>NO importa orden, con repetición → <span class="em-success">Combinación con repetición</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 21 — EJERCICIO 1 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Identificación de Técnicas</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la técnica correcta para cada problema.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 22 — EJERCICIO 2 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Cálculos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Resuelve los siguientes problemas. Escribe solo el número (sin comas ni espacios).</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 23 — BIBLIOGRAFÍA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAFÍA</div>
+        <h2>Referencia en Formato IEEE</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>[1] Fuente principal</strong>
+            <p>"Conceptos básicos de estadística," Páginas Personales UNAM. [Online]. Available: https://www.paginaspersonales.unam.mx/files/977/Conceptos_basicos_de_estadistica.pdf</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>📚 Contenidos basados en:</strong>
+            <ul style="margin-top:0.5rem;">
+                <li>Regla de la multiplicación</li>
+                <li>Permutaciones (lineales, circulares, con elementos repetidos)</li>
+                <li>Variaciones (sin y con elementos repetidos)</li>
+                <li>Combinaciones (sin y con elementos repetidos)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 24 — CIERRE -->
+<div class="slide cover">
+    <h1>¿Preguntas?</h1>
+    <div class="line"></div>
+    <p class="subtitle">Gracias por tu atención</p>
+    <p class="meta">Bioestadística Aplicada — Combinatoria</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">24</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9]/g,'');
+}
+
+// EJERCICIO 1
+const ex1Data = [
+    {
+        q: "¿Cuántas formas hay de ordenar 5 libros en un estante?",
+        opts: ["Permutación", "Variación", "Combinación", "Regla de multiplicación"],
+        correct: 0
+    },
+    {
+        q: "De 10 estudiantes, ¿de cuántas formas se puede elegir un comité de 3 (sin importar orden)?",
+        opts: ["Permutación", "Variación", "Combinación", "Variación con repetición"],
+        correct: 2
+    },
+    {
+        q: "¿Cuántos números de 4 dígitos se pueden formar con 0-9 (con repetición permitida)?",
+        opts: ["Permutación", "Variación con repetición", "Combinación", "Permutación con repetición"],
+        correct: 1
+    },
+    {
+        q: "De 8 personas, elegir presidente, vicepresidente y secretario:",
+        opts: ["Permutación", "Variación", "Combinación", "Combinación con repetición"],
+        correct: 1
+    },
+    {
+        q: "¿De cuántas formas se pueden sentar 6 personas en una mesa redonda?",
+        opts: ["Permutación lineal", "Permutación circular", "Variación", "Combinación"],
+        correct: 1
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// EJERCICIO 2
+const ex2Data = [
+    { q: "Calcula 5! (factorial de 5)", a: "120" },
+    { q: "¿De cuántas formas se pueden ordenar las letras de la palabra 'CASA' (permutación con repetición: 2 A)?", a: "12" },
+    { q: "Calcula C(8,3) = combinación de 8 tomados de 3 en 3", a: "56" },
+    { q: "Un restaurante ofrece 3 entradas, 4 platos principales y 2 postres. ¿Cuántos menús completos diferentes hay?", a: "24" },
+    { q: "¿Cuántos números de 3 cifras se pueden formar con los dígitos 1,2,3,4,5 (sin repetición)?", a: "60" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function selMC(prefix, qi, oi) {
+    const data = ex1Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        const userVal = normalise(inp.value);
+        const correctVal = normalise(item.a);
+        if (userVal === correctVal) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+</script>
+</body>
+</html>
