@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meetings, Markets & Conditionals - Advanced English</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Rajdhani',sans-serif;
+            background:#0a0a0a;
+            color:#00ffff; overflow:hidden;
+        }
+        .container { width:100vw; height:100vh; position:relative; }
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.5rem 6rem; flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* PORTADA */
+        .cover {
+            background:linear-gradient(135deg,#1a0033 0%,#330066 40%,#660099 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-100px; right:-100px; width:400px; height:400px;
+            border-radius:50%; 
+            background:radial-gradient(circle, rgba(255,0,110,0.3) 0%, transparent 70%);
+            animation:pulse 3s ease-in-out infinite;
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-80px; left:-80px; width:300px; height:300px;
+            border-radius:50%; 
+            background:radial-gradient(circle, rgba(0,180,216,0.25) 0%, transparent 70%);
+            animation:pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform:scale(1); opacity:0.6; }
+            50% { transform:scale(1.1); opacity:0.9; }
+        }
+        .cover h1 {
+            font-family:'Orbitron',sans-serif;
+            font-size:3.8rem; font-weight:900; line-height:1.2;
+            margin-bottom:1.2rem; position:relative; z-index:1;
+            background:linear-gradient(90deg, #ff006e, #00b4d8, #06ffa5);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            text-shadow:0 0 20px rgba(255,0,110,0.5);
+        }
+        .cover .subtitle {
+            font-size:1.4rem; color:#00ffff;
+            position:relative; z-index:1;
+            text-shadow:0 0 10px rgba(0,255,255,0.8);
+        }
+        .cover .line {
+            width:100px; height:4px; 
+            background:linear-gradient(90deg, #ff006e, #00b4d8, #06ffa5);
+            margin:1.8rem auto; position:relative; z-index:1;
+            box-shadow:0 0 15px rgba(255,0,110,0.7);
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            color:#b537f2; position:relative; z-index:1;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            color:#ff006e; position:relative; z-index:1;
+        }
+
+        /* SLIDES */
+        .slide-header { margin-bottom:1.3rem; flex-shrink:0; }
+        .slide-number {
+            color:#ff006e; font-size:0.8rem; font-weight:700;
+            letter-spacing:3px; text-transform:uppercase; margin-bottom:0.4rem;
+            text-shadow:0 0 10px rgba(255,0,110,0.6);
+        }
+        h2 {
+            font-family:'Orbitron',sans-serif;
+            font-size:2.3rem; 
+            background:linear-gradient(90deg, #00ffff, #ff006e);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+        }
+        h3 {
+            font-family:'Orbitron',sans-serif;
+            font-size:1.4rem; color:#06ffa5; margin:1.2rem 0 0.7rem;
+            text-shadow:0 0 8px rgba(6,255,165,0.5);
+        }
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:6px; }
+        .content::-webkit-scrollbar-track { background:rgba(255,0,110,0.1); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { 
+            background:linear-gradient(180deg, #ff006e, #b537f2); 
+            border-radius:3px; 
+        }
+
+        p { font-size:1.05rem; line-height:1.7; margin-bottom:1.1rem; color:#e0e0e0; }
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:1rem; line-height:1.6; margin-bottom:0.6rem;
+            padding-left:1.5rem; position:relative; color:#e0e0e0;
+        }
+        ul li::before {
+            content:'▸'; position:absolute; left:0;
+            color:#ff006e; font-weight:bold;
+            text-shadow:0 0 8px rgba(255,0,110,0.8);
+        }
+
+        /* CAJAS */
+        .box {
+            background:rgba(255,0,110,0.1); 
+            border-left:4px solid #ff006e;
+            padding:1.2rem 1.4rem; margin:1.2rem 0; border-radius:0 7px 7px 0;
+            box-shadow:0 0 15px rgba(255,0,110,0.3);
+        }
+        .box strong { 
+            color:#ff006e; display:block; margin-bottom:0.4rem; 
+            font-size:1.05rem; text-shadow:0 0 8px rgba(255,0,110,0.6);
+        }
+        .box p { margin-bottom:0.35rem; }
+        .box-warn { background:rgba(6,255,165,0.1); border-left-color:#06ffa5; 
+            box-shadow:0 0 15px rgba(6,255,165,0.3); }
+        .box-warn strong { color:#06ffa5; text-shadow:0 0 8px rgba(6,255,165,0.6); }
+        .box-success { background:rgba(0,180,216,0.1); border-left-color:#00b4d8;
+            box-shadow:0 0 15px rgba(0,180,216,0.3); }
+        .box-success strong { color:#00b4d8; text-shadow:0 0 8px rgba(0,180,216,0.6); }
+
+        /* GRIDS */
+        .grid { display:grid; gap:1.1rem; margin:1.1rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+        .card {
+            background:rgba(20,20,40,0.8); padding:1.2rem;
+            border-radius:9px; border:1px solid rgba(255,0,110,0.4);
+            box-shadow:0 0 10px rgba(255,0,110,0.2);
+        }
+        .card h4 { color:#ff006e; margin-bottom:0.5rem; font-size:1.1rem; 
+            text-shadow:0 0 8px rgba(255,0,110,0.5); }
+        .card p { font-size:0.95rem; margin-bottom:0.3rem; }
+        .card-accent { border-color:#00b4d8; box-shadow:0 0 10px rgba(0,180,216,0.3); }
+        .card-accent h4 { color:#00b4d8; text-shadow:0 0 8px rgba(0,180,216,0.5); }
+
+        .em { color:#ff006e; font-weight:700; }
+        .em-warn { color:#06ffa5; font-weight:700; }
+        .em-success { color:#00b4d8; font-weight:700; }
+
+        /* TABLAS */
+        table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.92rem; }
+        th,td { padding:0.7rem 0.9rem; text-align:left; border-bottom:1px solid rgba(255,0,110,0.3); }
+        th { background:rgba(255,0,110,0.2); color:#ff006e; font-weight:700; 
+            font-size:0.9rem; letter-spacing:0.5px; }
+        tr:last-child td { border-bottom:none; }
+        td { color:#e0e0e0; }
+
+        /* EXERCISE */
+        .exercise-badge {
+            background:linear-gradient(135deg,#ff006e,#b537f2);
+            color:#fff; padding:0.3rem 1.2rem; border-radius:24px;
+            display:inline-block; font-weight:800; font-size:0.8rem;
+            letter-spacing:1.5px; box-shadow:0 0 20px rgba(255,0,110,0.5);
+        }
+
+        .exercise-input {
+            width:100%; background:rgba(20,20,40,0.8);
+            border:1px solid rgba(255,0,110,0.4); border-radius:7px;
+            padding:0.6rem 0.9rem; color:#00ffff; font-size:0.95rem;
+            font-family:'Rajdhani',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#ff006e; 
+            box-shadow:0 0 15px rgba(255,0,110,0.4); }
+        .exercise-input.correct { border-color:#06ffa5; background:rgba(6,255,165,0.15); }
+        .exercise-input.incorrect { border-color:#ff006e; background:rgba(255,0,110,0.15); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.95rem; color:#e0e0e0; display:block; }
+        .exercise-q .qnum { color:#ff006e; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:linear-gradient(135deg, #ff006e, #b537f2); border:none; color:#fff;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Rajdhani',sans-serif;
+            transition:all 0.25s;
+            box-shadow:0 0 15px rgba(255,0,110,0.4);
+        }
+        .ex-btn:hover { transform:scale(1.05); box-shadow:0 0 25px rgba(255,0,110,0.7); }
+        .ex-btn-sec { background:transparent; border:2px solid #00b4d8; color:#00b4d8; }
+        .ex-btn-sec:hover { background:rgba(0,180,216,0.2); box-shadow:0 0 20px rgba(0,180,216,0.5); }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; 
+            font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(6,255,165,0.2); border:1px solid #06ffa5; color:#06ffa5; }
+        .feedback-msg.partial { background:rgba(255,0,110,0.15); border:1px solid #ff006e; color:#ff006e; }
+
+        .mc-option {
+            background:rgba(20,20,40,0.7); border:1px solid rgba(255,0,110,0.3);
+            border-radius:7px; padding:0.6rem 1rem; margin:0.35rem 0;
+            cursor:pointer; transition:all 0.22s; font-size:0.95rem; color:#e0e0e0;
+        }
+        .mc-option:hover { border-color:#ff006e; box-shadow:0 0 15px rgba(255,0,110,0.4); }
+        .mc-option.selected { border-color:#00b4d8; background:rgba(0,180,216,0.2); }
+        .mc-option.correct-sel { border-color:#06ffa5; background:rgba(6,255,165,0.25); }
+        .mc-option.incorrect-sel { border-color:#ff006e; background:rgba(255,0,110,0.2); }
+
+        /* NAV */
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; 
+            background:linear-gradient(135deg, #ff006e, #b537f2); 
+            border:none; border-radius:50%; color:#fff; font-size:1.35rem;
+            font-weight:bold; cursor:pointer; transition:all 0.3s;
+            box-shadow:0 0 20px rgba(255,0,110,0.5);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); 
+            box-shadow:0 0 30px rgba(255,0,110,0.8); }
+        .btn:disabled { opacity:0.3; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(20,20,40,0.95); padding:0.8rem 1.6rem;
+            border-radius:28px; border:2px solid #ff006e;
+            color:#00ffff; font-weight:700; z-index:1000; font-size:0.95rem;
+            box-shadow:0 0 20px rgba(255,0,110,0.4);
+        }
+
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.6rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 — COVER -->
+<div class="slide cover active">
+    <h1>MEETINGS<br>MARKETS<br>CONDITIONALS</h1>
+    <div class="line"></div>
+    <p class="subtitle">Advanced Business English Communication</p>
+    <p class="meta">Advanced English 2 | 90-Minute Session</p>
+    <p class="help">👉 Use arrow keys or buttons to navigate →</p>
+</div>
+
+<!-- SLIDE 2 — OVERVIEW -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">SESSION OVERVIEW</div>
+        <h2>Today's Topics</h2>
+    </div>
+    <div class="content">
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>5.1 Meeting Language</h4>
+                <p>Professional phrases for:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Considering options</li>
+                    <li>Defining objectives</li>
+                    <li>Making decisions</li>
+                    <li>Implementing plans</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>5.2 Money Market</h4>
+                <p>Essential vocabulary:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Price changes (cut, slash, hike)</li>
+                    <li>Market trends (rising, plunging)</li>
+                    <li>Market dynamics</li>
+                    <li>Economic terminology</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>5.3 Conditionals</h4>
+                <p>Hypothetical situations:</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Real conditionals</li>
+                    <li>Unreal conditionals</li>
+                    <li>If-substitutes</li>
+                    <li>Practical applications</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>⏱ Time Management</strong>
+            <p>• Meeting Language: 30 min<br>
+            • Money Market Vocabulary: 30 min<br>
+            • Conditionals: 25 min<br>
+            • Practice & Review: 5 min</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 — MEETING LANGUAGE INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.1 — MEETING LANGUAGE</div>
+        <h2>Decision-Making Phrases</h2>
+    </div>
+    <div class="content">
+        <p>These phrases help you <span class="em">make professional decisions</span> in business meetings. They are categorized by purpose:</p>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Considering Options</h4>
+                <ul>
+                    <li>I'm wondering if...</li>
+                    <li>One option would be...</li>
+                    <li>Another alternative is...</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>Defining Objectives</h4>
+                <ul>
+                    <li>Our aim is to...</li>
+                    <li>The most important thing is...</li>
+                    <li>Above all else, we must...</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Deciding Between Options</h4>
+                <ul>
+                    <li>We need to decide <strong>whether</strong> to...</li>
+                    <li>The advantage/disadvantage of...</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>Implementing Decisions</h4>
+                <ul>
+                    <li>We've agreed to...</li>
+                    <li>What are your thoughts?</li>
+                    <li>Does anyone have any other ideas?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4 — GRAMMAR NOTES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.1 — GRAMMAR NOTES</div>
+        <h2>Key Grammar Rules</h2>
+    </div>
+    <div class="content">
+        <h3>1. "Whether" Usage</h3>
+        <p><strong>Whether</strong> is used in sentences with two options or an if/if not scenario:</p>
+        <div class="box">
+            <strong>✓ Correct Examples</strong>
+            <p>• I will decide <strong>whether to</strong> hire Rebecca, or search for a more qualified candidate.<br>
+            • I need to decide <strong>whether to</strong> cancel the trip.</p>
+        </div>
+
+        <h3>2. "The advantage/disadvantage of" + -ING</h3>
+        <div class="grid grid-2">
+            <div class="box box-success">
+                <strong>✓ CORRECT</strong>
+                <p>One of the advantages of <strong>studying</strong> abroad is that you can learn a new language.</p>
+            </div>
+            <div class="box box-warn">
+                <strong>✗ INCORRECT</strong>
+                <p>One of the advantages of <strong>to study</strong> abroad...</p>
+            </div>
+        </div>
+
+        <h3>3. Flexible Phrases (Multiple Verb Forms Accepted)</h3>
+        <p>These phrases can combine with different verb forms:</p>
+        <ul>
+            <li><strong>The most important thing is</strong> to stay / staying / Will we stay...?</li>
+            <li><strong>We've agreed to</strong> meet / meeting...</li>
+            <li><strong>Another alternative is</strong> to reduce / reducing...</li>
+        </ul>
+    </div>
+</div>
+
+<!-- SLIDE 5 — MEETING EXAMPLE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.1 — PRACTICAL EXAMPLE</div>
+        <h2>Meeting Dialogue</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📋 Context: Team Meeting About Client Trip</strong>
+        </div>
+
+        <p style="font-size:0.95rem; line-height:1.6;">
+        Thanks for meeting today, everyone. I'll try to make this as quickly as possible. <span class="em">Our aim is to</span> figure out how we will handle Rick's absence. As you know, he is undergoing a minor surgery and will be home for about four days. However, his doctor will probably not clear him to fly for another week. So, <span class="em">we're here to decide whether to</span> postpone the London trip or send someone else in his place.
+        </p>
+
+        <p style="font-size:0.95rem; line-height:1.6;">
+        <span class="em-success">The advantage of</span> sending someone else, such as Laura, is that we could close the deal before the client finds a different offer. On the other hand, though, Rick already has a great rapport with the client, so I don't know how I feel about sending them someone new. <span class="em">I'm wondering if</span> it would be better to wait.
+        </p>
+
+        <p style="font-size:0.95rem; line-height:1.6;">
+        <span class="em">Another alternative is</span> to fly the client here instead. Although Rick's doctors don't want him to travel internationally right away, he is confident he'll be able to participate in a meeting here at the end of the week. <span class="em-warn">Above all else, we must consider</span> his health. <span class="em">What are your thoughts? Does anyone have any other ideas?</span>
+        </p>
+    </div>
+</div>
+
+<!-- SLIDE 6 — MONEY VOCAB INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.2 — MONEY MARKET</div>
+        <h2>Price Change Vocabulary</h2>
+    </div>
+    <div class="content">
+        <p>These terms describe <span class="em">increases and decreases in price</span>:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>Meaning</th>
+                    <th>Intensity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>cut</strong></td>
+                    <td>reduce</td>
+                    <td>Normal decrease</td>
+                </tr>
+                <tr>
+                    <td><strong>slash</strong></td>
+                    <td>reduce dramatically</td>
+                    <td>Sharp decrease ⬇⬇⬇</td>
+                </tr>
+                <tr>
+                    <td><strong>raise</strong></td>
+                    <td>increase [v] / an increase in pay [n]</td>
+                    <td>Normal increase</td>
+                </tr>
+                <tr>
+                    <td><strong>hike</strong></td>
+                    <td>increase sharply and unexpectedly</td>
+                    <td>Sharp increase ⬆⬆⬆</td>
+                </tr>
+                <tr>
+                    <td><strong>freeze</strong></td>
+                    <td>prohibit any change</td>
+                    <td>No change allowed</td>
+                </tr>
+                <tr>
+                    <td><strong>stable</strong></td>
+                    <td>having little to no change</td>
+                    <td>Steady/constant</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="box box-warn">
+            <strong>💡 Note on "Hike"</strong>
+            <p><strong>Hike</strong> has a connotation of being sharp and unexpected.<br>
+            Example: The cable service provider lost a lot of customers after its price <strong>hike</strong> last year.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 — TRENDS VOCAB -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.2 — MONEY MARKET</div>
+        <h2>Market Trend Vocabulary</h2>
+    </div>
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>Meaning</th>
+                    <th>Intensity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>falling</strong></td>
+                    <td>decreasing steadily over time</td>
+                    <td>Gradual decline ↘</td>
+                </tr>
+                <tr>
+                    <td><strong>plunging</strong></td>
+                    <td>decreasing dramatically</td>
+                    <td>Sharp decline ⬇⬇⬇</td>
+                </tr>
+                <tr>
+                    <td><strong>rising</strong></td>
+                    <td>increasing steadily over time</td>
+                    <td>Gradual increase ↗</td>
+                </tr>
+                <tr>
+                    <td><strong>soaring</strong></td>
+                    <td>increasing dramatically</td>
+                    <td>Sharp increase ⬆⬆⬆</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Example Sentences</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>As Verbs</h4>
+                <p>• The stock price <strong>is falling</strong>, so shareholders are worried.<br>
+                • Our stock price <strong>is rising</strong>, so investors are happy.<br>
+                • Now that fuel prices <strong>are soaring</strong>, I'll take the bus more.</p>
+            </div>
+            <div class="card">
+                <h4>As Adjectives</h4>
+                <p>• The <strong>falling</strong> stock price has shareholders worried.<br>
+                • <strong>Rising</strong> demand has helped bring down prices.<br>
+                • <strong>Plunging</strong> stock markets can send the economy into recession.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 — USAGE EXAMPLES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.2 — USAGE EXAMPLES</div>
+        <h2>Money Vocabulary in Context</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>✓ As Verbs</strong>
+            <p>• The restaurant <strong>cut</strong> its prices in hopes of drawing more customers.<br>
+            • Florists often <strong>raise</strong> their prices around Valentine's Day.<br>
+            • On December 26th, most stores <strong>slash</strong> prices on their Christmas merchandise.<br>
+            • Your bank can <strong>freeze</strong> your account if it suspects illegal activity.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✓ As Nouns</strong>
+            <p>• The people were delighted by the fuel price <strong>cut</strong>.<br>
+            • In some industries, employees get a small pay <strong>raise</strong> every year.<br>
+            • The government ordered a price <strong>freeze</strong> on bottled water after the hurricane.<br>
+            • Prescription drug companies face criticism for price <strong>hikes</strong>.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>✓ As Adjectives</strong>
+            <p>• The <strong>falling</strong> stock price has shareholders very worried.<br>
+            • The <strong>rising</strong> demand for mobile phones has helped bring down their price.<br>
+            • Due to <strong>soaring</strong> oil prices, hybrid cars are becoming popular.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9 — MARKET VOCAB -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.2 — MARKET VOCABULARY</div>
+        <h2>Additional Market Terms</h2>
+    </div>
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>dominate</strong></td>
+                    <td>to control</td>
+                </tr>
+                <tr>
+                    <td><strong>break into</strong></td>
+                    <td>to enter (a difficult market) for the first time</td>
+                </tr>
+                <tr>
+                    <td><strong>declining</strong></td>
+                    <td>decreasing over time</td>
+                </tr>
+                <tr>
+                    <td><strong>niche</strong></td>
+                    <td>small and specialized; a focused part of the market</td>
+                </tr>
+                <tr>
+                    <td><strong>mass (market)</strong></td>
+                    <td>the whole; many</td>
+                </tr>
+                <tr>
+                    <td><strong>flood (the market)</strong></td>
+                    <td>excess inventory causes prices to decrease</td>
+                </tr>
+                <tr>
+                    <td><strong>saturation</strong></td>
+                    <td>to fill or satisfy 100%</td>
+                </tr>
+                <tr>
+                    <td><strong>obsolete</strong></td>
+                    <td>no longer in use</td>
+                </tr>
+                <tr>
+                    <td><strong>be forced out of</strong></td>
+                    <td>be caused to leave</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SLIDE 10 — MARKET EXAMPLE -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.2 — PRACTICAL EXAMPLE</div>
+        <h2>Streaming Services vs Cable TV</h2>
+    </div>
+    <div class="content">
+        <p style="font-size:0.98rem; line-height:1.65;">
+        As online streaming services such as Hulu and Netflix continue to grow in popularity, the demand for cable television is <span class="em">declining</span> significantly. For decades, cable television <span class="em-success">dominated</span> in-home entertainment. However, now that home Internet access is increasingly common, streaming services have become an important <span class="em">mass market</span> option.
+        </p>
+
+        <p style="font-size:0.98rem; line-height:1.65;">
+        Although most streaming services do not offer live/real-time television, their catalogues are quite complete and their monthly prices are lower than most cable providers. Many people think that cable television is slowly being <span class="em-warn">forced out of</span> the market and may soon become <span class="em">obsolete</span>.
+        </p>
+
+        <div class="box">
+            <strong>📊 Key Market Terms in This Example:</strong>
+            <p>• <strong>Declining:</strong> demand for cable TV is decreasing<br>
+            • <strong>Dominated:</strong> cable TV controlled the market<br>
+            • <strong>Mass market:</strong> streaming appeals to many people<br>
+            • <strong>Forced out of:</strong> being pushed out of the market<br>
+            • <strong>Obsolete:</strong> may no longer be used</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11 — CONDITIONALS INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.3 — CONDITIONALS</div>
+        <h2>Real vs Unreal Conditionals</h2>
+    </div>
+    <div class="content">
+        <p>Conditional statements discuss <span class="em">hypothetical situations</span>. They usually include an <strong>if-clause</strong>.</p>
+
+        <div class="box box-success">
+            <strong>✓ REAL Conditionals</strong>
+            <p>Describe <strong>real-life situations</strong> that are possible:</p>
+            <ul style="margin-top:0.5rem;">
+                <li><strong>Present:</strong> If I have time, I go to the gym. <em>[Sometimes I have time]</em></li>
+                <li><strong>Past:</strong> If I had time, I went to the gym. <em>[Sometimes I had time]</em></li>
+                <li><strong>Future:</strong> If I have time, I'll go to the gym. <em>[I don't know if I will have time]</em></li>
+            </ul>
+        </div>
+
+        <div class="box box-warn">
+            <strong>✓ UNREAL Conditionals</strong>
+            <p>Describe <strong>imaginary and unreal situations</strong>:</p>
+            <ul style="margin-top:0.5rem;">
+                <li><strong>Present:</strong> If I had time, I would go to the gym. <em>[I don't have time]</em></li>
+                <li><strong>Past:</strong> If I had had time, I would have gone to the gym. <em>[I didn't have time]</em></li>
+                <li><strong>Future:</strong> If I had time, I would go to the gym. <em>[I won't have time]</em></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12 — IF SUBSTITUTES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.3 — IF-SUBSTITUTES</div>
+        <h2>Replacing "If" in Conditionals</h2>
+    </div>
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Expression</th>
+                    <th>Meaning</th>
+                    <th>Example</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>unless</strong></td>
+                    <td>if... not / "except if"</td>
+                    <td><strong>Unless</strong> the hotel has Wi-Fi, I'll be out of touch.</td>
+                </tr>
+                <tr>
+                    <td><strong>provided/providing that</strong></td>
+                    <td>if... yes or no</td>
+                    <td>We can postpone the meeting, <strong>provided that</strong> everyone's schedule is clear.</td>
+                </tr>
+                <tr>
+                    <td><strong>so long as / as long as</strong></td>
+                    <td>only if</td>
+                    <td>I will help you, <strong>as long as</strong> you're more careful next time.</td>
+                </tr>
+                <tr>
+                    <td><strong>should (+subject)</strong></td>
+                    <td>if... yes or no (formal)</td>
+                    <td><strong>Should you</strong> have any concerns, please contact HR.</td>
+                </tr>
+                <tr>
+                    <td><strong>had (+subject)</strong></td>
+                    <td>if... yes or no (past unreal)</td>
+                    <td><strong>Had I known</strong> the client was vegetarian, I would have picked a different restaurant.</td>
+                </tr>
+                <tr>
+                    <td><strong>or / otherwise</strong></td>
+                    <td>expresses consequence if... not</td>
+                    <td>Rehearse the presentation <strong>or</strong> it will look sloppy!</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SLIDE 13 — MORE IF-SUBSTITUTE EXAMPLES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.3 — IF-SUBSTITUTES</div>
+        <h2>Additional Examples</h2>
+    </div>
+    <div class="content">
+        <h3>"Unless" (if... not)</h3>
+        <div class="box">
+            <strong>Examples:</strong>
+            <p>• You probably won't get promoted <strong>unless</strong> you finish university.<br>
+            • I will have to leave early today <strong>unless</strong> my husband can take our daughter to her appointment.</p>
+        </div>
+
+        <h3>"Provided/Providing that" (if... yes)</h3>
+        <div class="box box-success">
+            <strong>Examples:</strong>
+            <p>• <strong>Provided that</strong> Ahmed is available, we won't need an interpreter.<br>
+            • We will accept the proposal, <strong>so long as</strong> you change the deadline from Nov 1st to Nov 15th.</p>
+        </div>
+
+        <h3>"Should" & "Had" (formal inversion)</h3>
+        <div class="box box-warn">
+            <strong>Examples:</strong>
+            <p>• <strong>Should you have</strong> any concerns about the policy, contact HR. <em>[If you have...]</em><br>
+            • <strong>Had I known</strong> the client was vegetarian, I would have picked a different restaurant. <em>[If I had known...]</em><br>
+            • Kim would never have accepted the job <strong>had she known</strong> how demanding Jessica is.</p>
+        </div>
+
+        <h3>"Or" / "Otherwise" (consequence)</h3>
+        <div class="box">
+            <strong>Examples:</strong>
+            <p>• Rehearse the presentation <strong>or</strong> it will look sloppy!<br>
+            • Rehearse the presentation; <strong>otherwise</strong> it will look sloppy!</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14 — EXERCISE 1 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EXERCISE 1</div>
+        <h2>Conditional Matching</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instructions</strong>
+            <p>Match the if-clauses (Column A) with the correct results (Column B).</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Check Answers</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Reset</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 15 — EXERCISE 2 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EXERCISE 2</div>
+        <h2>Vocabulary Application</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instructions</strong>
+            <p>Complete the sentences with the correct word.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Check Answers</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Reset</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 16 — BIBLIOGRAPHY -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAPHY</div>
+        <h2>Reference (APA Format)</h2>
+    </div>
+    <div class="content">
+        <div class="box box-success">
+            <strong>📚 Course Textbook</strong>
+            <p>Powell, M. (2014). <em>In company 3.0. Student's Book.</em> Thailand: Macmillan Press.</p>
+        </div>
+
+        <div class="box">
+            <strong>💡 Content Covered</strong>
+            <ul style="margin-top:0.5rem;">
+                <li>Unit 5.1: Language for Meetings and Decision Making</li>
+                <li>Unit 5.2: Money Market Vocabulary</li>
+                <li>Unit 5.3: Conditional Statements</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17 — CLOSING -->
+<div class="slide cover">
+    <h1>SESSION<br>COMPLETE</h1>
+    <div class="line"></div>
+    <p class="subtitle">Review key phrases and practice conditionals regularly</p>
+    <p class="meta" style="margin-top:2rem;">Questions?</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">17</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+// EXERCISE 1 - Conditional Matching
+const ex1Data = [
+    { a: "If we submit a proposal that contains errors", b: "the client will think we are incompetent.", correctIdx: 2 },
+    { a: "If my son fails the math test", b: "I won't let him play video games this weekend.", correctIdx: 5 },
+    { a: "If I have the money", b: "I will buy a new car this year.", correctIdx: 1 },
+    { a: "If Annette closes this deal", b: "she'll become the #1 salesperson in our district.", correctIdx: 3 },
+    { a: "If I see Frank at the conference", b: "I'll tell him you said hi.", correctIdx: 4 }
+];
+
+const allOptions = [
+    "the client will think we are incompetent.",
+    "I will buy a new car this year.",
+    "she'll become the #1 salesperson in our district.",
+    "I'll tell him you said hi.",
+    "I won't let him play video games this weekend."
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1.2rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.a}</label>
+            <select class="exercise-input" id="ex1-sel-${qi}" style="cursor:pointer;">
+                <option value="">-- Select result --</option>
+                ${allOptions.map((opt, oi) => `<option value="${oi}">${opt}</option>`).join('')}
+            </select>
+        </div>`
+    ).join('');
+})();
+
+// EXERCISE 2 - Vocabulary
+const ex2Data = [
+    { q: "The company decided to __________ prices by 50% to attract more customers. (cut/slash)", a: "slash" },
+    { q: "Stock prices are __________ dramatically after the scandal. (falling/plunging)", a: "plunging" },
+    { q: "__________ you need assistance, please call our helpline. (If/Should)", a: "should" },
+    { q: "You won't pass the exam __________ you study harder. (unless/provided)", a: "unless" },
+    { q: "The advantage of __________ online is convenience. (shop/shopping)", a: "shopping" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function checkEx1() {
+    let correct = 0;
+    ex1Data.forEach((item, qi) => {
+        const sel = document.getElementById(`ex1-sel-${qi}`);
+        const userIdx = parseInt(sel.value);
+        if (userIdx === item.correctIdx) {
+            sel.classList.add('correct');
+            sel.classList.remove('incorrect');
+            correct++;
+        } else {
+            sel.classList.add('incorrect');
+            sel.classList.remove('correct');
+        }
+    });
+    const fb = document.getElementById('ex1-feedback');
+    fb.classList.add('show');
+    if (correct === ex1Data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 Perfect! You got all ${correct} matches correct!`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `You matched <strong>${correct} out of ${ex1Data.length}</strong> correctly. Try again!`;
+    }
+}
+
+function resetEx1() {
+    ex1Data.forEach((_, qi) => {
+        const sel = document.getElementById(`ex1-sel-${qi}`);
+        sel.value = '';
+        sel.className = 'exercise-input';
+    });
+    document.getElementById('ex1-feedback').className = 'feedback-msg';
+}
+
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z]/g,'');
+}
+
+function checkEx2() {
+    let correct = 0;
+    ex2Data.forEach((item, i) => {
+        const inp = document.getElementById(`ex2-inp-${i}`);
+        const userVal = normalise(inp.value);
+        const correctVal = normalise(item.a);
+        if (userVal === correctVal) {
+            inp.classList.add('correct');
+            inp.classList.remove('incorrect');
+            correct++;
+        } else {
+            inp.classList.add('incorrect');
+            inp.classList.remove('correct');
+        }
+    });
+    const fb = document.getElementById('ex2-feedback');
+    fb.classList.add('show');
+    if (correct === ex2Data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 Excellent! All ${correct} answers are correct!`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `You got <strong>${correct} out of ${ex2Data.length}</strong> correct. Review the incorrect ones!`;
+    }
+}
+
+function resetEx2() {
+    ex2Data.forEach((_, i) => {
+        const inp = document.getElementById(`ex2-inp-${i}`);
+        inp.value = '';
+        inp.className = 'exercise-input';
+    });
+    document.getElementById('ex2-feedback').className = 'feedback-msg';
+}
+</script>
+</body>
+</html>
