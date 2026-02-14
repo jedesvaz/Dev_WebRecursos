@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indagación de Requerimientos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:#0a1929;
+            color:#e3f2fd;
+            overflow:hidden;
+        }
+
+        .container { width:100vw; height:100vh; position:relative; }
+
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.8rem 6.5rem;
+            flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* ─── PORTADA ─── */
+        .cover {
+            background:linear-gradient(135deg,#01579b 0%,#0277bd 40%,#0288d1 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-120px; right:-120px;
+            width:380px; height:380px; border-radius:50%;
+            background:rgba(41,182,246,0.12);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-80px; left:-80px;
+            width:280px; height:280px; border-radius:50%;
+            background:rgba(41,182,246,0.08);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.6rem; font-weight:900;
+            line-height:1.2; margin-bottom:1.2rem;
+            position:relative; z-index:1;
+        }
+        .cover .subtitle {
+            font-size:1.35rem; opacity:0.88;
+            position:relative; z-index:1;
+        }
+        .cover .line {
+            width:90px; height:3px;
+            background:#81d4fa; margin:1.8rem auto;
+            position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            opacity:0.65; position:relative; z-index:1;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            opacity:0.55; position:relative; z-index:1;
+        }
+
+        /* ─── SLIDES NORMALES ─── */
+        .slide-header { margin-bottom:1.5rem; flex-shrink:0; }
+
+        .slide-number {
+            color:#29b6f6; font-size:0.82rem;
+            font-weight:700; letter-spacing:2.8px;
+            text-transform:uppercase; margin-bottom:0.4rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.3rem; color:#e3f2fd;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.4rem; color:#29b6f6;
+            margin:1.3rem 0 0.75rem;
+        }
+
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(41,182,246,0.08); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#29b6f6; border-radius:3px; }
+
+        p { font-size:1.04rem; line-height:1.75; margin-bottom:1.15rem; opacity:0.93; }
+
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:0.99rem; line-height:1.65;
+            margin-bottom:0.65rem; padding-left:1.5rem;
+            position:relative; opacity:0.91;
+        }
+        ul li::before {
+            content:'▸'; position:absolute;
+            left:0; color:#29b6f6; font-weight:bold;
+        }
+
+        /* ─── CAJAS ─── */
+        .box {
+            background:rgba(41,182,246,0.08);
+            border-left:4px solid #29b6f6;
+            padding:1.3rem 1.5rem;
+            margin:1.3rem 0; border-radius:0 7px 7px 0;
+        }
+        .box strong { color:#29b6f6; display:block; margin-bottom:0.4rem; font-size:1.04rem; }
+        .box p { margin-bottom:0.35rem; }
+
+        .box-warn { background:rgba(255,167,38,0.09); border-left-color:#ffa726; }
+        .box-warn strong { color:#ffa726; }
+
+        .box-success { background:rgba(102,187,106,0.09); border-left-color:#66bb6a; }
+        .box-success strong { color:#66bb6a; }
+
+        /* ─── CARDS / GRIDS ─── */
+        .grid { display:grid; gap:1.2rem; margin:1.2rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+
+        .card {
+            background:rgba(255,255,255,0.045);
+            padding:1.3rem; border-radius:9px;
+            border:1px solid rgba(41,182,246,0.2);
+        }
+        .card h4 { color:#29b6f6; margin-bottom:0.5rem; font-size:1.08rem; }
+        .card p { font-size:0.96rem; margin-bottom:0.3rem; }
+
+        .card-accent { border-color:rgba(41,182,246,0.4); background:rgba(41,182,246,0.07); }
+
+        .em { color:#29b6f6; font-weight:700; }
+        .em-warn { color:#ffa726; font-weight:700; }
+        .em-success { color:#66bb6a; font-weight:700; }
+
+        /* ─── TABLAS ─── */
+        table { width:100%; border-collapse:collapse; margin:1.1rem 0; }
+        th,td { padding:0.75rem 1rem; text-align:left; border-bottom:1px solid rgba(41,182,246,0.16); font-size:0.95rem; }
+        th { background:rgba(41,182,246,0.12); color:#29b6f6; font-weight:700; font-size:0.9rem; letter-spacing:0.45px; }
+        tr:last-child td { border-bottom:none; }
+
+        /* ─── DIAGRAMA FLUJO ─── */
+        .flow-diagram {
+            display:flex; align-items:center;
+            justify-content:center; gap:1.2rem;
+            margin:1.2rem 0; flex-wrap:wrap;
+        }
+        .flow-box {
+            background:rgba(41,182,246,0.12);
+            border:2px solid #29b6f6;
+            border-radius:10px; padding:1.2rem 1.8rem;
+            text-align:center; min-width:140px;
+        }
+        .flow-box h4 { color:#29b6f6; font-size:1rem; margin-bottom:0.3rem; }
+        .flow-box p { font-size:0.88rem; margin:0; opacity:0.85; }
+        .flow-arrow {
+            font-size:1.8rem; color:#29b6f6; font-weight:bold;
+        }
+
+        /* ─── STEPS (pasos numerados) ─── */
+        .step {
+            display:flex; gap:1rem; align-items:flex-start;
+            margin-bottom:0.9rem;
+        }
+        .step-num {
+            background:#29b6f6; color:#0a1929;
+            width:28px; height:28px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:0.85rem; font-weight:700; flex-shrink:0;
+            margin-top:3px;
+        }
+        .step-text { font-size:0.97rem; line-height:1.65; }
+
+        /* ─── BADGES ─── */
+        .exercise-badge {
+            background:linear-gradient(135deg,#0277bd,#29b6f6);
+            color:#fff; padding:0.3rem 1.2rem;
+            border-radius:24px; display:inline-block;
+            font-weight:800; font-size:0.82rem;
+            letter-spacing:1.5px;
+            box-shadow:0 3px 10px rgba(41,182,246,0.35);
+        }
+
+        /* ─── EJERCICIOS ─── */
+        .exercise-input {
+            width:100%; background:rgba(255,255,255,0.055);
+            border:1px solid rgba(41,182,246,0.3);
+            border-radius:7px; padding:0.6rem 0.9rem;
+            color:#e3f2fd; font-size:0.96rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#29b6f6; background:rgba(41,182,246,0.08); }
+        .exercise-input.correct { border-color:#66bb6a; background:rgba(102,187,106,0.12); }
+        .exercise-input.incorrect { border-color:#ef5350; background:rgba(239,83,80,0.12); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.96rem; opacity:0.91; display:block; }
+        .exercise-q .qnum { color:#29b6f6; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#0277bd; border:none; color:#fff;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#29b6f6; transform:scale(1.05); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(41,182,246,0.4); color:#29b6f6; }
+        .ex-btn-sec:hover { background:rgba(41,182,246,0.12); border-color:#29b6f6; }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(102,187,106,0.12); border:1px solid rgba(102,187,106,0.35); color:#66bb6a; }
+        .feedback-msg.partial { background:rgba(255,167,38,0.09); border:1px solid rgba(255,167,38,0.35); color:#ffa726; }
+
+        /* ─── OPCIÓN MÚLTIPLE ─── */
+        .mc-option {
+            background:rgba(255,255,255,0.045);
+            border:1px solid rgba(41,182,246,0.22);
+            border-radius:7px; padding:0.6rem 1rem;
+            margin:0.35rem 0; cursor:pointer;
+            transition:all 0.22s; font-size:0.96rem;
+        }
+        .mc-option:hover { border-color:#29b6f6; background:rgba(41,182,246,0.08); }
+        .mc-option.selected { border-color:#29b6f6; background:rgba(41,182,246,0.13); }
+        .mc-option.correct-sel { border-color:#66bb6a; background:rgba(102,187,106,0.2); }
+        .mc-option.incorrect-sel { border-color:#ef5350; background:rgba(239,83,80,0.15); }
+
+        /* ─── NAV ─── */
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; background:#0277bd;
+            border:none; border-radius:50%; color:#fff;
+            font-size:1.35rem; font-weight:bold; cursor:pointer;
+            transition:all 0.3s; box-shadow:0 4px 15px rgba(0,0,0,0.35);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); background:#29b6f6; }
+        .btn:disabled { opacity:0.28; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(10,25,41,0.92);
+            padding:0.8rem 1.6rem; border-radius:28px;
+            border:2px solid #29b6f6; color:#81d4fa;
+            font-weight:700; z-index:1000; font-size:0.95rem;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.4rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+            .flow-diagram{flex-wrap:wrap; gap:0.6rem;}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+            .flow-diagram{flex-direction:column;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ══════════ SLIDE 1 — PORTADA ══════════ -->
+<div class="slide cover active">
+    <h1>Indagación de Requerimientos</h1>
+    <div class="line"></div>
+    <p class="subtitle">Tema 4 — Técnicas y Herramientas para Elicitación de Requisitos</p>
+    <p class="meta">Ingeniería de Requerimientos de Software | Nivel: Medio</p>
+    <p class="help">👉 Usa las flechas del teclado o los botones para navegar →</p>
+</div>
+
+<!-- ══════════ SLIDE 2 — CASO DAVISNET ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">CASO DE ESTUDIO</div>
+        <h2>Davisnet® — Estaciones Meteorológicas</h2>
+    </div>
+    <div class="content">
+        <p>La compañía <span class="em">Davisnet®</span> se dedica a la fabricación y venta de <strong>estaciones meteorológicas</strong> para usos desde el doméstico hasta el agrícola.</p>
+
+        <div class="box">
+            <strong>📊 Instrumentos de medición</strong>
+            <p>Cada estación está dotada de: barómetro, termómetro, anemómetro, sensores de humedad interior, recolector de lluvia, sensores de radiación solar y sensores de humedad en el suelo.</p>
+        </div>
+
+        <h3>El desafío</h3>
+        <p>Davisnet® desea ofrecer a sus clientes la capacidad de <strong>monitorear la información de estos sensores desde una página de Internet</strong>. Ha contratado a una empresa desarrolladora de software y <span class="em-warn">te han asignado la coordinación de la ingeniería de requerimientos</span>.</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>❓ Pregunta 1</h4>
+                <p>¿Cuál sería el <strong>primer paso</strong> que debes realizar para comenzar con la documentación de los requerimientos?</p>
+            </div>
+            <div class="card card-accent">
+                <h4>❓ Pregunta 2</h4>
+                <p>¿A <strong>quién</strong> deberías consultar para conocer las funcionalidades del sistema?</p>
+            </div>
+            <div class="card card-accent">
+                <h4>❓ Pregunta 3</h4>
+                <p>¿Qué <strong>técnica de indagación</strong> deberías utilizar para especificaciones completas y claras?</p>
+            </div>
+        </div>
+
+        <p style="text-align:center; margin-top:1rem; color:#ffa726; font-weight:600;">Estas preguntas las resolverás al final de este tema →</p>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 3 — INTRODUCCIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4 — INDAGACIÓN</div>
+        <h2>¿Qué es la Indagación de Requerimientos?</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">indagación (o elicitación) de requerimientos</span> es el proceso de <strong>recopilar, analizar y documentar</strong> las necesidades y expectativas de los stakeholders para un sistema de software.</p>
+
+        <div class="box box-success">
+            <strong>🎯 Objetivo principal</strong>
+            <p>Establecer claramente el tipo de apoyo que necesitas del personal que definirá los requerimientos. Su <strong>compromiso de participación activa</strong> será uno de los factores del éxito del proyecto.</p>
+        </div>
+
+        <h3>Estrategias de trabajo</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>📊 De lo general a lo particular</h4>
+                <p>Iniciar con <strong>sesiones de trabajo</strong> para contexto general, luego detallar con técnicas específicas de indagación.</p>
+            </div>
+            <div class="card">
+                <h4>🔍 De lo particular a lo general</h4>
+                <p>Iniciar con <strong>técnicas de recopilación</strong> (entrevistas, cuestionarios), luego consolidar en reuniones con usuarios.</p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Principio fundamental</strong>
+            <p>Cualquier estrategia que apliques siempre debe permitirte <strong>detallar los requerimientos</strong> de manera que no haya duda de lo que se espera del sistema, tanto para el usuario como para el equipo de desarrollo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 4 — FUENTES DE INFORMACIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — RECOPILACIÓN</div>
+        <h2>Fuentes de Información</h2>
+    </div>
+    <div class="content">
+        <p>El primer paso es <strong>establecer las fuentes de información</strong> que se requieren e involucrar al mayor número de participantes clave.</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>👥 Stakeholders</h4>
+                <p>Personas de la organización que influyen directa o indirectamente en los requisitos del sistema.</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Clientes</li>
+                    <li>Gerentes</li>
+                    <li>Operadores</li>
+                    <li>Asistentes</li>
+                    <li>Equipo de desarrollo</li>
+                </ul>
+                <p style="font-size:0.88rem; color:#29b6f6; margin-top:0.5rem;">Fuente principal de información</p>
+            </div>
+            <div class="card card-accent">
+                <h4>📄 Documentos</h4>
+                <p>Información organizacional existente.</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Políticas</li>
+                    <li>Estándares</li>
+                    <li>Procedimientos</li>
+                    <li>Guidelines</li>
+                    <li>Manuales de sistemas heredados</li>
+                </ul>
+                <p style="font-size:0.88rem; color:#29b6f6; margin-top:0.5rem;">Útil para automatizar procesos manuales</p>
+            </div>
+            <div class="card card-accent">
+                <h4>💻 Sistemas en operación</h4>
+                <p>Sistemas actuales de la empresa para procesos administrativos u operativos.</p>
+                <ul style="margin-top:0.5rem;">
+                    <li>Funciones eficientes a replicar</li>
+                    <li>Métricas de desempeño</li>
+                    <li>Casos de uso existentes</li>
+                </ul>
+                <p style="font-size:0.88rem; color:#29b6f6; margin-top:0.5rem;">Base para comparación y mejora</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 5 — SESIONES DE TRABAJO (parte 1) ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — RECOPILACIÓN</div>
+        <h2>Sesiones de Trabajo</h2>
+    </div>
+    <div class="content">
+        <p>Las <span class="em">reuniones con stakeholders</span> son particularmente efectivas porque permiten escuchar <strong>diferentes puntos de vista</strong> sobre lo que se espera del software.</p>
+
+        <div class="box">
+            <strong>🎯 Meta de las sesiones (Pressman, 2010)</strong>
+            <p>"Identificar el problema, proponer elementos de la solución, negociar distintos enfoques y especificar un conjunto preliminar de requerimientos en una atmósfera que favorezca el logro de la meta."</p>
+        </div>
+
+        <h3>Requisitos para participantes</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>✅ Perfil adecuado</h4>
+                <ul>
+                    <li>Conocimiento de los procesos</li>
+                    <li>Actitud propositiva y abierta</li>
+                    <li>Capacidad de tomar decisiones</li>
+                    <li>Disponibilidad de tiempo</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>❌ Problema común</h4>
+                <p>Gerentes envían personas <strong>no clave</strong> para impactar menos la operación.</p>
+                <p style="margin-top:0.5rem; color:#ffa726;">⚠️ El ingeniero de requerimientos debe detectar esto desde el inicio o será una pérdida de tiempo.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 6 — SESIONES DE TRABAJO (parte 2) ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — RECOPILACIÓN</div>
+        <h2>Facilitación de Sesiones de Trabajo</h2>
+    </div>
+    <div class="content">
+        <h3>Rol del ingeniero de requerimientos</h3>
+        <p>Es responsabilidad del ingeniero ser el <span class="em">facilitador</span> de las reuniones:</p>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>🎭 Responsabilidades</h4>
+                <ul>
+                    <li>Aclarar expectativas</li>
+                    <li>Establecer reglas de comportamiento</li>
+                    <li>Mantener motivados a los participantes</li>
+                    <li>Guiar hacia la meta propuesta</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h4>🏢 Logística necesaria</h4>
+                <ul>
+                    <li>Lugar acondicionado</li>
+                    <li>Pintarrón y marcadores</li>
+                    <li>Post-it y rotafolio</li>
+                    <li>Hojas blancas y bolígrafos</li>
+                    <li>Proyector</li>
+                </ul>
+            </div>
+        </div>
+
+        <h3>Metodología recomendada (Pressman, 2010)</h3>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Comenzar con una <strong>declaratoria general del problema</strong> para contextualizar (puede revisarse antes de la sesión).</div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">Solicitar a participantes describir: elementos del ambiente, funciones, procesos, resultados, restricciones, reglas de negocio y criterios de desempeño.</div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">Comparar, analizar, eliminar y agregar características mediante <strong>ejercicio de consenso</strong>.</div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">Consolidar en un <strong>documento preliminar de especificaciones</strong>.</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 7 — MINIESPECIFICACIONES ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — RECOPILACIÓN</div>
+        <h2>Miniespecificaciones</h2>
+    </div>
+    <div class="content">
+        <p>Algunas características del sistema requieren <span class="em">descripciones más detalladas</span> llamadas <strong>miniespecificaciones</strong>.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🎯 Propósito</h4>
+                <ul>
+                    <li>Aclarar <strong>funciones críticas</strong> del sistema</li>
+                    <li>Facilitar comprensión del equipo de desarrollo</li>
+                    <li>Base para <strong>validación</strong> por el usuario</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>👥 Proceso de elaboración</h4>
+                <ul>
+                    <li>Elaboradas por grupo <strong>reducido</strong> de personas</li>
+                    <li>Conocen a fondo los pasos del procedimiento</li>
+                    <li>Analizadas y complementadas por el resto del equipo</li>
+                    <li>Visión más amplia y estable</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📋 Contenido típico de una miniespecificación</strong>
+            <p>Descripción detallada paso a paso de un proceso crítico, incluyendo: entradas, salidas, reglas de negocio, validaciones, casos excepcionales y criterios de aceptación.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Ejemplo</strong>
+            <p>Para Davisnet®: una miniespecificación del proceso de "Lectura y almacenamiento de datos del sensor de temperatura" detallando frecuencia de muestreo, validación de rangos, manejo de errores de comunicación, y formato de almacenamiento.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 8 — TÉCNICAS: INTRODUCCIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — RECOPILACIÓN</div>
+        <h2>Técnicas de Recopilación de Información</h2>
+    </div>
+    <div class="content">
+        <p>Estas técnicas permiten recuperar información que detalle de forma <strong>completa y exhaustiva</strong> los requisitos del sistema. Son <span class="em">complemento</span> de las sesiones de trabajo.</p>
+
+        <div class="box box-success">
+            <strong>✅ Principio de flexibilidad</strong>
+            <p>Puedes utilizar <strong>una o varias técnicas</strong> dependiendo de la situación y el tipo de información que necesites recolectar.</p>
+        </div>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>💬 Entrevista</h4>
+                <p>Sesión uno a uno entre ingeniero y stakeholder</p>
+            </div>
+            <div class="card">
+                <h4>📋 Cuestionario</h4>
+                <p>Información masiva en poco tiempo</p>
+            </div>
+            <div class="card">
+                <h4>💡 Lluvia de ideas</h4>
+                <p>Creatividad en grupo sin restricciones</p>
+            </div>
+            <div class="card">
+                <h4>👁️ Observación</h4>
+                <p>Experiencia vivencial del proceso</p>
+            </div>
+            <div class="card">
+                <h4>🖥️ Análisis de interfaz</h4>
+                <p>Interacción usuario-sistema</p>
+            </div>
+            <div class="card">
+                <h4>🎯 Método Delphi</h4>
+                <p>Consenso de expertos anónimos</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 9 — ENTREVISTA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — TÉCNICAS</div>
+        <h2>Entrevista</h2>
+    </div>
+    <div class="content">
+        <p>Una <span class="em">entrevista</span> es una sesión <strong>uno a uno</strong> entre el ingeniero de requerimientos y un stakeholder.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📝 Preparación</h4>
+                <ul>
+                    <li>Preparar con <strong>suficiente anticipación</strong></li>
+                    <li>Listar serie de preguntas</li>
+                    <li>Investigar el contexto del entrevistado</li>
+                    <li>Definir objetivos claros de la sesión</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>💬 Durante la entrevista</h4>
+                <ul>
+                    <li>Profundizar en aspectos importantes</li>
+                    <li>Encontrar <strong>necesidades ocultas</strong></li>
+                    <li>Adaptarse a las respuestas</li>
+                    <li>Tomar notas detalladas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Cuándo usar entrevistas</strong>
+            <p>Recomendable solo cuando sea necesario recabar <strong>más información</strong> que puedes obtener de <strong>pocos usuarios</strong>, dado que implica mayor tiempo y el proceso es lento.</p>
+        </div>
+
+        <div class="box">
+            <strong>💡 Ejemplo Davisnet®</strong>
+            <p>Entrevistar al jefe de soporte técnico para entender problemas actuales con consultas telefónicas de clientes sobre lecturas de sensores.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 10 — CUESTIONARIO ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — TÉCNICAS</div>
+        <h2>Cuestionario</h2>
+    </div>
+    <div class="content">
+        <p>Los <span class="em">cuestionarios</span> se generan cuando se necesita obtener <strong>información masiva en poco tiempo</strong>.</p>
+
+        <div class="box">
+            <strong>✅ Cuándo usar cuestionarios</strong>
+            <p>Útiles para:</p>
+            <ul>
+                <li>Entrevistar a <strong>muchas personas</strong> con el mismo perfil</li>
+                <li>Personas que realizan la misma función</li>
+                <li>Confirmar información que ya se tiene</li>
+                <li>Analizar una <strong>opinión general</strong> del sistema</li>
+            </ul>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>📋 Tipos de preguntas</h4>
+                <ul>
+                    <li><strong>Abiertas:</strong> respuesta libre</li>
+                    <li><strong>Cerradas:</strong> opciones predefinidas</li>
+                </ul>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">Considerar: objetivo a alcanzar y tiempo de análisis de respuestas</p>
+            </div>
+            <div class="card">
+                <h4>⚠️ Desafíos (Pohl y Rupp, 2011)</h4>
+                <p>La creación de un cuestionario adecuado es:</p>
+                <ul>
+                    <li>A menudo <strong>difícil</strong></li>
+                    <li>Consume mucho tiempo</li>
+                    <li>Requiere conocimiento profundo del dominio</li>
+                    <li>Necesita pautas psicológicas</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Ejemplo Davisnet®</strong>
+            <p>Cuestionario a 200 clientes actuales preguntando: frecuencia de consulta de datos, dispositivos que usan, funciones deseadas en la web, nivel de satisfacción con sistema actual.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 11 — LLUVIA DE IDEAS Y OBSERVACIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — TÉCNICAS</div>
+        <h2>Lluvia de Ideas y Observación</h2>
+    </div>
+    <div class="content">
+        <h3>💡 Lluvia de ideas (Brainstorming)</h3>
+        <p>Grupo de <strong>5 a 10 personas</strong> generando ideas sin restricciones.</p>
+
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Cada participante <strong>escribe ideas</strong> libremente en una hoja (sin restricción)</div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">Expresan <strong>una idea</strong> por turno, sin explicar, que se anota en pintarrón <strong>sin juzgar</strong></div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">Una vez anotadas todas, el autor <strong>explica cada una</strong></div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">Se eligen las mejores en <strong>consenso</strong> y se crea informe</div>
+        </div>
+
+        <p style="margin-top:0.8rem;"><span class="em-success">Útil para:</span> involucrados de diferentes grupos, formas creativas/innovadoras, mecanismo de colaboración.</p>
+
+        <h3 style="margin-top:1.2rem;">👁️ Observación</h3>
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>🏭 Observación de campo</h4>
+                <p>El ingeniero acompaña al usuario en su lugar de trabajo, tomando nota de los pasos del procedimiento.</p>
+            </div>
+            <div class="card">
+                <h4>🎓 Observación de aprendiz</h4>
+                <p>El usuario lleva al ingeniero "de la mano" a través del proceso para que aprenda cada paso.</p>
+            </div>
+        </div>
+
+        <p><span class="em-success">Beneficio:</span> Sentido vivencial, sensibilización sobre necesidades del día a día.</p>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 12 — ANÁLISIS DE INTERFAZ Y DELPHI ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.1 — TÉCNICAS</div>
+        <h2>Análisis de Interfaz y Método Delphi</h2>
+    </div>
+    <div class="content">
+        <h3>🖥️ Análisis de interfaz</h3>
+        <p>Análisis sobre cómo el usuario <strong>interactúa</strong> con un sistema a través de su interfaz gráfica.</p>
+
+        <div class="box">
+            <strong>🎯 Objetivo</strong>
+            <p>Encontrar la mejor manera para que un usuario pueda ingresar, manipular y sacar información del sistema de forma <strong>ágil, consistente y sin errores</strong>.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Ejemplo</strong>
+            <p>Si el sistema es para un restaurant o estación de maquiladora, un <strong>monitor touch screen</strong> puede ser más útil que un teclado para ingresar valores.</p>
+            <p style="margin-top:0.5rem;">Para Davisnet®: analizar si dashboard debe ser responsive (móvil/tablet), widgets configurables, gráficas interactivas vs tablas estáticas.</p>
+        </div>
+
+        <h3 style="margin-top:1.2rem;">🎯 Método Delphi</h3>
+        <p>Técnica basada en obtener información de <strong>expertos</strong> a través de cuestionarios iterativos y anónimos.</p>
+
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Expertos contestan <strong>primer cuestionario</strong> sobre funciones del sistema</div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">Ingeniero recopila y genera <strong>segundo cuestionario</strong> con resumen de juicios (anónimo)</div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">Expertos <strong>reevalúan</strong> sus opiniones al ver el conjunto</div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">Se llega a un <strong>consenso</strong> sin influencia de jerarquías o personalidades dominantes</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 13 — HERRAMIENTAS: INTRODUCCIÓN ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.2 — HERRAMIENTAS</div>
+        <h2>Herramientas de Soporte</h2>
+    </div>
+    <div class="content">
+        <p>Las herramientas que puede utilizar un ingeniero de requerimientos están relacionadas con el <span class="em">modelado de ideas</span>, que permiten expresar información de manera <strong>ágil y sencilla</strong>.</p>
+
+        <div class="box">
+            <strong>💡 Ejemplo</strong>
+            <p>Si necesitas explicar la arquitectura tecnológica de la organización a un grupo de usuarios, lo más sencillo es simplificar la información a través de un <strong>diagrama o modelo gráfico</strong>.</p>
+        </div>
+
+        <div class="grid grid-3">
+            <div class="card">
+                <h4>🧠 Mapas mentales</h4>
+                <p>Representación gráfica de conceptos y relaciones</p>
+            </div>
+            <div class="card">
+                <h4>🎥 Audio y video</h4>
+                <p>Grabaciones de procesos y operaciones</p>
+            </div>
+            <div class="card">
+                <h4>📋 Casos de uso</h4>
+                <p>Secuencias de acción paso a paso</p>
+            </div>
+            <div class="card">
+                <h4>✏️ Bocetos</h4>
+                <p>Dibujos rápidos de interfaces</p>
+            </div>
+            <div class="card">
+                <h4>👤 Escenarios persona</h4>
+                <p>Definición de usuarios tipo</p>
+            </div>
+            <div class="card">
+                <h4>🎬 Storyboard</h4>
+                <p>Secuencia visual de interacciones</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 14 — MAPAS MENTALES Y VIDEO ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.2 — HERRAMIENTAS</div>
+        <h2>Mapas Mentales y Grabaciones</h2>
+    </div>
+    <div class="content">
+        <h3>🧠 Mapas mentales</h3>
+        <p>Representaciones gráficas de <strong>conceptos y sus relaciones</strong> en torno a una idea principal.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📊 Estructura</h4>
+                <ul>
+                    <li>Parecidos a una <strong>red neuronal</strong></li>
+                    <li>Ideas centrales → brazos gruesos</li>
+                    <li>Ideas secundarias → brazos delgados</li>
+                    <li>Facilitan ver relaciones</li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>✅ Utilidad</h4>
+                <p>Herramienta útil cuando se desea <strong>expresar ideas y sus relaciones</strong> de forma visual y jerárquica.</p>
+                <p style="margin-top:0.5rem; font-size:0.88rem;">Ejemplo: mapa de funcionalidades del sistema Davisnet® con ramificaciones por tipo de usuario.</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top:1.2rem;">🎥 Audio y grabaciones en video</h3>
+        <div class="box">
+            <strong>✅ Ventajas</strong>
+            <p>Herramienta útil en <strong>observación de campo</strong>. Permite analizar con detalles los movimientos y acciones que realiza un operador.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Problema</strong>
+            <p>Suelen <strong>modificar la conducta</strong> de las personas que saben que son grabadas o incluso incomodarlas, produciendo <strong>resultados sesgados</strong>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 15 — CASOS DE USO Y BOCETOS ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.2 — HERRAMIENTAS</div>
+        <h2>Casos de Uso y Bocetos</h2>
+    </div>
+    <div class="content">
+        <h3>📋 Modelado de secuencias de acción (Casos de uso)</h3>
+        <p>Documento que expresa <strong>paso a paso</strong> las acciones que realizarán los usuarios utilizando el sistema.</p>
+
+        <div class="box box-success">
+            <strong>✅ Ventajas</strong>
+            <ul>
+                <li><strong>Ampliamente utilizada</strong> en la industria del software</li>
+                <li>Mecanismo de <strong>validación</strong> de requerimientos</li>
+                <li>El mismo cliente puede usarlos</li>
+                <li>Serán explicados más adelante en este curso</li>
+            </ul>
+        </div>
+
+        <h3 style="margin-top:1.2rem;">✏️ Bocetos (Sketches)</h3>
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>🎨 ¿Qué son?</h4>
+                <p>Dibujos <strong>burdos</strong> que expresan una función rápida, simulando lo que hará el sistema o cómo podría verse su interfaz gráfica.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>✅ Ventajas</h4>
+                <ul>
+                    <li>Muy <strong>sencillos</strong> de usar</li>
+                    <li>No importa la calidad del dibujo</li>
+                    <li>Importa la <strong>idea</strong> que transmite</li>
+                    <li>Cualquier persona puede generarlos</li>
+                    <li>Aclaran la interfaz del sistema</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Ejemplo Davisnet®</strong>
+            <p>Boceto de dashboard web mostrando: gráfica de temperatura de últimas 24h, alertas de sensores, selector de estación, exportar datos.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 16 — ESCENARIOS PERSONA Y STORYBOARD ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4.2 — HERRAMIENTAS</div>
+        <h2>Escenarios Persona y Storyboard</h2>
+    </div>
+    <div class="content">
+        <h3>👤 Escenarios persona</h3>
+        <p>Herramienta que define a un <strong>usuario (persona)</strong> con características detalladas sobre quién es, qué hace y su ambiente de trabajo.</p>
+
+        <div class="box">
+            <strong>📝 Ejemplo</strong>
+            <p><strong>Janeth López</strong> es una ingeniera capturista de datos que ingresa órdenes de compra de productos. Cada orden la ingresa en <strong>30 minutos</strong> (promedio) y <strong>1 de cada 5</strong> órdenes tiene errores que provocan malestar en el cliente. Janeth trabaja 8 horas diarias, 6 días a la semana.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Utilidad</strong>
+            <p>Permite a los stakeholders <strong>entender requerimientos concretos</strong> que ayudarán a este usuario, en lugar de tratar con requerimientos abstractos y superficiales.</p>
+        </div>
+
+        <h3 style="margin-top:1.2rem;">🎬 Storyboard</h3>
+        <p>Herramienta visual que <strong>mezcla bocetos con escenarios-persona</strong>. Describe una situación de interacción particular entre el usuario y el sistema.</p>
+
+        <div class="box">
+            <strong>✅ Ventajas</strong>
+            <ul>
+                <li>Analiza <strong>situaciones complejas</strong> de manera sencilla</li>
+                <li>Inspira <strong>creatividad e innovación</strong></li>
+                <li>Visualización de flujos de trabajo</li>
+            </ul>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Ejemplo Davisnet®</strong>
+            <p>Persona: "Miguel Fernández, agricultor de 55 años, usa smartphone, revisa datos 3 veces al día desde el campo para decidir riego."<br>
+            Storyboard: Secuencia de Miguel abriendo app → seleccionando campo → viendo humedad del suelo → tomando decisión de riego.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 17 — PRODUCTOS DE TRABAJO ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4 — DOCUMENTACIÓN</div>
+        <h2>Productos de la Indagación</h2>
+    </div>
+    <div class="content">
+        <p>El resultado de todo el trabajo debe estar <span class="em">debidamente documentado</span>. Pressman (2010) propone el siguiente listado:</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>📄 Documentos iniciales</h4>
+                <ul>
+                    <li><strong>Enunciado de la necesidad</strong> y su factibilidad</li>
+                    <li><strong>Alcance</strong> acotado del sistema</li>
+                    <li>Lista de <strong>clientes, usuarios y participantes</strong></li>
+                    <li>Descripción del <strong>ambiente técnico</strong></li>
+                </ul>
+            </div>
+            <div class="card card-accent">
+                <h4>📋 Requerimientos detallados</h4>
+                <ul>
+                    <li>Lista de <strong>requerimientos</strong> (organizados por función)</li>
+                    <li><strong>Restricciones del dominio</strong> aplicables</li>
+                    <li>Conjunto de <strong>escenarios de uso</strong></li>
+                    <li><strong>Prototipos</strong> desarrollados</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Importancia de la documentación</strong>
+            <p>Estos productos de trabajo son la <strong>base</strong> para las siguientes fases del proyecto: análisis, diseño, implementación y validación. Sin documentación adecuada, el proyecto carece de dirección clara.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 18 — CASO DAVISNET RESUELTO ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">CASO DE ESTUDIO</div>
+        <h2>Davisnet® — Resolución</h2>
+    </div>
+    <div class="content">
+        <p>Retomemos las preguntas del inicio:</p>
+
+        <div class="box box-success">
+            <strong>❓ Pregunta 1: ¿Cuál sería el primer paso?</strong>
+            <p><span class="em-success">Respuesta:</span> Establecer las <strong>fuentes de información</strong> necesarias e identificar a los <strong>stakeholders clave</strong>: clientes (agricultores, aficionados), equipo técnico de Davisnet®, gerencia comercial, equipo de soporte, usuarios de sistemas actuales.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>❓ Pregunta 2: ¿A quién consultar?</strong>
+            <p><span class="em-success">Respuesta:</span> A múltiples stakeholders:</p>
+            <ul>
+                <li><strong>Clientes actuales</strong> — qué funcionalidades necesitan</li>
+                <li><strong>Equipo técnico</strong> — especificaciones de sensores, protocolos de comunicación</li>
+                <li><strong>Soporte al cliente</strong> — problemas frecuentes, consultas comunes</li>
+                <li><strong>Gerencia comercial</strong> — objetivos de negocio, diferenciación competitiva</li>
+            </ul>
+        </div>
+
+        <div class="box box-success">
+            <strong>❓ Pregunta 3: ¿Qué técnica usar?</strong>
+            <p><span class="em-success">Respuesta:</span> Combinación de varias:</p>
+            <ul>
+                <li><strong>Sesiones de trabajo</strong> — contexto general con equipo interno</li>
+                <li><strong>Entrevistas</strong> — con clientes clave y equipo técnico</li>
+                <li><strong>Cuestionarios</strong> — para base amplia de clientes actuales</li>
+                <li><strong>Casos de uso</strong> — para validar funcionalidades con usuarios</li>
+                <li><strong>Bocetos/Prototipos</strong> — para dashboard web</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 19 — EJERCICIO 1 ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Práctica: Fuentes y Técnicas</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Selecciona la respuesta correcta para cada pregunta.</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 20 — EJERCICIO 2 ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Práctica: Sesiones y Miniespecificaciones</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 21 — EJERCICIO 3 ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 3</div>
+        <h2>Práctica: Técnicas de Recopilación</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Relaciona cada situación con la técnica más apropiada.</p>
+        </div>
+        <div id="ex3-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx3()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx3()">↺ Limpiar</button>
+        </div>
+        <div id="ex3-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 22 — EJERCICIO 4 ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 4</div>
+        <h2>Práctica: Herramientas de Soporte</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex4-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx4()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx4()">↺ Limpiar</button>
+        </div>
+        <div id="ex4-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 23 — BIBLIOGRAFÍA ══════════ -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAFÍA</div>
+        <h2>Fuentes y Recursos</h2>
+    </div>
+    <div class="content">
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>📚 Plataforma Canva — Universidad Tecmilenio</h4>
+            <p><em>Tema 4: Indagación de Requerimientos.</em> Contenido del curso de Ingeniería de Requerimientos de Software. Cubre fuentes de información, sesiones de trabajo, miniespecificaciones, técnicas de recopilación (entrevista, cuestionario, lluvia de ideas, observación, análisis de interfaz, método Delphi) y herramientas de soporte (mapas mentales, casos de uso, bocetos, escenarios persona, storyboard).</p>
+        </div>
+        <div class="card card-accent" style="margin-bottom:1rem;">
+            <h4>📖 Pressman, R. (2010)</h4>
+            <p><em>Ingeniería del Software: Un Enfoque Práctico.</em> Referencia para metodología de sesiones de trabajo y productos de la indagación de requerimientos.</p>
+        </div>
+        <div class="card card-accent">
+            <h4>📖 Pohl, K. & Rupp, C. (2011)</h4>
+            <p><em>Requirements Engineering Fundamentals.</em> Referencia sobre diseño de cuestionarios y técnicas de elicitación.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════ SLIDE 24 — PORTADA FINAL ══════════ -->
+<div class="slide cover">
+    <h1>¿Preguntas?</h1>
+    <div class="line"></div>
+    <p class="subtitle">Gracias por tu atención</p>
+</div>
+
+</div><!-- /container -->
+
+<!-- ─── CONTADOR Y NAV ─── -->
+<div class="counter"><span id="current">1</span> / <span id="total">24</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCRIPTS
+     ═══════════════════════════════════════════════ -->
+<script>
+// ── NAVEGACIÓN ──
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+// ── UTIL ──
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z0-9.,\-\s]/g,'')
+        .replace(/\s+/g,' ');
+}
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 1 — Opción múltiple: Fuentes y Técnicas
+// ══════════════════════════════════════════════════
+const ex1Data = [
+    {
+        q: "¿Cuál es la principal fuente de información en un proyecto de ingeniería de requerimientos?",
+        opts: ["Los documentos de la organización", "Los stakeholders", "Los sistemas en operación", "Los manuales técnicos"],
+        correct: 1
+    },
+    {
+        q: "¿Cuándo es recomendable usar la técnica de entrevista?",
+        opts: ["Cuando necesitas información de muchas personas rápidamente", "Cuando necesitas información detallada de pocos usuarios", "Cuando quieres ideas creativas en grupo", "Cuando los expertos deben llegar a consenso anónimo"],
+        correct: 1
+    },
+    {
+        q: "¿Qué técnica es más apropiada para obtener información masiva en poco tiempo?",
+        opts: ["Entrevista", "Lluvia de ideas", "Cuestionario", "Observación de campo"],
+        correct: 2
+    },
+    {
+        q: "La técnica Delphi se caracteriza por:",
+        opts: ["Sesiones presenciales de expertos", "Cuestionarios iterativos y anónimos a expertos", "Observación del proceso en el campo", "Entrevistas uno a uno"],
+        correct: 1
+    },
+    {
+        q: "¿Qué tipo de observación implica que el ingeniero aprenda el proceso 'de la mano' del usuario?",
+        opts: ["Observación de campo", "Observación de aprendiz", "Observación remota", "Observación participativa"],
+        correct: 1
+    },
+    {
+        q: "Las sesiones de trabajo son efectivas porque:",
+        opts: ["Son rápidas y no requieren preparación", "Permiten escuchar diferentes puntos de vista", "Siempre llegan a consenso inmediato", "No requieren facilitador"],
+        correct: 1
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 2 — Fill-in-blank: Sesiones y Miniespecificaciones
+// ══════════════════════════════════════════════════
+const ex2Data = [
+    { q: "El ingeniero de requerimientos debe ser el __________ de las reuniones de trabajo.", a: "facilitador" },
+    { q: "Las sesiones de trabajo deben contar con material didáctico como pintarrón, marcadores y __________.", a: "postit" },
+    { q: "Las __________ son descripciones detalladas de funciones críticas del sistema.", a: "miniespecificaciones" },
+    { q: "Según Pressman (2010), las sesiones deben comenzar con una __________ general del problema.", a: "declaratoria" },
+    { q: "Es importante que los participantes de las sesiones tengan capacidad de tomar __________.", a: "decisiones" },
+    { q: "Las miniespecificaciones son útiles para __________ el sistema por el usuario.", a: "validar" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 3 — Opción múltiple: Técnicas de Recopilación
+// ══════════════════════════════════════════════════
+const ex3Data = [
+    {
+        q: "Situación: Necesitas obtener opiniones de 500 empleados sobre el nuevo sistema. ¿Qué técnica usarías?",
+        opts: ["Entrevista individual a cada uno", "Cuestionario masivo", "Lluvia de ideas con todos", "Método Delphi"],
+        correct: 1
+    },
+    {
+        q: "Situación: Quieres entender exactamente cómo el operador realiza su trabajo diario. ¿Qué técnica?",
+        opts: ["Cuestionario", "Lluvia de ideas", "Observación de campo", "Método Delphi"],
+        correct: 2
+    },
+    {
+        q: "Situación: Necesitas ideas creativas e innovadoras de un grupo multidisciplinario. ¿Qué técnica?",
+        opts: ["Entrevista", "Cuestionario", "Lluvia de ideas", "Observación"],
+        correct: 2
+    },
+    {
+        q: "Situación: Debes determinar si un sistema touch screen es mejor que teclado. ¿Qué técnica?",
+        opts: ["Análisis de interfaz", "Método Delphi", "Lluvia de ideas", "Cuestionario"],
+        correct: 0
+    },
+    {
+        q: "Situación: Tres expertos deben llegar a consenso sin influencia de jerarquías. ¿Qué técnica?",
+        opts: ["Sesión de trabajo", "Entrevistas grupales", "Método Delphi", "Lluvia de ideas"],
+        correct: 2
+    }
+];
+
+(function renderEx3() {
+    document.getElementById('ex3-container').innerHTML = ex3Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex3-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex3',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// EJERCICIO 4 — Fill-in-blank: Herramientas de Soporte
+// ══════════════════════════════════════════════════
+const ex4Data = [
+    { q: "Los __________ mentales son representaciones gráficas de conceptos y sus relaciones.", a: "mapas" },
+    { q: "Los bocetos o __________ son dibujos burdos que expresan ideas rápidamente.", a: "sketches" },
+    { q: "Un __________ persona define a un usuario con características detalladas sobre quién es y qué hace.", a: "escenario" },
+    { q: "El __________ es una herramienta visual que mezcla bocetos con escenarios persona.", a: "storyboard" },
+    { q: "Los casos de uso son también llamados modelado de __________ de acción.", a: "secuencias" },
+    { q: "Las grabaciones en video pueden modificar la __________ de las personas grabadas.", a: "conducta" }
+];
+
+(function renderEx4() {
+    document.getElementById('ex4-container').innerHTML = ex4Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex4-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+// ══════════════════════════════════════════════════
+// FUNCIONES GENÉRICOS DE EJERCICIOS
+// ══════════════════════════════════════════════════
+
+// ── Selección múltiple genérica ──
+function selMC(prefix, qi, oi) {
+    const data = prefix === 'ex1' ? ex1Data : ex3Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+// ── Check opción múltiple genérica ──
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+// ── Reset opción múltiple genérica ──
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+// ── Check fill-in-blank genérico ──
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        if (normalise(inp.value) === normalise(item.a)) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+// ── Reset fill-in-blank genérico ──
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+// ══════════════════════════════════════════════════
+// CONECTAR EJERCICIOS A FUNCIONES
+// ══════════════════════════════════════════════════
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+function checkEx3()  { checkMC('ex3', ex3Data, 'ex3-feedback'); }
+function resetEx3()  { resetMC('ex3', ex3Data, 'ex3-feedback'); }
+function checkEx4()  { checkFill('ex4', ex4Data, 'ex4-feedback'); }
+function resetEx4()  { resetFill('ex4', ex4Data, 'ex4-feedback'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tipos de Requerimientos - Ingeniería de Software</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family:'Source Sans Pro',sans-serif;
+            background:linear-gradient(135deg,#3d2817 0%,#5c3a21 40%,#704214 100%);
+            color:#f5deb3; overflow:hidden;
+        }
+        .container { width:100vw; height:100vh; position:relative; }
+        .slide {
+            display:none; width:100%; height:100%;
+            padding:3.5rem 6rem; flex-direction:column;
+        }
+        .slide.active { display:flex; }
+
+        /* PORTADA */
+        .cover {
+            background:linear-gradient(135deg,#8b4513 0%,#a0522d 40%,#d2691e 100%);
+            justify-content:center; align-items:center; text-align:center;
+            position:relative; overflow:hidden;
+        }
+        .cover::before {
+            content:''; position:absolute;
+            top:-100px; right:-100px; width:350px; height:350px;
+            border-radius:50%; background:rgba(218,165,32,0.15);
+        }
+        .cover::after {
+            content:''; position:absolute;
+            bottom:-70px; left:-70px; width:250px; height:250px;
+            border-radius:50%; background:rgba(196,69,54,0.12);
+        }
+        .cover h1 {
+            font-family:'Playfair Display',serif;
+            font-size:3.6rem; font-weight:900; line-height:1.2;
+            margin-bottom:1.2rem; position:relative; z-index:1;
+            color:#daa520;
+        }
+        .cover .subtitle {
+            font-size:1.35rem; color:#f5deb3;
+            position:relative; z-index:1; opacity:0.95;
+        }
+        .cover .line {
+            width:90px; height:3px; background:#c44536;
+            margin:1.8rem auto; position:relative; z-index:1;
+        }
+        .cover .help {
+            margin-top:2.5rem; font-size:0.95rem;
+            opacity:0.7; position:relative; z-index:1; color:#f5deb3;
+        }
+        .cover .meta {
+            margin-top:0.8rem; font-size:0.88rem;
+            opacity:0.6; position:relative; z-index:1; color:#daa520;
+        }
+
+        /* SLIDES */
+        .slide-header { margin-bottom:1.3rem; flex-shrink:0; }
+        .slide-number {
+            color:#daa520; font-size:0.8rem; font-weight:700;
+            letter-spacing:2.5px; text-transform:uppercase; margin-bottom:0.4rem;
+        }
+        h2 {
+            font-family:'Playfair Display',serif;
+            font-size:2.2rem; color:#f5deb3;
+        }
+        h3 {
+            font-family:'Playfair Display',serif;
+            font-size:1.35rem; color:#daa520; margin:1.2rem 0 0.7rem;
+        }
+        .content { flex:1; overflow-y:auto; padding-right:1.5rem; }
+        .content::-webkit-scrollbar { width:5px; }
+        .content::-webkit-scrollbar-track { background:rgba(218,165,32,0.1); border-radius:3px; }
+        .content::-webkit-scrollbar-thumb { background:#c44536; border-radius:3px; }
+
+        p { font-size:1.02rem; line-height:1.7; margin-bottom:1.1rem; color:#f5deb3; }
+        ul { list-style:none; margin:0.8rem 0; }
+        ul li {
+            font-size:0.98rem; line-height:1.6; margin-bottom:0.6rem;
+            padding-left:1.5rem; position:relative; color:#f5deb3;
+        }
+        ul li::before {
+            content:'▸'; position:absolute; left:0;
+            color:#daa520; font-weight:bold;
+        }
+
+        /* CAJAS */
+        .box {
+            background:rgba(218,165,32,0.12); border-left:4px solid #daa520;
+            padding:1.2rem 1.4rem; margin:1.2rem 0; border-radius:0 7px 7px 0;
+        }
+        .box strong { color:#daa520; display:block; margin-bottom:0.4rem; font-size:1.02rem; }
+        .box p { margin-bottom:0.35rem; }
+        .box-warn { background:rgba(196,69,54,0.12); border-left-color:#c44536; }
+        .box-warn strong { color:#ff7f50; }
+        .box-success { background:rgba(160,82,45,0.12); border-left-color:#cd853f; }
+        .box-success strong { color:#deb887; }
+
+        /* GRIDS */
+        .grid { display:grid; gap:1.1rem; margin:1.1rem 0; }
+        .grid-2 { grid-template-columns:repeat(2,1fr); }
+        .grid-3 { grid-template-columns:repeat(3,1fr); }
+        .card {
+            background:rgba(61,40,23,0.6); padding:1.2rem;
+            border-radius:9px; border:1px solid rgba(218,165,32,0.3);
+            box-shadow:0 2px 8px rgba(0,0,0,0.3);
+        }
+        .card h4 { color:#daa520; margin-bottom:0.5rem; font-size:1.06rem; }
+        .card p { font-size:0.95rem; margin-bottom:0.3rem; }
+        .card-accent { border-color:rgba(196,69,54,0.5); background:rgba(92,58,33,0.6); }
+
+        .em { color:#daa520; font-weight:700; }
+        .em-warn { color:#ff7f50; font-weight:700; }
+        .em-success { color:#deb887; font-weight:700; }
+
+        /* TABLAS */
+        table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.9rem; }
+        th,td { padding:0.7rem 0.9rem; text-align:left; border-bottom:1px solid rgba(218,165,32,0.3); }
+        th { background:rgba(218,165,32,0.2); color:#daa520; font-weight:700; font-size:0.88rem; letter-spacing:0.4px; }
+        tr:last-child td { border-bottom:none; }
+        td { color:#f5deb3; }
+
+        /* BADGES */
+        .exercise-badge {
+            background:linear-gradient(135deg,#c44536,#d2691e);
+            color:#fff; padding:0.3rem 1.2rem; border-radius:24px;
+            display:inline-block; font-weight:800; font-size:0.8rem;
+            letter-spacing:1.5px; box-shadow:0 3px 10px rgba(196,69,54,0.4);
+        }
+
+        /* EJERCICIOS */
+        .exercise-input {
+            width:100%; background:rgba(61,40,23,0.5);
+            border:1px solid rgba(218,165,32,0.4); border-radius:7px;
+            padding:0.6rem 0.9rem; color:#f5deb3; font-size:0.95rem;
+            font-family:'Source Sans Pro',sans-serif;
+            margin-top:0.3rem; transition:border-color 0.25s;
+        }
+        .exercise-input:focus { outline:none; border-color:#daa520; background:rgba(92,58,33,0.6); }
+        .exercise-input.correct { border-color:#90ee90; background:rgba(144,238,144,0.15); }
+        .exercise-input.incorrect { border-color:#ff6347; background:rgba(255,99,71,0.15); }
+
+        .exercise-q { margin-bottom:0.9rem; }
+        .exercise-q label { font-size:0.95rem; color:#f5deb3; display:block; }
+        .exercise-q .qnum { color:#daa520; font-weight:700; }
+
+        .exercise-btns { display:flex; gap:1rem; margin-top:1.4rem; flex-wrap:wrap; }
+        .ex-btn {
+            background:#c44536; border:none; color:#fff;
+            padding:0.55rem 1.6rem; border-radius:24px;
+            font-weight:700; font-size:0.9rem; cursor:pointer;
+            font-family:'Source Sans Pro',sans-serif;
+            transition:background 0.25s,transform 0.15s;
+        }
+        .ex-btn:hover { background:#d2691e; transform:scale(1.05); }
+        .ex-btn-sec { background:transparent; border:1px solid rgba(218,165,32,0.5); color:#daa520; }
+        .ex-btn-sec:hover { background:rgba(218,165,32,0.15); border-color:#daa520; }
+
+        .feedback-msg { margin-top:1rem; padding:0.75rem 1.2rem; border-radius:7px; font-size:0.95rem; display:none; }
+        .feedback-msg.show { display:block; }
+        .feedback-msg.success { background:rgba(144,238,144,0.2); border:1px solid rgba(144,238,144,0.5); color:#90ee90; }
+        .feedback-msg.partial { background:rgba(255,140,0,0.15); border:1px solid rgba(255,140,0,0.5); color:#ff8c00; }
+
+        .mc-option {
+            background:rgba(61,40,23,0.5); border:1px solid rgba(218,165,32,0.3);
+            border-radius:7px; padding:0.6rem 1rem; margin:0.35rem 0;
+            cursor:pointer; transition:all 0.22s; font-size:0.95rem; color:#f5deb3;
+        }
+        .mc-option:hover { border-color:#daa520; background:rgba(92,58,33,0.6); }
+        .mc-option.selected { border-color:#daa520; background:rgba(218,165,32,0.2); }
+        .mc-option.correct-sel { border-color:#90ee90; background:rgba(144,238,144,0.2); }
+        .mc-option.incorrect-sel { border-color:#ff6347; background:rgba(255,99,71,0.2); }
+
+        /* NAV */
+        .nav { position:fixed; bottom:2rem; right:2rem; display:flex; gap:1.1rem; z-index:1000; }
+        .btn {
+            width:56px; height:56px; background:#c44536; border:none;
+            border-radius:50%; color:#fff; font-size:1.35rem;
+            font-weight:bold; cursor:pointer; transition:all 0.3s;
+            box-shadow:0 4px 15px rgba(0,0,0,0.4);
+        }
+        .btn:hover:not(:disabled) { transform:scale(1.12); background:#d2691e; }
+        .btn:disabled { opacity:0.3; cursor:not-allowed; }
+
+        .counter {
+            position:fixed; bottom:2rem; left:2rem;
+            background:rgba(61,40,23,0.95); padding:0.8rem 1.6rem;
+            border-radius:28px; border:2px solid #daa520;
+            color:#f5deb3; font-weight:700; z-index:1000; font-size:0.95rem;
+            box-shadow:0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        @media(max-width:1024px){
+            .slide{padding:2.5rem 3rem;}
+            .cover h1{font-size:2.6rem;}
+            h2{font-size:1.9rem;}
+            .grid-3{grid-template-columns:repeat(2,1fr);}
+        }
+        @media(max-width:680px){
+            .slide{padding:1.8rem 1.5rem;}
+            .grid-2,.grid-3{grid-template-columns:1fr;}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 — PORTADA -->
+<div class="slide cover active">
+    <h1>Tipos de<br>Requerimientos</h1>
+    <div class="line"></div>
+    <p class="subtitle">Funcionales, No Funcionales y Reusabilidad</p>
+    <p class="meta">Ingeniería de Requerimientos de Software | Nivel: Medio</p>
+    <p class="help">👉 Usa las flechas del teclado o los botones para navegar →</p>
+</div>
+
+<!-- SLIDE 2 — INTRODUCCIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">INTRODUCCIÓN</div>
+        <h2>Importancia de los Requerimientos</h2>
+    </div>
+    <div class="content">
+        <p>La ingeniería de requerimientos debe <span class="em">detallar los requerimientos funcionales</span>, principalmente porque:</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>Es lo mínimo esperado</h4>
+                <p>Los requerimientos funcionales definen <strong>qué debe hacer</strong> el sistema como mínimo.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Guía para desarrolladores</h4>
+                <p>Permiten explicar a los desarrolladores <strong>qué deberán construir</strong>.</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Principio fundamental</strong>
+            <p>Los requerimientos funcionales deben mantenerse <span class="em-success">independientes de la tecnología</span> a utilizar. Será trabajo del diseñador ubicar la tecnología más adecuada que soporte las funciones descritas.</p>
+        </div>
+
+        <h3>Características de un buen requerimiento</h3>
+        <p>Cada requerimiento debe ser:</p>
+        <div class="grid grid-2">
+            <div class="card">
+                <p>✓ <strong>Preciso</strong></p>
+            </div>
+            <div class="card">
+                <p>✓ <strong>Entendible</strong></p>
+            </div>
+            <div class="card">
+                <p>✓ <strong>Comunicable</strong></p>
+            </div>
+            <div class="card">
+                <p>✓ <strong>Verificable</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 3 — ASPECTOS REQUERIMIENTOS FUNCIONALES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">REQUERIMIENTOS FUNCIONALES</div>
+        <h2>Cinco Aspectos Clave</h2>
+    </div>
+    <div class="content">
+        <p>La mejor forma de describir requerimientos funcionales es a través de estos aspectos:</p>
+
+        <div class="grid grid-3">
+            <div class="card card-accent">
+                <h4>1. Descripción</h4>
+                <p>Definición clara de la función esperada</p>
+            </div>
+            <div class="card card-accent">
+                <h4>2. Razón Fundamental</h4>
+                <p>El <strong>por qué</strong> del requerimiento</p>
+            </div>
+            <div class="card card-accent">
+                <h4>3. Criterio</h4>
+                <p>Forma de verificación medible</p>
+            </div>
+            <div class="card">
+                <h4>4. Restricciones</h4>
+                <p>Reglas que rigen el comportamiento</p>
+            </div>
+            <div class="card">
+                <h4>5. Excepciones y Alternativas</h4>
+                <p>Situaciones especiales y opciones</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>📌 Estos cinco aspectos trabajarán juntos para:</strong>
+            <ul style="margin-top:0.5rem;">
+                <li>Proporcionar claridad total sobre cada función</li>
+                <li>Facilitar la comunicación con el equipo de desarrollo</li>
+                <li>Permitir la verificación del cumplimiento</li>
+                <li>Documentar casos especiales y reglas de negocio</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4 — DESCRIPCIÓN -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">1 — DESCRIPCIÓN</div>
+        <h2>Redacción de Requerimientos</h2>
+    </div>
+    <div class="content">
+        <div class="box box-success">
+            <strong>✅ Recomendaciones para describir funciones</strong>
+            <p>• Utilizar <strong>oraciones cortas</strong> con un solo verbo<br>
+            • Fáciles de entender<br>
+            • Menos susceptibles de errores de interpretación</p>
+        </div>
+
+        <h3>Fórmula recomendada por Robertson y Robertson</h3>
+        <p>Cada función debe empezar con:</p>
+
+        <div class="box">
+            <strong style="font-size:1.2rem; text-align:center; display:block;">"El producto deberá..."</strong>
+            <p style="margin-top:0.5rem;">Esta oración especifica la <strong>necesidad de tener una función específica</strong>.</p>
+        </div>
+
+        <div class="grid grid-2">
+            <div class="box box-warn">
+                <strong>✗ Evitar ambigüedades</strong>
+                <p>• "El producto <strong>debería</strong>..."<br>
+                • "Se espera que el producto <strong>logre</strong>..."<br>
+                <br>
+                Estos verbos crean confusión sobre si son funciones <span class="em-warn">obligatorias u opcionales</span>.</p>
+            </div>
+            <div class="box box-success">
+                <strong>✓ Uso correcto</strong>
+                <p>• "El producto <strong>deberá</strong> permitir..."<br>
+                • "El sistema <strong>deberá</strong> mostrar..."<br>
+                <br>
+                Estas oraciones establecen claramente funciones <span class="em-success">obligatorias</span>.</p>
+            </div>
+        </div>
+
+        <h3>Independencia tecnológica</h3>
+        <div class="grid grid-2">
+            <div class="box box-warn">
+                <strong>✗ Limita implementación</strong>
+                <p>"El sistema <strong>implementará un Web Service</strong> para proveer de un servicio por internet"</p>
+                <p style="margin-top:0.3rem; font-size:0.9rem;">Describe el <span class="em-warn">cómo</span></p>
+            </div>
+            <div class="box box-success">
+                <strong>✓ Describe necesidad</strong>
+                <p>"El sistema <strong>deberá permitir</strong> tener acceso a la aplicación a través de internet"</p>
+                <p style="margin-top:0.3rem; font-size:0.9rem;">Establece el <span class="em-success">qué</span></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5 — RAZÓN FUNDAMENTAL -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">2 — RAZÓN FUNDAMENTAL</div>
+        <h2>El Por Qué del Requerimiento</h2>
+    </div>
+    <div class="content">
+        <p>La <span class="em">razón fundamental</span> aclara la necesidad detrás del requerimiento y la <strong>importancia</strong> que tiene para la organización.</p>
+
+        <h3>Ejemplo 1: Sistema de reservaciones de cine</h3>
+        <div class="box">
+            <strong>Descripción:</strong>
+            <p>El producto deberá mostrar los asientos ocupados.</p>
+        </div>
+        <div class="box box-success">
+            <strong>Razón Fundamental:</strong>
+            <p>Permitir identificar los lugares disponibles a los siguientes clientes.</p>
+            <p style="margin-top:0.5rem; font-size:0.9rem;">Esta descripción permite conocer el <strong>uso</strong> del requerimiento para el buen servicio al cliente y su importancia.</p>
+        </div>
+
+        <h3>Ejemplo 2: Alertas de temperatura - Comparación</h3>
+        <div class="grid grid-2">
+            <div class="box">
+                <strong>Razón Fundamental A:</strong>
+                <p>Poder mantener una sala confortable.</p>
+                <p style="margin-top:0.5rem; font-size:0.9rem;">→ Prioridad: <span class="em">Comodidad del cliente</span></p>
+            </div>
+            <div class="box box-warn">
+                <strong>Razón Fundamental B:</strong>
+                <p>Las alertas de temperatura deben ser tomadas en cuenta para evitar sobrecalentamiento del equipo de proyección, que puede provocar <strong>incendios</strong>.</p>
+                <p style="margin-top:0.5rem; font-size:0.9rem;">→ Prioridad: <span class="em-warn">Seguridad (ALTA)</span></p>
+            </div>
+        </div>
+
+        <div class="box box-warn">
+            <strong>💡 Importancia de la razón fundamental</strong>
+            <p>La segunda razón es de <strong>seguridad</strong> y puede <span class="em-warn">poner en riesgo vidas</span>. Es un requerimiento de <strong>alta prioridad</strong> que establece un claro mensaje sobre el esfuerzo que deberá realizar el equipo de desarrollo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6 — CRITERIO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">3 — CRITERIO</div>
+        <h2>Verificación del Cumplimiento</h2>
+    </div>
+    <div class="content">
+        <p>El <span class="em">criterio</span> es un atributo para <strong>evaluar si el requerimiento cumple o no</strong> con su objetivo.</p>
+
+        <div class="box box-success">
+            <strong>✅ Recomendación</strong>
+            <p>Encontrar un criterio que se pueda <strong>medir cuantitativamente</strong> cuando sea posible. Esto evita interpretaciones sobre si cumplió o no un requerimiento.</p>
+        </div>
+
+        <h3>Ejemplo: Sistema amigable para el usuario</h3>
+
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>Descripción:</h4>
+            <p>El producto deberá ser amigable para el usuario.</p>
+            <p style="margin-top:0.3rem; font-size:0.9rem; color:#ff7f50;">⚠️ Muy ambigua - ¿Quién puede determinar si un sistema es amigable?</p>
+        </div>
+
+        <div class="card" style="margin-bottom:1rem;">
+            <h4>Razón Fundamental:</h4>
+            <p>Los usuarios deberán encontrar el nuevo sistema más fácil de usar que el actual sistema, de tal manera que se cometan menos errores.</p>
+            <p style="margin-top:0.3rem; font-size:0.9rem; color:#daa520;">✓ Establece el <strong>por qué</strong> debe ser amigable</p>
+        </div>
+
+        <div class="card card-accent">
+            <h4>Criterio:</h4>
+            <p style="font-size:1.05rem;">La tasa promedio de errores de captura deberá ser <strong>menos del 1.5%</strong>.</p>
+            <p style="margin-top:0.5rem; font-size:0.9rem; color:#90ee90;">✓ Medida específica y verificable</p>
+        </div>
+
+        <div class="box">
+            <strong>📊 Ventajas del criterio cuantitativo</strong>
+            <ul style="margin-top:0.5rem;">
+                <li>Permite verificar cumplimiento durante las pruebas</li>
+                <li>Proporciona datos de comprobación para el usuario</li>
+                <li>Sirve como base para el mantenimiento del producto</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7 — RESTRICCIONES Y EXCEPCIONES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">4 Y 5 — RESTRICCIONES Y EXCEPCIONES</div>
+        <h2>Reglas y Situaciones Especiales</h2>
+    </div>
+    <div class="content">
+        <h3>Restricciones</h3>
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>Las <span class="em">restricciones</span> son reglas que rigen el comportamiento de los requerimientos. Determinan las situaciones o escenarios en los que una función debe realizarse.</p>
+        </div>
+
+        <p>Algunas veces son:</p>
+        <ul>
+            <li><strong>Reglas de negocio:</strong> reglas de operación en apego a una política organizacional</li>
+            <li><strong>Reglas externas:</strong> impuestas por la legislación</li>
+        </ul>
+
+        <h3>Excepciones y Alternativas</h3>
+        <div class="box box-warn">
+            <strong>⚠️ Excepciones</strong>
+            <p>Situaciones inevitables que pueden provocar <strong>desviaciones</strong> en el proceso o generar acciones incorrectas.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✓ Alternativas</strong>
+            <p>Opciones que puede tomar el requerimiento en <strong>respuesta a la excepción</strong> detectada.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8 — EJEMPLO COMPLETO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">EJEMPLO COMPLETO</div>
+        <h2>Sistema de Boletos de Cine</h2>
+    </div>
+    <div class="content">
+        <div class="card" style="margin-bottom:0.8rem;">
+            <h4>Descripción:</h4>
+            <p>El producto deberá mostrar los asientos ocupados.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:0.8rem;">
+            <h4>Razón Fundamental:</h4>
+            <p>Permitir identificar los lugares disponibles a los clientes y evitar sobreventa de salas.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:0.8rem;">
+            <h4>Criterio:</h4>
+            <p>Las salas tienen una capacidad determinada por el número de asientos disponibles.</p>
+        </div>
+
+        <div class="card" style="margin-bottom:0.8rem;">
+            <h4>Restricciones:</h4>
+            <p>Las salas no podrán sobrepasar su capacidad.</p>
+        </div>
+
+        <div class="card card-accent" style="margin-bottom:0.8rem;">
+            <h4>Condición de Excepción:</h4>
+            <p>Si no existen más asientos disponibles en una sala, el sistema deberá <strong>impedir posteriores ventas</strong> para la misma sala.</p>
+        </div>
+
+        <div class="card card-accent">
+            <h4>Alternativa:</h4>
+            <p>El sistema mostrará horarios de la misma función con asientos disponibles o, en caso de saturación del resto de las funciones, mostrará un aviso de <strong>"entradas agotadas"</strong>.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9 — NO FUNCIONALES INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.2 — NO FUNCIONALES</div>
+        <h2>Requerimientos No Funcionales</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📌 Definición</strong>
+            <p>Los requerimientos no funcionales establecen las <span class="em">características del desempeño</span> que deberá demostrar el sistema en operación.</p>
+        </div>
+
+        <div class="box box-warn">
+            <strong>⚠️ Importancia</strong>
+            <p>Son <strong>tan importantes</strong> como los requerimientos funcionales, porque pueden ser un <span class="em-warn">factor decisivo</span> en la aceptación del usuario final.</p>
+        </div>
+
+        <p>Según Robertson y Robertson (2012), los requerimientos no funcionales describen:</p>
+        <ul>
+            <li>Las <strong>cualidades</strong> que debe tener el producto</li>
+            <li>De <strong>lo bien que hace</strong> las cosas que hace</li>
+        </ul>
+
+        <div class="box box-success">
+            <strong>✅ Beneficios</strong>
+            <p>Estos requerimientos permiten que el producto sea:</p>
+            <ul style="margin-top:0.5rem;">
+                <li><strong>Atractivo</strong></li>
+                <li><strong>Confiable</strong></li>
+                <li><strong>Rápido</strong></li>
+                <li><strong>Seguro</strong></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10 — ESCENARIO SISTEMA LENTO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">ESCENARIO REAL</div>
+        <h2>¿Por Qué los Usuarios Rechazan el Sistema?</h2>
+    </div>
+    <div class="content">
+        <div class="box box-warn">
+            <strong>📖 Caso: Sistema Lento</strong>
+        </div>
+
+        <p style="font-size:1rem; line-height:1.65;">
+        El gerente de una empresa está revisando por qué los usuarios se <strong>resisten a utilizar</strong> el nuevo sistema. El gerente conoce de antemano que el sistema realiza todo lo que se espera que haga, sin embargo al entrevistar a los usuarios se da cuenta dónde está el error.
+        </p>
+
+        <p style="font-size:1rem; line-height:1.65;">
+        Las computadoras de los usuarios se encuentran ya <strong>saturadas</strong> con algunos sistemas con los que han estado trabajando durante varios años. Al instalar el nuevo sistema notan que es <span class="em-warn">bastante lento</span>. Procesar una orden es más tardado que antes, por lo que los usuarios <strong>prefieren hacerlo manualmente</strong> que utilizar el sistema.
+        </p>
+
+        <div class="box box-warn">
+            <strong>❌ Problema identificado</strong>
+            <p>Este escenario se presenta porque los <span class="em-warn">requerimientos no funcionales fueron ignorados</span>. No se consideró medir el desempeño en las computadoras actuales de los usuarios, provocando molestia y resistencia al cambio.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✓ Lección</strong>
+            <p>Los requerimientos no funcionales <strong>complementan</strong> a los requerimientos funcionales. No basta con especificar <strong>qué</strong> debe hacer el sistema, también es necesario especificar <strong>cómo de bien</strong> debe hacerlo.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11 — TIPOS NO FUNCIONALES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">TIPOS NO FUNCIONALES</div>
+        <h2>Categorías de Requerimientos No Funcionales</h2>
+    </div>
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Descripción</th>
+                    <th>Ejemplo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Look and Feel</strong></td>
+                    <td>Parte visual y experiencia de uso</td>
+                    <td>El producto debe cumplir con los estándares de imagen corporativa.</td>
+                </tr>
+                <tr>
+                    <td><strong>Usabilidad</strong></td>
+                    <td>Facilidad de uso de las funciones</td>
+                    <td>El producto debe ser utilizado sin dificultad por usuarios con experiencia limitada en computadoras.</td>
+                </tr>
+                <tr>
+                    <td><strong>Rendimiento</strong></td>
+                    <td>Rapidez, recursos, disponibilidad, precisión, confiabilidad</td>
+                    <td>El sistema deberá soportar 300 usuarios concurrentes.</td>
+                </tr>
+                <tr>
+                    <td><strong>Entorno operacional</strong></td>
+                    <td>Ambiente de funcionamiento</td>
+                    <td>El producto deberá ser portátil y soportar temperaturas extremas.</td>
+                </tr>
+                <tr>
+                    <td><strong>Mantenibilidad</strong></td>
+                    <td>Facilidad para cambios futuros</td>
+                    <td>El sistema deberá mostrar contenido en español e inglés y podrá ser traducido a otros idiomas fácilmente.</td>
+                </tr>
+                <tr>
+                    <td><strong>Seguridad</strong></td>
+                    <td>Confidencialidad, integridad, disponibilidad</td>
+                    <td>El sistema deberá obligar a los usuarios a generar claves de acceso robustas.</td>
+                </tr>
+                <tr>
+                    <td><strong>Legales</strong></td>
+                    <td>Normas y reglas que debe cumplir</td>
+                    <td>El producto deberá cumplir con las especificaciones del SAT para factura electrónica.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SLIDE 12 — EJEMPLOS NO FUNCIONALES -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">EJEMPLOS REALES</div>
+        <h2>Ventajas Competitivas</h2>
+    </div>
+    <div class="content">
+        <p>En muchos productos de consumo, los <span class="em">requerimientos no funcionales</span> generan características específicas que se traducen en <strong>ventajas competitivas</strong>.</p>
+
+        <div class="grid grid-2">
+            <div class="card card-accent">
+                <h4>iPad®</h4>
+                <p><strong>Categoría:</strong> Usabilidad</p>
+                <p style="margin-top:0.5rem;">El mercado tiene una clara preferencia por el iPad® como dispositivo tipo tableta, debido principalmente a su <span class="em-success">funcionamiento intuitivo</span>.</p>
+                <p style="margin-top:0.5rem; font-size:0.9rem;">Hasta un niño de 4 años podría utilizarlo sin ninguna instrucción.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>Amazon®</h4>
+                <p><strong>Categoría:</strong> Look and Feel / Usabilidad</p>
+                <p style="margin-top:0.5rem;">La página de Amazon® crea una tienda virtual que es preferida no sólo porque <strong>funciona bien</strong>, sino porque hace que la <span class="em-success">experiencia de compra sea única</span>.</p>
+            </div>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Conclusión</strong>
+            <p>Los requerimientos no funcionales son propiedades que debe tener la <strong>funcionalidad del producto</strong> de software. No se tratan sólo de "hacer las cosas", sino de "hacerlas <span class="em-success">excepcionalmente bien</span>".</p>
+        </div>
+
+        <div class="box">
+            <strong>📌 Recordatorio</strong>
+            <p>Cada requerimiento no funcional debe ser acompañado de:</p>
+            <ul style="margin-top:0.5rem;">
+                <li>Descripción breve</li>
+                <li>Razón fundamental</li>
+                <li>Criterio</li>
+                <li>Restricciones</li>
+                <li>Excepciones</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13 — REUSABILIDAD INTRO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">5.3 — REUSABILIDAD</div>
+        <h2>Reusabilidad de Requerimientos</h2>
+    </div>
+    <div class="content">
+        <p>Sin duda cada proyecto de desarrollo de software es <span class="em">único</span>; sus objetivos y personas involucradas cambian, por lo que el resultado necesariamente será diferente.</p>
+
+        <div class="box">
+            <strong>💡 Oportunidad de ahorro</strong>
+            <p>Sin embargo, con el tiempo los productos son utilizados de <strong>la misma manera</strong> entre organizaciones del mismo giro, entonces es posible <span class="em-success">ahorrar esfuerzos y tiempo</span> cuando hay requerimientos similares en varios proyectos.</p>
+        </div>
+
+        <h3>Ejemplo: Tienda de conveniencia → Gasolinera</h3>
+        <div class="card" style="margin-bottom:1rem;">
+            <p>Imagina que fuiste parte del proyecto de desarrollo de software para una <strong>tienda de conveniencia</strong>. El producto permite a los cajeros ingresar ventas diarias en terminales con pantallas táctiles.</p>
+        </div>
+
+        <div class="card card-accent">
+            <p>Estos requerimientos pueden aplicar para otro proyecto, por ejemplo una <strong>gasolinera</strong>. No es que se utilicen exactamente los mismos, sino que pueden ser <span class="em">analizados y complementados</span> por el equipo del proyecto.</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Beneficios</strong>
+            <ul style="margin-top:0.5rem;">
+                <li>El equipo avanza rápidamente</li>
+                <li>Se pueden definir detalles de funcionalidades más importantes</li>
+                <li>Se genera experiencia en el equipo de desarrollo</li>
+                <li>Se puede crear una <strong>librería de requerimientos de reuso</strong></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14 — CULTURA ORGANIZACIONAL -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">REUSABILIDAD</div>
+        <h2>Cultura Organizacional</h2>
+    </div>
+    <div class="content">
+        <div class="box box-warn">
+            <strong>⚠️ Advertencia de Robertson y Robertson (2012)</strong>
+            <p style="font-size:1.05rem;">"La reutilización exitosa de requerimientos comienza con tener una <span class="em-warn">cultura organizacional</span> que conscientemente impulse a reutilizar en lugar de reinventar".</p>
+        </div>
+
+        <div class="box box-success">
+            <strong>✅ Objetivo final</strong>
+            <p>Lo que necesitamos es que se produzca un <strong>software de calidad</strong> que sea útil para el usuario y se debe utilizar <span class="em-success">toda la experiencia generada</span> de proyectos anteriores.</p>
+        </div>
+
+        <h3>Patrones</h3>
+        <p>Cualquier <span class="em">patrón</span> sirve de guía para <strong>repetir una acción</strong> y obtener un resultado similar.</p>
+
+        <div class="grid grid-2">
+            <div class="card">
+                <h4>Analogía: El sastre</h4>
+                <p>Un sastre utiliza <strong>patrones</strong> para confeccionar a medida algún traje.</p>
+            </div>
+            <div class="card card-accent">
+                <h4>En desarrollo de software</h4>
+                <p>Encontrar un <strong>patrón</strong> en las funciones requeridas sirve como base para la reutilización y permite describir con precisión cada requerimiento.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <strong>🎯 Habilidad del ingeniero de requerimientos</strong>
+            <p>Debe tener la capacidad de <strong>encontrar los patrones</strong> entre diferentes proyectos a través de la <span class="em">abstracción</span> de las necesidades que se repiten.</p>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15 — EJERCICIO 1 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 1</div>
+        <h2>Identificación de Tipos de Requerimientos</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Identifica si cada requerimiento es Funcional (F) o No Funcional (NF).</p>
+        </div>
+        <div id="ex1-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx1()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx1()">↺ Limpiar</button>
+        </div>
+        <div id="ex1-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 16 — EJERCICIO 2 -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number exercise-badge">🎯 EJERCICIO 2</div>
+        <h2>Aspectos de Requerimientos Funcionales</h2>
+    </div>
+    <div class="content">
+        <div class="box">
+            <strong>📝 Instrucciones</strong>
+            <p>Completa los espacios en blanco.</p>
+        </div>
+        <div id="ex2-container"></div>
+        <div class="exercise-btns">
+            <button class="ex-btn" onclick="checkEx2()">✔ Revisar</button>
+            <button class="ex-btn ex-btn-sec" onclick="resetEx2()">↺ Limpiar</button>
+        </div>
+        <div id="ex2-feedback" class="feedback-msg"></div>
+    </div>
+</div>
+
+<!-- SLIDE 17 — GLOSARIO -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">GLOSARIO</div>
+        <h2>Términos Clave</h2>
+    </div>
+    <div class="content">
+        <table style="font-size:0.85rem;">
+            <thead>
+                <tr>
+                    <th>Término</th>
+                    <th>Definición</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Precisión</strong></td>
+                    <td>El grado en que las salidas de software son suficientemente precisas para satisfacer su uso previsto.</td>
+                </tr>
+                <tr>
+                    <td><strong>Usabilidad</strong></td>
+                    <td>El esfuerzo necesario para aprender y utilizar el software.</td>
+                </tr>
+                <tr>
+                    <td><strong>Integridad</strong></td>
+                    <td>La medida en que se controla el acceso y permisos de los usuarios a un programa.</td>
+                </tr>
+                <tr>
+                    <td><strong>Eficiencia</strong></td>
+                    <td>La cantidad de recursos informáticos requeridos por este software para realizar su función.</td>
+                </tr>
+                <tr>
+                    <td><strong>Portabilidad</strong></td>
+                    <td>El esfuerzo requerido para transferir un software de un entorno de configuración de hardware y software a otro.</td>
+                </tr>
+                <tr>
+                    <td><strong>Escalabilidad</strong></td>
+                    <td>La medida en que el software puede aprovechar recursos adicionales para enfrentar de manera eficiente mayor demanda.</td>
+                </tr>
+                <tr>
+                    <td><strong>Interoperabilidad</strong></td>
+                    <td>El esfuerzo requerido para acoplar el software con otro.</td>
+                </tr>
+                <tr>
+                    <td><strong>Robustez</strong></td>
+                    <td>El grado en que el programa sigue funcionando en presencia de entradas no válidas o condiciones ambientales estresantes.</td>
+                </tr>
+                <tr>
+                    <td><strong>Mantenibilidad</strong></td>
+                    <td>El esfuerzo necesario para localizar y corregir un error en el software o para cambiar o agregar capacidades.</td>
+                </tr>
+                <tr>
+                    <td><strong>Reusabilidad</strong></td>
+                    <td>La medida en que los componentes o módulos del software se pueden utilizar para otros fines.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- SLIDE 18 — BIBLIOGRAFÍA -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">BIBLIOGRAFÍA</div>
+        <h2>Referencia en Formato APA</h2>
+    </div>
+    <div class="content">
+        <div class="box box-success">
+            <strong>📚 Texto principal</strong>
+            <p>Robertson, S., y Robertson, J. (2012). <em>Mastering the Requirements Process: Getting Requirements Right</em> (3ª ed.). EE.UU: Pearson.</p>
+        </div>
+
+        <div class="box">
+            <strong>💡 Contenidos basados en:</strong>
+            <ul style="margin-top:0.5rem;">
+                <li>Capítulo sobre requerimientos funcionales</li>
+                <li>Clasificación y descripción de requerimientos no funcionales</li>
+                <li>Reusabilidad de requerimientos y patrones</li>
+                <li>Mejores prácticas en especificación de requerimientos</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 19 — CIERRE -->
+<div class="slide cover">
+    <h1>Resumen</h1>
+    <div class="line"></div>
+    <p class="subtitle">Los requerimientos funcionales describen QUÉ debe hacer el sistema</p>
+    <p class="subtitle" style="margin-top:1rem;">Los requerimientos no funcionales describen QUÉ TAN BIEN debe hacerlo</p>
+    <p class="meta" style="margin-top:2rem;">¿Preguntas?</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">19</span></div>
+<div class="nav">
+    <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+    <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+    if (n < 0) n = 0;
+    if (n >= total) n = total - 1;
+    slides.forEach(s => s.classList.remove('active'));
+    slides[n].classList.add('active');
+    current = n;
+    document.getElementById('current').textContent = n + 1;
+    document.getElementById('prev').disabled = (n === 0);
+    document.getElementById('next').disabled = (n === total - 1);
+}
+function nav(dir) { show(current + dir); }
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft')  nav(-1);
+    if (e.key === 'ArrowRight') nav(1);
+    if (e.key === ' ')          { e.preventDefault(); nav(1); }
+});
+show(0);
+
+function normalise(s) {
+    return s.trim().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^a-z]/g,'');
+}
+
+// EJERCICIO 1
+const ex1Data = [
+    {
+        q: "El sistema deberá permitir el registro de nuevos usuarios.",
+        opts: ["Funcional", "No Funcional"],
+        correct: 0
+    },
+    {
+        q: "El sistema deberá soportar 500 usuarios concurrentes.",
+        opts: ["Funcional", "No Funcional"],
+        correct: 1
+    },
+    {
+        q: "El producto debe cumplir con los estándares de imagen corporativa.",
+        opts: ["Funcional", "No Funcional"],
+        correct: 1
+    },
+    {
+        q: "El sistema deberá generar reportes de ventas mensuales.",
+        opts: ["Funcional", "No Funcional"],
+        correct: 0
+    },
+    {
+        q: "El tiempo de respuesta del sistema no debe exceder 2 segundos.",
+        opts: ["Funcional", "No Funcional"],
+        correct: 1
+    },
+    {
+        q: "El sistema deberá permitir la exportación de datos a formato Excel.",
+        opts: ["Funcional", "No Funcional"],
+        correct: 0
+    }
+];
+
+(function renderEx1() {
+    document.getElementById('ex1-container').innerHTML = ex1Data.map((item, qi) =>
+        `<div class="exercise-q" style="margin-bottom:1rem;">
+            <label><span class="qnum">${qi+1}.</span> ${item.q}</label>
+            ${item.opts.map((opt, oi) =>
+                `<div class="mc-option" id="ex1-opt-${qi}-${oi}" data-sel="false" onclick="selMC('ex1',${qi},${oi})">${opt}</div>`
+            ).join('')}
+        </div>`
+    ).join('');
+})();
+
+// EJERCICIO 2
+const ex2Data = [
+    { q: "Los requerimientos funcionales deben redactarse comenzando con: 'El producto __________...'", a: "debera" },
+    { q: "La __________ fundamental explica el por qué del requerimiento.", a: "razon" },
+    { q: "El __________ permite verificar si el requerimiento cumple su objetivo de forma medible.", a: "criterio" },
+    { q: "Las __________ son reglas que rigen el comportamiento de los requerimientos.", a: "restricciones" },
+    { q: "La __________ de requerimientos permite ahorrar tiempo utilizando especificaciones de proyectos anteriores.", a: "reusabilidad" }
+];
+
+(function renderEx2() {
+    document.getElementById('ex2-container').innerHTML = ex2Data.map((item, i) =>
+        `<div class="exercise-q">
+            <label><span class="qnum">${i+1}.</span> ${item.q}</label>
+            <input type="text" class="exercise-input" id="ex2-inp-${i}" autocomplete="off">
+        </div>`
+    ).join('');
+})();
+
+function selMC(prefix, qi, oi) {
+    const data = ex1Data;
+    data[qi].opts.forEach((_, i) => {
+        const el = document.getElementById(`${prefix}-opt-${qi}-${i}`);
+        el.classList.remove('selected');
+        el.dataset.sel = 'false';
+    });
+    const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+    el.classList.add('selected');
+    el.dataset.sel = 'true';
+}
+
+function checkMC(prefix, data, feedbackId) {
+    let c = 0;
+    data.forEach((item, qi) => {
+        let selIdx = -1;
+        item.opts.forEach((_, oi) => {
+            if (document.getElementById(`${prefix}-opt-${qi}-${oi}`).dataset.sel === 'true') selIdx = oi;
+        });
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            if (oi === item.correct) el.classList.add('correct-sel');
+            else if (oi === selIdx && selIdx !== item.correct) el.classList.add('incorrect-sel');
+        });
+        if (selIdx === item.correct) c++;
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (c === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${c} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${c} de ${data.length}</strong>. Las opciones correctas están marcadas en verde.`;
+    }
+}
+
+function resetMC(prefix, data, feedbackId) {
+    data.forEach((item, qi) => {
+        item.opts.forEach((_, oi) => {
+            const el = document.getElementById(`${prefix}-opt-${qi}-${oi}`);
+            el.classList.remove('selected','correct-sel','incorrect-sel');
+            el.dataset.sel = 'false';
+        });
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkFill(prefix, data, feedbackId) {
+    let correct = 0;
+    data.forEach((item, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        const userVal = normalise(inp.value);
+        const correctVal = normalise(item.a);
+        if (userVal === correctVal) {
+            inp.classList.remove('incorrect'); inp.classList.add('correct');
+            correct++;
+        } else {
+            inp.classList.remove('correct'); inp.classList.add('incorrect');
+        }
+    });
+    const fb = document.getElementById(feedbackId);
+    fb.classList.add('show');
+    if (correct === data.length) {
+        fb.className = 'feedback-msg show success';
+        fb.innerHTML = `🎉 ¡Perfecto! Acertaste las ${correct} respuestas.`;
+    } else {
+        fb.className = 'feedback-msg show partial';
+        fb.innerHTML = `Acertaste <strong>${correct} de ${data.length}</strong>. Las marcadas en rojo necesitan revisión.`;
+    }
+}
+
+function resetFill(prefix, data, feedbackId) {
+    data.forEach((_, i) => {
+        const inp = document.getElementById(`${prefix}-inp-${i}`);
+        inp.value = ''; inp.className = 'exercise-input';
+    });
+    document.getElementById(feedbackId).className = 'feedback-msg';
+    document.getElementById(feedbackId).innerHTML = '';
+}
+
+function checkEx1()  { checkMC('ex1', ex1Data, 'ex1-feedback'); }
+function resetEx1()  { resetMC('ex1', ex1Data, 'ex1-feedback'); }
+function checkEx2()  { checkFill('ex2', ex2Data, 'ex2-feedback'); }
+function resetEx2()  { resetFill('ex2', ex2Data, 'ex2-feedback'); }
+</script>
+</body>
+</html>
