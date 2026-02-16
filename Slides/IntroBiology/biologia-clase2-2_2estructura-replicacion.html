@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Biología Molecular - Clase 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Roboto,sans-serif;background:#f0f4f0;color:#2d4a2b;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3.5rem 6rem;flex-direction:column}.slide.active{display:flex}.cover{background:linear-gradient(135deg,#2d5016,#4a7c2d,#6b9b4f);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}.cover::before{content:'';position:absolute;top:-120px;right:-120px;width:380px;height:380px;border-radius:50%;background:rgba(255,255,255,.08)}.cover::after{content:'';position:absolute;bottom:-90px;left:-90px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.05)}.cover h1{font-family:'Roboto Slab',serif;font-size:3.8rem;font-weight:700;margin-bottom:1rem;position:relative;z-index:1;color:#fff;text-shadow:0 3px 10px rgba(0,0,0,.2)}.cover .subtitle{font-size:1.5rem;color:#fff;opacity:.9;z-index:1;margin-bottom:.5rem}.cover .line{width:120px;height:4px;background:#a8d88e;margin:1.5rem auto;z-index:1;border-radius:2px}.cover .meta{margin-top:.7rem;font-size:.9rem;color:#fff;opacity:.7;z-index:1}.cover .help{margin-top:2.5rem;font-size:.95rem;color:#fff;opacity:.75;z-index:1}.slide-header{margin-bottom:1.5rem;flex-shrink:0}.slide-number{color:#5a8a3a;font-size:.76rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:.6rem}h2{font-family:'Roboto Slab',serif;font-size:2.4rem;color:#2d4a2b;font-weight:700}h3{font-family:'Roboto Slab',serif;font-size:1.45rem;color:#4a7c2d;margin:1.4rem 0 .9rem;font-weight:600}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:6px}.content::-webkit-scrollbar-track{background:rgba(90,138,58,.1);border-radius:3px}.content::-webkit-scrollbar-thumb{background:#5a8a3a;border-radius:3px}p{font-size:1.02rem;line-height:1.8;margin-bottom:1.2rem;color:#2d4a2b}ul{list-style:none;margin:1rem 0}ul li{font-size:.98rem;line-height:1.7;margin-bottom:.7rem;padding-left:1.7rem;position:relative;color:#3a5a2b}ul li::before{content:'🔬';position:absolute;left:0;font-size:.85rem}.box{background:#fff;border-left:5px solid #5a8a3a;padding:1.4rem 1.6rem;margin:1.4rem 0;border-radius:0 10px 10px 0;box-shadow:0 3px 10px rgba(90,138,58,.12)}.box strong{color:#4a7c2d;display:block;margin-bottom:.6rem;font-size:1.06rem}.box p{margin-bottom:.5rem}.box-warn{background:#fffef5;border-left-color:#d4a017}.box-warn strong{color:#d4a017}.box-success{background:#f7fff7;border-left-color:#3d8b3d}.box-success strong{color:#3d8b3d}.box-info{background:#f8fffe;border-left-color:#2d7a7a}.box-info strong{color:#2d7a7a}.grid{display:grid;gap:1.3rem;margin:1.3rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#fff;padding:1.4rem;border-radius:12px;border:1px solid rgba(90,138,58,.2);box-shadow:0 3px 8px rgba(90,138,58,.1)}.card h4{color:#4a7c2d;margin-bottom:.7rem;font-size:1.1rem;font-weight:600}.card p{font-size:.96rem;margin-bottom:.4rem}.card-accent{border-color:#5a8a3a;background:linear-gradient(135deg,#fff,#f8fff8);box-shadow:0 4px 12px rgba(90,138,58,.18)}.em{color:#4a7c2d;font-weight:700}.em-warn{color:#d4a017;font-weight:700}.formula{background:#fff;padding:1.3rem 2rem;border-radius:12px;border:3px solid #5a8a3a;font-family:'Courier New',monospace;font-size:1.2rem;text-align:center;margin:1.3rem 0;color:#2d4a2b;font-weight:600;box-shadow:0 4px 14px rgba(90,138,58,.2)}.diagram{background:#f8fff8;padding:1.5rem;border-radius:12px;border:2px solid #a8d88e;margin:1.3rem 0}.diagram-title{color:#4a7c2d;font-weight:700;font-size:1.05rem;margin-bottom:1rem;text-align:center}.flow{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;margin:.8rem 0}.flow-box{background:#fff;padding:1rem 1.5rem;border-radius:8px;border:2px solid #5a8a3a;font-weight:600;color:#2d4a2b;min-width:100px;text-align:center}.flow-arrow{color:#5a8a3a;font-size:2rem;font-weight:700}.activity-section{background:linear-gradient(135deg,#f0fff0,#e8f8e8);padding:2rem;border-radius:15px;border:3px solid #6b9b4f;margin:1.5rem 0}.activity-title{color:#2d5016;font-size:1.6rem;font-weight:700;margin-bottom:1rem;text-align:center}.activity-time{background:#4a7c2d;color:#fff;padding:.4rem 1.2rem;border-radius:20px;display:inline-block;font-size:.85rem;font-weight:700;margin-bottom:1rem}.activity-box{background:#fff;padding:1.5rem;border-radius:10px;margin:1rem 0;border-left:4px solid #5a8a3a}.gene-diagram{background:#fff;padding:1.5rem;border-radius:10px;border:2px solid #5a8a3a;margin:1rem 0;text-align:center}.gene-part{display:inline-block;padding:.5rem 1rem;margin:.3rem;border-radius:5px;font-size:.9rem;font-weight:600}.promoter{background:#ffe8e8;border:2px solid #d4a017}.exon{background:#e8f8e8;border:2px solid:#5a8a3a}.intron{background:#f0f0f0;border:2px dashed #888}.nav{position:fixed;bottom:2rem;right:2rem;display:flex;gap:1.3rem;z-index:1000}.btn{width:60px;height:60px;background:#4a7c2d;border:none;border-radius:50%;color:#fff;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 18px rgba(74,124,45,.4);transition:all .3s}.btn:hover:not(:disabled){background:#5a8a3a;transform:scale(1.15)}.btn:disabled{opacity:.3;cursor:not-allowed}.counter{position:fixed;bottom:2rem;left:2rem;background:rgba(255,255,255,.95);padding:.9rem 1.8rem;border-radius:32px;border:2px solid #5a8a3a;color:#4a7c2d;font-weight:700;z-index:1000;box-shadow:0 3px 14px rgba(90,138,58,.3)}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:2.8rem}h2{font-size:2.1rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:1.8rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 -->
+<div class="slide cover active">
+<h1>Biología Celular<br>y Molecular</h1>
+<div class="line"></div>
+<p class="subtitle">Clase 2: Estructura Génica y Replicación del ADN</p>
+<p class="meta">Introducción a la Biología Celular y Molecular | Nivel: Principiante</p>
+<p class="help">👉 Usa las flechas para navegar →</p>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INTRODUCCIÓN</div>
+<h2>Estructura de la Clase</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>📋 Duración Total: 2 horas</strong>
+<p>Continuamos profundizando en la biología molecular con estructura génica y replicación.</p>
+</div>
+
+<div class="grid grid-3">
+<div class="card card-accent">
+<h4>⏰ Momento 1</h4>
+<p><strong>30 minutos</strong></p>
+<p>Explicación sobre estructura del gen, diferencias procariotas/eucariontes, y replicación del ADN.</p>
+</div>
+<div class="card card-accent">
+<h4>🔍 Momento 2</h4>
+<p><strong>60 minutos</strong></p>
+<p>Investigación sobre regulación génica, replicación y superenrollamiento usando videos y PDF.</p>
+</div>
+<div class="card card-accent">
+<h4>💬 Momento 3</h4>
+<p><strong>30 minutos</strong></p>
+<p>Presentación de hallazgos y discusión grupal.</p>
+</div>
+</div>
+
+<h3>Objetivos de Aprendizaje</h3>
+<div class="box box-success">
+<strong>✅ Al finalizar, podrás:</strong>
+<ul>
+<li>Identificar las partes de un gen: exones, intrones, promotor, secuencias reguladoras</li>
+<li>Comparar genes procariontes y eucariontes</li>
+<li>Explicar el proceso de replicación del ADN</li>
+<li>Comprender el superenrollamiento y su importancia médica</li>
+<li>Analizar la regulación de la expresión génica</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ESTRUCTURA DEL GEN</div>
+<h2>Organización del Gen Eucarionte</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🧬 Concepto Importante</strong>
+<p>No todo el genoma lleva información para sintetizar ARN funcional. Los genes eucariotas tienen una estructura compleja con <strong>secuencias codificantes y no codificantes</strong>.</p>
+</div>
+
+<h3>Regiones del Genoma</h3>
+<div class="grid grid-2">
+<div class="card">
+<h4>Regiones Intergénicas</h4>
+<ul>
+<li>Separan los genes</li>
+<li>~<strong>70% del genoma</strong> en vertebrados</li>
+<li>Contienen elementos reguladores</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Regiones Génicas</h4>
+<ul>
+<li>Genes propiamente dichos</li>
+<li>~<strong>30% del genoma</strong></li>
+<li>Incluyen exones e intrones</li>
+</ul>
+</div>
+</div>
+
+<h3>Estructura de un Gen Típico</h3>
+<div class="gene-diagram">
+<div style="margin-bottom:1rem;font-weight:700;color:#2d4a2b">Gen Eucarionte</div>
+<div class="gene-part promoter">PROMOTOR</div>
+<div class="gene-part exon">EXÓN 1</div>
+<div class="gene-part intron">INTRÓN 1</div>
+<div class="gene-part exon">EXÓN 2</div>
+<div class="gene-part intron">INTRÓN 2</div>
+<div class="gene-part exon">EXÓN 3</div>
+<p style="margin-top:1rem;font-size:.9rem">← 5' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dirección de transcripción &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3' →</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ESTRUCTURA DEL GEN</div>
+<h2>Exones e Intrones</h2>
+</div>
+<div class="content">
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>📗 EXONES</h4>
+<p><strong>Secuencias codificantes</strong></p>
+<ul style="margin-top:.7rem">
+<li>Presentes en el gen (ADN)</li>
+<li>Presentes en pre-ARNm</li>
+<li>Presentes en ARNm maduro</li>
+<li><strong>Se traducen</strong> en proteínas</li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem;color:#4a7c2d">Del inglés: <em>EXpressed regiONs</em></p>
+</div>
+<div class="card">
+<h4>📕 INTRONES</h4>
+<p><strong>Secuencias no codificantes</strong></p>
+<ul style="margin-top:.7rem">
+<li>Presentes en el gen (ADN)</li>
+<li>Presentes en pre-ARNm</li>
+<li><strong>Ausentes</strong> en ARNm maduro</li>
+<li><strong>NO se traducen</strong></li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem;color:#888">Del inglés: <em>INTervening regiONs</em></p>
+</div>
+</div>
+
+<h3>Procesamiento: Splicing (Corte y Empalme)</h3>
+<div class="box box-info">
+<strong>✂️ ¿Qué es el splicing?</strong>
+<p>Es el proceso de eliminar intrones y unir exones durante el procesamiento del pre-ARNm en el núcleo.</p>
+</div>
+
+<div class="diagram">
+<div class="diagram-title">Proceso de Splicing</div>
+<div class="flow" style="flex-direction:column;gap:1rem">
+<div class="flow-box" style="min-width:300px;background:#fff8e8">pre-ARNm: EXÓN-intrón-EXÓN-intrón-EXÓN</div>
+<div style="text-align:center;color:#d4a017">↓<br>Espliceosoma corta intrones</div>
+<div class="flow-box" style="min-width:250px;background:#e8f8e8">ARNm maduro: EXÓN-EXÓN-EXÓN</div>
+</div>
+</div>
+
+<div class="box">
+<strong>🔬 Espliceosoma</strong>
+<p>Complejo de proteínas y pequeños ARN nucleares (snRNA) que reconoce secuencias específicas en los intrones y realiza el corte y empalme.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ESTRUCTURA DEL GEN</div>
+<h2>Promotor y Secuencias Reguladoras</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🎯 Promotor</strong>
+<p>Región del ADN donde se <strong>inicia la transcripción</strong>. La ARN polimerasa se une al promotor para comenzar a sintetizar ARN.</p>
+</div>
+
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Características</h4>
+<ul>
+<li>Ubicado <strong>upstream</strong> (5') del gen</li>
+<li>Secuencias conservadas (ej: TATA box)</li>
+<li>Sitio de unión para factores de transcripción</li>
+<li>Determina <strong>cuándo</strong> se transcribe el gen</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Función</h4>
+<ul>
+<li>Recluta ARN polimerasa</li>
+<li>Controla frecuencia de transcripción</li>
+<li>Responde a señales celulares</li>
+<li>Específico para cada gen</li>
+</ul>
+</div>
+</div>
+
+<h3>Secuencias Reguladoras</h3>
+<div class="box">
+<strong>⚙️ Elementos Reguladores</strong>
+<p>Proteínas llamadas <strong>factores de transcripción</strong> se unen a estas regiones y regulan la actividad del gen.</p>
+</div>
+
+<div class="grid grid-2" style="margin-top:1rem">
+<div class="card">
+<h4>🔼 Potenciadores (Enhancers)</h4>
+<p>Secuencias que <strong>aumentan</strong> la transcripción del gen.</p>
+<p style="margin-top:.5rem;font-size:.9rem">Pueden estar lejos del promotor (incluso a miles de pares de bases)</p>
+</div>
+<div class="card">
+<h4>🔽 Silenciadores (Silencers)</h4>
+<p>Secuencias que <strong>disminuyen o bloquean</strong> la transcripción.</p>
+<p style="margin-top:.5rem;font-size:.9rem">Permiten apagar genes cuando no se necesitan</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROCARIOTAS VS EUCARIONTES</div>
+<h2>Diferencias en Organización Génica</h2>
+</div>
+<div class="content">
+<div class="grid grid-2">
+<div class="card">
+<h4>🦠 GENES PROCARIONTES</h4>
+<ul>
+<li><strong>Sin intrones</strong> (genes continuos)</li>
+<li>Estructura simple</li>
+<li>ARNm no requiere procesamiento</li>
+<li>Transcripción y traducción acopladas</li>
+<li>Organizados en <strong>operones</strong></li>
+<li>Regulación principalmente transcripcional</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>🧬 GENES EUCARIONTES</h4>
+<ul>
+<li><strong>Con intrones y exones</strong></li>
+<li>Estructura compleja</li>
+<li>ARNm requiere splicing</li>
+<li>Transcripción (núcleo) y traducción (citosol) separadas</li>
+<li>Genes <strong>individuales</strong></li>
+<li>Regulación en múltiples niveles</li>
+</ul>
+</div>
+</div>
+
+<h3>El Operón (Procariontes)</h3>
+<div class="box box-info">
+<strong>📚 Definición</strong>
+<p>Un <span class="em">operón</span> es una unidad funcional de genes procariontes que incluye:</p>
+<ul style="margin-top:.5rem">
+<li><strong>Promotor:</strong> sitio de unión de ARN polimerasa</li>
+<li><strong>Operador:</strong> sitio de unión del represor</li>
+<li><strong>Genes estructurales:</strong> varios genes relacionados funcionalmente que se transcriben juntos</li>
+</ul>
+</div>
+
+<div class="gene-diagram" style="background:#fffef5">
+<div style="margin-bottom:1rem;font-weight:700;color:#2d4a2b">Operón Lac (E. coli)</div>
+<div class="gene-part promoter">PROMOTOR</div>
+<div class="gene-part" style="background:#ffe8f8;border:2px solid #d4a017">OPERADOR</div>
+<div class="gene-part exon">gen Z</div>
+<div class="gene-part exon">gen Y</div>
+<div class="gene-part exon">gen A</div>
+<p style="margin-top:1rem;font-size:.85rem">Todos los genes se transcriben en un solo ARNm (policitrónico)</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">REGULACIÓN PROCARIONTE</div>
+<h2>Operones: Inducible vs Reprimible</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🔬 Regulación en Procariontes</strong>
+<p>La regulación ocurre principalmente a nivel de <strong>transcripción</strong>, lo cual es muy eficiente (evita síntesis innecesaria de proteínas).</p>
+</div>
+
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>🔛 Operón Inducible</h4>
+<p><strong>Ejemplo: Operón lac</strong></p>
+<ul style="margin-top:.5rem">
+<li>Normalmente <strong>apagado</strong></li>
+<li>Se <strong>activa</strong> en presencia del sustrato (lactosa)</li>
+<li>La lactosa inactiva al represor</li>
+<li>ARN polimerasa puede transcribir</li>
+<li>Se producen enzimas para degradar lactosa</li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem;color:#4a7c2d"><strong>Lógica:</strong> "Solo hacer enzimas cuando el sustrato está presente"</p>
+</div>
+<div class="card card-accent">
+<h4>🔙 Operón Reprimible</h4>
+<p><strong>Ejemplo: Operón trp</strong></p>
+<ul style="margin-top:.5rem">
+<li>Normalmente <strong>encendido</strong></li>
+<li>Se <strong>apaga</strong> en presencia del producto (triptófano)</li>
+<li>El triptófano activa al represor</li>
+<li>Represor bloquea la transcripción</li>
+<li>No se producen enzimas de síntesis</li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem;color:#4a7c2d"><strong>Lógica:</strong> "No hacer enzimas si el producto ya está disponible"</p>
+</div>
+</div>
+
+<div class="box box-warn">
+<strong>🔑 Concepto Clave</strong>
+<p>Los represores son <strong>proteínas alostéricas</strong>: cambian su conformación 3D al interactuar con moléculas pequeñas (efectores).</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 8 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">DUPLICACIÓN DEL ADN</div>
+<h2>Replicación del ADN</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔄 ¿Por qué es importante?</strong>
+<p>La replicación del ADN durante la <strong>fase S del ciclo celular</strong> asegura que las nuevas células posean copias completas y precisas de la información genética.</p>
+</div>
+
+<h3>Características de la Doble Hélice</h3>
+<div class="grid grid-2">
+<div class="card">
+<h4>Estructura</h4>
+<ul>
+<li>Cadenas <strong>antiparalelas</strong> (5'→3' y 3'→5')</li>
+<li>Cadenas principales: azúcar-fosfato</li>
+<li>Bases nitrogenadas en el interior</li>
+<li>Puentes de hidrógeno: A-T (2), G-C (3)</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Complementariedad</h4>
+<ul>
+<li>A siempre con T</li>
+<li>G siempre con C</li>
+<li>Permite <strong>replicación exacta</strong></li>
+<li>Base de las reglas de Chargaff</li>
+</ul>
+</div>
+</div>
+
+<div class="box">
+<strong>📏 Reglas de Chargaff</strong>
+<p><strong>1ª Regla:</strong> [A] = [T] y [G] = [C] en cualquier ADN<br>
+<strong>2ª Regla:</strong> Proporciones de bases son constantes dentro de una misma especie, pero varían entre especies</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 9 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">DUPLICACIÓN DEL ADN</div>
+<h2>Inicio de la Replicación</h2>
+</div>
+<div class="content">
+<h3>Proteínas Iniciadoras</h3>
+<div class="box box-info">
+<strong>🚀 Origen de Replicación</strong>
+<p>Secuencia específica de nucleótidos donde se inicia la replicación. Las proteínas iniciadoras se unen aquí.</p>
+</div>
+
+<div class="grid grid-3">
+<div class="card">
+<h4>1. Topoisomerasa</h4>
+<p>Desenreda la doble hélice</p>
+<p style="margin-top:.5rem;font-size:.9rem">Corta, rota y vuelve a unir el ADN</p>
+</div>
+<div class="card">
+<h4>2. Helicasa</h4>
+<p>Rompe puentes de hidrógeno</p>
+<p style="margin-top:.5rem;font-size:.9rem">Separa las dos cadenas</p>
+</div>
+<div class="card">
+<h4>3. Proteína SSB</h4>
+<p>Estabiliza cadenas separadas</p>
+<p style="margin-top:.5rem;font-size:.9rem">Evita que se vuelvan a unir</p>
+</div>
+</div>
+
+<h3>Burbuja de Replicación</h3>
+<div class="diagram">
+<div class="diagram-title">Formación de la Burbuja</div>
+<div style="background:#fff;padding:1rem;border-radius:8px;text-align:center">
+<p style="font-weight:600;margin-bottom:.5rem">═══════════════</p>
+<p style="margin:.3rem 0">Helicasa abre la doble hélice ↓</p>
+<p style="font-weight:600;margin:.5rem 0">═══╱╲═══╱╲═══</p>
+<p style="margin-top:.5rem;font-size:.9rem">Extremos = <strong>Horquillas de replicación</strong></p>
+</div>
+</div>
+
+<div class="box box-warn">
+<strong>⚡ Diferencia Procariotas vs Eucariontes</strong>
+<p><strong>Procariontes:</strong> 1 burbuja de replicación, velocidad ~1,000 nt/seg<br>
+<strong>Eucariontes:</strong> Múltiples burbujas, velocidad ~50 nt/seg (pero en paralelo para acelerar el proceso)</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 10 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">DUPLICACIÓN DEL ADN</div>
+<h2>Síntesis del ADN</h2>
+</div>
+<div class="content">
+<h3>Enzimas Clave</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Primasa</h4>
+<p>Sintetiza <strong>cebadores (primers)</strong>: cadenas cortas de ARN que sirven de punto de unión para la ADN polimerasa.</p>
+</div>
+<div class="card card-accent">
+<h4>ADN Polimerasa</h4>
+<p>Enzima principal que sintetiza la nueva cadena de ADN. Solo puede agregar nucleótidos en el extremo <strong>3'</strong>.</p>
+</div>
+</div>
+
+<div class="box box-info">
+<strong>🔬 Mecanismo de Síntesis</strong>
+<p>1. ADN polimerasa se une al cebador<br>
+2. Lee la cadena molde (3'→5')<br>
+3. Agrega nucleótidos complementarios en dirección 5'→3'<br>
+4. La energía proviene del rompimiento de 2 grupos fosfato del nucleótido entrante</p>
+</div>
+
+<h3>Cadena Líder vs Cadena Rezagada</h3>
+<div class="diagram">
+<div class="diagram-title">Direccionalidad de la Síntesis</div>
+<div class="grid grid-2" style="margin-top:1rem">
+<div style="background:#e8f8e8;padding:1rem;border-radius:8px">
+<h4 style="color:#4a7c2d;margin-bottom:.5rem">Cadena Líder</h4>
+<p style="font-size:.9rem">• Síntesis <strong>continua</strong><br>
+• Dirección 5'→3'<br>
+• Un solo cebador<br>
+• Avanza con la horquilla</p>
+</div>
+<div style="background:#fffef5;padding:1rem;border-radius:8px">
+<h4 style="color:#d4a017;margin-bottom:.5rem">Cadena Rezagada</h4>
+<p style="font-size:.9rem">• Síntesis en <strong>fragmentos</strong><br>
+• Dirección 5'→3' (pero en sentido opuesto)<br>
+• Múltiples cebadores<br>
+• <strong>Fragmentos de Okazaki</strong></p>
+</div>
+</div>
+</div>
+
+<div class="box">
+<strong>🔗 ADN Ligasa</strong>
+<p>Une los fragmentos de Okazaki, sellando los espacios en la cadena de azúcar-fosfato.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 11 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">DUPLICACIÓN DEL ADN</div>
+<h2>Replicación Semiconservativa</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>✅ Modelo Semiconservativo</strong>
+<p>Cada molécula de ADN resultante contiene:<br>
+• <strong>Una cadena original</strong> (molde)<br>
+• <strong>Una cadena nueva</strong> (complementaria)</p>
+</div>
+
+<div class="diagram">
+<div class="diagram-title">Resultado de la Replicación</div>
+<div class="flow" style="flex-direction:column;gap:1.5rem">
+<div class="flow-box" style="background:#e8f8e8;min-width:200px">ADN Original<br><span style="font-size:.85rem">(2 cadenas)</span></div>
+<div style="text-align:center;color:#4a7c2d">↓ Replicación</div>
+<div style="display:flex;gap:2rem;justify-content:center">
+<div class="flow-box" style="background:#f8fff8;padding:.8rem">
+<div style="color:#2d5016">Cadena 1</div>
+<div style="font-size:.85rem;margin-top:.3rem">original<br>nueva</div>
+</div>
+<div class="flow-box" style="background:#f8fff8;padding:.8rem">
+<div style="color:#2d5016">Cadena 2</div>
+<div style="font-size:.85rem;margin-top:.3rem">nueva<br>original</div>
+</div>
+</div>
+</div>
+<p style="text-align:center;margin-top:1rem;font-weight:600;color:#4a7c2d">2 moléculas de ADN idénticas</p>
+</div>
+
+<div class="box box-info">
+<strong>🔬 Importancia</strong>
+<p>Este mecanismo asegura la <strong>transmisión fiel</strong> de la información genética de célula madre a células hijas durante la división celular.</p>
+</div>
+
+<div class="box">
+<strong>📌 Resultado Final</strong>
+<p>Las dos moléculas resultantes son <strong>cromátidas hermanas</strong> unidas por el centrómero, que se separarán durante la mitosis o meiosis.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 12 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">SUPERENROLLAMIENTO</div>
+<h2>Superenrollamiento del ADN</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🌀 ¿Qué es?</strong>
+<p>El <span class="em">superenrollamiento</span> es la estructura tridimensional adicional que adquiere el ADN más allá de su doble hélice. Permite que largas secuencias de ADN se <strong>compacten</strong> dentro del núcleo celular.</p>
+</div>
+
+<h3>Tipos de Superenrollamiento</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>⊕ Superenrollamiento Positivo</h4>
+<ul>
+<li>Giro en sentido <strong>horario</strong></li>
+<li>Compacta más la molécula</li>
+<li>Aumenta la tensión</li>
+<li>Dificulta separación de cadenas</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>⊖ Superenrollamiento Negativo</h4>
+<ul>
+<li>Giro en sentido <strong>antihorario</strong></li>
+<li>Genera espacios</li>
+<li>Reduce la tensión</li>
+<li><strong>Facilita</strong> separación de cadenas</li>
+<li>Necesario para replicación y transcripción</li>
+</ul>
+</div>
+</div>
+
+<div class="box box-info">
+<strong>⚙️ Importancia Biológica</strong>
+<p>El superenrollamiento negativo es esencial para:<br>
+• <strong>Replicación:</strong> permite separar las cadenas<br>
+• <strong>Transcripción:</strong> facilita acceso a la ARN polimerasa<br>
+• <strong>Compactación:</strong> permite empaquetar ~2 metros de ADN en un núcleo de ~10 μm</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 13 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">SUPERENROLLAMIENTO</div>
+<h2>Topoisomerasas</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔧 Enzimas Reguladoras</strong>
+<p>Las <span class="em">topoisomerasas</span> son enzimas que controlan el superenrollamiento del ADN mediante corte, rotación y reunión de las cadenas.</p>
+</div>
+
+<h3>Tipos y Función</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Topoisomerasa I</h4>
+<ul>
+<li>Corta <strong>una cadena</strong></li>
+<li>Permite rotación</li>
+<li>Vuelve a unir</li>
+<li>Relaja superenrollamientos</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Topoisomerasa II</h4>
+<ul>
+<li>Corta <strong>ambas cadenas</strong></li>
+<li>Pasa otra doble hélice a través</li>
+<li>Vuelve a unir</li>
+<li>Desenreda nudos</li>
+</ul>
+</div>
+</div>
+
+<h3>Importancia Médica</h3>
+<div class="box box-warn">
+<strong>💊 Aplicaciones Clínicas</strong>
+<p><strong>Antibióticos:</strong> Muchos antibióticos (ej. fluoroquinolonas) inhiben topoisomerasas bacterianas → impiden replicación → muerte bacteriana</p>
+<p style="margin-top:.5rem"><strong>Antineoplásicos:</strong> Inhibidores de topoisomerasa (ej. etopósido, doxorrubicina) impiden replicación de células cancerosas</p>
+</div>
+
+<div class="box">
+<strong>🧬 Enfermedades Asociadas</strong>
+<p>Mutaciones en genes de topoisomerasas humanas se asocian con:<br>
+• <strong>Síndrome de Werner:</strong> envejecimiento prematuro<br>
+• Predisposición a ciertos tipos de cáncer<br>
+• Inestabilidad genómica</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 14 - ACTIVIDAD -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD DE INVESTIGACIÓN</div>
+<h2>Momento 2: Investigación Profunda</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">🔍 Actividad de Investigación Multimodal</div>
+<div style="text-align:center;margin-bottom:1.5rem">
+<span class="activity-time">⏰ DURACIÓN: 60 MINUTOS</span>
+</div>
+
+<div class="box box-info">
+<strong>📋 Estructura de la Actividad</strong>
+<p>Trabajarán en <strong>equipos de 3-4 personas</strong>. Cada equipo investigará usando múltiples recursos y preparará una presentación integradora.</p>
+</div>
+
+<h3 style="color:#2d5016;margin-top:1.5rem">🎯 Objetivos</h3>
+<div class="grid grid-2">
+<div class="card">
+<h4>1. Integración</h4>
+<p>Conectar estructura génica con regulación y replicación</p>
+</div>
+<div class="card">
+<h4>2. Análisis</h4>
+<p>Comprender diferencias procariotas/eucariontes en profundidad</p>
+</div>
+<div class="card">
+<h4>3. Aplicación</h4>
+<p>Relacionar superenrollamiento con aplicaciones médicas</p>
+</div>
+<div class="card">
+<h4>4. Síntesis</h4>
+<p>Crear un mapa conceptual integrando todos los temas</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 15 - RECURSOS -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD DE INVESTIGACIÓN</div>
+<h2>Recursos para Investigación</h2>
+</div>
+<div class="content">
+<h3>📚 Recursos Obligatorios</h3>
+
+<div class="activity-box">
+<h4 style="color:#2d5016">1. PDF: Genómica y Biología Molecular</h4>
+<p><strong>Fuente:</strong> Biblioteca Nacional de Maestros (Argentina)</p>
+<p><strong>Enlace:</strong> <a href="http://www.bnm.me.gov.ar/giga1/documentos/EL002318.pdf" style="color:#5a8a3a">Descargar PDF</a></p>
+<p style="margin-top:.5rem;font-size:.9rem">Enfócate en: estructura del gen, exones/intrones, regulación génica</p>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#2d5016">2. Video: Replicación del ADN</h4>
+<p><strong>YouTube:</strong> Animación detallada del proceso</p>
+<p><strong>Enlace:</strong> <a href="https://www.youtube.com/watch?v=3OTVaV_0Vv8" style="color:#5a8a3a">Ver Video</a></p>
+<p style="margin-top:.5rem;font-size:.9rem">Observa: helicasa, primasa, ADN polimerasa, ligasa, fragmentos de Okazaki</p>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#2d5016">3. Video: Regulación Génica</h4>
+<p><strong>YouTube:</strong> Operones y regulación eucarionte</p>
+<p><strong>Enlace:</strong> <a href="https://www.youtube.com/watch?v=DAS9BPZYeto" style="color:#5a8a3a">Ver Video</a></p>
+<p style="margin-top:.5rem;font-size:.9rem">Compara: operón lac vs regulación eucarionte multinivel</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 16 - GUÍA INVESTIGACIÓN -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD DE INVESTIGACIÓN</div>
+<h2>Guía de Investigación</h2>
+</div>
+<div class="content">
+<h3>Preguntas Guía</h3>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">Bloque 1: Estructura del Gen (20 min)</h4>
+<p>• Dibuja un gen eucarionte completo identificando: promotor, exones, intrones, secuencias reguladoras<br>
+• ¿Por qué los eucariontes tienen intrones? ¿Qué ventaja evolutiva podrían representar?<br>
+• Explica el proceso de splicing con tus propias palabras<br>
+• ¿Qué pasaría si un intrón NO se elimina correctamente?</p>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">Bloque 2: Regulación (20 min)</h4>
+<p>• Compara operón lac vs operón trp: ¿cuándo están activos?<br>
+• ¿Por qué los procariontes usan operones pero los eucariontes no?<br>
+• Menciona al menos 3 niveles donde los eucariontes pueden regular la expresión génica<br>
+• ¿Cómo se relaciona esto con la especialización celular en organismos multicelulares?</p>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">Bloque 3: Replicación y Superenrollamiento (20 min)</h4>
+<p>• ¿Por qué la replicación es semiconservativa y no conservativa?<br>
+• Explica por qué existe una cadena líder y una rezagada<br>
+• ¿Qué función tienen las topoisomerasas durante la replicación?<br>
+• Menciona 2 aplicaciones médicas del conocimiento sobre topoisomerasas</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 17 - TAREA INTEGRADORA -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD DE INVESTIGACIÓN</div>
+<h2>Tarea Integradora</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🎨 Producto Final: Mapa Conceptual</strong>
+<p>Cada equipo debe crear un <strong>mapa conceptual</strong> que integre todos los conceptos estudiados en ambas clases.</p>
+</div>
+
+<h3>Elementos que Debe Incluir</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>De la Clase 1</h4>
+<ul>
+<li>Dogma central (ADN→ARN→Proteína)</li>
+<li>Genoma y gen</li>
+<li>Transcripción</li>
+<li>Traducción</li>
+<li>Código genético</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>De la Clase 2</h4>
+<ul>
+<li>Estructura del gen (exones, intrones, promotor)</li>
+<li>Splicing</li>
+<li>Regulación (operones, niveles)</li>
+<li>Replicación del ADN</li>
+<li>Superenrollamiento</li>
+</ul>
+</div>
+</div>
+
+<h3>Criterios de Evaluación</h3>
+<div class="activity-box">
+<p><strong>✓ Completitud:</strong> Incluye todos los conceptos clave<br>
+<strong>✓ Conexiones:</strong> Muestra relaciones lógicas entre conceptos<br>
+<strong>✓ Claridad:</strong> Organización visual clara y legible<br>
+<strong>✓ Profundidad:</strong> Va más allá de definiciones simples<br>
+<strong>✓ Creatividad:</strong> Uso de colores, símbolos, ejemplos</p>
+</div>
+
+<div class="box box-info">
+<strong>💡 Consejo</strong>
+<p>Pueden hacer el mapa en papel grande, digitalmente, o usar herramientas como: MindMeister, Coggle, Canva, o simplemente PowerPoint/Google Slides.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 18 - MOMENTO 3 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PRESENTACIÓN</div>
+<h2>Momento 3: Compartir Hallazgos</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">💬 Presentación de Mapas Conceptuales</div>
+<div style="text-align:center;margin-bottom:1.5rem">
+<span class="activity-time">⏰ DURACIÓN: 30 MINUTOS</span>
+</div>
+
+<div class="box box-success">
+<strong>🎯 Dinámica</strong>
+<p>Cada equipo presentará su mapa conceptual explicando las conexiones más importantes que identificaron.</p>
+</div>
+
+<h3 style="color:#2d5016">Formato</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Tiempo por Equipo</h4>
+<ul>
+<li><strong>5 minutos:</strong> Presentación del mapa</li>
+<li><strong>2 minutos:</strong> Preguntas y retroalimentación</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Qué Presentar</h4>
+<ul>
+<li>Visión general del mapa</li>
+<li>2-3 conexiones clave identificadas</li>
+<li>Un "¡ajá!" moment de la investigación</li>
+<li>Una pregunta que quedó abierta</li>
+</ul>
+</div>
+</div>
+
+<h3 style="color:#2d5016;margin-top:1.5rem">Evaluación Participativa</h3>
+<div class="box">
+<p>Después de todas las presentaciones, votaremos por:<br>
+• <strong>Mapa más completo</strong><br>
+• <strong>Mejor organización visual</strong><br>
+• <strong>Conexión más creativa</strong></p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 19 - RESUMEN -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RESUMEN GENERAL</div>
+<h2>Integración de Ambas Clases</h2>
+</div>
+<div class="content">
+<div class="diagram">
+<div class="diagram-title">Visión Completa: Del ADN a la Función</div>
+<div class="flow" style="flex-direction:column;gap:1rem">
+<div class="flow-box" style="background:#f8fff8;min-width:300px">
+<strong>ADN (Genoma)</strong><br>
+<span style="font-size:.85rem">Organizado en genes con promotores, exones, intrones</span>
+</div>
+<div style="text-align:center">↓ Replicación (semiconservativa) →<br>topoisomerasas, helicasas, ADN polimerasa</div>
+<div class="flow-box" style="background:#fff8e8;min-width:300px">
+<strong>Transcripción</strong><br>
+<span style="font-size:.85rem">ADN → pre-ARNm (regulada por promotores)</span>
+</div>
+<div style="text-align:center">↓ Splicing (eucariontes) →<br>elimina intrones, une exones</div>
+<div class="flow-box" style="background:#ffe8f8;min-width:300px">
+<strong>ARNm maduro</strong><br>
+<span style="font-size:.85rem">Exportado al citosol</span>
+</div>
+<div style="text-align:center">↓ Traducción →<br>ribosomas + ARNt</div>
+<div class="flow-box" style="background:#ffe8e8;min-width:300px">
+<strong>PROTEÍNA</strong><br>
+<span style="font-size:.85rem">Función celular</span>
+</div>
+</div>
+</div>
+
+<div class="box box-success" style="margin-top:1rem">
+<strong>🔑 Conceptos Centrales</strong>
+<p>• El <strong>genoma</strong> contiene toda la información<br>
+• Los <strong>genes</strong> son las unidades funcionales<br>
+• La <strong>regulación</strong> determina cuándo y cuánto se expresa cada gen<br>
+• La <strong>replicación</strong> asegura la transmisión fiel de la información<br>
+• Todo está finamente <strong>regulado</strong> y <strong>coordinado</strong></p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 20 - DIFERENCIAS CLAVE -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RESUMEN</div>
+<h2>Procariontes vs Eucariontes</h2>
+</div>
+<div class="content">
+<table style="font-size:.88rem">
+<tr><th>Característica</th><th>Procariontes</th><th>Eucariontes</th></tr>
+<tr><td><strong>Genes</strong></td><td>Continuos (sin intrones)</td><td>Interrumpidos (con intrones)</td></tr>
+<tr><td><strong>Organización</strong></td><td>Operones (policistrónicos)</td><td>Genes individuales (monocistrónicos)</td></tr>
+<tr><td><strong>Transcripción</strong></td><td>Citosol</td><td>Núcleo</td></tr>
+<tr><td><strong>Traducción</strong></td><td>Citosol (acoplada)</td><td>Citosol (separada)</td></tr>
+<tr><td><strong>Procesamiento ARN</strong></td><td>No requiere</td><td>Splicing, cap 5', cola poli-A</td></tr>
+<tr><td><strong>Regulación principal</strong></td><td>Nivel transcripcional</td><td>Múltiples niveles</td></tr>
+<tr><td><strong>Orígenes replicación</strong></td><td>Uno</td><td>Múltiples</td></tr>
+<tr><td><strong>Velocidad replicación</strong></td><td>~1,000 nt/s</td><td>~50 nt/s</td></tr>
+<tr><td><strong>Superenrollamiento</strong></td><td>Sí (circular)</td><td>Sí (lineal, histonas)</td></tr>
+</table>
+
+<div class="box box-info" style="margin-top:1.5rem">
+<strong>💡 Implicación Evolutiva</strong>
+<p>Estas diferencias reflejan la mayor <strong>complejidad regulatoria</strong> necesaria en eucariontes multicelulares, donde diferentes células deben expresar diferentes conjuntos de genes a pesar de tener el mismo genoma.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 21 - APLICACIONES -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">APLICACIONES</div>
+<h2>Relevancia Médica y Biotecnológica</h2>
+</div>
+<div class="content">
+<h3>🏥 Medicina</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Diagnóstico</h4>
+<ul>
+<li>Detección de mutaciones en genes</li>
+<li>Análisis de expresión génica en cáncer</li>
+<li>Pruebas de paternidad (replicación fiel)</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Terapias</h4>
+<ul>
+<li>Antibióticos (inhibidores de topoisomerasa bacteriana)</li>
+<li>Antineoplásicos (inhibidores de topoisomerasa)</li>
+<li>Terapia génica (corrección de genes defectuosos)</li>
+</ul>
+</div>
+</div>
+
+<h3>🧬 Biotecnología</h3>
+<div class="grid grid-2">
+<div class="card">
+<h4>Ingeniería Genética</h4>
+<ul>
+<li>Modificación de genes (CRISPR)</li>
+<li>Producción de proteínas recombinantes (insulina)</li>
+<li>Organismos transgénicos</li>
+</ul>
+</div>
+<div class="card">
+<h4>Investigación</h4>
+<ul>
+<li>Secuenciación genómica</li>
+<li>Estudios de regulación génica</li>
+<li>Medicina personalizada</li>
+</ul>
+</div>
+</div>
+
+<div class="box box-success">
+<strong>✨ El Futuro</strong>
+<p>Comprender los mecanismos de expresión génica, regulación y replicación es fundamental para desarrollar nuevas terapias, diagnosticar enfermedades genéticas y avanzar en medicina de precisión.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 22 - REFLEXIÓN -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CIERRE</div>
+<h2>Reflexión Final</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🌟 Lo que Hemos Aprendido</strong>
+<p>En estas dos clases hemos recorrido el camino completo desde el ADN hasta las proteínas funcionales:</p>
+</div>
+
+<div class="grid grid-2" style="margin-top:1.5rem">
+<div class="card card-accent">
+<h4>Clase 1</h4>
+<ul>
+<li>Dogma central</li>
+<li>Genoma y gen</li>
+<li>Transcripción</li>
+<li>Traducción</li>
+<li>Código genético</li>
+<li>Aplicaciones genómicas</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Clase 2</h4>
+<ul>
+<li>Estructura compleja del gen</li>
+<li>Splicing de intrones</li>
+<li>Regulación génica</li>
+<li>Replicación del ADN</li>
+<li>Superenrollamiento</li>
+<li>Diferencias evolutivas</li>
+</ul>
+</div>
+</div>
+
+<div class="box box-info" style="margin-top:1.5rem">
+<strong>💭 Pregunta para Reflexionar</strong>
+<p style="font-style:italic">"Si todas las células de tu cuerpo tienen el mismo genoma, ¿cómo es que una neurona es tan diferente de una célula muscular?"</p>
+<p style="margin-top:.7rem;font-size:.95rem">La respuesta está en la <strong>regulación diferencial de la expresión génica</strong> que estudiamos hoy.</p>
+</div>
+
+<div class="box box-success">
+<strong>🎓 Mensaje Final</strong>
+<p>La biología molecular es la base para comprender la vida a nivel molecular. Estos conocimientos son fundamentales para tu formación en ciencias de la salud y biológicas.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 23 - FIN -->
+<div class="slide cover">
+<h1>¡Excelente Trabajo!</h1>
+<div class="line"></div>
+<p class="subtitle">Fin del Módulo de Biología Molecular</p>
+<p class="meta">Introducción a la Biología Celular y Molecular</p>
+<p class="help" style="margin-top:3rem">Gracias por su participación activa 🔬🧬</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">23</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>

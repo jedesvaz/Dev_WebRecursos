@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Biología Molecular - Clase 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Roboto,sans-serif;background:#f0f4f0;color:#2d4a2b;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3.5rem 6rem;flex-direction:column}.slide.active{display:flex}.cover{background:linear-gradient(135deg,#2d5016,#4a7c2d,#6b9b4f);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}.cover::before{content:'';position:absolute;top:-120px;right:-120px;width:380px;height:380px;border-radius:50%;background:rgba(255,255,255,.08)}.cover::after{content:'';position:absolute;bottom:-90px;left:-90px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.05)}.cover h1{font-family:'Roboto Slab',serif;font-size:3.8rem;font-weight:700;margin-bottom:1rem;position:relative;z-index:1;color:#fff;text-shadow:0 3px 10px rgba(0,0,0,.2)}.cover .subtitle{font-size:1.5rem;color:#fff;opacity:.9;z-index:1;margin-bottom:.5rem}.cover .line{width:120px;height:4px;background:#a8d88e;margin:1.5rem auto;z-index:1;border-radius:2px}.cover .meta{margin-top:.7rem;font-size:.9rem;color:#fff;opacity:.7;z-index:1}.cover .help{margin-top:2.5rem;font-size:.95rem;color:#fff;opacity:.75;z-index:1}.slide-header{margin-bottom:1.5rem;flex-shrink:0}.slide-number{color:#5a8a3a;font-size:.76rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:.6rem}h2{font-family:'Roboto Slab',serif;font-size:2.4rem;color:#2d4a2b;font-weight:700}h3{font-family:'Roboto Slab',serif;font-size:1.45rem;color:#4a7c2d;margin:1.4rem 0 .9rem;font-weight:600}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:6px}.content::-webkit-scrollbar-track{background:rgba(90,138,58,.1);border-radius:3px}.content::-webkit-scrollbar-thumb{background:#5a8a3a;border-radius:3px}p{font-size:1.02rem;line-height:1.8;margin-bottom:1.2rem;color:#2d4a2b}ul{list-style:none;margin:1rem 0}ul li{font-size:.98rem;line-height:1.7;margin-bottom:.7rem;padding-left:1.7rem;position:relative;color:#3a5a2b}ul li::before{content:'🔬';position:absolute;left:0;font-size:.85rem}.box{background:#fff;border-left:5px solid #5a8a3a;padding:1.4rem 1.6rem;margin:1.4rem 0;border-radius:0 10px 10px 0;box-shadow:0 3px 10px rgba(90,138,58,.12)}.box strong{color:#4a7c2d;display:block;margin-bottom:.6rem;font-size:1.06rem}.box p{margin-bottom:.5rem}.box-warn{background:#fffef5;border-left-color:#d4a017}.box-warn strong{color:#d4a017}.box-success{background:#f7fff7;border-left-color:#3d8b3d}.box-success strong{color:#3d8b3d}.box-info{background:#f8fffe;border-left-color:#2d7a7a}.box-info strong{color:#2d7a7a}.grid{display:grid;gap:1.3rem;margin:1.3rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#fff;padding:1.4rem;border-radius:12px;border:1px solid rgba(90,138,58,.2);box-shadow:0 3px 8px rgba(90,138,58,.1)}.card h4{color:#4a7c2d;margin-bottom:.7rem;font-size:1.1rem;font-weight:600}.card p{font-size:.96rem;margin-bottom:.4rem}.card-accent{border-color:#5a8a3a;background:linear-gradient(135deg,#fff,#f8fff8);box-shadow:0 4px 12px rgba(90,138,58,.18)}.em{color:#4a7c2d;font-weight:700}.em-warn{color:#d4a017;font-weight:700}.formula{background:#fff;padding:1.3rem 2rem;border-radius:12px;border:3px solid #5a8a3a;font-family:'Courier New',monospace;font-size:1.2rem;text-align:center;margin:1.3rem 0;color:#2d4a2b;font-weight:600;box-shadow:0 4px 14px rgba(90,138,58,.2)}.diagram{background:#f8fff8;padding:1.5rem;border-radius:12px;border:2px solid #a8d88e;margin:1.3rem 0}.diagram-title{color:#4a7c2d;font-weight:700;font-size:1.05rem;margin-bottom:1rem;text-align:center}.flow{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;margin:.8rem 0}.flow-box{background:#fff;padding:1rem 1.5rem;border-radius:8px;border:2px solid #5a8a3a;font-weight:600;color:#2d4a2b;min-width:100px;text-align:center}.flow-arrow{color:#5a8a3a;font-size:2rem;font-weight:700}.activity-section{background:linear-gradient(135deg,#f0fff0,#e8f8e8);padding:2rem;border-radius:15px;border:3px solid #6b9b4f;margin:1.5rem 0}.activity-title{color:#2d5016;font-size:1.6rem;font-weight:700;margin-bottom:1rem;text-align:center}.activity-time{background:#4a7c2d;color:#fff;padding:.4rem 1.2rem;border-radius:20px;display:inline-block;font-size:.85rem;font-weight:700;margin-bottom:1rem}.activity-box{background:#fff;padding:1.5rem;border-radius:10px;margin:1rem 0;border-left:4px solid #5a8a3a}.nav{position:fixed;bottom:2rem;right:2rem;display:flex;gap:1.3rem;z-index:1000}.btn{width:60px;height:60px;background:#4a7c2d;border:none;border-radius:50%;color:#fff;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 18px rgba(74,124,45,.4);transition:all .3s}.btn:hover:not(:disabled){background:#5a8a3a;transform:scale(1.15)}.btn:disabled{opacity:.3;cursor:not-allowed}.counter{position:fixed;bottom:2rem;left:2rem;background:rgba(255,255,255,.95);padding:.9rem 1.8rem;border-radius:32px;border:2px solid #5a8a3a;color:#4a7c2d;font-weight:700;z-index:1000;box-shadow:0 3px 14px rgba(90,138,58,.3)}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:2.8rem}h2{font-size:2.1rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:1.8rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- SLIDE 1 -->
+<div class="slide cover active">
+<h1>Biología Celular<br>y Molecular</h1>
+<div class="line"></div>
+<p class="subtitle">Clase 1: Dogma Central y Expresión Génica</p>
+<p class="meta">Introducción a la Biología Celular y Molecular | Nivel: Principiante</p>
+<p class="help">👉 Usa las flechas para navegar →</p>
+</div>
+
+<!-- SLIDE 2 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INTRODUCCIÓN</div>
+<h2>Estructura de la Clase</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>📋 Duración Total: 2 horas</strong>
+<p>Esta clase se divide en tres momentos de aprendizaje activo.</p>
+</div>
+
+<div class="grid grid-3">
+<div class="card card-accent">
+<h4>⏰ Momento 1</h4>
+<p><strong>30 minutos</strong></p>
+<p>Explicación y contextualización del profesor sobre el dogma central de la biología molecular.</p>
+</div>
+<div class="card card-accent">
+<h4>🔍 Momento 2</h4>
+<p><strong>60 minutos</strong></p>
+<p>Investigación guiada: lectura crítica de artículo científico sobre genómica humana.</p>
+</div>
+<div class="card card-accent">
+<h4>💬 Momento 3</h4>
+<p><strong>30 minutos</strong></p>
+<p>Presentación y discusión de hallazgos en equipos.</p>
+</div>
+</div>
+
+<h3>Objetivos de Aprendizaje</h3>
+<div class="box box-success">
+<strong>✅ Al finalizar esta clase, podrás:</strong>
+<ul>
+<li>Explicar el dogma central de la biología molecular</li>
+<li>Comprender los conceptos de genoma y gen</li>
+<li>Describir los procesos de transcripción y traducción</li>
+<li>Analizar críticamente literatura científica sobre genómica</li>
+<li>Relacionar la estructura del ADN con su función informacional</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CONCEPTOS FUNDAMENTALES</div>
+<h2>¿Qué es el ADN?</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🧬 Definición</strong>
+<p>El <span class="em">ADN (ácido desoxirribonucleico)</span> es el material genético de todos los organismos de la Tierra. Cuando se transmite de padres a hijos, el ADN puede determinar algunas características de los hijos (color de ojos, cabello, etc.).</p>
+</div>
+
+<h3>Pregunta Central</h3>
+<div class="box box-warn">
+<strong>💡 ¿Cómo puede la secuencia de una molécula de ADN tener efecto sobre las características de un organismo?</strong>
+<p>Por ejemplo: ¿Cómo puede la secuencia de nucleótidos (A, T, C, G) determinar el color de las flores en plantas de chícharos?</p>
+</div>
+
+<h3>Estructura del ADN</h3>
+<div class="grid grid-2">
+<div class="card">
+<h4>Componentes</h4>
+<ul>
+<li><strong>Nucleótidos:</strong> unidades básicas</li>
+<li><strong>Bases nitrogenadas:</strong> A, T, C, G</li>
+<li><strong>Azúcar:</strong> desoxirribosa</li>
+<li><strong>Fosfato:</strong> grupos PO₄</li>
+</ul>
+</div>
+<div class="card">
+<h4>Organización</h4>
+<ul>
+<li><strong>Doble hélice</strong></li>
+<li><strong>Cadenas antiparalelas</strong> (5'→3' y 3'→5')</li>
+<li><strong>Complementariedad:</strong> A-T, G-C</li>
+<li><strong>Puentes de hidrógeno</strong></li>
+</ul>
+</div>
+</div>
+
+<div class="box box-info">
+<strong>🔑 Concepto Clave</strong>
+<p>El ADN no es solo una larga cadena de nucleótidos. Se divide en <strong>unidades funcionales</strong> llamadas <span class="em">genes</span>.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">GENOMA</div>
+<h2>Concepto de Genoma</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>📚 Definición (Genome.gov)</strong>
+<p>El <span class="em">genoma</span> es el <strong>conjunto completo de instrucciones de ADN</strong> que se encuentra en una célula.</p>
+</div>
+
+<h3>Características del Genoma Humano</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Ubicación</h4>
+<ul>
+<li><strong>Núcleo celular:</strong> 23 pares de cromosomas</li>
+<li><strong>Mitocondrias:</strong> pequeño cromosoma circular</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Contenido</h4>
+<ul>
+<li><strong>~3 mil millones</strong> de nucleótidos</li>
+<li><strong>~20,000</strong> genes codificantes de proteínas</li>
+<li>Toda la información para desarrollo y función</li>
+</ul>
+</div>
+</div>
+
+<h3>Variación de Tamaño Genómico</h3>
+<div class="box box-warn">
+<strong>❄ Dato Curioso</strong>
+<p>No hay correlación consistente entre complejidad biológica y tamaño del genoma:</p>
+<ul style="margin-top:.7rem">
+<li><strong>Virus y bacterias:</strong> genomas muy pequeños</li>
+<li><strong>Humanos:</strong> ~3 mil millones de nucleótidos</li>
+<li><strong>Paris japonica (flor japonesa):</strong> ~150 mil millones de nucleótidos (¡50 veces más grande que el humano!)</li>
+</ul>
+</div>
+
+<div class="box">
+<strong>💬 Reflexión</strong>
+<p>Los humanos somos el único organismo que ha secuenciado su propio genoma completo, pero existen muchas formas de vida con genomas sustancialmente más grandes. ¡Asombroso!</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">GEN</div>
+<h2>Concepto de Gen</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>📚 Definición (Genome.gov)</strong>
+<p>El <span class="em">gen</span> se considera la <strong>unidad básica de la herencia</strong>. Los genes se transmiten de padres a hijos y contienen la información necesaria para especificar rasgos físicos y biológicos.</p>
+</div>
+
+<h3>Función de los Genes</h3>
+<div class="box">
+<strong>🔬 Productos Funcionales</strong>
+<p>Cada gen proporciona las instrucciones para formar un <strong>producto funcional</strong>, es decir, una molécula necesaria para desempeñar un trabajo en la célula.</p>
+</div>
+
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Genes codificantes de proteínas</h4>
+<p><strong>La mayoría de los genes</strong> codifican proteínas (polipéptidos).</p>
+<p style="margin-top:.5rem;font-size:.9rem">Ejemplo: Gen del color de flores → proteína que produce pigmentos</p>
+<p style="margin-top:.3rem"><strong>~20,000 genes</strong> codificantes en humanos</p>
+</div>
+<div class="card card-accent">
+<h4>Genes de ARN funcional</h4>
+<p>Algunos genes producen <strong>moléculas de ARN funcionales</strong> que NO se traducen a proteínas.</p>
+<p style="margin-top:.5rem;font-size:.9rem">Ejemplos: ARN de transferencia (ARNt), ARN ribosómico (ARNr)</p>
+</div>
+</div>
+
+<div class="box box-info">
+<strong>🔢 Dato Importante</strong>
+<p>Solo el <strong>1.5%</strong> del genoma humano codifica para los ~20,000 genes de proteínas. El resto incluye regiones reguladoras, ARN no codificantes, y secuencias cuya función aún se investiga.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">DOGMA CENTRAL</div>
+<h2>El Dogma Central de la Biología Molecular</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🎯 Concepto Central</strong>
+<p>El <span class="em">dogma central</span> describe el flujo direccional de la información genética en las células:</p>
+</div>
+
+<div class="diagram">
+<div class="diagram-title">Flujo de Información Genética</div>
+<div class="flow">
+<div class="flow-box">ADN</div>
+<div class="flow-arrow">→</div>
+<div class="flow-box">ARN</div>
+<div class="flow-arrow">→</div>
+<div class="flow-box">PROTEÍNA</div>
+</div>
+<p style="text-align:center;margin-top:1rem;color:#4a7c2d;font-weight:600">Este flujo es UNIDIRECCIONAL</p>
+</div>
+
+<h3>Dos Pasos Fundamentales</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>1. TRANSCRIPCIÓN</h4>
+<p><strong>ADN → ARN</strong></p>
+<p style="margin-top:.5rem">La secuencia de ADN de un gen se <strong>copia</strong> para obtener una molécula de ARN.</p>
+<p style="margin-top:.3rem;font-size:.9rem;color:#3a5a2b">Implica "reescribir" el ADN en el alfabeto del ARN (similar pero no idéntico)</p>
+</div>
+<div class="card card-accent">
+<h4>2. TRADUCCIÓN</h4>
+<p><strong>ARN → PROTEÍNA</strong></p>
+<p style="margin-top:.5rem">La secuencia del ARN mensajero se <strong>decodifica</strong> para especificar la secuencia de aminoácidos de un polipéptido.</p>
+<p style="margin-top:.3rem;font-size:.9rem;color:#3a5a2b">Se traduce del "idioma" de nucleótidos al "idioma" de aminoácidos</p>
+</div>
+</div>
+
+<div class="box">
+<strong>📖 Terminología</strong>
+<p>El proceso completo de pasar de ADN a producto funcional se conoce como <span class="em">expresión génica</span>.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">TRANSCRIPCIÓN</div>
+<h2>Proceso de Transcripción</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>🔬 ¿Qué sucede?</strong>
+<p>Una cadena del ADN (llamada <span class="em">cadena molde</span>) sirve como plantilla para que la enzima <strong>ARN polimerasa</strong> sintetice una cadena de ARN complementaria.</p>
+</div>
+
+<h3>Ejemplo de Transcripción</h3>
+<div class="diagram">
+<div class="diagram-title">De ADN a ARN</div>
+<div style="background:#fff;padding:1rem;border-radius:8px;margin:.5rem 0">
+<p><strong>ADN (doble cadena):</strong></p>
+<p style="font-family:monospace;margin:.3rem 0">5'-ATGATCTCGTAA-3' (cadena codificante)</p>
+<p style="font-family:monospace;margin:.3rem 0">3'-TACTAGAGCATT-5' (cadena molde)</p>
+<p style="margin-top:1rem"><strong>ARNm transcrito:</strong></p>
+<p style="font-family:monospace;margin:.3rem 0;color:#4a7c2d;font-weight:700">5'-AUGAUCUCGUAA-3'</p>
+</div>
+</div>
+
+<h3>Diferencias ADN vs ARN</h3>
+<div class="grid grid-2">
+<div class="card">
+<h4>ADN</h4>
+<ul>
+<li>Doble cadena</li>
+<li>Desoxirribosa (azúcar)</li>
+<li>Bases: A, T, C, G</li>
+<li>Timina (T)</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>ARN</h4>
+<ul>
+<li>Cadena simple</li>
+<li>Ribosa (azúcar)</li>
+<li>Bases: A, U, C, G</li>
+<li><strong>Uracilo (U)</strong> en lugar de T</li>
+</ul>
+</div>
+</div>
+
+<div class="box box-success">
+<strong>✅ Resultado</strong>
+<p>El producto de la transcripción se llama <span class="em">transcrito primario</span>. En eucariontes, debe procesarse para convertirse en ARN mensajero (ARNm) maduro.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 8 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">TRANSCRIPCIÓN</div>
+<h2>Procesamiento del ARN</h2>
+</div>
+<div class="content">
+<h3>Diferencias: Bacterias vs Eucariontes</h3>
+
+<div class="grid grid-2">
+<div class="card">
+<h4>🦠 BACTERIAS (Procariontes)</h4>
+<ul>
+<li><strong>Transcripción:</strong> en el citosol</li>
+<li>El transcrito primario = ARNm</li>
+<li><strong>Sin procesamiento</strong> adicional</li>
+<li>Traducción puede comenzar <strong>antes</strong> de terminar transcripción</li>
+<li>No hay núcleo</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>🧬 EUCARIONTES (Humanos)</h4>
+<ul>
+<li><strong>Transcripción:</strong> en el núcleo</li>
+<li>Transcrito primario ≠ ARNm</li>
+<li><strong>Requiere procesamiento:</strong>
+<ul style="margin-left:1.5rem;margin-top:.3rem">
+<li>Casquetes en extremos (cap 5', cola poli-A 3')</li>
+<li><strong>Empalme (splicing)</strong></li>
+</ul>
+</li>
+<li>ARNm debe <strong>exportarse</strong> al citosol</li>
+<li>Hay núcleo</li>
+</ul>
+</div>
+</div>
+
+<div class="box box-warn">
+<strong>⚡ Diferencia Espacial</strong>
+<p><strong>Eucariontes:</strong> Transcripción (núcleo) y traducción (citosol) están <span class="em">separadas espacialmente</span>.</p>
+<p><strong>Procariontes:</strong> Ambos procesos ocurren en el mismo lugar (citosol), permitiendo acoplamiento transcripción-traducción.</p>
+</div>
+
+<div class="box box-info">
+<strong>📍 Nota Importante</strong>
+<p>El procesamiento del ARN eucarionte (incluyendo el empalme de intrones y exones) se estudiará en detalle en la <strong>Clase 2</strong>.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 9 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">TRADUCCIÓN</div>
+<h2>El Código Genético</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔢 ¿Qué es el código genético?</strong>
+<p>Es el conjunto de relaciones que especifica cómo los <strong>tripletes de nucleótidos</strong> (codones) en el ARNm corresponden a <strong>aminoácidos específicos</strong> en la proteína.</p>
+</div>
+
+<h3>Características del Código</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Codones</h4>
+<ul>
+<li>Grupos de <strong>3 nucleótidos</strong></li>
+<li><strong>61 codones</strong> especifican aminoácidos</li>
+<li><strong>1 codón de inicio:</strong> AUG (metionina)</li>
+<li><strong>3 codones de terminación:</strong> UAA, UAG, UGA</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Propiedades</h4>
+<ul>
+<li><strong>Universal:</strong> (casi) el mismo en todos los organismos</li>
+<li><strong>Redundante:</strong> varios codones pueden especificar el mismo aminoácido</li>
+<li><strong>No ambiguo:</strong> cada codón especifica solo un aminoácido</li>
+</ul>
+</div>
+</div>
+
+<h3>Ejemplo de Traducción</h3>
+<div class="diagram">
+<div class="diagram-title">De ARNm a Proteína</div>
+<div style="background:#fff;padding:1rem;border-radius:8px">
+<p><strong>ARNm:</strong></p>
+<p style="font-family:monospace;color:#4a7c2d;font-weight:700">5'-AUG AUC UCG UAA-3'</p>
+<p style="margin-top:1rem"><strong>Lectura por codones:</strong></p>
+<ul style="margin-left:0;margin-top:.5rem">
+<li style="padding-left:0">🔹 AUG → Metionina (inicio)</li>
+<li style="padding-left:0">🔹 AUC → Isoleucina</li>
+<li style="padding-left:0">🔹 UCG → Serina</li>
+<li style="padding-left:0">🔹 UAA → ALTO (terminación)</li>
+</ul>
+<p style="margin-top:1rem"><strong>Polipéptido:</strong></p>
+<p style="font-family:monospace;color:#2d4a2b;font-weight:700">(N-terminal) Met-Ile-Ser (C-terminal)</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 10 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">TRADUCCIÓN</div>
+<h2>Proceso de Traducción</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>🏭 Lugar de traducción</strong>
+<p>La traducción ocurre en estructuras llamadas <span class="em">ribosomas</span>: máquinas moleculares que construyen polipéptidos.</p>
+</div>
+
+<h3>Moléculas Clave</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>ARNm (Mensajero)</h4>
+<ul>
+<li>Lleva la información del gen</li>
+<li>Secuencia de codones</li>
+<li>"Mensaje" entre ADN y ribosomas</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>ARNt (Transferencia)</h4>
+<ul>
+<li>Moléculas <strong>adaptadoras</strong></li>
+<li>Tienen <strong>anticodón</strong> (3 nucleótidos)</li>
+<li>Transportan el <strong>aminoácido</strong> correspondiente</li>
+</ul>
+</div>
+</div>
+
+<h3>¿Cómo funciona?</h3>
+<div class="box">
+<strong>🔄 Mecanismo</strong>
+<p>1. El ribosoma se une al ARNm y encuentra el codón de <strong>inicio (AUG)</strong><br>
+2. Un ARNt con anticodón complementario se une al codón<br>
+3. El ARNt deposita su aminoácido<br>
+4. El ribosoma avanza un codón<br>
+5. Se repite hasta encontrar un <strong>codón de terminación</strong><br>
+6. Se libera el polipéptido</p>
+</div>
+
+<div class="box box-success">
+<strong>✅ Resultado</strong>
+<p>La cadena de aminoácidos se construye <strong>pieza por pieza</strong> con una secuencia que coincide exactamente con la secuencia de codones en el ARNm.</p>
+</div>
+
+<div class="box box-warn">
+<strong>💡 Concepto Clave</strong>
+<p>El ribosoma NO "sabe" qué aminoácido insertar. Son los <strong>ARNt</strong> los que hacen la correspondencia codón-aminoácido.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 11 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RESUMEN</div>
+<h2>Recapitulación del Dogma Central</h2>
+</div>
+<div class="content">
+<div class="diagram">
+<div class="diagram-title">Flujo Completo de Información</div>
+<div class="flow" style="flex-direction:column;gap:1.5rem">
+<div class="flow-box" style="min-width:200px;background:#e8f8e8">ADN (en el genoma)</div>
+<div style="text-align:center">
+<div class="flow-arrow" style="transform:rotate(90deg)">→</div>
+<div style="margin-top:.5rem;color:#4a7c2d;font-weight:600">TRANSCRIPCIÓN</div>
+<div style="font-size:.85rem">(ARN polimerasa)</div>
+</div>
+<div class="flow-box" style="min-width:200px;background:#fff8e8">ARN mensajero</div>
+<div style="text-align:center">
+<div class="flow-arrow" style="transform:rotate(90deg)">→</div>
+<div style="margin-top:.5rem;color:#4a7c2d;font-weight:600">TRADUCCIÓN</div>
+<div style="font-size:.85rem">(Ribosomas + ARNt)</div>
+</div>
+<div class="flow-box" style="min-width:200px;background:#ffe8e8">PROTEÍNA (polipéptido)</div>
+</div>
+</div>
+
+<div class="grid grid-2" style="margin-top:1.5rem">
+<div class="card card-accent">
+<h4>🔑 Puntos Clave</h4>
+<ul>
+<li>ADN → ARN → Proteína</li>
+<li>Flujo <strong>unidireccional</strong></li>
+<li>Genes = unidades funcionales</li>
+<li>Código genético = tripletes</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>📍 Ubicaciones</h4>
+<ul>
+<li><strong>Eucariontes:</strong> Transcripción (núcleo), Traducción (citosol)</li>
+<li><strong>Procariontes:</strong> Ambas en citosol</li>
+</ul>
+</div>
+</div>
+
+<div class="box box-success">
+<strong>✨ Importancia</strong>
+<p>Este flujo de información es <strong>fundamental para toda la vida en la Tierra</strong>. Permite que la información almacenada en el ADN se exprese como proteínas funcionales que realizan el trabajo celular.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 12 - ACTIVIDAD -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD DE INVESTIGACIÓN</div>
+<h2>Momento 2: Lectura Crítica</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">📚 Actividad de Investigación Guiada</div>
+<div style="text-align:center;margin-bottom:1.5rem">
+<span class="activity-time">⏰ DURACIÓN: 60 MINUTOS</span>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#2d5016;margin-bottom:.7rem">📄 Recurso Principal</h4>
+<p><strong>Artículo:</strong> "Genómica Humana: Variantes Estructurales y Expresión Génica"</p>
+<p><strong>Fuente:</strong> Gaceta Mexicana de Oncología (Elsevier)</p>
+<p><strong>Enlace:</strong> <a href="https://www.elsevier.es/es-revista-gaceta-mexicana-oncologia-305-pdf-X1665920113687258" style="color:#5a8a3a;text-decoration:underline">Acceder al PDF</a></p>
+</div>
+
+<h3 style="color:#2d5016;margin-top:1.5rem">🎯 Objetivos de la Actividad</h3>
+<div class="grid grid-2">
+<div class="card">
+<h4>1. Comprensión</h4>
+<p>Entender cómo el análisis del genoma humano permite identificar variantes genéticas relacionadas con enfermedades.</p>
+</div>
+<div class="card">
+<h4>2. Aplicación</h4>
+<p>Relacionar los conceptos de genoma, gen y expresión génica con aplicaciones médicas reales.</p>
+</div>
+<div class="card">
+<h4>3. Análisis</h4>
+<p>Identificar la importancia del código genético y epigenético en la regulación génica.</p>
+</div>
+<div class="card">
+<h4>4. Evaluación</h4>
+<p>Valorar críticamente la relevancia de la genómica para medicina y biotecnología.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 13 - GUÍA LECTURA -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD DE INVESTIGACIÓN</div>
+<h2>Guía de Lectura Crítica</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>📋 Instrucciones</strong>
+<p>Lee el artículo completo y responde las siguientes preguntas en tu cuaderno. Trabaja en <strong>equipos de 3-4 personas</strong>.</p>
+</div>
+
+<h3>Preguntas Guía (Parte 1/2)</h3>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">1. Variabilidad Genómica</h4>
+<p>• ¿Qué información nos permiten entender los análisis del genoma humano según el artículo?<br>
+• ¿Cuál es la diferencia entre enfermedades monogénicas y poligénicas multifactoriales? Da ejemplos de cada una.</p>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">2. Avances Técnicos</h4>
+<p>• Identifica los 3 avances técnico-conceptuales mencionados en el artículo.<br>
+• ¿Qué son los microarreglos de ADN y para qué sirven?</p>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">3. Código Epigenético</h4>
+<p>• ¿Qué es el código epigenético?<br>
+• ¿Cómo se relaciona con la expresión génica?<br>
+• ¿En qué se diferencia del código genético que estudiamos hoy?</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 14 - GUÍA LECTURA 2 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD DE INVESTIGACIÓN</div>
+<h2>Guía de Lectura Crítica (cont.)</h2>
+</div>
+<div class="content">
+<h3>Preguntas Guía (Parte 2/2)</h3>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">4. Regulación de Expresión Génica</h4>
+<p>• Según el artículo, ¿por qué es importante entender la "organización funcional y la regulación de la expresión génica"?<br>
+• ¿Cómo se relaciona esto con el dogma central que estudiamos?</p>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">5. Aplicaciones Médicas</h4>
+<p>• ¿Cómo facilita la genómica los avances en medicina y biotecnología?<br>
+• Menciona al menos 2 aplicaciones médicas específicas que identifiques en el texto.</p>
+</div>
+
+<div class="activity-box">
+<h4 style="color:#4a7c2d">6. Conexión con la Clase</h4>
+<p>• ¿Cómo se relaciona el contenido del artículo con los conceptos de genoma, gen y expresión génica que aprendimos hoy?<br>
+• ¿Qué aspectos del artículo te generan más preguntas o curiosidad?</p>
+</div>
+
+<div class="box box-success" style="margin-top:1.5rem">
+<strong>💡 Consejo</strong>
+<p>Toma notas detalladas. Estas preguntas serán la base para tu presentación en el Momento 3.</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 15 - RECURSOS ADICIONALES -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD DE INVESTIGACIÓN</div>
+<h2>Recursos Complementarios</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>🌐 Recursos Adicionales Opcionales</strong>
+<p>Si terminas la lectura del artículo principal antes de tiempo, puedes explorar estos recursos para profundizar:</p>
+</div>
+
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>🎓 Khan Academy</h4>
+<p><strong>Tema:</strong> Dogma Central en Detalle</p>
+<p style="margin-top:.5rem;font-size:.9rem">Animaciones interactivas sobre transcripción y traducción</p>
+<p style="margin-top:.5rem"><a href="https://es.khanacademy.org/science/ap-biology/gene-expression-and-regulation/translation/a/intro-to-gene-expression-central-dogma" style="color:#5a8a3a">Visitar</a></p>
+</div>
+<div class="card card-accent">
+<h4>📚 Genome.gov</h4>
+<p><strong>Tema:</strong> Glosario Genético</p>
+<p style="margin-top:.5rem;font-size:.9rem">Definiciones oficiales de genoma y gen</p>
+<p style="margin-top:.5rem">
+<a href="https://www.genome.gov/genetics-glossary/Genome" style="color:#5a8a3a">Genoma</a> | 
+<a href="https://www.genome.gov/genetics-glossary/Gene" style="color:#5a8a3a">Gen</a>
+</p>
+</div>
+</div>
+
+<h3>🔍 Preguntas de Profundización</h3>
+<div class="box">
+<p>Si ya completaste las preguntas guía, reflexiona sobre:</p>
+<ul style="margin-top:.7rem">
+<li>¿Cómo crees que la tecnología de secuenciación genómica ha revolucionado la medicina?</li>
+<li>¿Qué implicaciones éticas tiene tener acceso completo al genoma de una persona?</li>
+<li>¿Por qué crees que solo el 1.5% del genoma codifica proteínas? ¿Qué función podría tener el resto?</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 16 - MOMENTO 3 -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PRESENTACIÓN</div>
+<h2>Momento 3: Compartir Hallazgos</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">💬 Presentación y Discusión</div>
+<div style="text-align:center;margin-bottom:1.5rem">
+<span class="activity-time">⏰ DURACIÓN: 30 MINUTOS</span>
+</div>
+
+<div class="box box-success">
+<strong>🎯 Objetivo</strong>
+<p>Cada equipo presentará sus hallazgos más importantes y aprenderemos colectivamente de la experiencia de investigación.</p>
+</div>
+
+<h3 style="color:#2d5016">Formato de Presentación</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Tiempo por Equipo</h4>
+<ul>
+<li><strong>5 minutos:</strong> Presentación</li>
+<li><strong>2 minutos:</strong> Preguntas</li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem">~4-5 equipos en total</p>
+</div>
+<div class="card card-accent">
+<h4>Contenido a Presentar</h4>
+<ul>
+<li>2-3 hallazgos principales del artículo</li>
+<li>Conexión con dogma central</li>
+<li>1 pregunta que les surgió</li>
+</ul>
+</div>
+</div>
+
+<h3 style="color:#2d5016;margin-top:1.5rem">Criterios de Evaluación</h3>
+<div class="activity-box">
+<p><strong>✓ Comprensión:</strong> ¿Entendieron los conceptos del artículo?<br>
+<strong>✓ Conexión:</strong> ¿Relacionaron el artículo con lo aprendido en clase?<br>
+<strong>✓ Análisis:</strong> ¿Identificaron implicaciones médicas/científicas?<br>
+<strong>✓ Comunicación:</strong> ¿Explicaron claramente sus hallazgos?</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 17 - CIERRE -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CIERRE CLASE 1</div>
+<h2>Resumen y Próxima Clase</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>✅ Lo que Aprendimos Hoy</strong>
+<ul>
+<li>El <strong>dogma central</strong>: ADN → ARN → Proteína</li>
+<li>Conceptos de <strong>genoma</strong> (conjunto completo de ADN) y <strong>gen</strong> (unidad funcional)</li>
+<li><strong>Transcripción:</strong> síntesis de ARN a partir de ADN</li>
+<li><strong>Traducción:</strong> síntesis de proteínas a partir de ARNm</li>
+<li>El <strong>código genético</strong> y su universalidad</li>
+<li>Aplicaciones de la <strong>genómica</strong> en medicina</li>
+</ul>
+</div>
+
+<div class="box box-info">
+<strong>🔜 Próxima Clase (Clase 2)</strong>
+<p>Profundizaremos en:</p>
+<ul style="margin-top:.5rem">
+<li><strong>Estructura del gen:</strong> exones, intrones, promotor, secuencias reguladoras</li>
+<li><strong>Diferencias:</strong> genes eucariontes vs procariontes (operones)</li>
+<li><strong>Duplicación del ADN:</strong> replicación semiconservativa</li>
+<li><strong>Superenrollamiento:</strong> topoisomerasas y compactación del ADN</li>
+</ul>
+</div>
+
+<div class="box box-warn">
+<strong>📝 Tarea Preparatoria</strong>
+<p>Para la próxima clase, trae dudas sobre:<br>
+• Procesamiento del ARN (splicing)<br>
+• Regulación de la expresión génica<br>
+• Replicación del ADN</p>
+</div>
+
+<div class="box">
+<strong>💭 Reflexión Final</strong>
+<p>"El ADN es como una receta, el ARN es como una fotocopia de esa receta, y las proteínas son los platos que se cocinan siguiendo esas instrucciones."</p>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 18 - FIN -->
+<div class="slide cover">
+<h1>¡Gracias!</h1>
+<div class="line"></div>
+<p class="subtitle">Nos vemos en la Clase 2</p>
+<p class="meta">Introducción a la Biología Celular y Molecular</p>
+<p class="help" style="margin-top:3rem">¡Excelente trabajo investigando! 🔬</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">18</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>
