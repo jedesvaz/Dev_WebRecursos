@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bioestadística Clase 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Roboto Condensed',sans-serif;background:#2b2b2b;color:#e8e8e8;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3.5rem 6rem;flex-direction:column}.slide.active{display:flex}.cover{background:linear-gradient(135deg,#1a1a1a,#2b2b2b,#3d3d3d);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}.cover::before{content:'';position:absolute;top:0;left:0;width:100%;height:8px;background:linear-gradient(90deg,#c1440e,#d4551a,#e06020)}.cover h1{font-family:'Roboto Condensed',sans-serif;font-size:4rem;font-weight:700;margin-bottom:1.5rem;color:#e06020;text-transform:uppercase;letter-spacing:3px;text-shadow:3px 3px 0 rgba(0,0,0,.5)}.cover .subtitle{font-size:1.6rem;color:#e8e8e8;margin-bottom:1rem;font-weight:400}.cover .line{width:150px;height:4px;background:#c1440e;margin:2rem auto}.cover .meta{margin-top:1rem;font-size:1rem;color:#b8b8b8;font-family:'Roboto Mono',monospace}.cover .help{margin-top:3rem;font-size:1rem;color:#a8a8a8}.slide-header{margin-bottom:1.8rem;flex-shrink:0;border-bottom:3px solid #c1440e;padding-bottom:1rem}.slide-number{color:#e06020;font-size:.75rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:.5rem;font-family:'Roboto Mono',monospace}h2{font-family:'Roboto Condensed',sans-serif;font-size:2.6rem;color:#e8e8e8;font-weight:700;text-transform:uppercase}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:8px}.content::-webkit-scrollbar-track{background:#1a1a1a}.content::-webkit-scrollbar-thumb{background:#c1440e;border-radius:4px}p{font-size:1.05rem;line-height:1.9;margin-bottom:1.3rem;color:#d8d8d8}ul{list-style:none;margin:1.2rem 0}ul li{font-size:1rem;line-height:1.8;margin-bottom:.8rem;padding-left:2rem;position:relative;color:#d8d8d8}ul li::before{content:'▸';position:absolute;left:0;color:#e06020;font-size:1.2rem;font-weight:700}.box{background:#1a1a1a;border-left:6px solid #c1440e;padding:1.6rem 1.8rem;margin:1.5rem 0;border-radius:0 6px 6px 0;box-shadow:0 4px 12px rgba(0,0,0,.4)}.box strong{color:#e06020;display:block;margin-bottom:.8rem;font-size:1.1rem;text-transform:uppercase}.box p{margin-bottom:.6rem;color:#d8d8d8}.box-warn{background:#2b1f1a;border-left-color:#d4a017}.box-warn strong{color:#d4a017}.box-success{background:#1a2b1a;border-left-color:#5a8a3a}.box-success strong{color:#5a8a3a}.box-info{background:#1a1f2b;border-left-color:#4a7c9d}.box-info strong{color:#4a7c9d}.grid{display:grid;gap:1.5rem;margin:1.5rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#1a1a1a;padding:1.6rem;border-radius:8px;border:2px solid #3d3d3d;box-shadow:0 3px 10px rgba(0,0,0,.3)}.card h4{color:#e06020;margin-bottom:.8rem;font-size:1.15rem;font-weight:700;text-transform:uppercase}.card p{font-size:1rem;margin-bottom:.5rem;color:#d8d8d8}.card-accent{border-color:#c1440e;background:#2b1f1a}.em{color:#e06020;font-weight:700}.formula{background:#1a1a1a;padding:1.5rem 2.2rem;border-radius:8px;border:3px solid #e06020;font-family:'Roboto Mono',monospace;font-size:1.3rem;text-align:center;margin:1.5rem 0;color:#e8e8e8;font-weight:600;box-shadow:0 4px 16px rgba(224,96,32,.3)}.diagram{background:#2b2b2b;padding:1.8rem;border-radius:10px;border:2px solid #5d5d5d;margin:1.5rem 0}.diagram-title{color:#e06020;font-weight:700;font-size:1.1rem;margin-bottom:1.2rem;text-align:center;text-transform:uppercase}.problem-slide{background:#1a1a1a;border:4px solid #c1440e;border-radius:12px;padding:3rem;margin:2rem 0;min-height:400px;display:flex;flex-direction:column;justify-content:center;align-items:center}.problem-title{color:#e06020;font-size:2rem;font-weight:700;margin-bottom:2rem;text-transform:uppercase;text-align:center}.problem-subtitle{color:#b8b8b8;font-size:1.2rem;margin-bottom:1rem;font-family:'Roboto Mono',monospace}.problem-space{background:#2b2b2b;width:100%;min-height:200px;border-radius:8px;border:2px dashed #5d5d5d;display:flex;justify-content:center;align-items:center;color:#5d5d5d;font-size:1.5rem;font-family:'Roboto Mono',monospace}.nav{position:fixed;bottom:2.5rem;right:2.5rem;display:flex;gap:1.5rem;z-index:1000}.btn{width:65px;height:65px;background:linear-gradient(135deg,#c1440e,#e06020);border:3px solid #1a1a1a;border-radius:8px;color:#fff;font-size:1.6rem;cursor:pointer;box-shadow:0 5px 20px rgba(193,68,14,.5);transition:all .3s;font-weight:700}.btn:hover:not(:disabled){background:linear-gradient(135deg,#d4551a,#f07030);transform:translateY(-3px);box-shadow:0 8px 25px rgba(193,68,14,.7)}.btn:disabled{opacity:.3;cursor:not-allowed}.counter{position:fixed;bottom:2.5rem;left:2.5rem;background:#1a1a1a;padding:1rem 2rem;border-radius:8px;border:3px solid #c1440e;color:#e06020;font-weight:700;z-index:1000;box-shadow:0 4px 16px rgba(0,0,0,.5);font-family:'Roboto Mono',monospace;font-size:1.1rem}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:3rem}h2{font-size:2.2rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:2rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="slide cover active">
+<h1>PROBABILIDAD</h1>
+<div class="line"></div>
+<p class="subtitle">Clase 1: Propiedades Elementales y Cálculo</p>
+<p class="meta">Bioestadística Aplicada | Nivel: Intermedio</p>
+<p class="help">→ Navegación con flechas del teclado</p>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ESTRUCTURA</div>
+<h2>Plan de Clase</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>⏱ Duración Total: 2 horas</strong>
+<p>Enfoque en aplicaciones clínicas y biomédicas</p>
+</div>
+<div class="grid grid-3">
+<div class="card card-accent">
+<h4>📖 Momento 1</h4>
+<p><strong>30 minutos</strong></p>
+<p>Explicación teórica: conceptos fundamentales de probabilidad</p>
+</div>
+<div class="card card-accent">
+<h4>✏️ Momento 2</h4>
+<p><strong>60 minutos</strong></p>
+<p>Resolución de problemas en equipos</p>
+</div>
+<div class="card card-accent">
+<h4>💬 Momento 3</h4>
+<p><strong>30 minutos</strong></p>
+<p>Presentación de soluciones y discusión</p>
+</div>
+</div>
+<h3 style="color:#e06020;margin:2rem 0 1rem;font-size:1.8rem">Objetivos de Aprendizaje</h3>
+<div class="box box-success">
+<strong>✓ Al finalizar, podrás:</strong>
+<ul>
+<li>Definir experimento, espacio muestral y evento</li>
+<li>Aplicar las propiedades elementales de la probabilidad</li>
+<li>Calcular probabilidades de eventos simples y compuestos</li>
+<li>Distinguir eventos mutuamente excluyentes e independientes</li>
+<li>Aplicar reglas de adición y multiplicación</li>
+<li>Calcular probabilidades condicionales</li>
+<li>Resolver problemas clínicos usando probabilidad total</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CONCEPTOS BÁSICOS</div>
+<h2>Definiciones Fundamentales</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🎲 Experimento</strong>
+<p>Proceso de observación o medición que produce un resultado. El resultado no se puede predecir con certeza antes de realizar el experimento.</p>
+<p style="margin-top:.7rem"><strong>Ejemplos clínicos:</strong><br>
+• Aplicar una prueba diagnóstica a un paciente<br>
+• Administrar un tratamiento y observar la respuesta<br>
+• Medir la presión arterial de un paciente<br>
+• Contar células en una muestra de sangre</p>
+</div>
+<div class="box box-info">
+<strong>📊 Espacio Muestral (E)</strong>
+<p>Conjunto de <strong>todos los posibles resultados</strong> de un experimento.</p>
+<p style="margin-top:.7rem"><strong>Ejemplos:</strong><br>
+• Prueba diagnóstica: E = {Positivo, Negativo}<br>
+• Grupo sanguíneo: E = {A, B, AB, O}<br>
+• Lanzar un dado: E = {1, 2, 3, 4, 5, 6} → 6 resultados</p>
+</div>
+<div class="box box-success">
+<strong>🎯 Evento (A, B, C, ...)</strong>
+<p>Subconjunto del espacio muestral. Son elementos que cumplen con alguna condición específica.</p>
+<p style="margin-top:.7rem"><strong>Ejemplos:</strong><br>
+• Evento A: "Prueba COVID positiva"<br>
+• Evento B: "Paciente con hipertensión"<br>
+• Evento C: "Sacar un número par" = {2, 4, 6}</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBABILIDAD</div>
+<h2>Concepto y Propiedades</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>📌 Definición de Probabilidad</strong>
+<p>La probabilidad de un evento es un <strong>número real no negativo y no superior a 1</strong> que mide la posibilidad de que suceda dicho evento.</p>
+<div class="formula">P(A) = Nº de casos favorables al evento A / Nº de casos totales</div>
+</div>
+<h3 style="color:#e06020;margin:1.5rem 0 1rem">Propiedades Fundamentales</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Propiedad 1</h4>
+<div class="formula" style="font-size:1.1rem;margin:.7rem 0">P(A) ≥ 0</div>
+<p>La probabilidad nunca es negativa</p>
+</div>
+<div class="card card-accent">
+<h4>Propiedad 2</h4>
+<div class="formula" style="font-size:1.1rem;margin:.7rem 0">P(E) = 1</div>
+<p>La probabilidad del espacio muestral completo es 1</p>
+</div>
+<div class="card card-accent">
+<h4>Propiedad 3</h4>
+<div class="formula" style="font-size:1.1rem;margin:.7rem 0">0 ≤ P(A) ≤ 1</div>
+<p>Toda probabilidad está entre 0 y 1</p>
+</div>
+<div class="card card-accent">
+<h4>Propiedad 4</h4>
+<div class="formula" style="font-size:1.1rem;margin:.7rem 0">P(A) + P(A<sup>c</sup>) = 1</div>
+<p>Probabilidad del complemento<br>Donde A<sup>c</sup> = "no A"</p>
+</div>
+</div>
+<div class="box box-warn">
+<strong>⚕ Ejemplo Clínico</strong>
+<p>En un hospital, de 200 pacientes ingresados, 50 tienen diabetes.</p>
+<p style="margin-top:.5rem">P(Diabetes) = 50/200 = 0.25 = <strong>25%</strong><br>
+P(No diabetes) = 150/200 = 0.75 = <strong>75%</strong></p>
+<p style="margin-top:.5rem">Verificación: 0.25 + 0.75 = <strong>1</strong> ✓</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EVENTOS MUTUAMENTE EXCLUYENTES</div>
+<h2>Definición y Ejemplos</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>🔀 Eventos Mutuamente Excluyentes</strong>
+<p>Dos o más eventos son <strong>mutuamente excluyentes</strong> si <span class="em">NO pueden ocurrir simultáneamente</span>. La ocurrencia de un evento impide automáticamente la ocurrencia del otro.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>✓ SON Mutuamente Excluyentes</h4>
+<p><strong>Ejemplo 1:</strong> Resultado de una prueba</p>
+<ul style="margin-top:.5rem">
+<li>A = Positivo</li>
+<li>B = Negativo</li>
+</ul>
+<p style="margin-top:.5rem;font-size:.95rem">Una prueba NO puede ser positiva Y negativa al mismo tiempo</p>
+<p style="margin-top:.7rem"><strong>Ejemplo 2:</strong> Grupo sanguíneo</p>
+<ul style="margin-top:.5rem">
+<li>A = Tipo A</li>
+<li>B = Tipo B</li>
+</ul>
+<p style="margin-top:.5rem;font-size:.95rem">Un paciente no puede tener ambos grupos simultáneamente</p>
+</div>
+<div class="card">
+<h4>✗ NO Son Mutuamente Excluyentes</h4>
+<p><strong>Ejemplo 1:</strong> Condiciones médicas</p>
+<ul style="margin-top:.5rem">
+<li>A = Tener diabetes</li>
+<li>B = Tener hipertensión</li>
+</ul>
+<p style="margin-top:.5rem;font-size:.95rem">Un paciente PUEDE tener ambas condiciones (comorbilidad)</p>
+<p style="margin-top:.7rem"><strong>Ejemplo 2:</strong> Características demográficas</p>
+<ul style="margin-top:.5rem">
+<li>A = Ser mujer</li>
+<li>B = Tener > 65 años</li>
+</ul>
+<p style="margin-top:.5rem;font-size:.95rem">Una persona puede ser mujer Y tener >65 años</p>
+</div>
+</div>
+<div class="box box-warn">
+<strong>💡 Implicación Matemática</strong>
+<p>Si A y B son mutuamente excluyentes, entonces:</p>
+<div class="formula" style="margin-top:.7rem">P(A ∩ B) = 0</div>
+<p style="margin-top:.5rem">La probabilidad de que ocurran ambos es cero</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EVENTOS INDEPENDIENTES</div>
+<h2>Definición y Ejemplos</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔓 Eventos Independientes</strong>
+<p>Dos eventos son <strong>independientes</strong> cuando la ocurrencia de uno <span class="em">NO tiene ningún efecto</span> en la probabilidad de que ocurra el otro.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>✓ Eventos Independientes</h4>
+<p><strong>Ejemplo 1:</strong> Pruebas a diferentes pacientes</p>
+<ul style="margin-top:.5rem">
+<li>A = Paciente 1 es positivo</li>
+<li>B = Paciente 2 es positivo</li>
+</ul>
+<p style="margin-top:.5rem;font-size:.95rem">El resultado de un paciente no afecta al otro (asumiendo no contagio)</p>
+<p style="margin-top:.7rem"><strong>Ejemplo 2:</strong> Lanzamientos repetidos</p>
+<ul style="margin-top:.5rem">
+<li>A = Sacar 5 en 1er dado</li>
+<li>B = Sacar 3 en 2do dado</li>
+</ul>
+<p style="margin-top:.5rem;font-size:.95rem">Los dados no se influencian entre sí</p>
+</div>
+<div class="card">
+<h4>✗ Eventos Dependientes</h4>
+<p><strong>Ejemplo 1:</strong> Muestreo sin reemplazo</p>
+<ul style="margin-top:.5rem">
+<li>A = 1ra carta es As</li>
+<li>B = 2da carta es As</li>
+</ul>
+<p style="margin-top:.5rem;font-size:.95rem">Si salió un As primero, quedan menos ases disponibles</p>
+<p style="margin-top:.7rem"><strong>Ejemplo 2:</strong> Síntomas relacionados</p>
+<ul style="margin-top:.5rem">
+<li>A = Tener fiebre</li>
+<li>B = Tener infección</li>
+</ul>
+<p style="margin-top:.5rem;font-size:.95rem">La presencia de infección aumenta probabilidad de fiebre</p>
+</div>
+</div>
+<div class="box box-info">
+<strong>📐 Condición Matemática</strong>
+<p>Si A y B son independientes, entonces:</p>
+<div class="formula" style="margin-top:.7rem">P(A | B) = P(A)</div>
+<p style="margin-top:.5rem">La probabilidad de A dado B es igual a la probabilidad de A</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">REGLAS DE ADICIÓN</div>
+<h2>Probabilidad de "A o B"</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>➕ Reglas de Adición</strong>
+<p>Se usan para calcular la probabilidad de que ocurra <strong>un evento U otro</strong> (o ambos).</p>
+</div>
+<h3 style="color:#e06020;margin:1.5rem 0 1rem">Caso 1: Eventos Mutuamente Excluyentes</h3>
+<div class="formula">P(A ∪ B) = P(A) + P(B)</div>
+<div class="box box-warn">
+<strong>⚕ Ejemplo: Grupo Sanguíneo</strong>
+<p>En una población:<br>
+P(Tipo A) = 0.40<br>
+P(Tipo B) = 0.11</p>
+<p style="margin-top:.7rem">¿Cuál es la probabilidad de que un paciente aleatorio sea tipo A o tipo B?</p>
+<p style="margin-top:.5rem">P(A ∪ B) = 0.40 + 0.11 = <strong>0.51 = 51%</strong></p>
+</div>
+<h3 style="color:#e06020;margin:1.5rem 0 1rem">Caso 2: Eventos NO Mutuamente Excluyentes</h3>
+<div class="formula">P(A ∪ B) = P(A) + P(B) - P(A ∩ B)</div>
+<div class="box box-warn">
+<strong>⚕ Ejemplo: Comorbilidades</strong>
+<p>P(Diabetes) = 0.25<br>
+P(Hipertensión) = 0.30<br>
+P(Ambas) = 0.10</p>
+<p style="margin-top:.7rem">¿Probabilidad de tener diabetes O hipertensión (o ambas)?</p>
+<p style="margin-top:.5rem">P(D ∪ H) = 0.25 + 0.30 - 0.10 = <strong>0.45 = 45%</strong></p>
+</div>
+<h3 style="color:#e06020;margin:1.5rem 0 1rem">Caso 3: Eventos Independientes</h3>
+<div class="formula">P(A ∪ B) = P(A) + P(B) - P(A) · P(B)</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">REGLAS DE MULTIPLICACIÓN</div>
+<h2>Probabilidad de "A y B"</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>✖ Reglas de Multiplicación</strong>
+<p>Se usan para calcular la probabilidad de que ocurran <strong>dos eventos simultáneamente</strong> o en secuencia.</p>
+</div>
+<h3 style="color:#e06020;margin:1.5rem 0 1rem">Caso 1: Eventos Independientes</h3>
+<div class="formula">P(A ∩ B) = P(A) · P(B)</div>
+<div class="box box-warn">
+<strong>⚕ Ejemplo: Pruebas a Dos Pacientes</strong>
+<p>Una enfermedad tiene prevalencia del 5% en la población.</p>
+<p style="margin-top:.5rem">P(Paciente 1 enfermo) = 0.05<br>
+P(Paciente 2 enfermo) = 0.05</p>
+<p style="margin-top:.7rem">¿Probabilidad de que AMBOS pacientes estén enfermos?</p>
+<p style="margin-top:.5rem">P(ambos enfermos) = 0.05 × 0.05 = <strong>0.0025 = 0.25%</strong></p>
+</div>
+<h3 style="color:#e06020;margin:1.5rem 0 1rem">Caso 2: Eventos NO Excluyentes (General)</h3>
+<div class="formula">P(A ∩ B) = P(A) + P(B) - P(A ∪ B)</div>
+<div class="box box-info">
+<strong>💡 Nota Importante</strong>
+<p>Para eventos dependientes, usar <strong>probabilidad condicional</strong>:</p>
+<div class="formula" style="margin-top:.7rem;font-size:1.1rem">P(A ∩ B) = P(A) · P(B|A)</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBABILIDAD CONDICIONAL</div>
+<h2>P(A | B) - "A dado que B"</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔗 Probabilidad Condicional</strong>
+<p>Probabilidad de que ocurra un evento A, <strong>sabiendo que ya ocurrió</strong> otro evento B.</p>
+<p style="margin-top:.5rem">Se denota: <span class="em">P(A|B)</span> y se lee "probabilidad de A dado B"</p>
+</div>
+<h3 style="color:#e06020;margin:1.5rem 0 1rem">Fórmulas</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Eventos Dependientes</h4>
+<div class="formula" style="font-size:1.1rem;margin:.8rem 0">P(A|B) = P(A ∩ B) / P(B)</div>
+<p style="font-size:.95rem">Donde P(B) > 0</p>
+</div>
+<div class="card card-accent">
+<h4>Eventos Independientes</h4>
+<div class="formula" style="font-size:1.1rem;margin:.8rem 0">P(A|B) = P(A)</div>
+<p style="font-size:.95rem">El conocimiento de B no afecta a A</p>
+</div>
+</div>
+<div class="box box-warn">
+<strong>⚕ Ejemplo Clínico: Prueba Diagnóstica</strong>
+<p>De 1000 pacientes evaluados:</p>
+<table style="width:100%;margin-top:.7rem;font-size:.95rem;background:#2b2b2b;border-collapse:collapse">
+<tr style="background:#1a1a1a"><th style="padding:.5rem;border:1px solid #5d5d5d"></th><th style="padding:.5rem;border:1px solid #5d5d5d">Enfermo</th><th style="padding:.5rem;border:1px solid #5d5d5d">Sano</th><th style="padding:.5rem;border:1px solid #5d5d5d">Total</th></tr>
+<tr><th style="padding:.5rem;border:1px solid #5d5d5d">Test +</th><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">80</td><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">50</td><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">130</td></tr>
+<tr><th style="padding:.5rem;border:1px solid #5d5d5d">Test -</th><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">20</td><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">850</td><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">870</td></tr>
+<tr style="background:#1a1a1a"><th style="padding:.5rem;border:1px solid #5d5d5d">Total</th><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">100</td><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">900</td><td style="padding:.5rem;border:1px solid #5d5d5d;text-align:center">1000</td></tr>
+</table>
+<p style="margin-top:.7rem"><strong>Pregunta:</strong> Si un paciente dio positivo, ¿cuál es la probabilidad de que esté realmente enfermo?</p>
+<p style="margin-top:.5rem">P(Enfermo | Test+) = P(Enfermo ∩ Test+) / P(Test+) = 80/130 = <strong>0.615 = 61.5%</strong></p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBABILIDAD TOTAL</div>
+<h2>Teorema y Diagrama de Árbol</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>🌳 Probabilidad Total</strong>
+<p>Si un evento A puede ocurrir de <strong>n maneras diferentes mutuamente excluyentes</strong> (particiones B₁, B₂, ..., Bₙ), entonces:</p>
+<div class="formula" style="font-size:1.05rem;margin-top:.8rem">P(A) = P(A|B₁)·P(B₁) + P(A|B₂)·P(B₂) + ... + P(A|Bₙ)·P(Bₙ)</div>
+</div>
+<div class="box box-warn">
+<strong>⚕ Ejemplo: Laboratorios Clínicos</strong>
+<p>Un hospital usa 3 laboratorios para análisis de sangre:</p>
+<ul style="margin-top:.5rem">
+<li>Lab A: 50% de muestras, 2% error</li>
+<li>Lab B: 30% de muestras, 3% error</li>
+<li>Lab C: 20% de muestras, 5% error</li>
+</ul>
+<p style="margin-top:.7rem"><strong>Pregunta:</strong> ¿Cuál es la probabilidad de que una muestra aleatoria tenga error?</p>
+<p style="margin-top:.7rem"><strong>Solución usando probabilidad total:</strong></p>
+<p style="margin-top:.5rem;font-family:'Roboto Mono',monospace;font-size:.9rem">
+P(Error) = P(Error|A)·P(A) + P(Error|B)·P(B) + P(Error|C)·P(C)<br>
+P(Error) = (0.02)(0.50) + (0.03)(0.30) + (0.05)(0.20)<br>
+P(Error) = 0.010 + 0.009 + 0.010<br>
+P(Error) = <strong>0.029 = 2.9%</strong>
+</p>
+</div>
+<h3 style="color:#e06020;margin:1.5rem 0 1rem">Diagrama de Árbol</h3>
+<div class="diagram">
+<div class="diagram-title">Representación Visual</div>
+<div style="font-family:'Roboto Mono',monospace;font-size:.9rem;line-height:2">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.02 (Error)<br>
+&nbsp;&nbsp;&nbsp;0.50 (Lab A) ─┤<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.98 (Sin error)<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.03 (Error)<br>
+&nbsp;&nbsp;&nbsp;0.30 (Lab B) ─┤<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.97 (Sin error)<br>
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.05 (Error)<br>
+&nbsp;&nbsp;&nbsp;0.20 (Lab C) ─┤<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.95 (Sin error)
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDES PARA PROBLEMAS (60 minutos) -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD - PROBLEMAS</div>
+<h2>Momento 2: Resolución</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>✏️ Instrucciones</strong>
+<p>• Trabajen en equipos de 3-4 personas<br>
+• Tiempo total: <strong>60 minutos</strong><br>
+• Resuelvan todos los problemas mostrando procedimiento completo<br>
+• Preparen la presentación de sus soluciones</p>
+</div>
+<div class="box box-warn">
+<strong>📋 Evaluación</strong>
+<ul style="margin-top:.5rem">
+<li>Planteamiento correcto del problema</li>
+<li>Procedimiento claro y justificado</li>
+<li>Resultado numérico correcto</li>
+<li>Interpretación en contexto clínico</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 1 - SLIDE EN BLANCO -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 1</div>
+<h2>Probabilidad Básica</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 1</div>
+<div class="problem-subtitle">[Aquí agregarás tu problema sobre probabilidad básica]</div>
+<div class="problem-space">
+PROBLEMA A DEFINIR POR EL PROFESOR
+</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 2 - SLIDE EN BLANCO -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 2</div>
+<h2>Eventos Mutuamente Excluyentes</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 2</div>
+<div class="problem-subtitle">[Aquí agregarás tu problema sobre eventos mutuamente excluyentes]</div>
+<div class="problem-space">
+PROBLEMA A DEFINIR POR EL PROFESOR
+</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 3 - SLIDE EN BLANCO -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 3</div>
+<h2>Reglas de Adición</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 3</div>
+<div class="problem-subtitle">[Aquí agregarás tu problema sobre reglas de adición]</div>
+<div class="problem-space">
+PROBLEMA A DEFINIR POR EL PROFESOR
+</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 4 - SLIDE EN BLANCO -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 4</div>
+<h2>Reglas de Multiplicación</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 4</div>
+<div class="problem-subtitle">[Aquí agregarás tu problema sobre reglas de multiplicación]</div>
+<div class="problem-space">
+PROBLEMA A DEFINIR POR EL PROFESOR
+</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 5 - SLIDE EN BLANCO -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 5</div>
+<h2>Probabilidad Condicional</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 5</div>
+<div class="problem-subtitle">[Aquí agregarás tu problema sobre probabilidad condicional]</div>
+<div class="problem-space">
+PROBLEMA A DEFINIR POR EL PROFESOR
+</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 6 - SLIDE EN BLANCO -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 6</div>
+<h2>Probabilidad Total</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 6</div>
+<div class="problem-subtitle">[Aquí agregarás tu problema sobre probabilidad total]</div>
+<div class="problem-space">
+PROBLEMA A DEFINIR POR EL PROFESOR
+</div>
+</div>
+</div>
+</div>
+
+<!-- MOMENTO 3: PRESENTACIONES -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PRESENTACIÓN</div>
+<h2>Momento 3: Compartir Soluciones</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>💬 Dinámica</strong>
+<p>Duración: <strong>30 minutos</strong></p>
+<p style="margin-top:.7rem">Cada equipo presentará las soluciones de los problemas asignados</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Formato</h4>
+<ul>
+<li>5 minutos por equipo</li>
+<li>Mostrar procedimiento</li>
+<li>Explicar razonamiento</li>
+<li>Justificar respuesta</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Criterios</h4>
+<ul>
+<li>Claridad en explicación</li>
+<li>Procedimiento correcto</li>
+<li>Interpretación clínica</li>
+<li>Trabajo en equipo</li>
+</ul>
+</div>
+</div>
+<div class="box box-success">
+<strong>📊 Aprendizaje Colaborativo</strong>
+<p>Objetivo: Aprender de las diferentes estrategias de solución y fortalecer la comprensión mediante la explicación a otros.</p>
+</div>
+</div>
+</div>
+
+<!-- CIERRE -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CIERRE</div>
+<h2>Resumen Clase 1</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>✓ Conceptos Cubiertos</strong>
+<ul>
+<li>Experimento, espacio muestral, evento</li>
+<li>Propiedades de probabilidad: 0 ≤ P(A) ≤ 1</li>
+<li>Cálculo: P(A) = casos favorables / casos totales</li>
+<li>Eventos mutuamente excluyentes vs independientes</li>
+<li>Reglas de adición (∪ = "o")</li>
+<li>Reglas de multiplicación (∩ = "y")</li>
+<li>Probabilidad condicional P(A|B)</li>
+<li>Probabilidad total (particiones)</li>
+</ul>
+</div>
+<div class="box box-info">
+<strong>🔜 Próxima Clase (Clase 2)</strong>
+<p>Profundizaremos en:</p>
+<ul style="margin-top:.5rem">
+<li><strong>Teorema de Bayes</strong> y aplicaciones clínicas</li>
+<li><strong>Pruebas diagnósticas:</strong> sensibilidad, especificidad</li>
+<li><strong>Valores predictivos:</strong> VPP, VPN</li>
+<li><strong>Matriz de confusión</strong></li>
+<li><strong>Curva ROC</strong> y razones de verosimilitud</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide cover">
+<h1>FIN CLASE 1</h1>
+<div class="line"></div>
+<p class="subtitle">Excelente trabajo</p>
+<p class="meta">Bioestadística Aplicada</p>
+<p class="help" style="margin-top:3rem">Prepárense para Teorema de Bayes →</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">21</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>

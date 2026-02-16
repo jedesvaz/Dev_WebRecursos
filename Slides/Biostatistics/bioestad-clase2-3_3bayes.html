@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bioestadística Clase 2 - Bayes</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Roboto Condensed',sans-serif;background:#2b2b2b;color:#e8e8e8;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3.5rem 6rem;flex-direction:column}.slide.active{display:flex}.cover{background:linear-gradient(135deg,#1a1a1a,#2b2b2b,#3d3d3d);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}.cover::before{content:'';position:absolute;top:0;left:0;width:100%;height:8px;background:linear-gradient(90deg,#c1440e,#d4551a,#e06020)}.cover h1{font-family:'Roboto Condensed',sans-serif;font-size:4rem;font-weight:700;margin-bottom:1.5rem;color:#e06020;text-transform:uppercase;letter-spacing:3px;text-shadow:3px 3px 0 rgba(0,0,0,.5)}.cover .subtitle{font-size:1.6rem;color:#e8e8e8;margin-bottom:1rem;font-weight:400}.cover .line{width:150px;height:4px;background:#c1440e;margin:2rem auto}.cover .meta{margin-top:1rem;font-size:1rem;color:#b8b8b8;font-family:'Roboto Mono',monospace}.cover .help{margin-top:3rem;font-size:1rem;color:#a8a8a8}.slide-header{margin-bottom:1.8rem;flex-shrink:0;border-bottom:3px solid #c1440e;padding-bottom:1rem}.slide-number{color:#e06020;font-size:.75rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:.5rem;font-family:'Roboto Mono',monospace}h2{font-family:'Roboto Condensed',sans-serif;font-size:2.6rem;color:#e8e8e8;font-weight:700;text-transform:uppercase}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:8px}.content::-webkit-scrollbar-track{background:#1a1a1a}.content::-webkit-scrollbar-thumb{background:#c1440e;border-radius:4px}p{font-size:1.05rem;line-height:1.9;margin-bottom:1.3rem;color:#d8d8d8}ul{list-style:none;margin:1.2rem 0}ul li{font-size:1rem;line-height:1.8;margin-bottom:.8rem;padding-left:2rem;position:relative;color:#d8d8d8}ul li::before{content:'▸';position:absolute;left:0;color:#e06020;font-size:1.2rem;font-weight:700}.box{background:#1a1a1a;border-left:6px solid #c1440e;padding:1.6rem 1.8rem;margin:1.5rem 0;border-radius:0 6px 6px 0;box-shadow:0 4px 12px rgba(0,0,0,.4)}.box strong{color:#e06020;display:block;margin-bottom:.8rem;font-size:1.1rem;text-transform:uppercase}.box p{margin-bottom:.6rem;color:#d8d8d8}.box-warn{background:#2b1f1a;border-left-color:#d4a017}.box-warn strong{color:#d4a017}.box-success{background:#1a2b1a;border-left-color:#5a8a3a}.box-success strong{color:#5a8a3a}.box-info{background:#1a1f2b;border-left-color:#4a7c9d}.box-info strong{color:#4a7c9d}.grid{display:grid;gap:1.5rem;margin:1.5rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#1a1a1a;padding:1.6rem;border-radius:8px;border:2px solid #3d3d3d;box-shadow:0 3px 10px rgba(0,0,0,.3)}.card h4{color:#e06020;margin-bottom:.8rem;font-size:1.15rem;font-weight:700;text-transform:uppercase}.card p{font-size:1rem;margin-bottom:.5rem;color:#d8d8d8}.card-accent{border-color:#c1440e;background:#2b1f1a}.em{color:#e06020;font-weight:700}.formula{background:#1a1a1a;padding:1.5rem 2.2rem;border-radius:8px;border:3px solid #e06020;font-family:'Roboto Mono',monospace;font-size:1.3rem;text-align:center;margin:1.5rem 0;color:#e8e8e8;font-weight:600;box-shadow:0 4px 16px rgba(224,96,32,.3)}table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.95rem;background:#1a1a1a;box-shadow:0 3px 10px rgba(0,0,0,.3)}th,td{padding:.8rem;border:1px solid #3d3d3d;text-align:center}th{background:#2b2b2b;color:#e06020;font-weight:700;text-transform:uppercase;font-size:.9rem}tr:hover{background:#2b2b2b}.problem-slide{background:#1a1a1a;border:4px solid #c1440e;border-radius:12px;padding:3rem;margin:2rem 0;min-height:400px;display:flex;flex-direction:column;justify-content:center;align-items:center}.problem-title{color:#e06020;font-size:2rem;font-weight:700;margin-bottom:2rem;text-transform:uppercase;text-align:center}.problem-subtitle{color:#b8b8b8;font-size:1.2rem;margin-bottom:1rem;font-family:'Roboto Mono',monospace}.problem-space{background:#2b2b2b;width:100%;min-height:200px;border-radius:8px;border:2px dashed #5d5d5d;display:flex;justify-content:center;align-items:center;color:#5d5d5d;font-size:1.5rem;font-family:'Roboto Mono',monospace}.nav{position:fixed;bottom:2.5rem;right:2.5rem;display:flex;gap:1.5rem;z-index:1000}.btn{width:65px;height:65px;background:linear-gradient(135deg,#c1440e,#e06020);border:3px solid #1a1a1a;border-radius:8px;color:#fff;font-size:1.6rem;cursor:pointer;box-shadow:0 5px 20px rgba(193,68,14,.5);transition:all .3s;font-weight:700}.btn:hover:not(:disabled){background:linear-gradient(135deg,#d4551a,#f07030);transform:translateY(-3px);box-shadow:0 8px 25px rgba(193,68,14,.7)}.btn:disabled{opacity:.3;cursor:not-allowed}.counter{position:fixed;bottom:2.5rem;left:2.5rem;background:#1a1a1a;padding:1rem 2rem;border-radius:8px;border:3px solid #c1440e;color:#e06020;font-weight:700;z-index:1000;box-shadow:0 4px 16px rgba(0,0,0,.5);font-family:'Roboto Mono',monospace;font-size:1.1rem}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:3rem}h2{font-size:2.2rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:2rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="slide cover active">
+<h1>TEOREMA DE BAYES</h1>
+<div class="line"></div>
+<p class="subtitle">Clase 2: Pruebas Diagnósticas y Clasificación</p>
+<p class="meta">Bioestadística Aplicada | Nivel: Intermedio</p>
+<p class="help">→ Navegación con flechas del teclado</p>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ESTRUCTURA</div>
+<h2>Plan de Clase</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>⏱ Duración Total: 2 horas</strong>
+<p>Aplicaciones clínicas: diagnóstico médico y pruebas de clasificación</p>
+</div>
+<div class="grid grid-3">
+<div class="card card-accent">
+<h4>📖 Momento 1</h4>
+<p><strong>30 minutos</strong></p>
+<p>Teorema de Bayes, sensibilidad, especificidad, VPP/VPN, matriz confusión</p>
+</div>
+<div class="card card-accent">
+<h4>✏️ Momento 2</h4>
+<p><strong>60 minutos</strong></p>
+<p>Resolución de problemas diagnósticos en equipos</p>
+</div>
+<div class="card card-accent">
+<h4>💬 Momento 3</h4>
+<p><strong>30 minutos</strong></p>
+<p>Presentación de soluciones y discusión clínica</p>
+</div>
+</div>
+<div class="box box-success">
+<strong>✅ Objetivos</strong>
+<ul>
+<li>Aplicar Teorema de Bayes en diagnóstico clínico</li>
+<li>Calcular sensibilidad y especificidad</li>
+<li>Interpretar VPP y VPN</li>
+<li>Construir matrices de confusión</li>
+<li>Usar razones de verosimilitud (LR)</li>
+<li>Interpretar curvas ROC</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">TEOREMA DE BAYES</div>
+<h2>Fundamento</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🎯 Teorema de Bayes</strong>
+<p>Actualiza probabilidades cuando se obtiene nueva información. Fundamental para razonamiento diagnóstico.</p>
+</div>
+<div class="formula" style="font-size:1.2rem">
+P(A|B) = [P(B|A) · P(A)] / P(B)
+</div>
+<div class="box">
+<strong>📖 Términos</strong>
+<p><strong>P(A|B)</strong> = Probabilidad <span class="em">posterior</span> (después de conocer B)<br>
+<strong>P(B|A)</strong> = Verosimilitud<br>
+<strong>P(A)</strong> = Probabilidad <span class="em">a priori</span><br>
+<strong>P(B)</strong> = Probabilidad total de B</p>
+</div>
+<div class="formula" style="font-size:1.05rem">
+P(A|B) = [P(B|A)·P(A)] / [P(B|A)·P(A) + P(B|A<sup>c</sup>)·P(A<sup>c</sup>)]
+</div>
+<div class="box box-info">
+<strong>⚕ Contexto Clínico</strong>
+<p>• <strong>A</strong> = Paciente tiene enfermedad<br>
+• <strong>B</strong> = Prueba es positiva<br>
+• <strong>P(A|B)</strong> = Prob. enfermedad dado test+<br>
+• <strong>P(B|A)</strong> = Sensibilidad<br>
+• <strong>P(A)</strong> = Prevalencia</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EJEMPLO BAYES</div>
+<h2>Caso Clínico</h2>
+</div>
+<div class="content">
+<div class="box box-warn">
+<strong>⚕ Detección de Enfermedad</strong>
+<p><strong>Datos:</strong><br>
+• Prevalencia: 1% (P(Enf) = 0.01)<br>
+• Sensibilidad: 90% (P(Test+|Enf) = 0.90)<br>
+• Especificidad: 95% (P(Test-|Sano) = 0.95)</p>
+<p style="margin-top:1rem"><strong>Pregunta:</strong> Si test es positivo, ¿prob. de estar enfermo?</p>
+<p style="margin-top:1rem;font-family:'Roboto Mono',monospace;font-size:.9rem">
+P(Test+) = 0.90×0.01 + 0.05×0.99 = 0.0585<br><br>
+P(Enf|Test+) = (0.90×0.01) / 0.0585<br>
+P(Enf|Test+) = 0.009 / 0.0585<br>
+P(Enf|Test+) = <strong>0.154 = 15.4%</strong>
+</p>
+</div>
+<div class="box box-info">
+<strong>💡 Interpretación</strong>
+<p>Aunque test es positivo, probabilidad real es solo <strong>15.4%</strong> por la baja prevalencia (1%). Importancia de considerar prevalencia.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">MATRIZ DE CONFUSIÓN</div>
+<h2>Clasificación Binaria</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📊 Matriz 2×2</strong>
+<p>Organiza resultados comparando predicciones con realidad</p>
+</div>
+<table>
+<tr>
+<th rowspan="2" colspan="2" style="background:#1a1a1a;border:none"></th>
+<th colspan="2" style="background:#2b1f1a">REALIDAD</th>
+</tr>
+<tr>
+<th style="background:#2b1f1a">Enfermo</th>
+<th style="background:#2b1f1a">Sano</th>
+</tr>
+<tr>
+<th rowspan="2" style="background:#1a2b2b">TEST</th>
+<th style="background:#1a2b2b">Positivo</th>
+<td style="background:#1a2b1a;color:#5a8a3a;font-weight:700">VP</td>
+<td style="background:#2b1a1a;color:#d4551a;font-weight:700">FP</td>
+</tr>
+<tr>
+<th style="background:#1a2b2b">Negativo</th>
+<td style="background:#2b1a1a;color:#d4551a;font-weight:700">FN</td>
+<td style="background:#1a2b1a;color:#5a8a3a;font-weight:700">VN</td>
+</tr>
+</table>
+<div class="grid grid-2" style="margin-top:1.5rem">
+<div class="card card-accent">
+<h4>VP - Verdaderos Positivos</h4>
+<p>Enfermos correctamente detectados</p>
+</div>
+<div class="card">
+<h4>FP - Falsos Positivos</h4>
+<p>Sanos incorrectamente diagnosticados (Error Tipo I)</p>
+</div>
+<div class="card">
+<h4>FN - Falsos Negativos</h4>
+<p>Enfermos no detectados (Error Tipo II)</p>
+</div>
+<div class="card card-accent">
+<h4>VN - Verdaderos Negativos</h4>
+<p>Sanos correctamente identificados</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">SENSIBILIDAD Y ESPECIFICIDAD</div>
+<h2>Métricas Principales</h2>
+</div>
+<div class="content">
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>🎯 Sensibilidad</h4>
+<p>Tasa Verdaderos Positivos</p>
+<div class="formula" style="font-size:1.1rem;margin:1rem 0">
+Sens = VP / (VP + FN)
+</div>
+<p>De los enfermos, ¿cuántos detectamos?</p>
+<p style="margin-top:.7rem"><strong>Alta sensibilidad:</strong> Pocos FN, buena para <span class="em">DESCARTAR</span></p>
+<p style="margin-top:.3rem;font-size:.9rem;font-style:italic">"SnNout: Sensibilidad alta, Negativo, rule OUT"</p>
+</div>
+<div class="card card-accent">
+<h4>🛡️ Especificidad</h4>
+<p>Tasa Verdaderos Negativos</p>
+<div class="formula" style="font-size:1.1rem;margin:1rem 0">
+Espec = VN / (FP + VN)
+</div>
+<p>De los sanos, ¿cuántos detectamos?</p>
+<p style="margin-top:.7rem"><strong>Alta especificidad:</strong> Pocos FP, buena para <span class="em">CONFIRMAR</span></p>
+<p style="margin-top:.3rem;font-size:.9rem;font-style:italic">"SpPin: Especificidad alta, Positivo, rule IN"</p>
+</div>
+</div>
+<div class="box box-warn" style="margin-top:1.5rem">
+<strong>⚕ Ejemplo: 1000 personas</strong>
+<table style="margin-top:.7rem">
+<tr><th></th><th>Enf+</th><th>Sano</th><th>Total</th></tr>
+<tr><th>Test+</th><td>85</td><td>30</td><td>115</td></tr>
+<tr><th>Test-</th><td>15</td><td>870</td><td>885</td></tr>
+<tr><th>Total</th><td>100</td><td>900</td><td>1000</td></tr>
+</table>
+<p style="margin-top:.7rem">
+<strong>Sensibilidad</strong> = 85/100 = <strong>85%</strong><br>
+<strong>Especificidad</strong> = 870/900 = <strong>96.7%</strong>
+</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">VALORES PREDICTIVOS</div>
+<h2>VPP y VPN</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🔮 Lo que importa al paciente</strong>
+<p>"Si MI prueba es positiva/negativa, ¿qué prob. tengo?"</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>VPP - Valor Predictivo Positivo</h4>
+<div class="formula" style="font-size:1.1rem;margin:1rem 0">
+VPP = VP / (VP + FP)
+</div>
+<p>De los positivos, ¿cuántos están enfermos?</p>
+<p style="margin-top:.7rem;font-size:.95rem"><strong>Depende de PREVALENCIA</strong></p>
+</div>
+<div class="card card-accent">
+<h4>VPN - Valor Predictivo Negativo</h4>
+<div class="formula" style="font-size:1.1rem;margin:1rem 0">
+VPN = VN / (FN + VN)
+</div>
+<p>De los negativos, ¿cuántos están sanos?</p>
+<p style="margin-top:.7rem;font-size:.95rem"><strong>Depende de PREVALENCIA</strong></p>
+</div>
+</div>
+<div class="box box-warn">
+<strong>⚠️ Efecto Prevalencia</strong>
+<p>• <strong>Alta prevalencia</strong> → ↑VPP, ↓VPN<br>
+• <strong>Baja prevalencia</strong> → ↓VPP, ↑VPN</p>
+<p style="margin-top:.7rem">Prueba 90/90% puede tener VPP 15% si enfermedad es rara (ej. Bayes)</p>
+</div>
+<div class="box box-info">
+<strong>📊 Con el ejemplo anterior</strong>
+<p><strong>VPP</strong> = 85/115 = <strong>73.9%</strong><br>
+<strong>VPN</strong> = 870/885 = <strong>98.3%</strong></p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RAZONES DE VEROSIMILITUD</div>
+<h2>Likelihood Ratios</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>📐 LR (Likelihood Ratios)</strong>
+<p>Combinan sensibilidad y especificidad para actualizar probabilidades</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>LR+ (Positivo)</h4>
+<div class="formula" style="font-size:1.05rem;margin:1rem 0">
+LR+ = Sens / (1-Espec)
+</div>
+<p><strong>Interpretación:</strong><br>
+• LR+ > 10: Gran aumento<br>
+• LR+ 5-10: Moderado<br>
+• LR+ 2-5: Pequeño<br>
+• LR+ 1: Sin cambio</p>
+</div>
+<div class="card card-accent">
+<h4>LR- (Negativo)</h4>
+<div class="formula" style="font-size:1.05rem;margin:1rem 0">
+LR- = (1-Sens) / Espec
+</div>
+<p><strong>Interpretación:</strong><br>
+• LR- < 0.1: Gran reducción<br>
+• LR- 0.1-0.2: Moderada<br>
+• LR- 0.2-0.5: Pequeña<br>
+• LR- 1: Sin cambio</p>
+</div>
+</div>
+<div class="box box-warn">
+<strong>⚕ Ejemplo</strong>
+<p>Sens=0.85, Espec=0.967</p>
+<p style="margin-top:.7rem">
+<strong>LR+</strong> = 0.85/(1-0.967) = 0.85/0.033 = <strong>25.8</strong><br>
+<strong>LR-</strong> = (1-0.85)/0.967 = 0.15/0.967 = <strong>0.16</strong>
+</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CURVA ROC</div>
+<h2>Receiver Operating Characteristic</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📈 Curva ROC</strong>
+<p>Muestra rendimiento en todos los umbrales. Sensibilidad vs (1-Especificidad)</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Área Bajo Curva (AUC)</h4>
+<p><strong>1.0:</strong> Perfecto<br>
+<strong>0.9-1.0:</strong> Excelente<br>
+<strong>0.8-0.9:</strong> Bueno<br>
+<strong>0.7-0.8:</strong> Aceptable<br>
+<strong>0.5:</strong> Azar<br>
+<strong><0.5:</strong> Peor que azar</p>
+</div>
+<div class="card card-accent">
+<h4>Trade-off</h4>
+<p>• <strong>Umbral bajo:</strong> ↑Sens, ↓Espec (más FP)<br>
+• <strong>Umbral alto:</strong> ↓Sens, ↑Espec (más FN)</p>
+<p style="margin-top:.7rem;font-size:.95rem">Elección según contexto clínico</p>
+</div>
+</div>
+<div class="box box-info">
+<strong>💡 Aplicación</strong>
+<p>• <strong>Screening:</strong> Priorizar sensibilidad alta<br>
+• <strong>Confirmación:</strong> Priorizar especificidad alta</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">TABLA RESUMEN</div>
+<h2>Fórmulas Esenciales</h2>
+</div>
+<div class="content">
+<table>
+<tr><th>Métrica</th><th>Fórmula</th><th>Significado</th></tr>
+<tr><td><strong>Sensibilidad</strong></td><td>VP/(VP+FN)</td><td>% enfermos detectados</td></tr>
+<tr><td><strong>Especificidad</strong></td><td>VN/(FP+VN)</td><td>% sanos detectados</td></tr>
+<tr><td><strong>VPP</strong></td><td>VP/(VP+FP)</td><td>Si test+, prob. enfermedad</td></tr>
+<tr><td><strong>VPN</strong></td><td>VN/(FN+VN)</td><td>Si test-, prob. salud</td></tr>
+<tr><td><strong>LR+</strong></td><td>Sens/(1-Espec)</td><td>Multiplicador si test+</td></tr>
+<tr><td><strong>LR-</strong></td><td>(1-Sens)/Espec</td><td>Multiplicador si test-</td></tr>
+<tr><td><strong>Precisión</strong></td><td>(VP+VN)/Total</td><td>% aciertos totales</td></tr>
+<tr><td><strong>Bayes</strong></td><td>P(A|B)=P(B|A)·P(A)/P(B)</td><td>Prob. posterior</td></tr>
+</table>
+<div class="box box-success" style="margin-top:1.5rem">
+<strong>💡 Reglas</strong>
+<p>• <strong>Sens:</strong> De ENFERMOS (VP+FN), ¿cuántos VP?<br>
+• <strong>Espec:</strong> De SANOS (FP+VN), ¿cuántos VN?<br>
+• <strong>VPP:</strong> De POSITIVOS (VP+FP), ¿cuántos VP?<br>
+• <strong>VPN:</strong> De NEGATIVOS (FN+VN), ¿cuántos VN?</p>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMAS 60 MIN -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD</div>
+<h2>Momento 2: Problemas</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>✏️ Instrucciones</strong>
+<p>• Equipos 3-4 personas<br>
+• Tiempo: <strong>60 minutos</strong><br>
+• Mostrar procedimiento completo<br>
+• Construir matrices cuando necesario<br>
+• Interpretar clínicamente</p>
+</div>
+<div class="box box-warn">
+<strong>📋 Evaluación</strong>
+<ul style="margin-top:.5rem">
+<li>Matriz de confusión correcta</li>
+<li>Fórmulas aplicadas bien</li>
+<li>Procedimiento claro</li>
+<li>Resultados correctos</li>
+<li>Interpretación clínica</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 1 BLANK -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 1</div>
+<h2>Teorema de Bayes</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 1</div>
+<div class="problem-subtitle">[Aquí agregarás problema sobre Teorema de Bayes]</div>
+<div class="problem-space">PROBLEMA A DEFINIR POR EL PROFESOR</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 2 BLANK -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 2</div>
+<h2>Sensibilidad y Especificidad</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 2</div>
+<div class="problem-subtitle">[Aquí agregarás problema sobre Sens/Espec]</div>
+<div class="problem-space">PROBLEMA A DEFINIR POR EL PROFESOR</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 3 BLANK -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 3</div>
+<h2>Valores Predictivos</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 3</div>
+<div class="problem-subtitle">[Aquí agregarás problema sobre VPP/VPN]</div>
+<div class="problem-space">PROBLEMA A DEFINIR POR EL PROFESOR</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 4 BLANK -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 4</div>
+<h2>Razones Verosimilitud</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 4</div>
+<div class="problem-subtitle">[Aquí agregarás problema sobre LR+/LR-]</div>
+<div class="problem-space">PROBLEMA A DEFINIR POR EL PROFESOR</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 5 BLANK -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 5</div>
+<h2>Matriz Completa</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 5</div>
+<div class="problem-subtitle">[Aquí agregarás problema integral con matriz]</div>
+<div class="problem-space">PROBLEMA A DEFINIR POR EL PROFESOR</div>
+</div>
+</div>
+</div>
+
+<!-- PROBLEMA 6 BLANK -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBLEMA 6</div>
+<h2>Caso Clínico Integrado</h2>
+</div>
+<div class="content">
+<div class="problem-slide">
+<div class="problem-title">ESPACIO PARA PROBLEMA 6</div>
+<div class="problem-subtitle">[Aquí agregarás caso clínico completo]</div>
+<div class="problem-space">PROBLEMA A DEFINIR POR EL PROFESOR</div>
+</div>
+</div>
+</div>
+
+<!-- PRESENTACIONES -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PRESENTACIÓN</div>
+<h2>Momento 3: Compartir</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>💬 Dinámica</strong>
+<p>Duración: <strong>30 minutos</strong></p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Formato</h4>
+<ul>
+<li>5 min por equipo</li>
+<li>Mostrar matriz</li>
+<li>Explicar cálculos</li>
+<li>Interpretar métricas</li>
+<li>Decisión clínica</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Criterios</h4>
+<ul>
+<li>Claridad</li>
+<li>Procedimiento correcto</li>
+<li>Interpretación clínica</li>
+<li>Análisis crítico</li>
+<li>Trabajo equipo</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<!-- RESUMEN INTEGRADO -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RESUMEN</div>
+<h2>Integración Clase 1 y 2</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>✓ Clase 1: Probabilidad</strong>
+<p>Experimento, espacio muestral, eventos, reglas adición/multiplicación, condicional, total</p>
+</div>
+<div class="box box-info">
+<strong>✓ Clase 2: Bayes y Diagnóstico</strong>
+<p>Bayes, matriz confusión, sens/espec, VPP/VPN, LR, ROC</p>
+</div>
+<div class="box">
+<strong>🔗 Conexión</strong>
+<p>Teorema de Bayes conecta probabilidad condicional con pruebas diagnósticas</p>
+</div>
+</div>
+</div>
+
+<!-- BIBLIOGRAFÍA -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">BIBLIOGRAFÍA</div>
+<h2>Referencias</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>[1]</strong> Khan Academy, "Probability and Statistics"
+</div>
+<div class="box">
+<strong>[2]</strong> Material didáctico, "Teoría de Probabilidades"
+</div>
+<div class="box">
+<strong>[3]</strong> Documentación técnica, "Sensibilidad y Especificidad en Pruebas Diagnósticas"
+</div>
+<div class="box box-info">
+<strong>📚 Lecturas Recomendadas</strong>
+<p>• Altman, "Practical Statistics for Medical Research"<br>
+• Fawcett, "Introduction to ROC analysis"<br>
+• Sackett, "Evidence-Based Medicine"</p>
+</div>
+</div>
+</div>
+
+<!-- CIERRE -->
+<div class="slide cover">
+<h1>FIN CLASE 2</h1>
+<div class="line"></div>
+<p class="subtitle">Excelente trabajo</p>
+<p class="meta">Bioestadística Aplicada</p>
+<p class="help" style="margin-top:3rem">¡Dominio de Probabilidad y Bayes! 📊</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">20</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>
