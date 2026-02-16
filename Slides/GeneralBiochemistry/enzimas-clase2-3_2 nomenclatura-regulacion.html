@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enzimas - Clase 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:Roboto,sans-serif;background:#f0f4f0;color:#2d4a2b;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3.5rem 6rem;flex-direction:column}.slide.active{display:flex}.cover{background:linear-gradient(135deg,#2d5016,#4a7c2d,#6b9b4f);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}.cover::before{content:'';position:absolute;top:-120px;right:-120px;width:380px;height:380px;border-radius:50%;background:rgba(255,255,255,.08)}.cover::after{content:'';position:absolute;bottom:-90px;left:-90px;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.05)}.cover h1{font-family:'Roboto Slab',serif;font-size:3.8rem;font-weight:700;margin-bottom:1rem;position:relative;z-index:1;color:#fff;text-shadow:0 3px 10px rgba(0,0,0,.2)}.cover .subtitle{font-size:1.5rem;color:#fff;opacity:.9;z-index:1;margin-bottom:.5rem}.cover .line{width:120px;height:4px;background:#a8d88e;margin:1.5rem auto;z-index:1;border-radius:2px}.cover .meta{margin-top:.7rem;font-size:.9rem;color:#fff;opacity:.7;z-index:1}.cover .help{margin-top:2.5rem;font-size:.95rem;color:#fff;opacity:.75;z-index:1}.slide-header{margin-bottom:1.5rem;flex-shrink:0}.slide-number{color:#5a8a3a;font-size:.76rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:.6rem}h2{font-family:'Roboto Slab',serif;font-size:2.4rem;color:#2d4a2b;font-weight:700}h3{font-family:'Roboto Slab',serif;font-size:1.45rem;color:#4a7c2d;margin:1.4rem 0 .9rem;font-weight:600}h4{font-family:'Roboto Slab',serif}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:6px}.content::-webkit-scrollbar-track{background:rgba(90,138,58,.1);border-radius:3px}.content::-webkit-scrollbar-thumb{background:#5a8a3a;border-radius:3px}p{font-size:1.02rem;line-height:1.8;margin-bottom:1.2rem;color:#2d4a2b}ul{list-style:none;margin:1rem 0}ul li{font-size:.98rem;line-height:1.7;margin-bottom:.7rem;padding-left:1.7rem;position:relative;color:#3a5a2b}ul li::before{content:'🧪';position:absolute;left:0;font-size:.85rem}.box{background:#fff;border-left:5px solid #5a8a3a;padding:1.4rem 1.6rem;margin:1.4rem 0;border-radius:0 10px 10px 0;box-shadow:0 3px 10px rgba(90,138,58,.12)}.box strong{color:#4a7c2d;display:block;margin-bottom:.6rem;font-size:1.06rem}.box p{margin-bottom:.5rem}.box-warn{background:#fffef5;border-left-color:#d4a017}.box-warn strong{color:#d4a017}.box-success{background:#f7fff7;border-left-color:#3d8b3d}.box-success strong{color:#3d8b3d}.box-info{background:#f8fffe;border-left-color:#2d7a7a}.box-info strong{color:#2d7a7a}.grid{display:grid;gap:1.3rem;margin:1.3rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#fff;padding:1.4rem;border-radius:12px;border:1px solid rgba(90,138,58,.2);box-shadow:0 3px 8px rgba(90,138,58,.1)}.card h4{color:#4a7c2d;margin-bottom:.7rem;font-size:1.1rem;font-weight:600}.card p{font-size:.96rem;margin-bottom:.4rem}.card-accent{border-color:#5a8a3a;background:linear-gradient(135deg,#fff,#f8fff8);box-shadow:0 4px 12px rgba(90,138,58,.18)}.em{color:#4a7c2d;font-weight:700}.formula{background:#fff;padding:1.3rem 2rem;border-radius:12px;border:3px solid #5a8a3a;font-family:'Courier New',monospace;font-size:1.2rem;text-align:center;margin:1.3rem 0;color:#2d4a2b;font-weight:600;box-shadow:0 4px 14px rgba(90,138,58,.2)}.activity-section{background:linear-gradient(135deg,#f0fff0,#e8f8e8);padding:2rem;border-radius:15px;border:3px solid #6b9b4f;margin:1.5rem 0}.activity-title{color:#2d5016;font-size:1.6rem;font-weight:700;margin-bottom:1rem;text-align:center}.activity-time{background:#4a7c2d;color:#fff;padding:.4rem 1.2rem;border-radius:20px;display:inline-block;font-size:.85rem;font-weight:700;margin-bottom:1rem}.activity-box{background:#fff;padding:1.5rem;border-radius:10px;margin:1rem 0;border-left:4px solid #5a8a3a}table{width:100%;border-collapse:collapse;margin:1rem 0}table th,table td{padding:.9rem;text-align:left;border-bottom:1px solid rgba(90,138,58,.2)}table th{background:#e8f8e8;color:#2d4a2b;font-weight:700}table tr:hover{background:#f8fff8}.nav{position:fixed;bottom:2rem;right:2rem;display:flex;gap:1.3rem;z-index:1000}.btn{width:60px;height:60px;background:#4a7c2d;border:none;border-radius:50%;color:#fff;font-size:1.5rem;cursor:pointer;box-shadow:0 4px 18px rgba(74,124,45,.4);transition:all .3s}.btn:hover:not(:disabled){background:#5a8a3a;transform:scale(1.15)}.btn:disabled{opacity:.3;cursor:not-allowed}.counter{position:fixed;bottom:2rem;left:2rem;background:rgba(255,255,255,.95);padding:.9rem 1.8rem;border-radius:32px;border:2px solid #5a8a3a;color:#4a7c2d;font-weight:700;z-index:1000;box-shadow:0 3px 14px rgba(90,138,58,.3)}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:2.8rem}h2{font-size:2.1rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:1.8rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="slide cover active">
+<h1>ENZIMAS</h1>
+<div class="line"></div>
+<p class="subtitle">Clase 2: Nomenclatura, Cinética y Regulación</p>
+<p class="meta">Bioquímica General | Nivel: Intermedio</p>
+<p class="help">👉 Usa las flechas para navegar →</p>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INTRODUCCIÓN</div>
+<h2>Estructura de la Clase</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>📋 Duración Total: 2 horas</strong>
+<p>Esta clase profundiza en la clasificación, cinética y regulación de las enzimas.</p>
+</div>
+<div class="grid grid-3">
+<div class="card card-accent">
+<h4>⏰ Momento 1</h4>
+<p><strong>60 minutos</strong></p>
+<p>Explicación del profesor sobre nomenclatura EC, cinética enzimática, y mecanismos de regulación.</p>
+</div>
+<div class="card card-accent">
+<h4>🔍 Momento 2</h4>
+<p><strong>30 minutos</strong></p>
+<p>Actividad de investigación sobre regulación en rutas metabólicas reales.</p>
+</div>
+<div class="card card-accent">
+<h4>💬 Momento 3</h4>
+<p><strong>30 minutos</strong></p>
+<p>Presentación de esquemas y discusión grupal.</p>
+</div>
+</div>
+<h3>Objetivos de Aprendizaje</h3>
+<div class="box box-success">
+<strong>✅ Al finalizar, podrás:</strong>
+<ul>
+<li>Clasificar enzimas según el sistema EC (6 clases principales)</li>
+<li>Comprender y aplicar la ecuación de Michaelis-Menten</li>
+<li>Interpretar K<sub>M</sub> y V<sub>max</sub> en cinética enzimática</li>
+<li>Analizar efectos de pH y temperatura en la actividad enzimática</li>
+<li>Distinguir entre inhibición competitiva y no competitiva</li>
+<li>Explicar regulación alostérica y retroinhibición</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">NOMENCLATURA</div>
+<h2>Sistema de Clasificación EC</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🏷️ Sistema EC (Enzyme Commission)</strong>
+<p>Clasificación internacional estandarizada que asigna un código único de 4 números a cada enzima según el tipo de reacción que cataliza.</p>
+</div>
+<div class="box box-info">
+<strong>📌 Formato del Código EC</strong>
+<p>EC <span class="em">A.B.C.D</span></p>
+<p style="margin-top:.7rem">• <strong>A:</strong> Clase principal (1-6)<br>
+• <strong>B:</strong> Subclase (tipo de sustrato o grupo transferido)<br>
+• <strong>C:</strong> Sub-subclase (especifica más la reacción)<br>
+• <strong>D:</strong> Número de serie (enzima específica)</p>
+</div>
+<div class="box">
+<strong>💡 Ejemplo: Lactato Deshidrogenasa</strong>
+<p><strong>EC 1.1.1.27</strong></p>
+<p>• <strong>1:</strong> Oxidorreductasa<br>
+• <strong>1:</strong> Actúa sobre grupo CH-OH<br>
+• <strong>1:</strong> Con NAD<sup>+</sup> o NADP<sup>+</sup> como aceptor<br>
+• <strong>27:</strong> Lactato deshidrogenasa específicamente</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">NOMENCLATURA</div>
+<h2>Las 6 Clases de Enzimas</h2>
+</div>
+<div class="content">
+<table>
+<tr>
+<th style="width:10%">EC</th>
+<th style="width:20%">Clase</th>
+<th style="width:35%">Reacción</th>
+<th style="width:35%">Ejemplos</th>
+</tr>
+<tr>
+<td><strong>EC 1</strong></td>
+<td>Oxidorreductasas</td>
+<td>Transferencia de electrones/H (reacciones redox)</td>
+<td>Deshidrogenasas, Oxidasas, Reductasas, Catalasa</td>
+</tr>
+<tr>
+<td><strong>EC 2</strong></td>
+<td>Transferasas</td>
+<td>Transferencia de grupos funcionales</td>
+<td>Quinasas, Transaminasas, Metiltransferasas</td>
+</tr>
+<tr>
+<td><strong>EC 3</strong></td>
+<td>Hidrolasas</td>
+<td>Hidrólisis de enlaces (con H₂O)</td>
+<td>Peptidasas, Lipasas, Amilasas, Nucleasas</td>
+</tr>
+<tr>
+<td><strong>EC 4</strong></td>
+<td>Liasas</td>
+<td>Rotura de enlaces C-C, C-N, C-O sin hidrólisis</td>
+<td>Descarboxilasas, Aldolasas, Deshidratasas</td>
+</tr>
+<tr>
+<td><strong>EC 5</strong></td>
+<td>Isomerasas</td>
+<td>Isomerización (reorganización intramolecular)</td>
+<td>Racemasas, Epimerasas, Mutasas</td>
+</tr>
+<tr>
+<td><strong>EC 6</strong></td>
+<td>Ligasas (Sintetasas)</td>
+<td>Formación de enlaces con gasto de ATP</td>
+<td>Sintetasas, Carboxilasas, ADN/ARN ligasas</td>
+</tr>
+</table>
+<div class="box box-warn" style="margin-top:1rem">
+<strong>⚡ Regla Nemotécnica</strong>
+<p><strong>O</strong>xido <strong>T</strong>ransfi <strong>H</strong>idro <strong>L</strong>iasa <strong>I</strong>somer <strong>L</strong>igasa</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CLASE EC 1</div>
+<h2>Oxidorreductasas</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔬 EC 1: Oxidorreductasas</strong>
+<p>Catalizan reacciones de <strong>oxidación-reducción</strong> (transferencia de electrones o átomos de hidrógeno).</p>
+</div>
+<h3>Reacción General</h3>
+<div class="formula">AH₂ + B → A + BH₂</div>
+<p style="text-align:center;margin-top:.5rem">AH₂ se oxida (pierde H), B se reduce (gana H)</p>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Subtipos Importantes</h4>
+<ul>
+<li><strong>Deshidrogenasas:</strong> Usan NAD<sup>+</sup>, NADP<sup>+</sup>, FAD</li>
+<li><strong>Oxidasas:</strong> Usan O₂ como aceptor</li>
+<li><strong>Reductasas:</strong> Reducen sustratos</li>
+<li><strong>Peroxidasas:</strong> Usan H₂O₂</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Ejemplos Clave</h4>
+<ul>
+<li><strong>Lactato DH (1.1.1.27):</strong> Lactato ⇄ Piruvato</li>
+<li><strong>Catalasa (1.11.1.6):</strong> 2H₂O₂ → 2H₂O + O₂</li>
+<li><strong>Citocromo oxidasa:</strong> Cadena respiratoria</li>
+<li><strong>Alcohol DH:</strong> Metaboliza etanol</li>
+</ul>
+</div>
+</div>
+<div class="box box-info">
+<strong>💡 Importancia Biológica</strong>
+<p>Esenciales en respiración celular, fotosíntesis, y metabolismo energético. La mayoría requieren cofactores (NAD<sup>+</sup>, FAD, hemo).</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CLASE EC 2</div>
+<h2>Transferasas</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔬 EC 2: Transferasas</strong>
+<p>Catalizan la <strong>transferencia de grupos funcionales</strong> de una molécula donadora a una aceptora.</p>
+</div>
+<h3>Reacción General</h3>
+<div class="formula">A-X + B → A + B-X</div>
+<p style="text-align:center;margin-top:.5rem">X = grupo funcional transferido</p>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Grupos Transferidos</h4>
+<ul>
+<li><strong>Grupos fosfato:</strong> Quinasas</li>
+<li><strong>Grupos amino:</strong> Transaminasas</li>
+<li><strong>Grupos metilo:</strong> Metiltransferasas</li>
+<li><strong>Grupos acilo:</strong> Aciltransferasas</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Ejemplos Clave</h4>
+<ul>
+<li><strong>Hexoquinasa (2.7.1.1):</strong> Glucosa + ATP → G6P</li>
+<li><strong>AST/ALT (2.6.1):</strong> Transaminasas hepáticas</li>
+<li><strong>Creatina quinasa:</strong> Marcador cardíaco</li>
+<li><strong>ADN metiltransferasa:</strong> Epigenética</li>
+</ul>
+</div>
+</div>
+<div class="box box-info">
+<strong>💡 Importancia Clínica</strong>
+<p>AST y ALT son marcadores de daño hepático. Creatina quinasa indica daño muscular o cardíaco.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CLASE EC 3</div>
+<h2>Hidrolasas</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔬 EC 3: Hidrolasas</strong>
+<p>Catalizan la <strong>hidrólisis</strong> (ruptura de enlaces mediante adición de agua).</p>
+</div>
+<h3>Reacción General</h3>
+<div class="formula">A-B + H₂O → A-OH + B-H</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Subtipos por Sustrato</h4>
+<ul>
+<li><strong>Peptidasas/Proteasas:</strong> Rompen enlaces peptídicos</li>
+<li><strong>Lipasas:</strong> Rompen ésteres en lípidos</li>
+<li><strong>Glucosidasas:</strong> Rompen glucósidos</li>
+<li><strong>Nucleasas:</strong> Rompen ácidos nucleicos</li>
+<li><strong>Fosfatasas:</strong> Eliminan grupos fosfato</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Ejemplos Clave</h4>
+<ul>
+<li><strong>Pepsina (3.4.23.1):</strong> Digestión proteínas</li>
+<li><strong>Tripsina:</strong> Proteasa pancreática</li>
+<li><strong>Amilasa:</strong> Digestión almidón</li>
+<li><strong>Lipasa pancreática:</strong> Digestión grasas</li>
+<li><strong>ATPasa:</strong> ATP → ADP + Pi</li>
+</ul>
+</div>
+</div>
+<div class="box box-info">
+<strong>💡 Importancia Digestiva</strong>
+<p>La mayoría de enzimas digestivas son hidrolasas: pepsina, tripsina, quimotripsina (proteínas), amilasa (carbohidratos), lipasa (grasas).</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CLASES EC 4, 5, 6</div>
+<h2>Liasas, Isomerasas y Ligasas</h2>
+</div>
+<div class="content">
+<div class="grid grid-3">
+<div class="card card-accent">
+<h4>EC 4: Liasas</h4>
+<p><strong>Rompen enlaces C-C, C-N, C-O</strong> sin agua ni oxidación</p>
+<ul style="margin-top:.7rem">
+<li><strong>Descarboxilasas:</strong> Eliminan CO₂</li>
+<li><strong>Aldolasas:</strong> Rompen C-C</li>
+<li><strong>Deshidratasas:</strong> Eliminan H₂O</li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem"><strong>Ej:</strong> Piruvato descarboxilasa, Aldolasa (glucólisis)</p>
+</div>
+<div class="card card-accent">
+<h4>EC 5: Isomerasas</h4>
+<p><strong>Catalizan reorganización intramolecular</strong> (isomerización)</p>
+<ul style="margin-top:.7rem">
+<li><strong>Racemasas:</strong> L ⇄ D</li>
+<li><strong>Epimerasas:</strong> Cambian configuración</li>
+<li><strong>Mutasas:</strong> Migración de grupos</li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem"><strong>Ej:</strong> Triosafosfato isomerasa, Glucosa-6-P isomerasa</p>
+</div>
+<div class="card card-accent">
+<h4>EC 6: Ligasas</h4>
+<p><strong>Forman enlaces con gasto de ATP</strong> (síntesis)</p>
+<ul style="margin-top:.7rem">
+<li><strong>Sintetasas:</strong> Unen moléculas</li>
+<li><strong>Carboxilasas:</strong> Añaden CO₂</li>
+<li>Requieren energía (ATP → ADP)</li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem"><strong>Ej:</strong> ADN ligasa (6.5.1.1), Aminoacil-ARNt sintetasa</p>
+</div>
+</div>
+<div class="box box-warn">
+<strong>⚡ Diferencia Liasa vs Hidrolasa</strong>
+<p><strong>Liasas:</strong> Rompen enlaces SIN agua (eliminan grupos pequeños: CO₂, H₂O, NH₃)<br>
+<strong>Hidrolasas:</strong> Rompen enlaces CON agua (añaden H₂O al sustrato)</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CINÉTICA</div>
+<h2>Cinética Enzimática de Michaelis-Menten</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>📊 Modelo de Michaelis-Menten</strong>
+<p>Describe la <strong>velocidad de reacción enzimática</strong> en función de la concentración de sustrato [S].</p>
+</div>
+<h3>Ecuación de Michaelis-Menten</h3>
+<div class="formula">v = (V<sub>max</sub> × [S]) / (K<sub>M</sub> + [S])</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>V<sub>max</sub> (Velocidad Máxima)</h4>
+<ul>
+<li>Velocidad cuando todos los sitios activos están saturados</li>
+<li>Depende de [E<sub>total</sub>]</li>
+<li>Unidades: moles/min, µmol/s</li>
+<li>Alcanzada a [S] muy alta</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>K<sub>M</sub> (Constante de Michaelis)</h4>
+<ul>
+<li>[S] necesaria para alcanzar <strong>½ V<sub>max</sub></strong></li>
+<li>Medida de <strong>afinidad</strong> enzima-sustrato</li>
+<li>K<sub>M</sub> baja = Alta afinidad</li>
+<li>K<sub>M</sub> alta = Baja afinidad</li>
+<li>Unidades: molar (mM, µM)</li>
+</ul>
+</div>
+</div>
+<div class="box box-info">
+<strong>💡 Interpretación de K<sub>M</sub></strong>
+<p>Si una enzima tiene K<sub>M</sub> = 0.1 mM para glucosa, significa que necesita muy poca glucosa para trabajar a media velocidad → <strong>alta afinidad</strong>.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CINÉTICA</div>
+<h2>Gráfica de Lineweaver-Burk</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>📐 Transformación Lineal</strong>
+<p>Lineweaver-Burk convierte la curva hiperbólica de Michaelis-Menten en una <strong>línea recta</strong> para facilitar el cálculo de K<sub>M</sub> y V<sub>max</sub>.</p>
+</div>
+<h3>Ecuación de Lineweaver-Burk</h3>
+<div class="formula">1/v = (K<sub>M</sub>/V<sub>max</sub>) × (1/[S]) + 1/V<sub>max</sub></div>
+<p style="text-align:center;margin-top:.5rem">Forma: y = mx + b</p>
+<div class="box box-info">
+<strong>📊 Interpretación de la Gráfica</strong>
+<p>• <strong>Eje X:</strong> 1/[S]<br>
+• <strong>Eje Y:</strong> 1/v<br>
+• <strong>Pendiente:</strong> K<sub>M</sub>/V<sub>max</sub><br>
+• <strong>Ordenada al origen:</strong> 1/V<sub>max</sub><br>
+• <strong>Intersección con eje X:</strong> -1/K<sub>M</sub></p>
+</div>
+<div class="box box-warn">
+<strong>⚡ Ventaja Principal</strong>
+<p>Permite identificar visualmente el <strong>tipo de inhibición enzimática</strong> comparando las rectas de enzima normal vs inhibida.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">REGULACIÓN</div>
+<h2>Factores que Afectan la Actividad</h2>
+</div>
+<div class="content">
+<h3>1. pH Óptimo</h3>
+<div class="box box-info">
+<strong>🔬 Efecto del pH</strong>
+<p>Cada enzima tiene un <strong>pH óptimo</strong> donde su actividad es máxima. Fuera de este rango, la actividad disminuye.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Mecanismo</h4>
+<ul>
+<li>El pH afecta ionización de aminoácidos del sitio activo</li>
+<li>Cambios extremos desnaturalizan la proteína</li>
+<li>Modifica carga de sustrato y enzima</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Ejemplos de pH Óptimo</h4>
+<ul>
+<li><strong>Pepsina:</strong> pH 2 (estómago)</li>
+<li><strong>Tripsina:</strong> pH 8 (intestino)</li>
+<li><strong>Amilasa salival:</strong> pH 6.8</li>
+<li><strong>Catalasa:</strong> pH 7 (neutral)</li>
+</ul>
+</div>
+</div>
+<h3 style="margin-top:1.5rem">2. Temperatura Óptima</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Efecto de la Temperatura</h4>
+<ul>
+<li>↑ T → ↑ colisiones → ↑ velocidad</li>
+<li>Pero T muy alta → desnaturalización</li>
+<li><strong>T óptima humana:</strong> 37°C</li>
+<li>Por encima de 40-50°C: pérdida de actividad</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Q<sub>10</sub> (Coeficiente de Temperatura)</h4>
+<p>Por cada 10°C de aumento, la velocidad se duplica o triplica (hasta cierto límite)</p>
+<p style="margin-top:.7rem;font-weight:600">Q<sub>10</sub> = 2-3</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INHIBICIÓN</div>
+<h2>Inhibición Irreversible</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔒 Inhibición Irreversible</strong>
+<p>El inhibidor se une <strong>covalentemente</strong> a la enzima, modificándola permanentemente. La enzima queda <strong>inactivada de forma permanente</strong>.</p>
+</div>
+<div class="box box-info">
+<strong>🔬 Características</strong>
+<p>• Unión <strong>covalente</strong> (irreversible)<br>
+• La enzima NO recupera su actividad<br>
+• NO se puede eliminar por diálisis<br>
+• Requiere síntesis de nueva enzima<br>
+• Generalmente tóxicos o fármacos potentes</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Ejemplos - Toxinas</h4>
+<ul>
+<li><strong>Cianuro (CN⁻):</strong> Bloquea citocromo oxidasa (cadena respiratoria) → muerte celular</li>
+<li><strong>Gas nervioso (Sarín):</strong> Inhibe acetilcolinesterasa → parálisis</li>
+<li><strong>Metales pesados (Hg²⁺):</strong> Se unen a grupos -SH</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Ejemplos - Fármacos</h4>
+<ul>
+<li><strong>Penicilina:</strong> Inhibe transpeptidasa bacteriana (síntesis pared celular)</li>
+<li><strong>Aspirina:</strong> Acetila irreversiblemente ciclooxigenasa (COX)</li>
+<li><strong>Omeprazol:</strong> Inhibe H⁺/K⁺-ATPasa (bomba de protones gástrica)</li>
+</ul>
+</div>
+</div>
+<div class="box box-warn">
+<strong>⚡ Uso Terapéutico</strong>
+<p>Aunque irreversible suena peligroso, es útil en medicina: la aspirina inhibe plaquetas por ~7 días (vida de la plaqueta), luego se sintetizan nuevas.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INHIBICIÓN</div>
+<h2>Inhibición Reversible Competitiva</h2>
+</div>
+<div class="content">
+<h3>Tipo 1: Competitiva</h3>
+<div class="box box-info">
+<strong>🎯 Mecanismo</strong>
+<p>El inhibidor tiene <strong>estructura similar al sustrato</strong> y compite por unirse al <strong>mismo sitio activo</strong>.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Características</h4>
+<ul>
+<li>Se une al <strong>sitio activo</strong></li>
+<li>Compite con el sustrato</li>
+<li>Unión <strong>reversible</strong> (no covalente)</li>
+<li>Estructura similar al sustrato</li>
+<li>Bloquea acceso del sustrato</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Efecto Cinético</h4>
+<ul>
+<li><strong>K<sub>M</sub> aparente aumenta</strong></li>
+<li><strong>V<sub>max</sub> NO cambia</strong></li>
+<li>Se supera aumentando [S]</li>
+<li>En Lineweaver-Burk: diferente pendiente, misma ordenada</li>
+</ul>
+</div>
+</div>
+<div class="box">
+<strong>💡 Ejemplos</strong>
+<p>• <strong>Malonato vs Succinato:</strong> Malonato inhibe succinato deshidrogenasa (ciclo de Krebs)<br>
+• <strong>Metotrexato:</strong> Análogo de ácido fólico, inhibe dihidrofolato reductasa (quimioterapia)<br>
+• <strong>Estatinas:</strong> Inhiben HMG-CoA reductasa (↓ colesterol)</p>
+</div>
+<div class="box box-success">
+<strong>✅ Punto Clave</strong>
+<p>Si aumentas mucho [S], eventualmente <strong>superas la inhibición</strong> porque hay más sustrato que inhibidor compitiendo por el sitio activo.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INHIBICIÓN</div>
+<h2>Inhibición Reversible No Competitiva</h2>
+</div>
+<div class="content">
+<h3>Tipo 2: No Competitiva</h3>
+<div class="box box-info">
+<strong>🎯 Mecanismo</strong>
+<p>El inhibidor se une en un <strong>sitio diferente</strong> al centro activo (sitio alostérico), impidiendo la catálisis aunque el sustrato se una.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Características</h4>
+<ul>
+<li>Se une <strong>fuera del sitio activo</strong></li>
+<li>NO compite con sustrato</li>
+<li>Puede unirse a E o ES</li>
+<li>Cambia conformación enzimática</li>
+<li>Bloquea función catalítica</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>Efecto Cinético</h4>
+<ul>
+<li><strong>K<sub>M</sub> NO cambia</strong></li>
+<li><strong>V<sub>max</sub> disminuye</strong></li>
+<li>NO se supera con ↑ [S]</li>
+<li>En Lineweaver-Burk: diferente ordenada, misma abscisa</li>
+</ul>
+</div>
+</div>
+<div class="box">
+<strong>💡 Ejemplos</strong>
+<p>• <strong>Metales pesados</strong> (Pb²⁺, Hg²⁺) se unen a grupos -SH fuera del sitio activo<br>
+• Algunos <strong>reguladores alostéricos</strong> naturales</p>
+</div>
+<div class="box box-warn">
+<strong>⚡ Diferencia Clave</strong>
+<p>A diferencia de la competitiva, <strong>aumentar [S] NO revierte</strong> la inhibición no competitiva porque el inhibidor no ocupa el sitio activo.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">REGULACIÓN ALOSTÉRICA</div>
+<h2>Enzimas Alostéricas</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔄 Alosterismo</strong>
+<p>Del griego <em>allo</em> = otro, <em>stereo</em> = espacio. Enzimas que pueden existir en <strong>dos conformaciones</strong>: activa (R) e inactiva (T).</p>
+</div>
+<div class="box box-info">
+<strong>🔬 Características</strong>
+<p>• Poseen <strong>centro activo</strong> (une sustrato) + <strong>centro(s) regulador(es)</strong> (une modulador)<br>
+• Generalmente <strong>estructura cuaternaria</strong> (múltiples subunidades)<br>
+• Cinética <strong>sigmoidea</strong> (cooperatividad), NO hiperbólica Michaelis-Menten<br>
+• Permiten <strong>regulación fina</strong> del metabolismo<br>
+• Responden a señales metabólicas</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Modulador Positivo (+)</h4>
+<p><strong>Activador/Efector positivo</strong></p>
+<ul style="margin-top:.7rem">
+<li>Se une al centro regulador</li>
+<li>Estabiliza forma <strong>activa (R)</strong></li>
+<li>↑ Afinidad por sustrato</li>
+<li>↑ Actividad enzimática</li>
+</ul>
+</div>
+<div class="card">
+<h4>Modulador Negativo (-)</h4>
+<p><strong>Inhibidor/Efector negativo</strong></p>
+<ul style="margin-top:.7rem">
+<li>Se une al centro regulador</li>
+<li>Estabiliza forma <strong>inactiva (T)</strong></li>
+<li>↓ Afinidad por sustrato</li>
+<li>↓ Actividad enzimática</li>
+</ul>
+</div>
+</div>
+<div class="box">
+<strong>📊 Cinética Sigmoidea</strong>
+<p>La curva [S] vs velocidad tiene forma de <strong>S</strong>, reflejando <strong>cooperatividad</strong> entre subunidades (la unión de sustrato a una subunidad facilita la unión a otras).</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RETROINHIBICIÓN</div>
+<h2>Feedback Inhibition</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>🔁 Retroinhibición (Inhibición por Producto Final)</strong>
+<p>Mecanismo de <strong>autorregulación</strong> donde el producto final de una ruta metabólica inhibe la <strong>primera enzima</strong> de la ruta.</p>
+</div>
+<div style="background:#f8fff8;padding:2rem;border:2px solid #5a8a3a;border-radius:12px;margin:1.5rem 0">
+<div style="text-align:center;font-weight:700;margin-bottom:1.5rem;color:#2d4a2b;font-size:1.1rem">Ruta Metabólica con Retroinhibición</div>
+<div style="display:flex;align-items:center;justify-content:center;gap:.8rem;flex-wrap:wrap;margin-bottom:2rem">
+<div style="background:#fffef5;padding:.8rem 1.3rem;border:2px solid #d4a017;border-radius:8px;font-weight:600">A</div>
+<div style="font-size:1.4rem;color:#5a8a3a">→</div>
+<div style="background:#fff;padding:.6rem;border:2px solid #5a8a3a;border-radius:8px;text-align:center">
+<div style="font-size:.8rem;color:#4a7c2d;font-weight:600">E₁</div>
+<div style="font-size:.7rem">(alostérica)</div>
+</div>
+<div style="font-size:1.4rem;color:#5a8a3a">→</div>
+<div style="background:#f5f5f5;padding:.8rem 1.3rem;border:2px solid #888;border-radius:8px">B</div>
+<div style="font-size:1.4rem;color:#5a8a3a">→</div>
+<div style="background:#fff;padding:.6rem;border:2px solid #5a8a3a;border-radius:8px">
+<div style="font-size:.8rem;color:#4a7c2d">E₂</div>
+</div>
+<div style="font-size:1.4rem;color:#5a8a3a">→</div>
+<div style="background:#f5f5f5;padding:.8rem 1.3rem;border:2px solid #888;border-radius:8px">C</div>
+<div style="font-size:1.4rem;color:#5a8a3a">→</div>
+<div style="background:#fff;padding:.6rem;border:2px solid #5a8a3a;border-radius:8px">
+<div style="font-size:.8rem;color:#4a7c2d">E₃</div>
+</div>
+<div style="font-size:1.4rem;color:#5a8a3a">→</div>
+<div style="background:#e8f8e8;padding:.8rem 1.3rem;border:2px solid #3d8b3d;border-radius:8px;font-weight:600">P</div>
+</div>
+<div style="text-align:center">
+<div style="font-size:2rem;color:#c44">↓</div>
+<div style="background:#ffe8e8;padding:.7rem 1.2rem;border:2px solid #c44;border-radius:8px;display:inline-block;font-weight:700;margin-top:.5rem">⊖ INHIBE E₁</div>
+</div>
+</div>
+<div class="box box-info">
+<strong>🔬 Mecanismo y Ventajas</strong>
+<p>• E₁ es <strong>enzima alostérica</strong> (sitio regulador)<br>
+• P actúa como <strong>modulador negativo</strong><br>
+• Cuando [P] alta → inhibe E₁ → ↓ síntesis de P<br>
+• Cuando [P] baja → E₁ se reactiva → ↑ síntesis de P<br>
+• <strong>Resultado:</strong> Economía celular, evita acumulación innecesaria</p>
+</div>
+<div class="box box-success">
+<strong>💡 Ejemplo Clásico: Síntesis de Isoleucina</strong>
+<p>La <strong>isoleucina</strong> (producto final) inhibe la <strong>treonina desaminasa</strong> (primera enzima que convierte treonina).</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD</div>
+<h2>Momento 2: Investigación</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">🔍 Regulación en Rutas Metabólicas</div>
+<div style="text-align:center;margin-bottom:1.5rem">
+<span class="activity-time">⏰ DURACIÓN: 30 MINUTOS</span>
+</div>
+<div class="box box-info">
+<strong>📋 Instrucciones</strong>
+<p>Trabajen en equipos de 3-4 personas. Investigarán una ruta metabólica real y crearán un <strong>esquema visual</strong> de su regulación enzimática.</p>
+</div>
+<h3 style="color:#2d5016">🎯 Objetivo</h3>
+<p>Comprender cómo se regula una ruta metabólica mediante enzimas alostéricas, retroinhibición, activadores e inhibidores.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD</div>
+<h2>Rutas a Investigar</h2>
+</div>
+<div class="content">
+<div class="activity-box">
+<h4 style="color:#2d5016">Cada equipo elegirá UNA ruta metabólica:</h4>
+<ul style="margin-top:.7rem">
+<li><strong>1. Glucólisis</strong> (degradación de glucosa → piruvato)</li>
+<li><strong>2. Ciclo de Krebs</strong> (ciclo del ácido cítrico)</li>
+<li><strong>3. Gluconeogénesis</strong> (síntesis de glucosa)</li>
+<li><strong>4. Síntesis de colesterol</strong></li>
+<li><strong>5. β-oxidación</strong> de ácidos grasos</li>
+<li><strong>6. Ciclo de la urea</strong></li>
+</ul>
+</div>
+<div class="activity-box">
+<h4 style="color:#2d5016">Para la ruta elegida, investiguen y determinen:</h4>
+<p>1. <strong>Enzimas clave reguladas</strong> (identificar al menos 2-3 enzimas alostéricas o reguladas)<br>
+2. <strong>Tipo de regulación:</strong> alostérica, retroinhibición, modificación covalente (fosforilación)<br>
+3. <strong>Moduladores específicos:</strong> ¿qué moléculas activan o inhiben cada enzima?<br>
+&nbsp;&nbsp;&nbsp;(ej: ATP, ADP, AMP, citrato, NADH, Ca²⁺)<br>
+4. <strong>Clase EC</strong> de las enzimas principales<br>
+5. <strong>Lógica biológica:</strong> ¿por qué tiene sentido esta regulación?<br>
+6. <strong>Condiciones fisiológicas:</strong> ¿cuándo se activa/desactiva la ruta? (ayuno, ejercicio, dieta rica en carbohidratos)</p>
+</div>
+<div class="activity-box">
+<h4 style="color:#2d5016">Producto a Entregar:</h4>
+<p>Un <strong>esquema visual</strong> (dibujado a mano o digital) que incluya:</p>
+<ul style="margin-top:.5rem">
+<li>Flujo simplificado de la ruta (sustratos → intermediarios → productos)</li>
+<li>Enzimas reguladas <strong>marcadas claramente</strong></li>
+<li>Flechas verdes (↑) para activación, rojas (↓) para inhibición</li>
+<li>Moléculas reguladoras identificadas con su efecto</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD</div>
+<h2>Recursos y Consejos</h2>
+</div>
+<div class="content">
+<h3>📚 Recursos Bibliográficos</h3>
+<div class="grid grid-2">
+<div class="card">
+<h4>Khan Academy</h4>
+<p><a href="https://es.khanacademy.org/science/biology/energy-and-enzymes" style="color:#5a8a3a">Energía y enzimas</a></p>
+</div>
+<div class="card">
+<h4>WikiBiología</h4>
+<p><a href="https://www.wikibiologia.net/fundamentos-de-las-enzimas-estructura-mecanismo-de-accion-y-regulacion-bioquimica/" style="color:#5a8a3a">Regulación bioquímica</a></p>
+</div>
+<div class="card">
+<h4>FlorandAlucía</h4>
+<p><a href="https://www.florandalucia.es/KK/index.php/la-celula/1-base-fisico-quimica/1-6-enzimas" style="color:#5a8a3a">Enzimas completo</a></p>
+</div>
+<div class="card">
+<h4>SocLalLuna</h4>
+<p><a href="https://soclalluna.com/2o-bachillerato/2obach/bloque-ii-bioquimica/" style="color:#5a8a3a">Bioquímica enzimas</a></p>
+</div>
+</div>
+<h3 style="margin-top:1.5rem">💡 Consejos para el Esquema</h3>
+<div class="box">
+<p>• <strong>Simplifiquen:</strong> No dibujen toda la ruta, solo 3-5 pasos clave con las enzimas reguladas<br>
+• <strong>Sean específicos:</strong> Nombren las moléculas reguladoras exactas (no solo "activador")<br>
+• <strong>Usen símbolos:</strong> ⊕ activación, ⊖ inhibición, flechas de colores<br>
+• <strong>Expliquen la lógica:</strong> ¿Por qué esa regulación tiene sentido metabólico?<br>
+• <strong>Claridad > Belleza:</strong> Lo importante es que se entienda el mecanismo<br>
+• Pueden usar papel, pizarra, PowerPoint, o apps como Canva</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PRESENTACIÓN</div>
+<h2>Momento 3: Compartir Hallazgos</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">💬 Presentación de Esquemas</div>
+<div style="text-align:center;margin-bottom:1.5rem">
+<span class="activity-time">⏰ DURACIÓN: 30 MINUTOS</span>
+</div>
+<div class="box box-success">
+<strong>🎯 Dinámica</strong>
+<p>Cada equipo presentará su esquema de regulación metabólica explicando los mecanismos identificados.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>Tiempo por Equipo</h4>
+<ul>
+<li><strong>5 minutos:</strong> Presentación del esquema</li>
+<li><strong>2 minutos:</strong> Preguntas y discusión</li>
+</ul>
+<p style="margin-top:.7rem;font-size:.9rem">~4-5 equipos en total</p>
+</div>
+<div class="card card-accent">
+<h4>Contenido a Presentar</h4>
+<ul>
+<li>Ruta metabólica elegida</li>
+<li>2-3 enzimas reguladas</li>
+<li>Moduladores y su efecto</li>
+<li>Lógica fisiológica</li>
+<li>Clasificación EC</li>
+</ul>
+</div>
+</div>
+<h3 style="color:#2d5016;margin-top:1.5rem">Criterios de Evaluación</h3>
+<div class="activity-box">
+<p><strong>✓ Claridad visual:</strong> Esquema organizado y fácil de seguir<br>
+<strong>✓ Precisión científica:</strong> Información correcta sobre enzimas y reguladores<br>
+<strong>✓ Completitud:</strong> Incluye enzimas, moduladores, efectos, EC<br>
+<strong>✓ Explicación lógica:</strong> Comunica POR QUÉ existe esa regulación<br>
+<strong>✓ Profundidad:</strong> Va más allá de memorizar, comprende el mecanismo</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RESUMEN</div>
+<h2>Integración Clase 1 y 2</h2>
+</div>
+<div class="content">
+<div class="box box-success">
+<strong>✅ CLASE 1: Estructura y Acción Catalítica</strong>
+<ul>
+<li>Energía de activación y catálisis</li>
+<li>Estructura: apoenzima + cofactor = holoenzima</li>
+<li>Centro activo, especificidad</li>
+<li>Modelos: llave-cerradura vs ajuste inducido</li>
+<li>Mecanismo: E + S ⇄ ES → E + P</li>
+</ul>
+</div>
+<div class="box box-info">
+<strong>✅ CLASE 2: Nomenclatura, Cinética y Regulación</strong>
+<ul>
+<li><strong>Clasificación EC:</strong> 6 clases (Oxido, Transfer, Hidro, Liasa, Isomer, Ligasa)</li>
+<li><strong>Cinética:</strong> K<sub>M</sub>, V<sub>max</sub>, Michaelis-Menten, Lineweaver-Burk</li>
+<li><strong>pH y Temperatura:</strong> óptimos específicos</li>
+<li><strong>Inhibición:</strong> irreversible, competitiva, no competitiva</li>
+<li><strong>Alosterismo:</strong> moduladores ⊕/⊖</li>
+<li><strong>Retroinhibición:</strong> producto final inhibe E₁</li>
+</ul>
+</div>
+<div class="box">
+<strong>🔑 Mensaje Central</strong>
+<p>Las enzimas son <strong>catalizadores específicos y regulables</strong> que permiten el control preciso del metabolismo, adaptándose constantemente a las necesidades celulares mediante múltiples mecanismos de regulación.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">REFERENCIA</div>
+<h2>Tabla Resumen EC</h2>
+</div>
+<div class="content">
+<table style="font-size:.82rem">
+<tr>
+<th style="width:12%">EC</th>
+<th style="width:18%">Clase</th>
+<th style="width:30%">Reacción</th>
+<th style="width:40%">Ejemplos Específicos</th>
+</tr>
+<tr>
+<td><strong>EC 1</strong></td>
+<td>Oxidorreductasas</td>
+<td>Transferencia e⁻/H (redox)</td>
+<td>LDH (1.1.1.27), Catalasa (1.11.1.6), Citocromo oxidasa</td>
+</tr>
+<tr>
+<td><strong>EC 2</strong></td>
+<td>Transferasas</td>
+<td>Transferencia grupos</td>
+<td>Hexoquinasa (2.7.1.1), AST/ALT, Metiltransferasa</td>
+</tr>
+<tr>
+<td><strong>EC 3</strong></td>
+<td>Hidrolasas</td>
+<td>Hidrólisis (con H₂O)</td>
+<td>Pepsina (3.4.23.1), Amilasa, Lipasa, ADNasa, ATPasa</td>
+</tr>
+<tr>
+<td><strong>EC 4</strong></td>
+<td>Liasas</td>
+<td>Rotura C-C, C-N, C-O (sin H₂O)</td>
+<td>Piruvato descarboxilasa, Aldolasa, Fumarasa</td>
+</tr>
+<tr>
+<td><strong>EC 5</strong></td>
+<td>Isomerasas</td>
+<td>Isomerización</td>
+<td>Triosafosfato isomerasa, Glucosa-6-P isomerasa</td>
+</tr>
+<tr>
+<td><strong>EC 6</strong></td>
+<td>Ligasas</td>
+<td>Unión (con ATP)</td>
+<td>ADN ligasa (6.5.1.1), Aminoacil-ARNt sintetasa</td>
+</tr>
+</table>
+<div class="box" style="margin-top:1.2rem">
+<strong>📌 Ecuación Fundamental de Michaelis-Menten</strong>
+<div class="formula" style="margin-top:.7rem">v = (V<sub>max</sub> × [S]) / (K<sub>M</sub> + [S])</div>
+<p style="margin-top:.7rem;text-align:center">Describe la cinética de reacciones enzimáticas</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">BIBLIOGRAFÍA</div>
+<h2>Referencias IEEE</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>[1]</strong> "Enzymes and the active site," Khan Academy. [En línea]. Disponible: https://es.khanacademy.org/science/biology/energy-and-enzymes/introduction-to-enzymes/a/enzymes-and-the-active-site
+</div>
+<div class="box">
+<strong>[2]</strong> "1.6. Enzimas," FlorandAlucía. [En línea]. Disponible: https://www.florandalucia.es/KK/index.php/la-celula/1-base-fisico-quimica/1-6-enzimas
+</div>
+<div class="box">
+<strong>[3]</strong> "Fundamentos de las Enzimas: Estructura, Mecanismo de Acción y Regulación Bioquímica," WikiBiología, 15 dic. 2025. [En línea]. Disponible: https://www.wikibiologia.net/fundamentos-de-las-enzimas-estructura-mecanismo-de-accion-y-regulacion-bioquimica/
+</div>
+<div class="box">
+<strong>[4]</strong> "Función catalítica de las enzimas," SocLalLuna. [En línea]. Disponible: https://soclalluna.com/2o-bachillerato/2obach/bloque-ii-bioquimica/ud02-glucidos-lipidos-proteinas-y-acidos-nucleicos/las-proteinas/funcion-catalitica-de-las-enzimas/
+</div>
+<div class="box box-info">
+<strong>📚 Lecturas Complementarias Recomendadas</strong>
+<p>• Lehninger Principles of Biochemistry (Nelson & Cox)<br>
+• Bioquímica (Stryer, Berg, Tymoczko)<br>
+• BRENDA Enzyme Database (base de datos EC internacional)</p>
+</div>
+</div>
+</div>
+
+<div class="slide cover">
+<h1>¡Excelente Trabajo!</h1>
+<div class="line"></div>
+<p class="subtitle">Módulo de Enzimas Completado</p>
+<p class="meta">Bioquímica General | Nivel: Intermedio</p>
+<p class="help" style="margin-top:3rem">Dominio completo: Estructura, Clasificación y Regulación 🧪</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">27</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>
