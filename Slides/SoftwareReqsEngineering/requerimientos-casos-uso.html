@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Modelado basado en Escenarios</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Lato',sans-serif;background:#f5f5f5;color:#2d3b45;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3.5rem 6rem;flex-direction:column}.slide.active{display:flex}.cover{background:linear-gradient(135deg,#127A3F,#0B874B,#00AC5F);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}.cover::before{content:'';position:absolute;top:-150px;right:-150px;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.08)}.cover::after{content:'';position:absolute;bottom:-100px;left:-100px;width:350px;height:350px;border-radius:50%;background:rgba(255,255,255,.06)}.cover h1{font-family:'Lato',sans-serif;font-size:4.2rem;font-weight:900;margin-bottom:1.5rem;color:#fff;letter-spacing:-1px;position:relative;z-index:1}.cover .subtitle{font-size:1.8rem;color:#fff;opacity:.95;z-index:1;margin-bottom:.8rem;font-weight:300}.cover .line{width:140px;height:5px;background:#fff;margin:2rem auto;z-index:1;border-radius:3px}.cover .meta{margin-top:1.2rem;font-size:1.05rem;color:#fff;opacity:.85;z-index:1;font-weight:400}.cover .help{margin-top:3rem;font-size:1rem;color:#fff;opacity:.7;z-index:1}.slide-header{margin-bottom:2rem;flex-shrink:0;border-bottom:4px solid #00AC5F;padding-bottom:1.2rem}.slide-number{color:#00AC5F;font-size:.72rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:.6rem}h2{font-family:'Lato',sans-serif;font-size:2.8rem;color:#2d3b45;font-weight:900;letter-spacing:-.5px}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:8px}.content::-webkit-scrollbar-track{background:#e8e8e8;border-radius:4px}.content::-webkit-scrollbar-thumb{background:#00AC5F;border-radius:4px}p{font-size:1.08rem;line-height:1.8;margin-bottom:1.3rem;color:#394b59}ul{list-style:none;margin:1.3rem 0}ul li{font-size:1.05rem;line-height:1.75;margin-bottom:.85rem;padding-left:2rem;position:relative;color:#394b59}ul li::before{content:'●';position:absolute;left:0;color:#00AC5F;font-size:1.3rem;font-weight:700}.box{background:#fff;border-left:6px solid #00AC5F;padding:1.8rem 2rem;margin:1.6rem 0;border-radius:0 8px 8px 0;box-shadow:0 3px 15px rgba(0,172,95,.12)}.box strong{color:#127A3F;display:block;margin-bottom:.9rem;font-size:1.15rem;font-weight:700}.box p{margin-bottom:.6rem;color:#394b59}.box-info{background:#f0fdf7;border-left-color:#2D8B47}.box-info strong{color:#2D8B47}.box-warn{background:#fffef5;border-left-color:#d4a017}.box-warn strong{color:#d4a017}.box-accent{background:#e6f9f0;border-left-color:#0B874B}.box-accent strong{color:#0B874B}.grid{display:grid;gap:1.6rem;margin:1.6rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#fff;padding:1.7rem;border-radius:10px;border:2px solid #e0e0e0;box-shadow:0 2px 10px rgba(0,0,0,.06);transition:all .3s}.card:hover{border-color:#00AC5F;box-shadow:0 4px 20px rgba(0,172,95,.15)}.card h4{color:#127A3F;margin-bottom:.9rem;font-size:1.2rem;font-weight:700}.card p{font-size:1.02rem;margin-bottom:.5rem;color:#394b59}.card-primary{border-color:#00AC5F;background:linear-gradient(135deg,#fff,#f0fdf7)}.em{color:#00AC5F;font-weight:700}.code{background:#2d3b45;color:#00AC5F;padding:.3rem .7rem;border-radius:5px;font-family:'Roboto Mono',monospace;font-size:.9rem}.activity-section{background:linear-gradient(135deg,#e6f9f0,#d4f4e6);padding:2.5rem;border-radius:15px;border:4px solid #00AC5F;margin:2rem 0;box-shadow:0 5px 25px rgba(0,172,95,.2)}.activity-title{color:#127A3F;font-size:2rem;font-weight:900;margin-bottom:1.5rem;text-align:center;letter-spacing:-.5px}.activity-subtitle{color:#2D8B47;font-size:1.3rem;font-weight:700;margin:1.5rem 0 1rem}.activity-box{background:#fff;padding:1.8rem;border-radius:10px;margin:1.2rem 0;border-left:5px solid #00AC5F}.diagram-box{background:#fff;padding:2rem;border-radius:12px;border:3px solid #00AC5F;margin:1.8rem 0;box-shadow:0 4px 20px rgba(0,172,95,.15)}.diagram-title{color:#127A3F;font-weight:700;font-size:1.25rem;margin-bottom:1.5rem;text-align:center}.steps{counter-reset:step;margin:1.5rem 0}.step{counter-increment:step;position:relative;padding:1.5rem 1.5rem 1.5rem 5rem;margin-bottom:1.5rem;background:#fff;border-radius:10px;border-left:5px solid #00AC5F;box-shadow:0 2px 10px rgba(0,0,0,.06)}.step::before{content:counter(step);position:absolute;left:1.5rem;top:50%;transform:translateY(-50%);width:2.5rem;height:2.5rem;background:#00AC5F;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.3rem}.step h4{color:#127A3F;font-size:1.15rem;font-weight:700;margin-bottom:.7rem}.step p{font-size:1rem;color:#394b59;line-height:1.7}table{width:100%;border-collapse:collapse;margin:1.5rem 0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);border-radius:8px;overflow:hidden}th,td{padding:1rem;text-align:left;border-bottom:1px solid #e8e8e8}th{background:linear-gradient(135deg,#127A3F,#00AC5F);color:#fff;font-weight:700;font-size:.95rem;text-transform:uppercase}tr:last-child td{border-bottom:none}tr:hover{background:#f0fdf7}.nav{position:fixed;bottom:2.5rem;right:2.5rem;display:flex;gap:1.5rem;z-index:1000}.btn{width:70px;height:70px;background:linear-gradient(135deg,#00AC5F,#2D8B47);border:none;border-radius:50%;color:#fff;font-size:1.8rem;cursor:pointer;box-shadow:0 5px 25px rgba(0,172,95,.4);transition:all .3s;font-weight:700;display:flex;align-items:center;justify-content:center}.btn:hover:not(:disabled){background:linear-gradient(135deg,#2D8B47,#127A3F);transform:scale(1.1);box-shadow:0 8px 30px rgba(0,172,95,.6)}.btn:disabled{opacity:.3;cursor:not-allowed}.counter{position:fixed;bottom:2.5rem;left:2.5rem;background:#fff;padding:1rem 2rem;border-radius:30px;border:3px solid #00AC5F;color:#127A3F;font-weight:700;z-index:1000;box-shadow:0 4px 20px rgba(0,172,95,.2);font-size:1.1rem}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:3rem}h2{font-size:2.3rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:2rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="slide cover active">
+<h1>Modelado basado en Escenarios</h1>
+<div class="line"></div>
+<p class="subtitle">Tema 6: Casos de Uso y Documentación</p>
+<p class="meta">Ingeniería de Requerimientos de Software | Nivel: Intermedio</p>
+<p class="help">→ Navegación con flechas del teclado</p>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INTRODUCCIÓN</div>
+<h2>¿Por qué Casos de Uso?</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🎯 Contexto del Proyecto</strong>
+<p>En todo proyecto de desarrollo de sistemas es fundamental <strong>aclarar el alcance y objetivos</strong> antes de comenzar el diseño y construcción.</p>
+</div>
+<h3 style="color:#127A3F;margin:1.5rem 0 1rem;font-size:1.6rem">Preguntas Clave</h3>
+<div class="grid grid-3">
+<div class="card card-primary">
+<h4>❓ ¿Cómo clarificar?</h4>
+<p>¿Cuáles son los mecanismos más adecuados para clarificar los requerimientos del cliente?</p>
+</div>
+<div class="card card-primary">
+<h4>🛠️ ¿Qué herramientas?</h4>
+<p>¿Qué herramientas se pueden utilizar para comunicar los requisitos?</p>
+</div>
+<div class="card card-primary">
+<h4>✅ ¿Cómo validar?</h4>
+<p>¿Existe algún documento para validar si el software alcanzó sus objetivos?</p>
+</div>
+</div>
+<div class="box box-accent" style="margin-top:2rem">
+<strong>💡 La Respuesta: Casos de Uso</strong>
+<p>Los <span class="em">casos de uso</span> son la herramienta fundamental en la ingeniería de requerimientos que permite documentar los requerimientos de forma clara para el cliente y el equipo de desarrollo.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">6.1 FUNDAMENTOS</div>
+<h2>¿Qué es un Caso de Uso?</h2>
+</div>
+<div class="content">
+<div class="box box-info">
+<strong>📖 Definición</strong>
+<p>"El caso de uso es una <strong>secuencia de acciones</strong> que un sistema debe realizar en el contexto del negocio a través del usuario o el actor"</p>
+<p style="margin-top:.5rem;font-style:italic;font-size:.95rem">— Tsui, Karam y Bernal (2013)</p>
+</div>
+<h3 style="color:#127A3F;margin:1.5rem 0 1rem;font-size:1.6rem">Objetivo Principal</h3>
+<div class="box">
+<p>Establecer los <strong>pasos que un usuario realizaría</strong> en el sistema para llevar a cabo una función que necesita, así como las <strong>reglas de negocio</strong> que serán marco de referencia.</p>
+</div>
+<div class="grid grid-2" style="margin-top:1.5rem">
+<div class="card">
+<h4>✓ Beneficios</h4>
+<ul style="font-size:.95rem">
+<li>Claridad en interacciones</li>
+<li>Documentación comprensible</li>
+<li>Validación con usuario final</li>
+<li>Base para desarrollo</li>
+</ul>
+</div>
+<div class="card card-primary">
+<h4>⚠️ Importante</h4>
+<p style="font-size:.95rem">"Un caso de uso es tan bueno como lo sean sus autores. Si la descripción es poco clara, el caso de uso será confuso o ambiguo."</p>
+<p style="margin-top:.5rem;font-style:italic;font-size:.85rem">— Pressman (2010)</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTORES</div>
+<h2>Paso 1: Describir los Actores</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>👥 ¿Qué es un Actor?</strong>
+<p>Cualquier <strong>persona, dispositivo o mecanismo automático</strong> que se comunica con el producto de software.</p>
+<p style="margin-top:.5rem">Puede ser: una persona, un sistema externo, una base de datos, o incluso otro caso de uso.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-primary">
+<h4>🎯 Actores Primarios</h4>
+<p><strong>Definición:</strong> Entidades que <strong>necesitan</strong> interactuar con el sistema para obtener un resultado esperado.</p>
+<p style="margin-top:.8rem"><strong>Ejemplos:</strong></p>
+<ul style="font-size:.95rem;margin-top:.5rem">
+<li>Cliente que reserva vuelo</li>
+<li>Empleado que consulta nómina</li>
+<li>Paciente que agenda cita</li>
+<li>Usuario que hace compra en línea</li>
+</ul>
+</div>
+<div class="card">
+<h4>🔧 Actores Secundarios</h4>
+<p><strong>Definición:</strong> Realizan funciones que <strong>soportan</strong> las acciones que producirán el resultado esperado por los actores primarios.</p>
+<p style="margin-top:.8rem"><strong>Ejemplos:</strong></p>
+<ul style="font-size:.95rem;margin-top:.5rem">
+<li>Base de datos de empleados</li>
+<li>Servidor de pagos</li>
+<li>Sistema GPS</li>
+<li>API de tráfico en tiempo real</li>
+</ul>
+</div>
+</div>
+<div class="box box-accent" style="margin-top:1.5rem">
+<strong>💡 Roles del Actor</strong>
+<p>Cuando el actor es una persona, identifica su <strong>rol específico</strong> al interactuar con el sistema:</p>
+<p style="margin-top:.5rem">Operador, Empleado, Analista Financiero, Administrador de BD, Gerente, Cliente, etc.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACCIONES</div>
+<h2>Paso 2: Listado de Acciones</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📝 Generar Listado de Acciones</strong>
+<p>Lista de acciones que realizan los actores (primarios o secundarios) para obtener el resultado deseado.</p>
+</div>
+<div class="box box-info">
+<strong>✈️ Ejemplo: Sistema de Reserva de Vuelos</strong>
+<p style="margin-top:.8rem">El actor <strong>(Cliente)</strong> puede realizar:</p>
+<ol style="margin-top:1rem;padding-left:2rem;list-style:decimal">
+<li style="margin-bottom:.7rem;padding-left:.5rem">Consultar disponibilidad de vuelo</li>
+<li style="margin-bottom:.7rem;padding-left:.5rem">Consultar tarifas y promociones</li>
+<li style="margin-bottom:.7rem;padding-left:.5rem">Reservar un vuelo</li>
+<li style="margin-bottom:.7rem;padding-left:.5rem">Cancelar una reservación</li>
+<li style="margin-bottom:.7rem;padding-left:.5rem">Consultar términos y condiciones del servicio</li>
+</ol>
+</div>
+<div class="box box-accent">
+<strong>💡 Observación Importante</strong>
+<p>El actor realiza <strong>varias acciones</strong> en el sistema, pero <strong>no necesariamente todas en una misma interacción</strong>.</p>
+<p style="margin-top:.7rem">Esto permite:</p>
+<ul style="margin-top:.5rem">
+<li>Describir cada acción de forma <strong>independiente</strong></li>
+<li>Facilitar la <strong>documentación</strong></li>
+<li>Permitir <strong>modificaciones posteriores</strong> sin afectar otras acciones</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CONTEXTO</div>
+<h2>Paso 3: Información de Contexto</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📋 Atributos de Contexto</strong>
+<p>Información que enmarca y delimita el caso de uso</p>
+</div>
+<div class="steps">
+<div class="step">
+<h4>Objetivo</h4>
+<p>Describe el <strong>propósito</strong> del caso de uso.</p>
+</div>
+<div class="step">
+<h4>Alcance</h4>
+<p>Determina el <strong>contexto</strong> en el que aplica el caso de uso.</p>
+</div>
+<div class="step">
+<h4>Precondiciones</h4>
+<p>Condiciones que se requieren <strong>antes</strong> de ejecutar el caso de uso.</p>
+</div>
+<div class="step">
+<h4>Evento de Disparo</h4>
+<p>Acción que permite <strong>iniciar</strong> el caso de uso.</p>
+</div>
+<div class="step">
+<h4>Postcondiciones</h4>
+<p>Estados del sistema que se presentan <strong>inmediatamente después</strong> de la ejecución.</p>
+</div>
+<div class="step">
+<h4>Reglas de Negocio</h4>
+<p>Restricciones que el usuario impone como <strong>mecanismo de control operativo</strong>.</p>
+</div>
+<div class="step">
+<h4>Excepciones / Alternativas</h4>
+<p>Situaciones que pueden <strong>complicar el flujo normal</strong> y sus posibles alternativas.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ESCENARIOS</div>
+<h2>Paso 4: Escenarios Principal y Secundario</h2>
+</div>
+<div class="content">
+<div class="box box-accent">
+<strong>📖 Descripción Paso a Paso</strong>
+<p>Describe el <strong>proceso detallado</strong> que siguen los actores.</p>
+</div>
+<div class="box box-info">
+<strong>🍳 Analogía: Receta de Cocina</strong>
+<p>Es como describir el procedimiento de una receta:</p>
+<p style="margin-top:.7rem;font-weight:600">Entre más detallados sean los pasos, mejor se entenderá y se asegurará el resultado.</p>
+</div>
+<div class="grid grid-2" style="margin-top:1.5rem">
+<div class="card card-primary">
+<h4>Escenario Principal</h4>
+<p>El <strong>flujo normal</strong> de eventos que ocurre cuando todo funciona según lo esperado.</p>
+<p style="margin-top:.7rem;font-size:.95rem">Describe la secuencia ideal de pasos desde el inicio hasta alcanzar el objetivo.</p>
+</div>
+<div class="card">
+<h4>Escenarios Alternativos</h4>
+<p>Flujos que se desvían del camino principal por <strong>excepciones o decisiones</strong>.</p>
+<p style="margin-top:.7rem;font-size:.95rem">Describen qué hacer cuando ocurre algo inesperado o se toma una decisión diferente.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">6.2 MODELOS UML</div>
+<h2>Diagramas de Casos de Uso</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📊 ¿Por qué Modelar Gráficamente?</strong>
+<p>Un modelo gráfico permite expresar de forma <strong>rápida y sencilla</strong> un escenario que nos interesa resolver.</p>
+<p style="margin-top:.5rem">Es la forma de <strong>abstraer un problema</strong> facilitando la comunicación.</p>
+</div>
+<div class="box box-info">
+<strong>🎨 UML - Unified Modeling Language</strong>
+<p>El modelado de casos de uso fue desarrollado por <strong>Jacobson et al. (1993)</strong> y agregado como herramienta UML.</p>
+</div>
+<h3 style="color:#127A3F;margin:1.5rem 0 1rem;font-size:1.6rem">Los Diagramas Permiten Establecer:</h3>
+<div class="grid grid-3">
+<div class="card card-primary">
+<h4>1. Escenarios</h4>
+<p>Interacción entre personas, organizaciones o sistemas externos con el sistema</p>
+</div>
+<div class="card card-primary">
+<h4>2. Metas</h4>
+<p>Objetivos que se plantea el usuario al usar el sistema</p>
+</div>
+<div class="card card-primary">
+<h4>3. Alcance</h4>
+<p>Límites claros de lo que el sistema hace y no hace</p>
+</div>
+</div>
+<div class="box box-accent" style="margin-top:1.5rem">
+<strong>💡 Efectividad</strong>
+<p>Los casos de uso son una técnica muy efectiva para <strong>indagar requerimientos</strong> y aclarar los escenarios que se podrían presentar con el sistema a los usuarios o stakeholders.</p>
+<p style="margin-top:.5rem;font-style:italic;font-size:.95rem">— Sommerville (2011)</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">DIAGRAMACIÓN</div>
+<h2>Pasos para Dibujar un Diagrama</h2>
+</div>
+<div class="content">
+<div class="steps">
+<div class="step">
+<h4>Establece el Sistema</h4>
+<p>Utiliza un <strong>rectángulo</strong> para establecer los límites o alcances del sistema. Incluye una etiqueta que describa el sistema. Es recomendable trabajar en un solo sistema para generar un caso de uso simple.</p>
+</div>
+<div class="step">
+<h4>Elige los Actores</h4>
+<p>Dibuja los actores usando una <strong>figura de persona</strong> (stick figure). Ubícalos en el lado derecho o izquierdo del rectángulo del sistema. Deja libre la parte superior e inferior. Incluye una etiqueta identificadora al pie de cada actor.</p>
+</div>
+<div class="step">
+<h4>Dibuja las Acciones</h4>
+<p>Usa <strong>óvalos</strong> para las acciones. Comienza con actividades principales y continúa con secundarias. Describe cada actividad empezando por un <strong>verbo en infinitivo</strong> con textos cortos. Las actividades del sistema van <strong>dentro</strong> del rectángulo, las externas van fuera.</p>
+</div>
+<div class="step">
+<h4>Asocia y Relaciona</h4>
+<p>Conecta cada actor con las actividades en las que participa usando <strong>líneas</strong>. Determina si existe alguna relación que <strong>incluya</strong>, <strong>extienda</strong> o <strong>generalice</strong> a otros casos de uso.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RELACIONES</div>
+<h2>Tipos de Relaciones entre Casos de Uso</h2>
+</div>
+<div class="content">
+<div class="grid grid-3">
+<div class="card card-primary">
+<h4>«include»<br>Incluir</h4>
+<p style="margin-top:.8rem">Permite describir con <strong>mayor detalle</strong> alguna actividad del caso de uso.</p>
+<p style="margin-top:.7rem;font-size:.95rem"><strong>Ventaja:</strong> Dividir una actividad en módulos independientes permite <strong>reutilizarlas</strong> y evita repetir pasos.</p>
+<p style="margin-top:.7rem;font-size:.9rem;font-style:italic">Ej: La actividad "Pagar" puede ser reutilizada en "Comprar boleto" y "Reservar hotel"</p>
+</div>
+<div class="card card-primary">
+<h4>«extend»<br>Extender</h4>
+<p style="margin-top:.8rem">Muestra que un caso de uso puede incluir funcionalidad de otro <strong>bajo ciertas circunstancias</strong>.</p>
+<p style="margin-top:.7rem;font-size:.95rem"><strong>Notación:</strong> Línea continua con flecha hacia el caso principal.</p>
+<p style="margin-top:.7rem;font-size:.9rem;font-style:italic">Ej: "Autenticar usuario" se extiende a "Registrar nuevo usuario"</p>
+</div>
+<div class="card card-primary">
+<h4>Generalización</h4>
+<p style="margin-top:.8rem">Técnica para gestionar la <strong>complejidad</strong>.</p>
+<p style="margin-top:.7rem;font-size:.95rem">Coloca la actividad de forma <strong>"general"</strong> y se relaciona con actividades más <strong>específicas</strong>.</p>
+<p style="margin-top:.7rem;font-size:.95rem"><strong>Notación:</strong> Flechas sin relleno desde lo específico hacia lo general.</p>
+</div>
+</div>
+<div class="box box-accent" style="margin-top:1.5rem">
+<strong>💡 Ejemplo Visual</strong>
+<p>En un sistema de restaurante:</p>
+<ul style="margin-top:.5rem">
+<li><strong>«include»:</strong> "Ordenar comida" incluye "Pagar"</li>
+<li><strong>«extend»:</strong> "Ordenar comida" puede extenderse a "Aplicar descuento" si hay cupón</li>
+<li><strong>Generalización:</strong> "Pagar" es general → "Pagar con tarjeta" y "Pagar en efectivo" son específicos</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">6.3 DOCUMENTACIÓN</div>
+<h2>Plantilla de Casos de Uso</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📄 ¿Existe una Plantilla?</strong>
+<p>El formato de especificación de casos de uso debe <strong>ajustarse a las necesidades</strong> de cada organización.</p>
+<p style="margin-top:.5rem">Sin embargo, existen <strong>20 secciones estándar</strong> recomendadas.</p>
+</div>
+<table style="font-size:.9rem">
+<tr><th style="width:8%">#</th><th style="width:25%">Sección</th><th>Contenido</th></tr>
+<tr><td>1</td><td>Diagrama</td><td>Diagrama UML del caso de uso</td></tr>
+<tr><td>2</td><td>Identificación</td><td>Código único e irrepetible (ej: CU-LOGIN-v1.0)</td></tr>
+<tr><td>3</td><td>Nombre</td><td>Descripción breve del caso</td></tr>
+<tr><td>4</td><td>Historial</td><td>Registro de cambios del documento</td></tr>
+<tr><td>5</td><td>Autores</td><td>Nombres de quienes redactaron</td></tr>
+<tr><td>6</td><td>Prioridad</td><td>Importancia según técnica de priorización</td></tr>
+<tr><td>7</td><td>Criticidad</td><td>Daño potencial si el caso falla</td></tr>
+<tr><td>8</td><td>Fuente</td><td>Origen de información (stakeholder, doc, sistema)</td></tr>
+<tr><td>9</td><td>Responsable</td><td>Representante del usuario final</td></tr>
+<tr><td>10</td><td>Descripción</td><td>Descripción breve del caso de uso</td></tr>
+</table>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">DOCUMENTACIÓN (CONT.)</div>
+<h2>Secciones 11-20</h2>
+</div>
+<div class="content">
+<table style="font-size:.9rem">
+<tr><th style="width:8%">#</th><th style="width:25%">Sección</th><th>Contenido</th></tr>
+<tr><td>11</td><td>Actores</td><td>Lista de actores que participaron</td></tr>
+<tr><td>12</td><td>Info. Contexto</td><td>Objetivo, alcance, precondiciones, evento disparo, postcondiciones, reglas negocio, excepciones</td></tr>
+<tr><td>13</td><td>Resultado</td><td>Descripción de resultados producidos</td></tr>
+<tr><td>14</td><td>Escenario Principal</td><td>Flujo normal paso a paso</td></tr>
+<tr><td>15</td><td>Escenarios Alternos</td><td>Extensiones y casos especiales</td></tr>
+<tr><td>16</td><td>Puntos Extensión</td><td>Referencias a otros casos de uso</td></tr>
+<tr><td>17</td><td>Req. Calidad</td><td>Referencia a doc. de requerimientos de calidad</td></tr>
+<tr><td>18</td><td>Definiciones</td><td>Glosario de términos, acrónimos y abreviaciones</td></tr>
+<tr><td>19</td><td>Firma Aceptación</td><td>Espacio para firma del responsable</td></tr>
+<tr><td>20</td><td>Anexos</td><td>Documentos complementarios (wireframes, etc.)</td></tr>
+</table>
+<div class="box box-accent" style="margin-top:1.5rem">
+<strong>💡 Wireframes</strong>
+<p>Son <strong>prototipos</strong> que muestran cómo podría verse el sistema. Muy útiles en la revisión de casos de uso.</p>
+<p style="margin-top:.5rem">Deben incluir: identificador, referencia al caso de uso, fecha, historial, autor y descripción.</p>
+<p style="margin-top:.7rem;font-weight:600;color:#d4a017">⚠️ Importante: Aclarar al cliente que son de referencia y el diseño podría cambiar.</p>
+</div>
+</div>
+</div>
+
+<!-- ACTIVIDAD INDIVIDUAL -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD</div>
+<h2>Ejercicio Individual en Clase</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">📝 Crea tu Propio Caso de Uso</div>
+<div class="activity-box">
+<p style="font-size:1.1rem;font-weight:600;color:#127A3F">Instrucciones:</p>
+<p style="margin-top:.5rem">Elige UNO de los siguientes sistemas y desarrolla un caso de uso completo:</p>
+</div>
+<div class="activity-subtitle">Opciones de Sistema:</div>
+<div class="grid grid-2">
+<div class="card card-primary">
+<h4>🏥 Sistema de Citas Médicas</h4>
+<p>Paciente agenda cita con especialista</p>
+</div>
+<div class="card card-primary">
+<h4>📚 Biblioteca Digital</h4>
+<p>Usuario reserva y descarga libro electrónico</p>
+</div>
+<div class="card card-primary">
+<h4>🍕 Pedido de Comida</h4>
+<p>Cliente ordena comida a domicilio</p>
+</div>
+<div class="card card-primary">
+<h4>🎓 Sistema Escolar</h4>
+<p>Estudiante se inscribe a una materia</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD (CONT.)</div>
+<h2>Entregables de la Actividad</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-subtitle">✅ Debes Incluir:</div>
+<div class="steps" style="margin-top:1.5rem">
+<div class="step">
+<h4>Diagrama de Caso de Uso</h4>
+<p>Dibuja el diagrama UML completo con: sistema (rectángulo), actores (figuras), acciones (óvalos) y relaciones.</p>
+</div>
+<div class="step">
+<h4>Identificar Actores</h4>
+<p>Lista de actores <strong>primarios</strong> y <strong>secundarios</strong> con sus roles específicos.</p>
+</div>
+<div class="step">
+<h4>Información de Contexto</h4>
+<p>Objetivo, precondiciones, evento de disparo, postcondiciones y al menos 2 reglas de negocio.</p>
+</div>
+<div class="step">
+<h4>Escenario Principal</h4>
+<p>Descripción paso a paso (mínimo 5 pasos) del flujo normal de eventos.</p>
+</div>
+<div class="step">
+<h4>Escenario Alternativo</h4>
+<p>Al menos 1 excepción o flujo alternativo.</p>
+</div>
+</div>
+<div class="box box-warn" style="margin-top:1.5rem">
+<strong>⏱️ Tiempo: 25 minutos</strong>
+<p>Trabaja de forma individual. Puedes usar papel o herramientas digitales.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EJEMPLO COMPLETO</div>
+<h2>Sistema de Navegación GPS</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🗺️ Caso de Uso: Navegar a un Destino</strong>
+<p><span class="code">CU-NAVSYS-v2.5</span></p>
+</div>
+<div class="grid grid-2">
+<div class="card">
+<h4>Actores</h4>
+<ul style="font-size:.95rem">
+<li>Operador de rutas</li>
+<li>Conductor</li>
+<li>Sistema Satelital GPS</li>
+<li>Servidor de tráfico</li>
+</ul>
+</div>
+<div class="card">
+<h4>Objetivo</h4>
+<p>Mostrar ruta más óptima desde origen al destino</p>
+</div>
+</div>
+<div class="box box-info" style="margin-top:1rem">
+<strong>📋 Reglas de Negocio</strong>
+<p><strong>RN01:</strong> La ruta debe contemplar información de tráfico en línea<br>
+<strong>RN02:</strong> El estimado debe usar límite de velocidad de 95 km/h</p>
+</div>
+<div class="box box-accent">
+<strong>🎬 Escenario Principal (7 pasos)</strong>
+<ol style="margin-top:.7rem;padding-left:2rem;list-style:decimal;font-size:.95rem">
+<li style="margin-bottom:.5rem;padding-left:.3rem">Sistema pide destino deseado</li>
+<li style="margin-bottom:.5rem;padding-left:.3rem">Conductor ingresa dirección destino</li>
+<li style="margin-bottom:.5rem;padding-left:.3rem">Sistema señala destino en mapas</li>
+<li style="margin-bottom:.5rem;padding-left:.3rem">Sistema calcula ruta adecuada basada en posición actual</li>
+<li style="margin-bottom:.5rem;padding-left:.3rem">Sistema muestra mapa con posición y ruta</li>
+<li style="margin-bottom:.5rem;padding-left:.3rem">Sistema actualiza tiempo restante</li>
+<li style="margin-bottom:.5rem;padding-left:.3rem">Al llegar, muestra "Ha llegado al destino"</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EJEMPLO (CONT.)</div>
+<h2>Escenarios Alternativos y Extensiones</h2>
+</div>
+<div class="content">
+<div class="box box-warn">
+<strong>🔀 Escenario Alternativo</strong>
+<p><strong>4a.</strong> Sistema calculará ruta evitando zonas congestionadas:</p>
+<ul style="margin-top:.7rem;font-size:.95rem">
+<li><strong>4a.1</strong> Sistema mantiene actualizada info de tráfico</li>
+<li><strong>4a.2</strong> Sistema recalcula ruta evitando congestión</li>
+</ul>
+</div>
+<div class="box box-info">
+<strong>🔗 Puntos de Extensión</strong>
+<p>Descargar información de tráfico → <span class="code">CU-InfoTrafico-v2.5</span></p>
+</div>
+<div class="box box-accent">
+<strong>✅ Requerimientos de Calidad</strong>
+<p><strong>QR.01:</strong> Tiempo de respuesta a solicitud de ruta<br>
+<strong>QR.15:</strong> Condiciones de operación</p>
+</div>
+<div class="box">
+<strong>📐 Wireframe Asociado</strong>
+<p><span class="code">WF-NAVSYS-v1.0</span> - Ruta de navegación</p>
+<p style="margin-top:.5rem;font-size:.95rem">Descripción: Sistema mostrará posibles rutas en un color y ruta recorrida en otro color.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">BUENAS PRÁCTICAS</div>
+<h2>Consejos para Documentar</h2>
+</div>
+<div class="content">
+<div class="grid grid-2">
+<div class="card card-primary">
+<h4>✓ Hacer</h4>
+<ul style="font-size:.95rem">
+<li>Usar lenguaje claro y simple</li>
+<li>Comenzar acciones con verbos infinitivos</li>
+<li>Numerar pasos secuencialmente</li>
+<li>Validar con el usuario final</li>
+<li>Mantener actualizado el historial</li>
+<li>Incluir códigos únicos</li>
+<li>Documentar excepciones</li>
+<li>Adjuntar wireframes cuando sea útil</li>
+</ul>
+</div>
+<div class="card">
+<h4>✗ Evitar</h4>
+<ul style="font-size:.95rem">
+<li>Descripciones ambiguas</li>
+<li>Términos técnicos sin definir</li>
+<li>Casos de uso muy complejos</li>
+<li>Omitir actores secundarios</li>
+<li>Ignorar flujos alternativos</li>
+<li>Copiar-pegar sin adaptar</li>
+<li>Olvidar reglas de negocio</li>
+<li>No obtener firma de aceptación</li>
+</ul>
+</div>
+</div>
+<div class="box box-accent" style="margin-top:1.5rem">
+<strong>💡 Recordatorio Clave</strong>
+<p style="font-size:1.1rem">"Un caso de uso es tan bueno como lo sean sus autores."</p>
+<p style="margin-top:.7rem">Invierte tiempo en redactar con claridad. Un caso de uso bien documentado ahorra tiempo y malentendidos en el desarrollo.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RESUMEN</div>
+<h2>Puntos Clave</h2>
+</div>
+<div class="content">
+<div class="grid grid-3">
+<div class="card card-primary">
+<h4>📖 Casos de Uso</h4>
+<p>Herramienta fundamental para documentar requerimientos de forma clara para cliente y equipo</p>
+</div>
+<div class="card card-primary">
+<h4>👥 Actores</h4>
+<p>Primarios (necesitan resultado) y Secundarios (soportan proceso)</p>
+</div>
+<div class="card card-primary">
+<h4>📊 UML</h4>
+<p>Diagramas con rectángulo (sistema), figuras (actores) y óvalos (acciones)</p>
+</div>
+<div class="card card-primary">
+<h4>🔗 Relaciones</h4>
+<p>«include», «extend» y Generalización</p>
+</div>
+<div class="card card-primary">
+<h4>📄 Documentación</h4>
+<p>Plantilla de 20 secciones estándar ajustable a la organización</p>
+</div>
+<div class="card card-primary">
+<h4>🎨 Wireframes</h4>
+<p>Prototipos visuales que complementan la documentación</p>
+</div>
+</div>
+<div class="box box-accent" style="margin-top:2rem">
+<strong>🎯 Objetivo Final</strong>
+<p>Crear documentación de requerimientos que sea:</p>
+<ul style="margin-top:.5rem">
+<li><strong>Clara:</strong> Comprensible para todos los stakeholders</li>
+<li><strong>Completa:</strong> Cubre flujos normales y alternativos</li>
+<li><strong>Validable:</strong> Permite verificar si el software cumple objetivos</li>
+<li><strong>Mantenible:</strong> Fácil de actualizar cuando hay cambios</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">BIBLIOGRAFÍA</div>
+<h2>Referencias</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>[1]</strong> Jacobson, I., Christerson, M., Jonsson, P. y Overgaard, G. (1993). <em>Object-oriented software engineering.</em> Wokingham: Addison-Wesley.
+</div>
+<div class="box">
+<strong>[2]</strong> Pohl, K. y Rupp, C. (2011). <em>Requirements engineering fundamentals.</em> EE. UU: Rocky Nook.
+</div>
+<div class="box">
+<strong>[3]</strong> Sommerville, I. (2011). <em>Ingeniería de software</em> (9ª ed.). México: Pearson.
+</div>
+<div class="box">
+<strong>[4]</strong> Tsui, F., Karam, O. y Bernal, B. (2013). <em>Essentials of Software Engineering</em> (3ª ed.). EE. UU: Jones & Bartlett Learning.
+</div>
+<div class="box box-info" style="margin-top:2rem">
+<strong>🔗 Recursos Adicionales</strong>
+<p>• UML.org - Especificaciones oficiales de UML<br>
+• MSDN Microsoft - Guías de diagramas de casos de uso<br>
+• IEEE - Estándares de documentación de software</p>
+</div>
+</div>
+</div>
+
+<div class="slide cover">
+<h1>¡Excelente Trabajo!</h1>
+<div class="line"></div>
+<p class="subtitle">Fin del Tema 6</p>
+<p class="meta">Ingeniería de Requerimientos de Software</p>
+<p class="help" style="margin-top:3rem">Ahora puedes documentar casos de uso profesionales 💻</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">18</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>
