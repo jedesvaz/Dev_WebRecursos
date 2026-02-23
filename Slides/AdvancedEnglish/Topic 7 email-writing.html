@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Email Writing - Advanced English</title>
+<link href="https://fonts.googleapis.com/css2?family=Product+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Roboto',sans-serif;background:#fff;color:#202124;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3rem 5rem;flex-direction:column}.slide.active{display:flex}.cover{background:linear-gradient(135deg,#4285F4,#34A853,#FBBC04,#EA4335);justify-content:center;align-items:center;text-align:center;position:relative}.cover h1{font-family:'Product Sans',sans-serif;font-size:5rem;font-weight:700;margin-bottom:2rem;color:#fff;letter-spacing:-1px}.cover .subtitle{font-size:1.8rem;color:#fff;opacity:.95;margin-bottom:1rem;font-weight:400}.cover .line{width:120px;height:5px;background:#fff;margin:2rem auto;border-radius:3px}.cover .meta{margin-top:1.5rem;font-size:1.1rem;color:#fff;opacity:.9;font-weight:400}.cover .help{margin-top:3rem;font-size:1rem;color:#fff;opacity:.8}.slide-header{margin-bottom:2rem;flex-shrink:0;padding-bottom:1rem;border-bottom:4px solid #4285F4}.slide-number{color:#4285F4;font-size:.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:.6rem}h2{font-family:'Product Sans',sans-serif;font-size:2.8rem;color:#202124;font-weight:700;letter-spacing:-.5px}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:8px}.content::-webkit-scrollbar-track{background:#f1f3f4;border-radius:4px}.content::-webkit-scrollbar-thumb{background:#4285F4;border-radius:4px}p{font-size:1.08rem;line-height:1.8;margin-bottom:1.3rem;color:#5f6368;font-weight:400}ul{list-style:none;margin:1.3rem 0}ul li{font-size:1.05rem;line-height:1.75;margin-bottom:.85rem;padding-left:2rem;position:relative;color:#5f6368}ul li::before{content:'●';position:absolute;left:0;color:#4285F4;font-size:1.2rem;font-weight:700}.box{background:#f8f9fa;padding:1.8rem 2rem;margin:1.6rem 0;border-radius:12px;border-left:5px solid #4285F4}.box strong{color:#4285F4;display:block;margin-bottom:.9rem;font-size:1.15rem;font-weight:700}.box p{margin-bottom:.6rem;color:#5f6368}.box-blue{border-left-color:#4285F4;background:#e8f0fe}.box-red{border-left-color:#EA4335;background:#fce8e6}.box-yellow{border-left-color:#FBBC04;background:#fef7e0}.box-green{border-left-color:#34A853;background:#e6f4ea}.grid{display:grid;gap:1.5rem;margin:1.5rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#fff;padding:1.8rem;border-radius:12px;border:2px solid #e8eaed;transition:all .3s;box-shadow:0 1px 3px rgba(60,64,67,.15)}.card:hover{border-color:#4285F4;box-shadow:0 4px 12px rgba(66,133,244,.2)}.card h4{color:#4285F4;margin-bottom:.9rem;font-size:1.2rem;font-weight:700}.card p{font-size:1.02rem;margin-bottom:.5rem;color:#5f6368}.card-google{background:linear-gradient(135deg,#f8f9fa,#fff);border-color:#4285F4}.em{color:#4285F4;font-weight:700}.code{background:#202124;color:#34A853;padding:.4rem .8rem;border-radius:6px;font-family:'Roboto Mono',monospace;font-size:.95rem}.activity-section{background:linear-gradient(135deg,#e8f0fe,#f8f9fa);padding:2.5rem;border-radius:16px;border:4px solid #4285F4;margin:2rem 0;box-shadow:0 4px 16px rgba(66,133,244,.2)}.activity-title{color:#4285F4;font-size:2.3rem;font-weight:700;margin-bottom:1.8rem;text-align:center;font-family:'Product Sans',sans-serif}.activity-box{background:#fff;padding:1.8rem;border-radius:10px;margin:1.3rem 0;border-left:5px solid #4285F4}.email-example{background:#202124;color:#e8eaed;padding:2rem;border-radius:10px;margin:1.5rem 0;font-family:'Roboto Mono',monospace;font-size:.95rem;line-height:1.7}.email-header{color:#FBBC04;font-weight:700;margin-bottom:.5rem}.email-from{color:#34A853}.email-body{margin-top:1rem;color:#e8eaed}table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(60,64,67,.15)}th,td{padding:1rem;text-align:left;border-bottom:1px solid #e8eaed}th{background:#4285F4;color:#fff;font-weight:700;font-size:.95rem;text-transform:uppercase}tr:last-child td{border-bottom:none}tr:hover{background:#f8f9fa}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin:1.5rem 0}.comparison-box{padding:1.5rem;border-radius:10px}.wrong{background:#fce8e6;border:3px solid #EA4335}.right{background:#e6f4ea;border:3px solid #34A853}.wrong h4{color:#EA4335;font-size:1.2rem;font-weight:700;margin-bottom:1rem}.right h4{color:#34A853;font-size:1.2rem;font-weight:700;margin-bottom:1rem}.nav{position:fixed;bottom:2.5rem;right:2.5rem;display:flex;gap:1.5rem;z-index:1000}.btn{width:65px;height:65px;background:#4285F4;border:none;border-radius:50%;color:#fff;font-size:1.7rem;cursor:pointer;box-shadow:0 4px 16px rgba(66,133,244,.4);transition:all .3s;font-weight:700;display:flex;align-items:center;justify-content:center}.btn:hover:not(:disabled){background:#1a73e8;transform:scale(1.08);box-shadow:0 6px 20px rgba(66,133,244,.5)}.btn:disabled{opacity:.3;cursor:not-allowed}.counter{position:fixed;bottom:2.5rem;left:2.5rem;background:#fff;padding:1rem 2rem;border-radius:30px;border:3px solid #4285F4;color:#4285F4;font-weight:700;z-index:1000;box-shadow:0 4px 16px rgba(66,133,244,.2);font-size:1.1rem}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:3.8rem}h2{font-size:2.3rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:2rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="slide cover active">
+<h1>Email Writing</h1>
+<div class="line"></div>
+<p class="subtitle">Topic 7: Professional Email Communication</p>
+<p class="meta">Advanced English 2</p>
+<p class="help">→ Navigate with arrow keys</p>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INTRODUCTION</div>
+<h2>Email vs Formal Letters</h2>
+</div>
+<div class="content">
+<div class="box box-blue">
+<strong>📧 Key Differences</strong>
+<p>Both emails and formal business letters should be drafted professionally, but they have important differences.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-google">
+<h4>1. Volume & Simplicity</h4>
+<p>The typical person receives <strong>tens to hundreds of emails every day</strong>.</p>
+<p style="margin-top:.8rem">✓ Simplicity is appreciated</p>
+<p>✓ No need for introduction/body/conclusion structure</p>
+</div>
+<div class="card card-google">
+<h4>2. Tone Flexibility</h4>
+<p>Email allows for <strong>more informal expressions</strong>, especially if you know your recipient.</p>
+<p style="margin-top:.8rem">⚠️ Important: <span class="em">Informal ≠ Unprofessional</span></p>
+</div>
+</div>
+<div class="box box-yellow" style="margin-top:2rem">
+<strong>💡 Important Rule</strong>
+<p>There is <strong>no magic rule</strong> for how formal your email should be.</p>
+<p style="margin-top:.5rem">It depends on:</p>
+<ul style="margin-top:.5rem">
+<li>Who the recipient is</li>
+<li>Your corporate culture</li>
+<li>Your existing relationship with the recipient</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">7.1 KEEPING IT SIMPLE</div>
+<h2>Unprofessional vs Informal</h2>
+</div>
+<div class="content">
+<div class="comparison">
+<div class="comparison-box wrong">
+<h4>✗ Unprofessional (UNACCEPTABLE)</h4>
+<ul style="font-size:.95rem;margin-top:1rem">
+<li>"Text message" language: "2morrow", "u"</li>
+<li>Not using proper capitalization</li>
+<li>Missing punctuation</li>
+<li>Sending without proofreading</li>
+<li>Typing in "ALL CAPS"</li>
+</ul>
+</div>
+<div class="comparison-box right">
+<h4>✓ Informal (ACCEPTABLE)</h4>
+<ul style="font-size:.95rem;margin-top:1rem">
+<li>Writing in shortened sentences</li>
+<li>Using brevity</li>
+<li>Bulleted lists instead of paragraphs</li>
+<li><strong>Shorter is better!</strong></li>
+</ul>
+</div>
+</div>
+<div class="box box-green" style="margin-top:2rem">
+<strong>✅ When to Use Informal Language</strong>
+<p>Nearly all informal terms in the chart would be appropriate for a business email to an <strong>acquaintance</strong>.</p>
+<p style="margin-top:.7rem">If emailing a business contact you <strong>don't know</strong>, use more formal English.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">SHORTENED SENTENCES</div>
+<h2>Brevity Matters</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📊 Why Brevity?</strong>
+<p>Many people's inboxes are <span class="em">bombarded</span> daily with emails.</p>
+<p style="margin-top:.5rem">People appreciate emails short enough to <strong>scan and prioritize</strong> without scrolling.</p>
+</div>
+<div class="box box-yellow">
+<strong>💡 Expert Recommendation</strong>
+<p>Keep business emails to a minimum of <strong>five sentences</strong> whenever possible.</p>
+</div>
+<h3 style="color:#4285F4;margin:1.5rem 0 1rem;font-size:1.5rem">How to Shorten Sentences</h3>
+<div class="box box-blue">
+<strong>Technique: Omit pronouns and auxiliary verbs</strong>
+<p>The pronoun <span class="em">I</span> is easily omitted because your recipient understands you're writing in first person.</p>
+<p style="margin-top:.7rem">⚠️ Still use: capital letters + proper punctuation</p>
+</div>
+<table>
+<tr><th>Original Sentence</th><th>Shortened Sentence</th></tr>
+<tr><td>I saw Mario today.</td><td><strong>Saw Mario today.</strong></td></tr>
+<tr><td>I'll talk to you soon.</td><td><strong>Talk soon. / Talk to you soon.</strong></td></tr>
+<tr><td>I'll see you soon.</td><td><strong>See you soon.</strong></td></tr>
+<tr><td>I received the package.</td><td><strong>Got the package.</strong></td></tr>
+<tr><td>I've been out of the office all day.</td><td><strong>Been out of the office all day.</strong></td></tr>
+</table>
+<div class="box box-red" style="margin-top:1.5rem">
+<strong>⚠️ Important Note</strong>
+<p>Only use shortened sentences with business contacts with whom you've <strong>already established a rapport</strong>.</p>
+<p style="margin-top:.5rem">Extremely informal – not for first-time contacts!</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EMAIL EXAMPLE</div>
+<h2>Shortened & Concise</h2>
+</div>
+<div class="content">
+<div class="email-example">
+<div class="email-header">To: <span class="email-from">psepulveda@abc.net</span></div>
+<div class="email-header">From: <span class="email-from">rjohnson@abc.net</span></div>
+<div class="email-body">
+Pedro,
+
+Saw your message about the accounting error. Sorry for the late reply--was in client meeting all morning. Will look into it as soon as I get back to the office.
+
+Thanks,
+Rachel
+</div>
+</div>
+<div class="box box-green" style="margin-top:1.5rem">
+<strong>✓ What Makes This Effective?</strong>
+<ul style="margin-top:.7rem">
+<li>Short and scannable</li>
+<li>Uses shortened sentences appropriately</li>
+<li>Still polite (greeting, thanks)</li>
+<li>Gets to the point immediately</li>
+<li>Clear action (will look into it)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">AVOID FLOWERY LANGUAGE</div>
+<h2>Plain English Wins</h2>
+</div>
+<div class="content">
+<div class="box box-yellow">
+<strong>⚠️ Common Mistake</strong>
+<p>Using unnecessarily formal or flowery language to appear more intelligent or important.</p>
+<p style="margin-top:.5rem"><strong>Problem:</strong> Elaborate language doesn't add value and slows the reader down.</p>
+</div>
+<div class="box">
+<strong>🎯 What Busy People Appreciate</strong>
+<ul style="margin-top:.7rem">
+<li><strong>"Plain English"</strong> – Clear, straightforward language</li>
+<li><strong>"Tight Writing"</strong> – Eliminating unnecessary words</li>
+<li>Getting to the point immediately</li>
+</ul>
+</div>
+<div class="box box-blue" style="margin-top:1.5rem">
+<strong>📝 Definition: Tight Writing</strong>
+<p>The skill of <span class="em">identifying and eliminating all unnecessary words</span> so that your ideas are clear to read.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">COMPARISON</div>
+<h2>Flowery vs Concise</h2>
+</div>
+<div class="content">
+<div class="box box-red">
+<strong>✗ FLOWERY VERSION (Too Long)</strong>
+<div class="email-example" style="margin-top:1rem;font-size:.85rem">
+<div class="email-header">To: jlawson@abc.net | From: rjohnson@abc.net | Re: Michael DeAngelo</div>
+<div class="email-body">
+Dear Jan,
+
+Good afternoon. My name is Rachel, and I am the personal assistant to Michael DeAngelo, Regional Accounts Manager (Texas and Oklahoma).
+
+I'm writing you on his behalf because, at this point in time, his expense reports from the March 7th trip to London still have not been processed. As such, Mr. DeAngelo is concerned about using his personal credit card for any subsequent business travel and is hoping for a prompt resolution to this issue.
+
+It is my understanding that you are in charge of processing these reports, so I would be grateful if you could assist me. However, if this is not your area and I should speak with someone else instead, I would appreciate you providing me with the necessary contact information. Please do not hesitate to contact me if there is anything I could do in order to facilitate this process. I am happy to help in any way possible.
+
+You can reach me at rjohnson@abc.net or (414)555-2826. Thank you so much for prompt attention in this matter. Have a wonderful day.
+
+Sincerely, Rachel Johnson
+</div>
+</div>
+<p style="margin-top:1rem;font-weight:600">Problems:</p>
+<ul style="margin-top:.5rem;font-size:.95rem">
+<li>Unnecessary background info</li>
+<li>Redundant contact info (already in signature)</li>
+<li>Unnecessarily formal for same organization</li>
+<li>Vague subject line</li>
+<li>Too long!</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">IMPROVED VERSION</div>
+<h2>Concise & Effective</h2>
+</div>
+<div class="content">
+<div class="box box-green">
+<strong>✓ CONCISE VERSION (Perfect)</strong>
+<div class="email-example" style="margin-top:1rem">
+<div class="email-header">To: jlawson@abc.net | From: rjohnson@abc.net</div>
+<div class="email-header">RE: <span style="color:#FBBC04">Need Expense Report Processed</span></div>
+<div class="email-body">
+Dear Jan,
+
+Michael DeAngelo's expense reports from the March 7th trip to London have not been processed yet. Please let me know what the status is or if you need anything else from our end. Thanks.
+
+Sincerely,
+Rachel Johnson
+Assistant, Regional Accounts
+Telephone (414)555-2826
+</div>
+</div>
+</div>
+<div class="grid grid-3" style="margin-top:1.5rem">
+<div class="card">
+<h4>✓ Still Polite</h4>
+<p>Uses "Dear," "Please," and "Thanks"</p>
+</div>
+<div class="card">
+<h4>✓ Clear Request</h4>
+<p>Topic and action needed are obvious</p>
+</div>
+<div class="card">
+<h4>✓ Professional</h4>
+<p>Complete sentences, proper grammar</p>
+</div>
+</div>
+<div class="box box-blue" style="margin-top:1.5rem">
+<strong>🎯 Key Difference</strong>
+<p>Jan can assess the email in <strong>one glance</strong>. This is more convenient and might lead to a faster response.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CRITICAL WARNING</div>
+<h2>Email Privacy</h2>
+</div>
+<div class="content">
+<div class="box box-red" style="padding:2.5rem">
+<strong style="font-size:1.5rem">⚠️ NEVER assume your email will be seen only by the person to whom you send it.</strong>
+<p style="margin-top:1.5rem;font-size:1.15rem">Email is <span class="em">permanent</span>.</p>
+<p style="margin-top:1rem;font-size:1.1rem">If you send it on a company-owned device or over a company network, it is most likely <strong>not private</strong>.</p>
+<p style="margin-top:1.5rem;font-size:1.15rem;font-weight:600;color:#EA4335">If you would be embarrassed by someone other than your intended recipient reading the email, <u>DO NOT SEND IT</u>.</p>
+</div>
+<div class="grid grid-2" style="margin-top:2rem">
+<div class="card">
+<h4>Email Can Be:</h4>
+<ul style="font-size:.95rem;margin-top:.7rem">
+<li>Forwarded to anyone</li>
+<li>Stored permanently on servers</li>
+<li>Retrieved years later</li>
+<li>Used as legal evidence</li>
+</ul>
+</div>
+<div class="card">
+<h4>Always Remember:</h4>
+<ul style="font-size:.95rem;margin-top:.7rem">
+<li>Think before you send</li>
+<li>Proofread carefully</li>
+<li>Keep it professional</li>
+<li>Assume it's public</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ACTIVIDAD INDIVIDUAL -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVITY</div>
+<h2>Individual Exercise</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">📝 Write a Professional Email</div>
+<div class="activity-box">
+<p style="font-size:1.15rem;font-weight:700;color:#4285F4">Scenario:</p>
+<p style="margin-top:.8rem">You are <strong>Sarah Martinez</strong>, Marketing Coordinator at TechCorp. Your colleague <strong>James Wilson</strong> (jwilson@techcorp.com) asked you last week to send him the Q4 marketing report. You forgot, and now he's waiting for it to prepare for tomorrow's presentation.</p>
+</div>
+<div class="activity-box" style="margin-top:1.5rem">
+<p style="font-size:1.1rem;font-weight:700;color:#202124">Task:</p>
+<p style="margin-top:.7rem">Write a <strong>professional email</strong> to James that:</p>
+<ol style="margin-top:.8rem;padding-left:2rem;list-style:decimal">
+<li style="margin-bottom:.8rem;padding-left:.5rem">Apologizes for the delay</li>
+<li style="margin-bottom:.8rem;padding-left:.5rem">Tells him you're sending the report now (attached)</li>
+<li style="margin-bottom:.8rem;padding-left:.5rem">Offers to help if he needs anything else</li>
+<li style="margin-bottom:.8rem;padding-left:.5rem">Uses appropriate tone (informal but professional)</li>
+<li style="margin-bottom:.8rem;padding-left:.5rem">Practices "tight writing" (concise, no unnecessary words)</li>
+</ol>
+</div>
+<div class="box box-yellow" style="margin-top:1.5rem">
+<strong>⏱️ Time: 10 minutes</strong>
+<p>Include: To, From, Subject line, greeting, body, closing, and signature.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">7.2 VOCABULARY</div>
+<h2>Computer & Internet Terms</h2>
+</div>
+<div class="content">
+<table style="font-size:.92rem">
+<tr><th style="width:22%">Term</th><th>Definition</th></tr>
+<tr><td><strong>netiquette</strong></td><td>(slang) Etiquette for the Internet</td></tr>
+<tr><td><strong>ISP</strong></td><td>Internet Service Provider (the company that gives you Internet)</td></tr>
+<tr><td><strong>web browser</strong></td><td>Software application for using the Internet (Chrome, Firefox, Safari)</td></tr>
+<tr><td><strong>blog</strong></td><td>Shortened name for "web log" – a type of online journal</td></tr>
+<tr><td><strong>dropdown menu</strong></td><td>Website element that opens a list when you mouse over or click</td></tr>
+<tr><td><strong>pop up</strong></td><td>Ad that opens in a new window automatically (usually annoying)</td></tr>
+<tr><td><strong>pop up blocker</strong></td><td>Program that prevents pop ups from opening</td></tr>
+<tr><td><strong>to forward</strong></td><td>To re-send a message you received to another person/group</td></tr>
+<tr><td><strong>to bookmark</strong></td><td>To save webpage location for one-click access</td></tr>
+<tr><td><strong>to unsubscribe</strong></td><td>To remove your email from a mailing list</td></tr>
+<tr><td><strong>FAQs</strong></td><td>Frequently Asked Questions</td></tr>
+<tr><td><strong>cloud storage</strong></td><td>Data storage on remote servers (OneDrive, Dropbox, Google Drive)</td></tr>
+</table>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EMAIL VOCABULARY</div>
+<h2>Essential Terms</h2>
+</div>
+<div class="content">
+<div class="grid grid-2">
+<div class="card card-google">
+<h4>Cc: (Carbon Copy)</h4>
+<p>To send a copy of your email to someone other than the primary recipient, for keeping them informed.</p>
+<p style="margin-top:.7rem;font-size:.95rem">⚠️ Names and emails in Cc are <strong>visible to everyone</strong>.</p>
+</div>
+<div class="card card-google">
+<h4>Bcc: (Blind Carbon Copy)</h4>
+<p>Same as Cc, but recipients <strong>cannot see</strong> the names/addresses of people in Bcc.</p>
+<p style="margin-top:.7rem;font-size:.95rem">Use when you don't want the primary recipient to know someone else got a copy.</p>
+</div>
+<div class="card card-google">
+<h4>Re: (Regarding)</h4>
+<p>With regard to – the <strong>subject</strong> of the email.</p>
+<p style="margin-top:.7rem;font-size:.95rem">Example: <span class="code">Re: Marketing Report</span></p>
+</div>
+<div class="card card-google">
+<h4>@ (at sign/symbol)</h4>
+<p>When saying email aloud, simply say "at".</p>
+<p style="margin-top:.7rem;font-size:.95rem">tom@abc.net = "Tom <strong>at</strong> abc dot net"</p>
+</div>
+<div class="card card-google">
+<h4>drafts</h4>
+<p>Preliminary version of a document. Also refers to the folder containing <strong>saved, unfinished emails</strong> not yet sent.</p>
+</div>
+<div class="card card-google">
+<h4>case sensitive</h4>
+<p>Differentiates between CAPITAL (ABC) and lowercase (abc).</p>
+<p style="margin-top:.7rem;font-size:.95rem">Most passwords are case sensitive!</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">7.3 FUTURE FORMS</div>
+<h2>Expressing the Future in English</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📅 Four Ways to Express Future</strong>
+<p>English has <strong>four different verb forms</strong> to talk about the future – not just "will" and "going to"!</p>
+</div>
+<div class="grid grid-2">
+<div class="card">
+<h4>Examples:</h4>
+<ul style="font-size:.95rem;margin-top:.7rem">
+<li>I <strong>start</strong> my new job next Tuesday.</li>
+<li>I<strong>'ll see</strong> you next Tuesday.</li>
+<li>I <strong>won't be able</strong> to go next Tuesday.</li>
+<li>I<strong>'m going</strong> to Chicago next Tuesday.</li>
+<li>I<strong>'m not driving</strong> on Tuesday. I<strong>'m taking</strong> the train.</li>
+</ul>
+</div>
+<div class="card">
+<h4>All refer to future!</h4>
+<p style="margin-top:.7rem">Different forms = different contexts and nuances.</p>
+<p style="margin-top:.7rem">By understanding these differences, you'll sound <strong>more natural</strong>.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">FUTURE FORMS GUIDE</div>
+<h2>When to Use Each Form</h2>
+</div>
+<div class="content">
+<table style="font-size:.9rem">
+<tr><th style="width:30%">Form</th><th style="width:35%">Use For</th><th>Example</th></tr>
+<tr><td><strong>Present Continuous</strong></td><td>Fixed arrangement</td><td>I'm having lunch with a client next Tuesday.</td></tr>
+<tr><td><strong>Present Simple</strong></td><td>Scheduled/timetabled event</td><td>The concert starts at 9 PM.</td></tr>
+<tr><td><strong>will</strong></td><td>Informed prediction</td><td>You will love the restaurant!</td></tr>
+<tr><td><strong>will</strong></td><td>Offer or promise</td><td>I'll pick you up at 9 AM tomorrow.</td></tr>
+<tr><td><strong>(be) going to</strong></td><td>Plan, intention, decision</td><td>I'm going to reach my sales goal this year.</td></tr>
+<tr><td><strong>Present Simple</strong></td><td>Indisputable future fact</td><td>Christmas is on the 25th.</td></tr>
+<tr><td><strong>Negative Pres. Continuous</strong></td><td>Time-specific refusal</td><td>I'm not going to check emails this weekend.</td></tr>
+<tr><td><strong>Present Continuous</strong></td><td>Opinion about future</td><td>It's going to be really hot tomorrow.</td></tr>
+</table>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">FUTURE EXAMPLES</div>
+<h2>Correct & Incorrect</h2>
+</div>
+<div class="content">
+<div class="grid grid-2">
+<div class="comparison-box right">
+<h4>✓ CORRECT</h4>
+<ul style="margin-top:1rem;font-size:.95rem">
+<li>I <strong>have</strong> an appointment tomorrow.</li>
+<li>It<strong>'s going to snow</strong> tomorrow.</li>
+<li>You <strong>will love</strong> the restaurant.</li>
+<li>You<strong>'re going to love</strong> the restaurant.</li>
+<li>I<strong>'m going</strong> to Miami on Saturday.</li>
+<li>I <strong>go</strong> to Miami on Saturday.</li>
+<li>I<strong>'m going to go</strong> to Miami on Saturday.</li>
+<li>I<strong>'ll go</strong> to Miami on Saturday.</li>
+</ul>
+</div>
+<div class="comparison-box wrong">
+<h4>✗ INCORRECT</h4>
+<ul style="margin-top:1rem;font-size:.95rem">
+<li>I<strong>'m having</strong> an appointment tomorrow.</li>
+<li>It <strong>snows</strong> tomorrow.</li>
+<li>It<strong>'s snowing</strong> tomorrow.</li>
+<li>You <strong>love</strong> the restaurant. [for future]</li>
+<li>You<strong>'re loving</strong> the restaurant. [for future]</li>
+</ul>
+</div>
+</div>
+<div class="box box-blue" style="margin-top:2rem">
+<strong>💡 Important Note</strong>
+<p>For "going to Miami" – all four forms are grammatically correct!</p>
+<p style="margin-top:.5rem">The <strong>best option depends on the context</strong>:</p>
+<ul style="margin-top:.7rem;font-size:.95rem">
+<li>Fixed arrangement? → Present Continuous</li>
+<li>Spontaneous decision? → will</li>
+<li>Prior plan? → going to</li>
+<li>Schedule? → Present Simple</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">SUMMARY</div>
+<h2>Key Takeaways</h2>
+</div>
+<div class="content">
+<div class="grid grid-3">
+<div class="card card-google">
+<h4>Keep It Simple</h4>
+<p>Brevity matters. Aim for 5 sentences. Use tight writing.</p>
+</div>
+<div class="card card-google">
+<h4>Informal ≠ Unprofessional</h4>
+<p>Shortened sentences OK with acquaintances. Always proofread!</p>
+</div>
+<div class="card card-google">
+<h4>Plain English</h4>
+<p>Avoid flowery language. Get to the point immediately.</p>
+</div>
+<div class="card card-google">
+<h4>Email is Permanent</h4>
+<p>Never assume privacy. Think before you send.</p>
+</div>
+<div class="card card-google">
+<h4>Master Vocabulary</h4>
+<p>Know Cc, Bcc, Re, @, netiquette, ISP, etc.</p>
+</div>
+<div class="card card-google">
+<h4>Future Forms</h4>
+<p>4 ways: Present Continuous, Present Simple, will, going to.</p>
+</div>
+</div>
+<div class="box box-green" style="margin-top:2rem">
+<strong>✅ Perfect Professional Email Formula</strong>
+<p style="margin-top:.7rem">Clear subject + Brief greeting + Concise message (5 sentences) + Polite closing + Professional signature</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">BIBLIOGRAPHY</div>
+<h2>Reference</h2>
+</div>
+<div class="content">
+<div class="box" style="padding:3rem">
+<strong style="font-size:1.3rem">📚 Bibliography</strong>
+<p style="margin-top:1.5rem;font-size:1.15rem">Powell, M. (2014). <em>In company 3.0. Intermediate Student's Book.</em> Thailand: Macmillan Press.</p>
+</div>
+<div class="box box-blue" style="margin-top:2rem">
+<strong>🔗 Additional Resources</strong>
+<p style="margin-top:.7rem">• Business Email Writing Guide<br>
+• Professional Communication Standards<br>
+• English Grammar Future Forms</p>
+</div>
+</div>
+</div>
+
+<div class="slide cover">
+<h1>Excellent Work!</h1>
+<div class="line"></div>
+<p class="subtitle">End of Topic 7: Email Writing</p>
+<p class="meta">Advanced English 2</p>
+<p class="help" style="margin-top:3.5rem">Now you can write professional emails confidently! 📧</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">17</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>
