@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Distribuciones de Probabilidad - Bioestadística</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Noto Sans JP',sans-serif;background:#fff;color:#2B3E50;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3rem 5rem;flex-direction:column}.slide.active{display:flex}.cover{background:linear-gradient(135deg,#2B3E50 0%,#5B7C99 100%);justify-content:center;align-items:center;text-align:center;position:relative}.cover::before{content:'';position:absolute;top:0;left:0;width:100%;height:8px;background:#F26522}.cover h1{font-family:'Noto Sans JP',sans-serif;font-size:4.5rem;font-weight:700;margin-bottom:2rem;color:#fff;letter-spacing:-1px}.cover .subtitle{font-size:1.6rem;color:#E8E8E8;margin-bottom:1rem;font-weight:300}.cover .line{width:100px;height:4px;background:#F26522;margin:2rem auto}.cover .meta{margin-top:1.5rem;font-size:1rem;color:#E8E8E8;font-weight:400}.cover .help{margin-top:3rem;font-size:.95rem;color:#E8E8E8;opacity:.8}.slide-header{margin-bottom:2rem;flex-shrink:0;padding-bottom:1rem;border-bottom:3px solid #5B7C99}.slide-number{color:#F26522;font-size:.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:.6rem}h2{font-family:'Noto Sans JP',sans-serif;font-size:2.8rem;color:#2B3E50;font-weight:700;letter-spacing:-.5px}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:6px}.content::-webkit-scrollbar-track{background:#E8E8E8;border-radius:3px}.content::-webkit-scrollbar-thumb{background:#5B7C99;border-radius:3px}p{font-size:1.08rem;line-height:1.8;margin-bottom:1.3rem;color:#4a5568;font-weight:400}ul{list-style:none;margin:1.3rem 0}ul li{font-size:1.05rem;line-height:1.75;margin-bottom:.85rem;padding-left:2rem;position:relative;color:#4a5568}ul li::before{content:'▪';position:absolute;left:0;color:#F26522;font-size:1.4rem;font-weight:700}.box{background:#f8f9fa;padding:1.8rem 2rem;margin:1.6rem 0;border-radius:8px;border-left:5px solid #5B7C99}.box strong{color:#2B3E50;display:block;margin-bottom:.9rem;font-size:1.15rem;font-weight:700}.box p{margin-bottom:.6rem;color:#4a5568}.box-blue{border-left-color:#5B7C99;background:#f0f4f8}.box-orange{border-left-color:#F26522;background:#fff5f0}.box-navy{border-left-color:#2B3E50;background:#f1f3f5}.grid{display:grid;gap:1.5rem;margin:1.5rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#fff;padding:1.8rem;border-radius:8px;border:2px solid #E8E8E8;transition:all .3s;box-shadow:0 1px 3px rgba(43,62,80,.08)}.card:hover{border-color:#5B7C99;box-shadow:0 4px 12px rgba(91,124,153,.15)}.card h4{color:#2B3E50;margin-bottom:.9rem;font-size:1.2rem;font-weight:700}.card p{font-size:1.02rem;margin-bottom:.5rem;color:#4a5568}.card-accent{border-color:#F26522;background:#fff5f0}.em{color:#F26522;font-weight:700}.formula{background:#2B3E50;color:#E8E8E8;padding:2rem 2.5rem;border-radius:8px;font-family:'Roboto Mono',monospace;font-size:1.4rem;text-align:center;margin:1.8rem 0;font-weight:600;box-shadow:0 4px 16px rgba(43,62,80,.2)}.formula-small{font-size:1.1rem;padding:1.3rem 1.8rem}.activity-section{background:linear-gradient(135deg,#f0f4f8,#fff);padding:2.5rem;border-radius:12px;border:4px solid #F26522;margin:2rem 0;box-shadow:0 4px 16px rgba(242,101,34,.15)}.activity-title{color:#F26522;font-size:2.3rem;font-weight:700;margin-bottom:1.8rem;text-align:center}.activity-box{background:#fff;padding:1.8rem;border-radius:8px;margin:1.3rem 0;border-left:5px solid #5B7C99}.example-box{background:#fff5f0;padding:2rem;border-radius:8px;margin:1.5rem 0;border:2px solid #F26522}.example-title{color:#F26522;font-weight:700;font-size:1.3rem;margin-bottom:1rem}table{width:100%;border-collapse:separate;border-spacing:0;margin:1.5rem 0;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(43,62,80,.1)}th,td{padding:1rem;text-align:center;border-bottom:1px solid #E8E8E8}th{background:#5B7C99;color:#fff;font-weight:700;font-size:.95rem}tr:last-child td{border-bottom:none}tr:hover{background:#f8f9fa}.definition{background:#f0f4f8;padding:1.5rem 2rem;border-left:5px solid #2B3E50;border-radius:0 8px 8px 0;margin:1.5rem 0}.definition strong{color:#2B3E50;font-size:1.1rem}.nav{position:fixed;bottom:2.5rem;right:2.5rem;display:flex;gap:1.5rem;z-index:1000}.btn{width:65px;height:65px;background:#5B7C99;border:none;border-radius:50%;color:#fff;font-size:1.7rem;cursor:pointer;box-shadow:0 4px 16px rgba(91,124,153,.3);transition:all .3s;font-weight:700;display:flex;align-items:center;justify-content:center}.btn:hover:not(:disabled){background:#2B3E50;transform:scale(1.08);box-shadow:0 6px 20px rgba(43,62,80,.4)}.btn:disabled{opacity:.3;cursor:not-allowed}.counter{position:fixed;bottom:2.5rem;left:2.5rem;background:#fff;padding:1rem 2rem;border-radius:30px;border:3px solid #5B7C99;color:#2B3E50;font-weight:700;z-index:1000;box-shadow:0 4px 16px rgba(91,124,153,.15);font-size:1.1rem}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:3.5rem}h2{font-size:2.3rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:2rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="slide cover active">
+<h1>Distribuciones de Probabilidad</h1>
+<div class="line"></div>
+<p class="subtitle">Variables Discretas y Distribución Binomial</p>
+<p class="meta">Bioestadística Aplicada | Nivel: Principiante</p>
+<p class="help">→ Navega con las flechas del teclado</p>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INTRODUCCIÓN</div>
+<h2>Variable Aleatoria</h2>
+</div>
+<div class="content">
+<div class="box box-blue">
+<strong>🎲 ¿Qué es una Variable Aleatoria?</strong>
+<p>Es una <span class="em">función</span> que asocia un número (valor real) con cada resultado de un experimento aleatorio.</p>
+</div>
+<div class="grid grid-2">
+<div class="card">
+<h4>Ejemplo Simple: Moneda</h4>
+<p>Espacio muestral: {cara, sello}</p>
+<p style="margin-top:.7rem">Definimos X como:</p>
+<ul style="font-size:.95rem;margin-top:.5rem">
+<li>X(cara) = 0</li>
+<li>X(sello) = 1</li>
+</ul>
+<p style="margin-top:.7rem">Transformamos resultados cualitativos en valores numéricos.</p>
+</div>
+<div class="card card-accent">
+<h4>🩺 Ejemplo Biomédico</h4>
+<p>Prueba diagnóstica de laboratorio</p>
+<p style="margin-top:.7rem">Definimos X como:</p>
+<ul style="font-size:.95rem;margin-top:.5rem">
+<li>X(negativo) = 0</li>
+<li>X(positivo) = 1</li>
+</ul>
+<p style="margin-top:.7rem">Facilita el análisis estadístico de resultados clínicos.</p>
+</div>
+</div>
+<div class="box box-orange" style="margin-top:1.5rem">
+<strong>📊 Tipos de Variables Aleatorias</strong>
+<ul style="margin-top:.7rem">
+<li><strong>Discreta:</strong> Toma valores enteros (contables)</li>
+<li><strong>Continua:</strong> Toma valores reales (medibles)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">4.1 VARIABLE DISCRETA</div>
+<h2>Definición</h2>
+</div>
+<div class="content">
+<div class="definition">
+<strong>📐 Definición: Variable Aleatoria Discreta</strong>
+<p style="margin-top:.7rem">Una variable aleatoria <strong>X</strong> es discreta si existe un conjunto <span class="em">finito o numerable</span> de valores {x₁, x₂, x₃, ...} tal que:</p>
+<div class="formula formula-small" style="margin-top:1rem">
+Σ P(X = xₙ) = 1
+</div>
+<p style="margin-top:.7rem">La probabilidad de que X tome valores fuera del conjunto es <strong>cero</strong>.</p>
+</div>
+<div class="example-box">
+<div class="example-title">🩺 Ejemplo Biomédico: Prueba de Embarazo</div>
+<p>Se realizan pruebas de embarazo a <strong>n = 10</strong> pacientes.</p>
+<p style="margin-top:.7rem">Definimos <strong>X</strong> = número de pruebas positivas</p>
+<p style="margin-top:.7rem">Valores posibles: <strong>X ∈ {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}</strong></p>
+<p style="margin-top:1rem">X es una variable aleatoria <span class="em">discreta</span> porque solo toma valores enteros en un conjunto finito.</p>
+</div>
+<div class="box box-navy" style="margin-top:1.5rem">
+<strong>💡 Características Clave</strong>
+<ul style="margin-top:.5rem">
+<li>Solo toma valores <strong>enteros</strong> o <strong>numerables</strong></li>
+<li>Se puede contar: 0, 1, 2, 3, ...</li>
+<li>Común en conteos médicos: pacientes, casos, eventos</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">FUNCIÓN DE PROBABILIDAD</div>
+<h2>p(x) y Propiedades</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📊 Función de Probabilidad</strong>
+<p>Para una variable discreta X, la <span class="em">función de probabilidad</span> p(x) asigna una probabilidad a cada valor posible.</p>
+</div>
+<div class="formula">
+p(x) = P(X = x)
+</div>
+<h3 style="color:#2B3E50;margin:1.5rem 0 1rem;font-size:1.5rem">Propiedades (Deben Cumplirse)</h3>
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>1. No Negatividad</h4>
+<div class="formula formula-small" style="margin-top:1rem">
+p(x) ≥ 0  ∀x
+</div>
+<p style="margin-top:.7rem">Todas las probabilidades son mayores o iguales a cero.</p>
+</div>
+<div class="card card-accent">
+<h4>2. Suma Unitaria</h4>
+<div class="formula formula-small" style="margin-top:1rem">
+Σ p(x) = 1
+</div>
+<p style="margin-top:.7rem">La suma de todas las probabilidades es 1.</p>
+</div>
+</div>
+<div class="box box-blue" style="margin-top:1.5rem">
+<strong>🩺 Ejemplo: Tipo Sanguíneo</strong>
+<p>En una población:</p>
+<table style="margin-top:1rem;font-size:.95rem">
+<tr><th>Tipo</th><th>A</th><th>B</th><th>AB</th><th>O</th></tr>
+<tr><td>p(x)</td><td>0.42</td><td>0.10</td><td>0.04</td><td>0.44</td></tr>
+</table>
+<p style="margin-top:1rem">Verificación: 0.42 + 0.10 + 0.04 + 0.44 = <strong>1.00 ✓</strong></p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">FUNCIÓN ACUMULATIVA</div>
+<h2>F(x) = P(X ≤ x)</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📈 Función de Distribución Acumulativa</strong>
+<p>La probabilidad de que X sea <span class="em">menor o igual</span> a un valor específico.</p>
+</div>
+<div class="formula">
+F(x) = P(X ≤ x) = Σ p(xᵢ)
+</div>
+<p style="text-align:center;margin-top:.5rem;font-size:.95rem">donde la suma incluye todos los xᵢ ≤ x</p>
+<h3 style="color:#2B3E50;margin:1.5rem 0 1rem;font-size:1.5rem">Propiedades de F(x)</h3>
+<div class="grid grid-3">
+<div class="card">
+<h4>Rango</h4>
+<div class="formula formula-small">0 ≤ F(x) ≤ 1</div>
+</div>
+<div class="card">
+<h4>Monotonía</h4>
+<p style="font-size:.9rem">Si xᵢ > xⱼ entonces<br>F(xᵢ) ≥ F(xⱼ)</p>
+</div>
+<div class="card">
+<h4>Probabilidad Mayor</h4>
+<div class="formula formula-small" style="font-size:.95rem">P(X ≥ x) = 1 - F(x)</div>
+</div>
+</div>
+<div class="example-box" style="margin-top:1.5rem">
+<div class="example-title">🩺 Ejemplo: Consultas Médicas</div>
+<p>X = número de consultas de emergencia por hora en urgencias</p>
+<table style="margin-top:1rem">
+<tr><th>x</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+<tr><td>p(x)</td><td>0.10</td><td>0.25</td><td>0.35</td><td>0.20</td><td>0.10</td></tr>
+<tr><td>F(x)</td><td>0.10</td><td>0.35</td><td>0.70</td><td>0.90</td><td>1.00</td></tr>
+</table>
+<p style="margin-top:1rem"><strong>P(X ≤ 2)</strong> = F(2) = <strong>0.70</strong> (70% probabilidad de 2 o menos consultas)</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">4.2 DISTRIBUCIÓN BINOMIAL</div>
+<h2>Proceso de Bernoulli</h2>
+</div>
+<div class="content">
+<div class="box box-orange">
+<strong>🎯 Proceso de Bernoulli</strong>
+<p>Experimento con <strong>solo dos resultados posibles</strong>:</p>
+<ul style="margin-top:.7rem">
+<li><strong>Éxito</strong> (probabilidad p)</li>
+<li><strong>Fracaso</strong> (probabilidad 1-p)</li>
+</ul>
+<p style="margin-top:.7rem">Estos resultados son <span class="em">mutuamente excluyentes</span>.</p>
+</div>
+<div class="box box-blue">
+<strong>📊 Distribución Binomial</strong>
+<p>Es la repetición de <strong>n veces</strong> un proceso de Bernoulli, donde contamos el <span class="em">número de éxitos</span>.</p>
+</div>
+<div class="grid grid-2" style="margin-top:1.5rem">
+<div class="card card-accent">
+<h4>🩺 Ejemplos Biomédicos</h4>
+<ul style="font-size:.95rem;margin-top:.7rem">
+<li>Paciente recuperado (éxito) / No recuperado (fracaso)</li>
+<li>Prueba positiva (éxito) / Negativa (fracaso)</li>
+<li>Mutación presente (éxito) / Ausente (fracaso)</li>
+<li>Tratamiento efectivo (éxito) / No efectivo (fracaso)</li>
+</ul>
+</div>
+<div class="card">
+<h4>Notación</h4>
+<p style="margin-top:.7rem"><strong>X ~ b(n, p)</strong></p>
+<p style="margin-top:.5rem;font-size:.95rem">X sigue una distribución binomial con parámetros:</p>
+<ul style="font-size:.9rem;margin-top:.5rem">
+<li>n = número de ensayos</li>
+<li>p = probabilidad de éxito</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">CARACTERÍSTICAS BINOMIAL</div>
+<h2>Condiciones Necesarias</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>✅ Para que X sea Binomial, debe cumplir:</strong>
+</div>
+<div class="grid grid-2" style="margin-top:1rem">
+<div class="card">
+<h4>a) Variable Discreta</h4>
+<p>X = número de éxitos en n ensayos</p>
+</div>
+<div class="card">
+<h4>b) Dos Resultados</h4>
+<p>Cada ensayo: éxito o fracaso</p>
+</div>
+<div class="card">
+<h4>c) Rango Definido</h4>
+<p>X puede variar entre 0 y n</p>
+<p style="font-size:.9rem;margin-top:.5rem">X ∈ {0, 1, 2, ..., n}</p>
+</div>
+<div class="card">
+<h4>d) Probabilidad Constante</h4>
+<p>p es la misma en cada ensayo</p>
+</div>
+<div class="card">
+<h4>e) Ensayos Independientes</h4>
+<p>Un resultado no afecta a los demás</p>
+</div>
+<div class="card card-accent">
+<h4>🎲 Resumen</h4>
+<p style="font-size:.95rem">n ensayos independientes, cada uno con probabilidad p de éxito</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">FÓRMULA BINOMIAL</div>
+<h2>P(X = k)</h2>
+</div>
+<div class="content">
+<div class="box box-orange">
+<strong>📐 Fórmula de Probabilidad Binomial</strong>
+</div>
+<div class="formula" style="font-size:1.6rem">
+P(X = k) = C(n,k) · p^k · (1-p)^(n-k)
+</div>
+<p style="text-align:center;margin-top:1rem;font-size:1.05rem">También escrito como:</p>
+<div class="formula" style="font-size:1.5rem">
+P(X = k) = (n choose k) · p^k · (1-p)^(n-k)
+</div>
+<div class="grid grid-3" style="margin-top:2rem">
+<div class="card">
+<h4>n</h4>
+<p>Número total de ensayos (repeticiones)</p>
+</div>
+<div class="card">
+<h4>k</h4>
+<p>Número de éxitos deseados</p>
+</div>
+<div class="card">
+<h4>p</h4>
+<p>Probabilidad de éxito en un ensayo</p>
+</div>
+</div>
+<div class="box box-blue" style="margin-top:1.5rem">
+<strong>🔢 Coeficiente Binomial</strong>
+<div class="formula formula-small" style="margin-top:1rem">
+C(n,k) = n! / (k! · (n-k)!)
+</div>
+<p style="text-align:center;margin-top:.7rem;font-size:.95rem">Número de formas de elegir k éxitos de n ensayos</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">MEDIA Y VARIANZA</div>
+<h2>Parámetros de la Binomial</h2>
+</div>
+<div class="content">
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>📊 Valor Esperado (Media)</h4>
+<div class="formula" style="margin-top:1rem">
+E(X) = μ = np
+</div>
+<p style="margin-top:1rem">El <strong>número promedio de éxitos</strong> esperados en n ensayos.</p>
+</div>
+<div class="card card-accent">
+<h4>📈 Varianza</h4>
+<div class="formula" style="margin-top:1rem">
+Var(X) = σ² = np(1-p)
+</div>
+<p style="margin-top:1rem">Mide la <strong>dispersión</strong> de los valores alrededor de la media.</p>
+</div>
+</div>
+<div class="example-box" style="margin-top:2rem">
+<div class="example-title">🩺 Ejemplo: Efectividad de Tratamiento</div>
+<p>Un tratamiento médico tiene <strong>p = 0.8</strong> (80%) de probabilidad de éxito.</p>
+<p style="margin-top:.7rem">Se aplica el tratamiento a <strong>n = 25</strong> pacientes.</p>
+<p style="margin-top:1rem"><strong>Pregunta:</strong> ¿Cuántos pacientes esperamos que se recuperen?</p>
+<p style="margin-top:1rem;font-weight:700">Solución:</p>
+<div class="formula formula-small" style="margin-top:.7rem">
+E(X) = np = 25 × 0.8 = 20 pacientes
+</div>
+<p style="margin-top:1rem"><strong>Varianza:</strong></p>
+<div class="formula formula-small">
+Var(X) = 25 × 0.8 × 0.2 = 4
+</div>
+<p style="margin-top:.7rem">Desviación estándar: σ = √4 = <strong>2 pacientes</strong></p>
+</div>
+</div>
+</div>
+
+<!-- ACTIVIDAD INDIVIDUAL -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD</div>
+<h2>Ejercicio Individual</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">📝 Resuelve el Problema Clínico</div>
+<div class="activity-box">
+<p style="font-size:1.15rem;font-weight:700;color:#2B3E50">Escenario:</p>
+<p style="margin-top:.8rem">Una prueba diagnóstica para detectar una enfermedad tiene una <strong>sensibilidad del 90%</strong> (probabilidad de detectar la enfermedad cuando está presente).</p>
+<p style="margin-top:.7rem">Se aplica la prueba a <strong>15 pacientes</strong> que se sabe tienen la enfermedad.</p>
+</div>
+<div class="activity-box" style="margin-top:1.5rem">
+<p style="font-size:1.1rem;font-weight:700;color:#2B3E50">Preguntas:</p>
+<ol style="margin-top:.8rem;padding-left:2rem;list-style:decimal">
+<li style="margin-bottom:1rem;padding-left:.5rem">¿Cuál es la probabilidad de que <strong>exactamente 12</strong> pacientes den positivo?</li>
+<li style="margin-bottom:1rem;padding-left:.5rem">¿Cuál es la probabilidad de que <strong>al menos 13</strong> pacientes den positivo?</li>
+<li style="margin-bottom:1rem;padding-left:.5rem">¿Cuántos pacientes <strong>esperamos</strong> que den positivo?</li>
+<li style="margin-bottom:1rem;padding-left:.5rem">Calcula la <strong>varianza</strong> y la <strong>desviación estándar</strong>.</li>
+</ol>
+</div>
+<div class="box box-orange" style="margin-top:1.5rem">
+<strong>⏱️ Tiempo: 15 minutos</strong>
+<p>Muestra todo tu procedimiento. Usa la fórmula binomial.</p>
+<p style="margin-top:.5rem;font-size:.95rem"><strong>Datos:</strong> n = 15, p = 0.90, k varía según pregunta</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EJEMPLO COMPLETO</div>
+<h2>Paso a Paso</h2>
+</div>
+<div class="content">
+<div class="example-box">
+<div class="example-title">🩺 Ejemplo: Vacunación Efectiva</div>
+<p>Una vacuna tiene <strong>p = 0.85</strong> de probabilidad de generar inmunidad.</p>
+<p style="margin-top:.7rem">Se vacunan <strong>n = 10</strong> personas.</p>
+<p style="margin-top:1rem"><strong>Pregunta:</strong> ¿Cuál es la probabilidad de que <strong>exactamente 8</strong> personas desarrollen inmunidad?</p>
+<p style="margin-top:1.5rem;font-weight:700">Solución:</p>
+<p style="margin-top:.7rem">Identificamos: X ~ b(10, 0.85), buscamos P(X = 8)</p>
+<div class="formula formula-small" style="margin-top:1rem">
+P(X = 8) = C(10,8) · (0.85)⁸ · (0.15)²
+</div>
+<p style="margin-top:1rem">Calculamos el coeficiente binomial:</p>
+<div class="formula formula-small">
+C(10,8) = 10! / (8! · 2!) = 45
+</div>
+<p style="margin-top:1rem">Sustituyendo:</p>
+<div class="formula formula-small">
+P(X = 8) = 45 · (0.85)⁸ · (0.15)²
+</div>
+<div class="formula formula-small">
+P(X = 8) = 45 · 0.2725 · 0.0225
+</div>
+<div class="formula formula-small">
+P(X = 8) = 0.2759 = <strong>27.59%</strong>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">PROBABILIDAD ACUMULADA</div>
+<h2>P(X ≤ k)</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📊 Función Acumulada Binomial</strong>
+<p>Probabilidad de tener <span class="em">k o menos</span> éxitos:</p>
+</div>
+<div class="formula">
+P(X ≤ j) = Σ P(X = k)
+</div>
+<p style="text-align:center;margin-top:.5rem;font-size:.95rem">Suma desde k=0 hasta k=j</p>
+<div class="example-box" style="margin-top:1.5rem">
+<div class="example-title">🩺 Ejemplo: Pruebas de Laboratorio</div>
+<p>En un laboratorio, la probabilidad de error en un análisis es <strong>p = 0.02</strong>.</p>
+<p style="margin-top:.7rem">Se realizan <strong>n = 50</strong> análisis.</p>
+<p style="margin-top:1rem"><strong>Pregunta:</strong> ¿Cuál es la probabilidad de tener <strong>a lo más 2 errores</strong>?</p>
+<p style="margin-top:1.5rem;font-weight:700">Solución:</p>
+<p style="margin-top:.7rem">Buscamos P(X ≤ 2) = P(X=0) + P(X=1) + P(X=2)</p>
+<div class="formula formula-small" style="margin-top:1rem;font-size:.95rem">
+P(X=0) = C(50,0) · (0.02)⁰ · (0.98)⁵⁰ = 0.3642
+</div>
+<div class="formula formula-small" style="font-size:.95rem">
+P(X=1) = C(50,1) · (0.02)¹ · (0.98)⁴⁹ = 0.3716
+</div>
+<div class="formula formula-small" style="font-size:.95rem">
+P(X=2) = C(50,2) · (0.02)² · (0.98)⁴⁸ = 0.1858
+</div>
+<div class="formula formula-small" style="margin-top:1rem">
+P(X ≤ 2) = 0.3642 + 0.3716 + 0.1858 = <strong>0.9216 = 92.16%</strong>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">APLICACIONES BIOMÉDICAS</div>
+<h2>Casos Reales</h2>
+</div>
+<div class="content">
+<div class="grid grid-2">
+<div class="card card-accent">
+<h4>🧬 Genética</h4>
+<ul style="font-size:.95rem;margin-top:.7rem">
+<li>Herencia de alelos</li>
+<li>Probabilidad de mutaciones</li>
+<li>Segregación mendeliana</li>
+<li>Estudios de genealogía</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>💉 Ensayos Clínicos</h4>
+<ul style="font-size:.95rem;margin-top:.7rem">
+<li>Efectividad de tratamientos</li>
+<li>Tasa de recuperación</li>
+<li>Efectos adversos</li>
+<li>Respuesta a medicamentos</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>🔬 Diagnóstico</h4>
+<ul style="font-size:.95rem;margin-top:.7rem">
+<li>Sensibilidad de pruebas</li>
+<li>Especificidad</li>
+<li>Detección de enfermedades</li>
+<li>Screening poblacional</li>
+</ul>
+</div>
+<div class="card card-accent">
+<h4>📊 Epidemiología</h4>
+<ul style="font-size:.95rem;margin-top:.7rem">
+<li>Propagación de enfermedades</li>
+<li>Tasa de contagio</li>
+<li>Efectividad de vacunas</li>
+<li>Estudios de prevalencia</li>
+</ul>
+</div>
+</div>
+<div class="box box-blue" style="margin-top:2rem">
+<strong>💡 Importancia en Biomedicina</strong>
+<p>La distribución binomial es fundamental para:</p>
+<ul style="margin-top:.7rem">
+<li>Diseñar estudios clínicos con tamaño de muestra adecuado</li>
+<li>Evaluar significancia estadística de resultados</li>
+<li>Tomar decisiones médicas basadas en evidencia</li>
+<li>Predecir resultados de intervenciones terapéuticas</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RESUMEN</div>
+<h2>Conceptos Clave</h2>
+</div>
+<div class="content">
+<table>
+<tr><th style="width:35%">Concepto</th><th>Fórmula / Descripción</th></tr>
+<tr><td><strong>Variable Discreta</strong></td><td>Toma valores enteros, contables</td></tr>
+<tr><td><strong>Función de Probabilidad</strong></td><td>p(x) = P(X = x), con Σp(x) = 1</td></tr>
+<tr><td><strong>Función Acumulativa</strong></td><td>F(x) = P(X ≤ x)</td></tr>
+<tr><td><strong>Proceso Bernoulli</strong></td><td>Dos resultados: éxito (p) o fracaso (1-p)</td></tr>
+<tr><td><strong>Distribución Binomial</strong></td><td>P(X=k) = C(n,k)·p^k·(1-p)^(n-k)</td></tr>
+<tr><td><strong>Media Binomial</strong></td><td>E(X) = np</td></tr>
+<tr><td><strong>Varianza Binomial</strong></td><td>Var(X) = np(1-p)</td></tr>
+<tr><td><strong>Condiciones Binomial</strong></td><td>n ensayos, p constante, independientes</td></tr>
+</table>
+<div class="box box-orange" style="margin-top:2rem">
+<strong>🎯 Recordar</strong>
+<ul style="margin-top:.7rem">
+<li>Binomial cuenta <strong>número de éxitos</strong> en n ensayos</li>
+<li>Cada ensayo tiene solo <strong>dos resultados</strong> posibles</li>
+<li>La probabilidad p es <strong>constante</strong> en cada ensayo</li>
+<li>Los ensayos son <strong>independientes</strong> entre sí</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">BIBLIOGRAFÍA</div>
+<h2>Referencias</h2>
+</div>
+<div class="content">
+<div class="box" style="padding:2.5rem">
+<strong style="font-size:1.3rem">📚 Bibliografía</strong>
+<p style="margin-top:1.5rem;font-size:1.05rem"><strong>[1]</strong> CIMAT - Centro de Investigación en Matemáticas</p>
+<p style="margin-top:.5rem;font-size:1rem">"Probabilidad y Estadística" - Capítulo 4: Variables Aleatorias</p>
+<p style="margin-top:.3rem;font-size:.9rem">Disponible en: https://www.cimat.mx/~jortega/MaterialDidactico/EPyE10/Cap4v1.6.pdf</p>
+<p style="margin-top:1.5rem;font-size:1.05rem"><strong>[2]</strong> UNAM - Universidad Nacional Autónoma de México</p>
+<p style="margin-top:.5rem;font-size:1rem">"Conceptos Básicos de Estadística"</p>
+<p style="margin-top:.3rem;font-size:.9rem">Disponible en: https://www.paginaspersonales.unam.mx/files/977/Conceptos_basicos_de_estadistica.pdf</p>
+</div>
+<div class="box box-blue" style="margin-top:2rem">
+<strong>📖 Temas Cubiertos</strong>
+<ul style="margin-top:.7rem;font-size:.95rem">
+<li>Variables aleatorias discretas y continuas</li>
+<li>Funciones de probabilidad y distribución</li>
+<li>Distribución binomial y sus aplicaciones</li>
+<li>Ejemplos biomédicos y clínicos</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="slide cover">
+<h1>¡Excelente Trabajo!</h1>
+<div class="line"></div>
+<p class="subtitle">Fin: Distribuciones de Probabilidad</p>
+<p class="meta">Bioestadística Aplicada</p>
+<p class="help" style="margin-top:3.5rem">Ahora dominas las distribuciones discretas 📊</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">17</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>
