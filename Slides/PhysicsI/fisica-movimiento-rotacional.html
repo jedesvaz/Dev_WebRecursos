@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Movimiento Rotacional - Física I</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter',sans-serif;background:#fff;color:#484848;overflow:hidden}.container{width:100vw;height:100vh}.slide{display:none;width:100%;height:100%;padding:3rem 5.5rem;flex-direction:column}.slide.active{display:flex}.cover{background:#E60012;justify-content:center;align-items:center;text-align:center;position:relative}.cover h1{font-family:'Inter',sans-serif;font-size:4.5rem;font-weight:800;margin-bottom:2rem;color:#fff;letter-spacing:-2px}.cover .subtitle{font-size:1.5rem;color:#fff;opacity:.95;margin-bottom:1rem;font-weight:300}.cover .line{width:100px;height:6px;background:#fff;margin:2.5rem auto;border-radius:3px}.cover .meta{margin-top:1.5rem;font-size:1rem;color:#fff;opacity:.9;font-weight:400}.cover .help{margin-top:3.5rem;font-size:.95rem;color:#fff;opacity:.75}.slide-header{margin-bottom:2.5rem;flex-shrink:0;padding-bottom:1.5rem;border-bottom:5px solid #E60012}.slide-number{color:#E60012;font-size:.7rem;font-weight:700;letter-spacing:5px;text-transform:uppercase;margin-bottom:.8rem}h2{font-family:'Inter',sans-serif;font-size:3rem;color:#484848;font-weight:800;letter-spacing:-1px}.content{flex:1;overflow-y:auto;padding-right:1.5rem}.content::-webkit-scrollbar{width:6px}.content::-webkit-scrollbar-track{background:#F0F0F0;border-radius:3px}.content::-webkit-scrollbar-thumb{background:#E60012;border-radius:3px}p{font-size:1.1rem;line-height:1.8;margin-bottom:1.4rem;color:#484848;font-weight:400}ul{list-style:none;margin:1.4rem 0}ul li{font-size:1.05rem;line-height:1.75;margin-bottom:.9rem;padding-left:2.2rem;position:relative;color:#484848}ul li::before{content:'◆';position:absolute;left:0;color:#E60012;font-size:1rem;font-weight:700}.box{background:#F0F0F0;padding:2rem 2.2rem;margin:1.8rem 0;border-radius:8px;border-left:6px solid #E60012}.box strong{color:#E60012;display:block;margin-bottom:1rem;font-size:1.2rem;font-weight:700}.box p{margin-bottom:.7rem;color:#484848}.box-white{background:#fff;border:3px solid #F0F0F0}.box-red{background:#fff5f5;border-left-color:#E60012}.grid{display:grid;gap:2rem;margin:2rem 0}.grid-2{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(3,1fr)}.card{background:#fff;padding:2rem;border-radius:10px;border:2px solid #F0F0F0;transition:all .3s}.card:hover{border-color:#E60012;box-shadow:0 8px 30px rgba(230,0,18,.1)}.card h4{color:#E60012;margin-bottom:1rem;font-size:1.3rem;font-weight:700}.card p{font-size:1.05rem;margin-bottom:.6rem;color:#484848}.card-minimal{background:#F0F0F0;border:none}.formula{background:#fff;padding:2rem 3rem;border-radius:10px;border:4px solid #E60012;font-family:'Inter',monospace;font-size:1.5rem;text-align:center;margin:2rem 0;color:#484848;font-weight:700;box-shadow:0 4px 20px rgba(230,0,18,.15)}.formula-small{font-size:1.2rem;padding:1.5rem 2rem}.em{color:#E60012;font-weight:700}.activity-section{background:#F0F0F0;padding:3rem;border-radius:15px;border:5px solid #E60012;margin:2.5rem 0}.activity-title{color:#E60012;font-size:2.5rem;font-weight:800;margin-bottom:2rem;text-align:center;letter-spacing:-1px}.activity-box{background:#fff;padding:2rem;border-radius:10px;margin:1.5rem 0;border-left:5px solid #E60012}.example-box{background:#fff5f5;padding:2rem;border-radius:10px;margin:1.5rem 0;border:3px solid #E60012}.example-title{color:#E60012;font-weight:700;font-size:1.3rem;margin-bottom:1rem}.steps{margin:2rem 0}.step{position:relative;padding:1.5rem 1.5rem 1.5rem 5.5rem;margin-bottom:1.5rem;background:#F0F0F0;border-radius:10px;border-left:6px solid #E60012}.step-number{position:absolute;left:1.5rem;top:50%;transform:translateY(-50%);width:3rem;height:3rem;background:#E60012;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.4rem}.step h4{color:#484848;font-size:1.2rem;font-weight:700;margin-bottom:.8rem}.step p{font-size:1.05rem;color:#484848;line-height:1.7}table{width:100%;border-collapse:separate;border-spacing:0;margin:2rem 0;background:#fff;border-radius:10px;overflow:hidden;border:2px solid #F0F0F0}th,td{padding:1.2rem;text-align:left;border-bottom:2px solid #F0F0F0}th{background:#E60012;color:#fff;font-weight:700;font-size:1rem;text-transform:uppercase;letter-spacing:1px}tr:last-child td{border-bottom:none}.nav{position:fixed;bottom:3rem;right:3rem;display:flex;gap:1.5rem;z-index:1000}.btn{width:70px;height:70px;background:#E60012;border:none;border-radius:50%;color:#fff;font-size:2rem;cursor:pointer;box-shadow:0 6px 25px rgba(230,0,18,.3);transition:all .3s;font-weight:700;display:flex;align-items:center;justify-content:center}.btn:hover:not(:disabled){background:#c50010;transform:scale(1.08);box-shadow:0 10px 35px rgba(230,0,18,.5)}.btn:disabled{opacity:.25;cursor:not-allowed}.counter{position:fixed;bottom:3rem;left:3rem;background:#fff;padding:1.2rem 2.5rem;border-radius:50px;border:3px solid #E60012;color:#E60012;font-weight:800;z-index:1000;box-shadow:0 6px 25px rgba(230,0,18,.15);font-size:1.2rem}@media(max-width:1024px){.slide{padding:2.5rem 3rem}.cover h1{font-size:3.5rem}h2{font-size:2.5rem}.grid-3{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.slide{padding:2rem 1.5rem}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="slide cover active">
+<h1>Movimiento Rotacional</h1>
+<div class="line"></div>
+<p class="subtitle">Cinemática y Dinámica del Movimiento Circular</p>
+<p class="meta">Física I: Cinemática y Dinámica | Nivel: Principiante</p>
+<p class="help">→ Usa las flechas para navegar</p>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">INTRODUCCIÓN</div>
+<h2>Mecánica Rotacional</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🎯 ¿Qué es la Mecánica Rotacional?</strong>
+<p>Área de la física que estudia el <span class="em">movimiento de rotación</span> de objetos rígidos: discos, esferas, barras, ruedas, etc.</p>
+</div>
+<div class="grid grid-2">
+<div class="card card-minimal">
+<h4>Cinemática Rotacional</h4>
+<p>Estudia y analiza la <strong>rotación de objetos</strong> sin considerar las causas que la producen.</p>
+<p style="margin-top:1rem;font-size:.95rem">Conceptos: posición angular, velocidad angular, aceleración angular.</p>
+</div>
+<div class="card card-minimal">
+<h4>Dinámica Rotacional</h4>
+<p>Analiza las <strong>causas que producen</strong> la rotación.</p>
+<p style="margin-top:1rem;font-size:.95rem">Conceptos: momento de inercia, momento de torsión (torca), momento angular.</p>
+</div>
+</div>
+<div class="box box-red" style="margin-top:2rem">
+<strong>💡 Analogía</strong>
+<p>El movimiento rotacional es similar al movimiento lineal, solo que en lugar de medir distancias, medimos <span class="em">ángulos</span>.</p>
+<p style="margin-top:.5rem">Esto facilita su estudio y comprensión.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">TEMA 11</div>
+<h2>Cinemática Rotacional</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📊 Comparación: Lineal vs Rotacional</strong>
+</div>
+<table>
+<tr>
+<th>Movimiento Lineal</th>
+<th>Movimiento Rotacional</th>
+<th>Unidades</th>
+</tr>
+<tr>
+<td>Posición (x)</td>
+<td>Posición Angular (θ)</td>
+<td>radianes, grados, rev</td>
+</tr>
+<tr>
+<td>Velocidad (v)</td>
+<td>Velocidad Angular (ω)</td>
+<td>rad/s, rev/s</td>
+</tr>
+<tr>
+<td>Aceleración (a)</td>
+<td>Aceleración Angular (α)</td>
+<td>rad/s²</td>
+</tr>
+<tr>
+<td>Masa (m)</td>
+<td>Momento de Inercia (I)</td>
+<td>kg·m²</td>
+</tr>
+<tr>
+<td>Fuerza (F)</td>
+<td>Torca (τ)</td>
+<td>N·m</td>
+</tr>
+</table>
+<div class="box box-white" style="margin-top:1.5rem">
+<strong>✓ Ventaja</strong>
+<p>Si entiendes el movimiento lineal, el movimiento rotacional será muy similar, solo cambian las variables.</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">11.1 POSICIÓN ANGULAR</div>
+<h2>θ - Theta</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📐 Posición Angular (θ)</strong>
+<p>Indica el <span class="em">ángulo</span> donde se ubica el objeto con respecto a un eje de referencia (eje polar) que forma θ=0.</p>
+</div>
+<div class="formula">
+θ = s / r
+</div>
+<p style="text-align:center;margin-top:1rem;font-size:1rem">Donde <strong>s</strong> = longitud de arco, <strong>r</strong> = radio</p>
+<div class="formula" style="margin-top:2rem">
+s = r θ &nbsp;&nbsp;&nbsp;(θ en radianes)
+</div>
+<div class="box box-red" style="margin-top:2rem">
+<strong>📏 El Radián</strong>
+<p>Es el ángulo que forma el rayo que limita una <strong>longitud de arco igual al radio</strong> del círculo.</p>
+</div>
+<div class="grid grid-3" style="margin-top:2rem">
+<div class="card">
+<h4>1 Revolución</h4>
+<p><strong>= 2π radianes</strong></p>
+<p style="margin-top:.5rem">= 360 grados</p>
+</div>
+<div class="card">
+<h4>Conversión</h4>
+<p><strong>1 rad = 57.3°</strong></p>
+<p style="margin-top:.5rem">1° = 0.01745 rad</p>
+</div>
+<div class="card">
+<h4>Perímetro</h4>
+<p><strong>P = 2πr</strong></p>
+<p style="margin-top:.5rem">Circunferencia completa</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">11.2 DESPLAZAMIENTO Y VELOCIDAD</div>
+<h2>Δθ y ω (omega)</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📍 Desplazamiento Angular (Δθ)</strong>
+<p>Es el <span class="em">cambio de posición angular</span> en que gira el objeto.</p>
+</div>
+<div class="formula">
+Δθ = θ₂ - θ₁
+</div>
+<div class="box" style="margin-top:2rem">
+<strong>⚡ Velocidad Angular Media (ω)</strong>
+<p>Es la <span class="em">razón de cambio</span> del desplazamiento angular en un tiempo determinado.</p>
+</div>
+<div class="formula">
+ω = Δθ / Δt
+</div>
+<p style="text-align:center;margin-top:1rem;font-size:1rem">Unidades: <strong>rad/s</strong>, rev/s, rpm</p>
+<div class="box box-red" style="margin-top:2rem">
+<strong>🔄 Conversiones Útiles</strong>
+<div class="formula formula-small" style="margin-top:1rem">
+1 rev/s = 2π rad/s
+</div>
+<div class="formula formula-small">
+1 rpm = (2π/60) rad/s ≈ 0.1047 rad/s
+</div>
+</div>
+<div class="box box-white" style="margin-top:1.5rem">
+<strong>📐 Velocidad Angular Instantánea</strong>
+<div class="formula formula-small" style="margin-top:1rem">
+ω = dθ/dt
+</div>
+<p style="text-align:center;margin-top:.5rem;font-size:.95rem">Se obtiene derivando la posición angular respecto al tiempo</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">11.3 ACELERACIÓN ANGULAR</div>
+<h2>α (alfa)</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🚀 Aceleración Angular Media (α)</strong>
+<p>Es la <span class="em">razón de cambio</span> de la velocidad angular en un tiempo determinado.</p>
+</div>
+<div class="formula">
+α = Δω / Δt = (ω₂ - ω₁) / (t₂ - t₁)
+</div>
+<p style="text-align:center;margin-top:1rem;font-size:1rem">Unidades: <strong>rad/s²</strong></p>
+<div class="box box-white" style="margin-top:2rem">
+<strong>📐 Aceleración Angular Instantánea</strong>
+<div class="formula formula-small" style="margin-top:1rem">
+α = dω/dt = d²θ/dt²
+</div>
+<p style="text-align:center;margin-top:.5rem;font-size:.95rem">Se obtiene derivando la velocidad angular respecto al tiempo</p>
+</div>
+<div class="box box-red" style="margin-top:2rem">
+<strong>🔢 Ecuaciones de Cinemática Rotacional</strong>
+<p>Para aceleración angular <span class="em">constante</span>:</p>
+<div class="formula formula-small" style="margin-top:1rem">
+ω = ω₀ + αt
+</div>
+<div class="formula formula-small">
+θ = θ₀ + ω₀t + ½αt²
+</div>
+<div class="formula formula-small">
+ω² = ω₀² + 2α(θ - θ₀)
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RELACIÓN LINEAL-ANGULAR</div>
+<h2>Conexión entre Movimientos</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🔗 Relación entre Cantidades Lineales y Angulares</strong>
+<p>Para un objeto que gira con radio <strong>r</strong>:</p>
+</div>
+<div class="grid grid-3">
+<div class="card card-minimal">
+<h4>Posición</h4>
+<div class="formula formula-small" style="margin-top:1rem">
+s = rθ
+</div>
+<p style="margin-top:.7rem;font-size:.9rem">Longitud de arco = radio × ángulo</p>
+</div>
+<div class="card card-minimal">
+<h4>Velocidad</h4>
+<div class="formula formula-small" style="margin-top:1rem">
+v = rω
+</div>
+<p style="margin-top:.7rem;font-size:.9rem">Velocidad tangencial</p>
+</div>
+<div class="card card-minimal">
+<h4>Aceleración</h4>
+<div class="formula formula-small" style="margin-top:1rem">
+a = rα
+</div>
+<p style="margin-top:.7rem;font-size:.9rem">Aceleración tangencial</p>
+</div>
+</div>
+<div class="example-box" style="margin-top:2rem">
+<div class="example-title">🚗 Ejemplo: Llantas de un Auto</div>
+<p>Un auto parte del reposo con <strong>a = 2 m/s²</strong> durante <strong>4 segundos</strong>.</p>
+<p style="margin-top:.7rem">Llantas: diámetro 80 cm → radio <strong>r = 0.4 m</strong></p>
+<p style="margin-top:1rem;font-weight:600">Paso 1: Movimiento lineal</p>
+<p style="margin-top:.5rem">v<sub>f</sub> = v₀ + at = 0 + 2(4) = <strong>8 m/s</strong></p>
+<p>x = ½at² = ½(2)(4²) = <strong>16 m</strong></p>
+<p style="margin-top:1rem;font-weight:600">Paso 2: Movimiento rotacional (llantas)</p>
+<p style="margin-top:.5rem">θ = x/r = 16/0.4 = <strong>40 rad</strong> = 6.37 revoluciones</p>
+<p style="margin-top:.5rem">ω = v/r = 8/0.4 = <strong>20 rad/s</strong></p>
+<p style="margin-top:.5rem">α = a/r = 2/0.4 = <strong>5 rad/s²</strong></p>
+</div>
+</div>
+</div>
+
+<!-- ACTIVIDAD INDIVIDUAL -->
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">ACTIVIDAD</div>
+<h2>Ejercicio Individual</h2>
+</div>
+<div class="content">
+<div class="activity-section">
+<div class="activity-title">📝 Resuelve el Problema</div>
+<div class="activity-box">
+<p style="font-size:1.2rem;font-weight:700;color:#E60012">Problema:</p>
+<p style="margin-top:1rem">Una rueda de bicicleta de <strong>radio r = 35 cm</strong> gira partiendo del reposo (ω₀ = 0) con una aceleración angular constante de <strong>α = 3 rad/s²</strong> durante <strong>t = 5 segundos</strong>.</p>
+</div>
+<div class="activity-box" style="margin-top:1.5rem">
+<p style="font-size:1.1rem;font-weight:700;color:#484848">Calcula:</p>
+<ol style="margin-top:1rem;padding-left:2rem;list-style:decimal">
+<li style="margin-bottom:1rem;padding-left:.5rem">La <strong>velocidad angular final</strong> (ω) de la rueda</li>
+<li style="margin-bottom:1rem;padding-left:.5rem">El <strong>ángulo total girado</strong> (θ) en radianes y en revoluciones</li>
+<li style="margin-bottom:1rem;padding-left:.5rem">La <strong>velocidad lineal</strong> (v) de un punto en el borde de la rueda</li>
+<li style="margin-bottom:1rem;padding-left:.5rem">La <strong>aceleración lineal</strong> (a) de ese mismo punto</li>
+</ol>
+</div>
+<div class="box box-red" style="margin-top:1.5rem">
+<strong>⏱️ Tiempo: 10 minutos</strong>
+<p>Trabaja de forma individual. Muestra todo tu procedimiento.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">TEMA 12</div>
+<h2>Dinámica Rotacional</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>⚙️ ¿Qué causa la rotación?</strong>
+<p>Ahora estudiaremos las <span class="em">causas</span> que producen el movimiento rotacional.</p>
+</div>
+<div class="grid grid-2" style="margin-top:2rem">
+<div class="card">
+<h4>Fuerza Centrípeta (F<sub>c</sub>)</h4>
+<p>Fuerza que mantiene a un objeto en movimiento circular, apuntando hacia el <strong>centro</strong> del círculo.</p>
+<div class="formula formula-small" style="margin-top:1rem">
+F<sub>c</sub> = ma<sub>c</sub> = m(v²/r)
+</div>
+</div>
+<div class="card">
+<h4>Torca o Momento (τ)</h4>
+<p>Describe la <strong>torsión o giro</strong> producida por una fuerza aplicada a cierta distancia del eje.</p>
+<div class="formula formula-small" style="margin-top:1rem">
+τ = rF sin φ
+</div>
+</div>
+</div>
+<div class="box box-red" style="margin-top:2rem">
+<strong>🎯 Segunda Ley de Newton Rotacional</strong>
+<div class="formula" style="margin-top:1rem">
+τ = Iα
+</div>
+<p style="text-align:center;margin-top:1rem">La torca neta es igual al momento de inercia por la aceleración angular</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">12.1 FUERZA CENTRÍPETA</div>
+<h2>F<sub>c</sub> = mv²/r</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🎯 Fuerza Centrípeta</strong>
+<p>De la Segunda Ley de Newton (F = ma), obtenemos la ecuación para movimiento circular:</p>
+</div>
+<div class="formula">
+F<sub>c</sub> = ma<sub>c</sub>
+</div>
+<div class="box box-white" style="margin-top:1.5rem">
+<strong>📐 Aceleración Centrípeta</strong>
+<div class="formula formula-small" style="margin-top:1rem">
+a<sub>c</sub> = v²/r = ω²r
+</div>
+<p style="text-align:center;margin-top:.7rem;font-size:.95rem">Siempre apunta hacia el <span class="em">centro del círculo</span></p>
+</div>
+<div class="formula" style="margin-top:2rem">
+F<sub>c</sub> = m(v²/r) = mω²r
+</div>
+<div class="example-box" style="margin-top:2rem">
+<div class="example-title">🚗 Ejemplo: Auto en Curva</div>
+<p>Un auto da vuelta en una esquina. La <strong>fricción estática</strong> entre llantas y pavimento proporciona la fuerza centrípeta.</p>
+<p style="margin-top:1rem">Si <strong>μ = 0.6</strong> (coeficiente de fricción) y <strong>r = 8 m</strong> (radio de curva):</p>
+<div class="formula formula-small" style="margin-top:1rem">
+F<sub>c</sub> = μmg = m(v²/r)
+</div>
+<p style="margin-top:1rem">Cancelando masas:</p>
+<div class="formula formula-small">
+v = √(μgr) = √(0.6 × 9.81 × 8) = 6.86 m/s
+</div>
+<p style="margin-top:1rem;font-weight:600">≈ 24.7 km/h es la velocidad máxima sin derrapar</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EJEMPLO F<sub>c</sub></div>
+<h2>Aceleración Lateral</h2>
+</div>
+<div class="content">
+<div class="example-box">
+<div class="example-title">🏎️ Ejemplo: Pista de Carreras</div>
+<p><strong>Dato:</strong> Un auto tiene aceleración lateral máxima de <strong>0.96g</strong></p>
+<p style="margin-top:.7rem">a<sub>c</sub> = 0.96 × 9.81 m/s² = <strong>9.4 m/s²</strong></p>
+<p style="margin-top:1rem"><strong>Pregunta:</strong> Si viaja a <strong>v = 50 m/s</strong> constante en pista plana, ¿cuál es el radio mínimo de curva sin derrapar?</p>
+<p style="margin-top:1.5rem;font-weight:700">Solución:</p>
+<p style="margin-top:.7rem">De la ecuación de aceleración centrípeta:</p>
+<div class="formula formula-small" style="margin-top:1rem">
+a<sub>c</sub> = v²/r
+</div>
+<p style="margin-top:1rem">Despejando <strong>r</strong>:</p>
+<div class="formula formula-small">
+r = v²/a<sub>c</sub>
+</div>
+<p style="margin-top:1rem">Sustituyendo:</p>
+<div class="formula formula-small">
+r = (50)² / 9.4 = 2500 / 9.4 = 266 m
+</div>
+<p style="margin-top:1.5rem;font-weight:700;color:#E60012">Radio mínimo: 266 metros</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">12.2 SEGUNDA LEY ROTACIONAL</div>
+<h2>τ = Iα</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>⚙️ Ecuación de Newton para Rotación</strong>
+<p>De F = ma (lineal), obtenemos la ecuación equivalente para rotación:</p>
+</div>
+<div class="formula" style="font-size:2rem">
+τ = Iα
+</div>
+<div class="grid grid-3" style="margin-top:2rem">
+<div class="card card-minimal">
+<h4>τ (tau)</h4>
+<p><strong>Torca neta</strong></p>
+<p style="margin-top:.5rem;font-size:.9rem">Momento de torsión aplicado al objeto</p>
+</div>
+<div class="card card-minimal">
+<h4>I</h4>
+<p><strong>Momento de Inercia</strong></p>
+<p style="margin-top:.5rem;font-size:.9rem">Resistencia del objeto a rotar (análogo a masa)</p>
+</div>
+<div class="card card-minimal">
+<h4>α (alfa)</h4>
+<p><strong>Aceleración Angular</strong></p>
+<p style="margin-top:.5rem;font-size:.9rem">Cambio de velocidad angular</p>
+</div>
+</div>
+<div class="box box-red" style="margin-top:2rem">
+<strong>💬 Interpretación</strong>
+<p>"La torca neta que actúa sobre un cuerpo rígido determina su <span class="em">aceleración angular</span>, de la misma manera que la fuerza neta sobre un cuerpo determina su aceleración lineal."</p>
+<p style="margin-top:.5rem;font-style:italic;font-size:.95rem">— Young & Freedman (2018)</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EJEMPLO τ = Iα</div>
+<h2>Volante en Rotación</h2>
+</div>
+<div class="content">
+<div class="example-box">
+<div class="example-title">⚙️ Ejemplo: Volante que se Detiene</div>
+<p><strong>Datos:</strong></p>
+<ul style="margin-top:.7rem">
+<li>Momento de inercia: <strong>I = 65 kg·m²</strong></li>
+<li>Velocidad angular inicial: <strong>ω₀ = 30 rad/s</strong></li>
+<li>Velocidad angular final: <strong>ω = 0</strong> (se detiene)</li>
+<li>Tiempo: <strong>t = 25 s</strong></li>
+</ul>
+<p style="margin-top:1.5rem"><strong>Pregunta:</strong> ¿Cuál es el momento de torsión neto que detiene el volante?</p>
+<p style="margin-top:1.5rem;font-weight:700">Solución:</p>
+<p style="margin-top:.7rem">Paso 1: Calcular aceleración angular</p>
+<div class="formula formula-small" style="margin-top:1rem">
+α = (ω - ω₀) / t = (0 - 30) / 25 = -1.2 rad/s²
+</div>
+<p style="margin-top:1rem">Paso 2: Calcular torca usando τ = Iα</p>
+<div class="formula formula-small">
+τ = (65)(-1.2) = -78 N·m
+</div>
+<p style="margin-top:1.5rem;font-weight:700;color:#E60012">Torca: -78 N·m (negativa = frena la rotación)</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">12.3 TORCA O MOMENTO</div>
+<h2>τ = rF sin φ</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>🔧 Torca (Momento de Torsión)</strong>
+<p>Describe la <span class="em">torsión o giro</span> producida por una fuerza.</p>
+<p style="margin-top:.5rem">Proporcional a la fuerza y a la distancia perpendicular.</p>
+</div>
+<div class="formula">
+τ = rF sin φ
+</div>
+<div class="grid grid-3" style="margin-top:1.5rem">
+<div class="card card-minimal">
+<h4>r</h4>
+<p>Distancia del eje de rotación al punto de aplicación</p>
+</div>
+<div class="card card-minimal">
+<h4>F</h4>
+<p>Magnitud de la fuerza aplicada</p>
+</div>
+<div class="card card-minimal">
+<h4>φ (phi)</h4>
+<p>Ángulo entre r y F</p>
+</div>
+</div>
+<div class="box box-white" style="margin-top:1.5rem">
+<strong>📐 Brazo de Palanca</strong>
+<div class="formula formula-small" style="margin-top:1rem">
+ℓ = r sin φ
+</div>
+<p style="text-align:center;margin-top:.7rem">Entonces: <strong>τ = ℓF</strong></p>
+</div>
+<div class="box box-red" style="margin-top:1.5rem">
+<strong>🎯 Forma Vectorial</strong>
+<div class="formula formula-small" style="margin-top:1rem">
+<strong>τ</strong> = <strong>r</strong> × <strong>F</strong>
+</div>
+<p style="text-align:center;margin-top:.7rem;font-size:.95rem">Producto cruz (perpendicular a r y F)</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">EJEMPLO TORCA</div>
+<h2>Plomero con Llave</h2>
+</div>
+<div class="content">
+<div class="example-box">
+<div class="example-title">🔧 Ejemplo: Aflojar Junta de Tubería</div>
+<p>Un plomero se para en el extremo de una extensión de su llave para aflojar una junta.</p>
+<p style="margin-top:1rem"><strong>Datos:</strong></p>
+<ul style="margin-top:.7rem">
+<li>Peso (fuerza): <strong>F = 850 N</strong></li>
+<li>Distancia al centro: <strong>r = 0.8 m</strong></li>
+<li>Ángulo con horizontal: <strong>19°</strong></li>
+<li>Ángulo entre r y F: <strong>φ = 110°</strong></li>
+</ul>
+<p style="margin-top:1.5rem;font-weight:700">Solución:</p>
+<p style="margin-top:.7rem">Usando τ = rF sin φ:</p>
+<div class="formula formula-small" style="margin-top:1rem">
+τ = (0.8)(850) sin(110°)
+</div>
+<div class="formula formula-small">
+τ = (680)(0.9397) = 639 N·m
+</div>
+<p style="margin-top:1.5rem;font-weight:700;color:#E60012">Torca aplicada: 639 N·m en sentido antihorario</p>
+<p style="margin-top:1rem;font-size:.95rem"><strong>Dirección:</strong> Usando regla de mano derecha, la torca apunta <strong>fuera del plano</strong> (perpendicular a r y F).</p>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">RESUMEN</div>
+<h2>Conceptos Clave</h2>
+</div>
+<div class="content">
+<table>
+<tr>
+<th style="width:30%">Concepto</th>
+<th style="width:35%">Ecuación</th>
+<th>Unidades</th>
+</tr>
+<tr>
+<td>Posición Angular</td>
+<td>θ = s/r</td>
+<td>rad, grados, rev</td>
+</tr>
+<tr>
+<td>Velocidad Angular</td>
+<td>ω = Δθ/Δt</td>
+<td>rad/s</td>
+</tr>
+<tr>
+<td>Aceleración Angular</td>
+<td>α = Δω/Δt</td>
+<td>rad/s²</td>
+</tr>
+<tr>
+<td>Relación Lineal-Angular</td>
+<td>v = rω, a = rα</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Fuerza Centrípeta</td>
+<td>F<sub>c</sub> = mv²/r</td>
+<td>N (Newtons)</td>
+</tr>
+<tr>
+<td>Torca</td>
+<td>τ = rF sin φ</td>
+<td>N·m</td>
+</tr>
+<tr>
+<td>Segunda Ley Rotacional</td>
+<td>τ = Iα</td>
+<td>N·m = kg·m²·rad/s²</td>
+</tr>
+</table>
+<div class="box box-red" style="margin-top:2rem">
+<strong>🎯 Analogías Fundamentales</strong>
+<div class="grid grid-2" style="margin-top:1rem">
+<div class="card card-minimal">
+<p><strong>Lineal:</strong> F = ma</p>
+<p style="margin-top:.3rem"><strong>Rotacional:</strong> τ = Iα</p>
+</div>
+<div class="card card-minimal">
+<p><strong>Masa (m)</strong> → <strong>Momento de Inercia (I)</strong></p>
+<p style="margin-top:.3rem"><strong>Fuerza (F)</strong> → <strong>Torca (τ)</strong></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<div class="slide-header">
+<div class="slide-number">BIBLIOGRAFÍA</div>
+<h2>Referencias</h2>
+</div>
+<div class="content">
+<div class="box">
+<strong>📚 Libro de Texto Principal</strong>
+<p style="margin-top:.7rem">Serway, R., y Jewett, J. (2018). <em>Física para ciencias e ingeniería, Vol. 1</em> (10ª ed.). México: CENGAGE Learning.</p>
+<p style="margin-top:.3rem">ISBN: 9786075266695</p>
+</div>
+<div class="box" style="margin-top:1.5rem">
+<strong>📖 Libro de Apoyo</strong>
+<p style="margin-top:.7rem">Young, H., y Freedman, R. (2018). <em>Sears Y Zemansky Física Universitaria Con Física Moderna.</em> México: Pearson.</p>
+<p style="margin-top:.3rem">ISBN: 9786073244404</p>
+</div>
+<div class="box box-red" style="margin-top:2rem">
+<strong>🔗 Recursos Adicionales</strong>
+<p style="margin-top:.7rem">• Simulador de movimiento rotacional: <a href="https://ophysics.com/r.html" style="color:#E60012">ophysics.com/r.html</a></p>
+<p style="margin-top:.5rem">• Fuerzas en giro de auto: <a href="http://www.educaplus.org/game/fuerzas-en-el-giro-de-un-coche" style="color:#E60012">educaplus.org</a></p>
+<p style="margin-top:.5rem">• Lanzamiento de martillo: <a href="http://www.educaplus.org/game/lanzamiento-de-martillo" style="color:#E60012">educaplus.org</a></p>
+</div>
+</div>
+</div>
+
+<div class="slide cover">
+<h1>¡Excelente Trabajo!</h1>
+<div class="line"></div>
+<p class="subtitle">Fin del Tema: Movimiento Rotacional</p>
+<p class="meta">Física I: Cinemática y Dinámica</p>
+<p class="help" style="margin-top:3.5rem">Ahora comprendes cómo rotan los objetos 🎯</p>
+</div>
+
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">17</span></div>
+<div class="nav">
+<button class="btn" id="prev" onclick="nav(-1)">◀</button>
+<button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide'),total=slides.length;document.getElementById('total').textContent=total;function show(n){n<0&&(n=0),n>=total&&(n=total-1),slides.forEach(s=>s.classList.remove('active')),slides[n].classList.add('active'),current=n,document.getElementById('current').textContent=n+1,document.getElementById('prev').disabled=0===n,document.getElementById('next').disabled=n===total-1}function nav(dir){show(current+dir)}document.addEventListener('keydown',e=>{'ArrowLeft'===e.key&&nav(-1),'ArrowRight'===e.key&&nav(1),' '===e.key&&(e.preventDefault(),nav(1))}),show(0);
+</script>
+</body>
+</html>
