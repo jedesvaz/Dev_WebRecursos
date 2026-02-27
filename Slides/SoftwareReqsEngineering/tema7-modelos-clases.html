@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tema 7 – Modelos de Clases</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Lato',sans-serif;background:#f4f4f8;color:#2d2d3a;overflow:hidden}
+.container{width:100vw;height:100vh}
+.slide{display:none;width:100%;height:100%;padding:3.5rem 6rem;flex-direction:column}
+.slide.active{display:flex}
+
+/* ── PORTADA ── */
+.cover{background:linear-gradient(135deg,#4a0080,#7b2fbf,#9d4edd);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-160px;right:-160px;width:430px;height:430px;border-radius:50%;background:rgba(255,255,255,.07)}
+.cover::after{content:'';position:absolute;bottom:-110px;left:-110px;width:380px;height:380px;border-radius:50%;background:rgba(255,255,255,.05)}
+.cover h1{font-size:4rem;font-weight:900;color:#fff;letter-spacing:-1px;position:relative;z-index:1;margin-bottom:1.2rem;line-height:1.1}
+.cover .subtitle{font-size:1.75rem;color:#fff;opacity:.95;z-index:1;margin-bottom:.7rem;font-weight:300}
+.cover .line{width:140px;height:5px;background:#fff;margin:1.8rem auto;z-index:1;border-radius:3px}
+.cover .meta{margin-top:1rem;font-size:1.05rem;color:#fff;opacity:.8;z-index:1}
+.cover .help{margin-top:2.5rem;font-size:.95rem;color:#fff;opacity:.65;z-index:1}
+.cover .badge{display:inline-block;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.45);color:#fff;padding:.4rem 1.2rem;border-radius:30px;font-size:.9rem;font-weight:700;margin-bottom:1.5rem;z-index:1;position:relative}
+
+/* ── HEADER DE SLIDE ── */
+.slide-header{margin-bottom:1.8rem;flex-shrink:0;border-bottom:4px solid #9d4edd;padding-bottom:1.1rem}
+.slide-number{color:#9d4edd;font-size:.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:.5rem}
+h2{font-size:2.6rem;color:#4a0080;font-weight:900;letter-spacing:-.5px}
+
+/* ── CONTENIDO ── */
+.content{flex:1;overflow-y:auto;padding-right:1.2rem}
+.content::-webkit-scrollbar{width:7px}
+.content::-webkit-scrollbar-track{background:#e6e0f0;border-radius:4px}
+.content::-webkit-scrollbar-thumb{background:#9d4edd;border-radius:4px}
+p{font-size:1.06rem;line-height:1.8;margin-bottom:1.2rem;color:#3d3d52}
+h3{color:#4a0080;font-size:1.5rem;font-weight:700;margin:1.5rem 0 .9rem}
+h4{color:#7b2fbf;font-size:1.1rem;font-weight:700;margin-bottom:.7rem}
+ul{list-style:none;margin:1rem 0}
+ul li{font-size:1.04rem;line-height:1.75;margin-bottom:.8rem;padding-left:2rem;position:relative;color:#3d3d52}
+ul li::before{content:'●';position:absolute;left:0;color:#9d4edd;font-size:1.2rem;font-weight:700}
+
+/* ── BOXES ── */
+.box{background:#fff;border-left:6px solid #9d4edd;padding:1.6rem 1.8rem;margin:1.4rem 0;border-radius:0 8px 8px 0;box-shadow:0 3px 15px rgba(157,78,221,.1)}
+.box strong{color:#4a0080;display:block;margin-bottom:.7rem;font-size:1.1rem;font-weight:700}
+.box p{margin-bottom:.5rem;color:#3d3d52}
+.box-info{background:#f5f0ff;border-left-color:#7b2fbf}
+.box-info strong{color:#7b2fbf}
+.box-warn{background:#fff8f0;border-left-color:#d4820f}
+.box-warn strong{color:#d4820f}
+.box-accent{background:#efe8ff;border-left-color:#4a0080}
+.box-accent strong{color:#4a0080}
+.box-success{background:#f0fdf4;border-left-color:#16a34a}
+.box-success strong{color:#15803d}
+.box-quote{background:#faf5ff;border-left:6px solid #c084fc;padding:1.4rem 1.8rem;border-radius:0 8px 8px 0;margin:1.2rem 0;font-style:italic}
+.box-quote strong{color:#7b2fbf;font-style:normal}
+
+/* ── GRIDS Y CARDS ── */
+.grid{display:grid;gap:1.4rem;margin:1.4rem 0}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;padding:1.5rem;border-radius:10px;border:2px solid #e0e0ec;box-shadow:0 2px 10px rgba(0,0,0,.05);transition:all .3s}
+.card:hover{border-color:#9d4edd;box-shadow:0 4px 18px rgba(157,78,221,.15)}
+.card h4{color:#4a0080;margin-bottom:.8rem}
+.card p{font-size:1rem;margin-bottom:.4rem;color:#3d3d52}
+.card-primary{border-color:#9d4edd;background:linear-gradient(135deg,#fff,#f5f0ff)}
+.card-accent{border-color:#7b2fbf;background:#f5f0ff}
+.em{color:#9d4edd;font-weight:700}
+.code{background:#1e1e2e;color:#cba6f7;padding:.3rem .7rem;border-radius:5px;font-family:'Roboto Mono',monospace;font-size:.88rem}
+.tag{display:inline-block;background:#efe8ff;color:#4a0080;border:1.5px solid #9d4edd;border-radius:20px;padding:.2rem .9rem;font-size:.88rem;font-weight:700;margin:.2rem}
+
+/* ── CLASS BOX (UML Visual) ── */
+.class-box{display:inline-block;min-width:180px;border:3px solid #9d4edd;border-radius:6px;overflow:hidden;box-shadow:0 4px 14px rgba(157,78,221,.18);font-family:'Roboto Mono',monospace;font-size:.9rem}
+.class-name{background:linear-gradient(135deg,#4a0080,#9d4edd);color:#fff;font-weight:700;text-align:center;padding:.6rem 1rem;font-size:1rem;font-family:'Lato',sans-serif;font-style:italic}
+.class-attrs{background:#faf5ff;padding:.8rem 1rem;border-top:2px solid #9d4edd}
+.class-methods{background:#f5f0ff;padding:.8rem 1rem;border-top:2px solid #9d4edd}
+.class-row{color:#3d3d52;padding:.2rem 0;font-size:.85rem}
+.class-row span{color:#7b2fbf}
+
+/* ── CRC CARD ── */
+.crc-card{background:#fff;border:3px solid #9d4edd;border-radius:10px;overflow:hidden;box-shadow:0 4px 18px rgba(157,78,221,.15)}
+.crc-header{background:linear-gradient(135deg,#4a0080,#7b2fbf);color:#fff;padding:.8rem 1.2rem;font-weight:900;font-size:1.1rem}
+.crc-body{display:grid;grid-template-columns:1fr 1fr}
+.crc-col{padding:1rem 1.2rem}
+.crc-col:first-child{border-right:2px solid #e8e0f5}
+.crc-col-title{font-size:.72rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#9d4edd;margin-bottom:.6rem}
+.crc-item{font-size:.92rem;color:#3d3d52;padding:.25rem 0;border-bottom:1px dashed #e8e0f5;line-height:1.5}
+.crc-item:last-child{border-bottom:none}
+
+/* ── TAXONOMY TABLE ── */
+.tax-item{display:flex;gap:1rem;background:#fff;border-radius:8px;padding:1rem 1.2rem;margin-bottom:.8rem;border-left:5px solid #9d4edd;box-shadow:0 1px 6px rgba(0,0,0,.05);align-items:flex-start}
+.tax-icon{font-size:1.6rem;flex-shrink:0;margin-top:.1rem}
+.tax-text strong{color:#4a0080;font-size:1rem}
+.tax-text p{font-size:.93rem;margin:0;margin-top:.2rem;color:#3d3d52}
+
+/* ── STEPS ── */
+.steps{counter-reset:step;margin:1.4rem 0}
+.step{counter-increment:step;position:relative;padding:1.4rem 1.4rem 1.4rem 4.8rem;margin-bottom:1.3rem;background:#fff;border-radius:10px;border-left:5px solid #9d4edd;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.step::before{content:counter(step);position:absolute;left:1.2rem;top:50%;transform:translateY(-50%);width:2.4rem;height:2.4rem;background:#9d4edd;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem}
+.step h4{color:#4a0080;font-size:1.1rem;margin-bottom:.6rem}
+.step p{font-size:.99rem;color:#3d3d52;line-height:1.7;margin-bottom:0}
+
+/* ── MULTIPLICITY TABLE ── */
+table{width:100%;border-collapse:collapse;margin:1.3rem 0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);border-radius:8px;overflow:hidden}
+th,td{padding:.9rem 1rem;text-align:left;border-bottom:1px solid #ede8f5;font-size:.97rem}
+th{background:linear-gradient(135deg,#4a0080,#9d4edd);color:#fff;font-weight:700;font-size:.88rem;text-transform:uppercase}
+tr:last-child td{border-bottom:none}
+tr:hover{background:#f5f0ff}
+td strong{color:#4a0080;font-family:'Roboto Mono',monospace}
+
+/* ── EXAMPLE BLOCK ── */
+.example-text{background:#1e1e2e;color:#cdd6f4;padding:1.6rem 1.8rem;border-radius:10px;line-height:2;font-size:1.02rem}
+.example-text strong{color:#cba6f7}
+.example-text em{color:#a6e3a1;font-style:italic}
+
+/* ── ACTIVITY ── */
+.activity-section{background:linear-gradient(135deg,#efe8ff,#e0d0ff);padding:2.2rem;border-radius:15px;border:4px solid #9d4edd;margin:1.8rem 0;box-shadow:0 5px 22px rgba(157,78,221,.18)}
+.activity-title{color:#4a0080;font-size:1.9rem;font-weight:900;margin-bottom:1.3rem;text-align:center}
+.activity-box{background:#fff;padding:1.6rem;border-radius:10px;margin:1rem 0;border-left:5px solid #9d4edd}
+.activity-box h4{color:#4a0080}
+
+/* ── GLOSARIO ── */
+.glos-item{background:#fff;border-radius:8px;padding:1.1rem 1.4rem;margin-bottom:1rem;border-left:5px solid #7b2fbf;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.glos-item strong{color:#4a0080;font-size:1.05rem}
+.glos-item p{margin:0;margin-top:.4rem;font-size:.99rem}
+
+/* ── NAVEGACIÓN ── */
+.nav{position:fixed;bottom:2.5rem;right:2.5rem;display:flex;gap:1.4rem;z-index:1000}
+.btn{width:68px;height:68px;background:linear-gradient(135deg,#9d4edd,#7b2fbf);border:none;border-radius:50%;color:#fff;font-size:1.7rem;cursor:pointer;box-shadow:0 5px 22px rgba(157,78,221,.35);transition:all .3s;font-weight:700;display:flex;align-items:center;justify-content:center}
+.btn:hover:not(:disabled){background:linear-gradient(135deg,#7b2fbf,#4a0080);transform:scale(1.1);box-shadow:0 8px 28px rgba(157,78,221,.5)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.counter{position:fixed;bottom:2.5rem;left:2.5rem;background:#fff;padding:.9rem 1.8rem;border-radius:30px;border:3px solid #9d4edd;color:#4a0080;font-weight:700;z-index:1000;box-shadow:0 4px 18px rgba(157,78,221,.18);font-size:1.05rem}
+.progress-bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,#9d4edd,#4a0080);z-index:2000;transition:width .3s ease}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .slide{padding:2.5rem 3rem}
+  .cover h1{font-size:3rem}
+  h2{font-size:2.1rem}
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:680px){
+  .slide{padding:2rem 1.4rem}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  h2{font-size:1.8rem}
+  .cover h1{font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+
+<!-- ══════════════════════════════════════════
+     SLIDE 1 · PORTADA
+════════════════════════════════════════════ -->
+<div class="slide cover active">
+  <div class="badge">Ingeniería de Requerimientos de Software</div>
+  <h1>Modelos de Clases</h1>
+  <div class="line"></div>
+  <p class="subtitle">Tema 7 · Paradigma Orientado a Objetos</p>
+  <p class="meta">TI13312 | Universidad Tecmilenio &nbsp;·&nbsp; Nivel: Intermedio</p>
+  <p class="help">→ Navega con las flechas del teclado o los botones</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 2 · CONTEXTO / INTRODUCCIÓN
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">CONTEXTO</div>
+    <h2>El Mundo como Objetos</h2>
+  </div>
+  <div class="content">
+    <div class="box">
+      <strong>🌎 Observa tu entorno</strong>
+      <p>Te rodea un mundo de objetos que tienen características únicas y a la vez son parecidos a otros. Tu automóvil tiene un color, matrícula y detalles que lo hacen único, pero comparte características con todos los autos del mismo modelo y marca.</p>
+    </div>
+    <div class="grid grid-2">
+      <div class="card card-primary">
+        <h4>🧠 Pensamiento y Comunicación</h4>
+        <p>El proceso de pensamiento y comunicación se basa en la <strong>abstracción de objetos</strong>. Cuando describes algo, usas palabras que evocan objetos que tu interlocutor relaciona en su mente.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>💻 Software Orientado a Objetos</h4>
+        <p>El desarrollo de software ha adoptado esta misma forma de ver el mundo. Este paradigma es la base de los <strong>lenguajes de programación más modernos</strong>.</p>
+      </div>
+    </div>
+    <div class="box box-accent" style="margin-top:1.5rem">
+      <strong>🎯 En este tema aprenderás a:</strong>
+      <p>Revisar los fundamentos del paradigma orientado a objetos y <strong>expresar un contexto del sistema a través de clases</strong> para documentar los requerimientos que darán solución a un problema.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 3 · OBJETIVOS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">OBJETIVOS</div>
+    <h2>Objetivos de Aprendizaje</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>🎯 Al concluir este tema podrás:</strong>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Reconocer los conceptos del diseño orientado a objetos</h4>
+        <p>Identificar y definir los elementos fundamentales: objeto, clase, atributos, métodos, asociaciones, agregación, composición y herencia.</p>
+      </div>
+      <div class="step">
+        <h4>Construir Diagramas de Clases UML</h4>
+        <p>Aplicar el análisis gramatical para detectar clases, atributos y métodos a partir de los escenarios de casos de uso, y representarlos en notación UML.</p>
+      </div>
+      <div class="step">
+        <h4>Elaborar Tarjetas CRC</h4>
+        <p>Generar el inventario de clases usando el modelo Clase-Responsabilidad-Colaborador para documentar los requerimientos del sistema.</p>
+      </div>
+      <div class="step">
+        <h4>Aclarar requerimientos con diagramas de clases</h4>
+        <p>Usar los diagramas UML y tarjetas CRC como herramientas de comunicación con el cliente para validar el alcance del sistema.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 4 · CONCEPTOS FUNDAMENTALES – OBJETO Y CLASE
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.1 FUNDAMENTOS</div>
+    <h2>Objeto y Clase</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>Objeto</h3>
+        <div class="box">
+          <strong>🏠 Definición</strong>
+          <p>Un objeto es algo que podemos percibir de forma <strong>real o abstracta</strong>. Si piensas en una casa, se te viene a la mente una imagen con características simples: techo, ventana y puerta.</p>
+          <p>Un objeto pertenece a una clase, tiene atributos, realiza métodos y posee estados.</p>
+        </div>
+        <div class="box box-info" style="margin-top:1rem">
+          <strong>⚙️ Características de un Objeto</strong>
+          <ul style="margin:.5rem 0">
+            <li>Pertenece a una <strong>clase</strong></li>
+            <li>Tiene un conjunto de <strong>atributos</strong></li>
+            <li>Realiza ciertos <strong>métodos</strong></li>
+            <li>Posee <strong>estados</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <h3>Clase</h3>
+        <div class="box">
+          <strong>📦 Definición</strong>
+          <p>Es un conjunto de objetos que tienen una <strong>estructura y comportamiento similares</strong>. Por ejemplo: <em>vehículo</em> es un concepto abstracto que nos permite movernos de un lugar a otro.</p>
+        </div>
+        <div class="box-quote">
+          <strong>Pohl y Rupp (2011):</strong><br>
+          <p style="margin:0;margin-top:.5rem">"Una clase es una colección lógica de atributos de datos que necesita el producto para llevar a cabo sus funciones."</p>
+        </div>
+        <div class="box box-accent" style="margin-top:1rem">
+          <strong>🚗 Ejemplo</strong>
+          <p><span class="tag">Vehículo</span> es la clase.<br><span class="tag">Mi auto rojo ABC-123</span> es el objeto.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 5 · ATRIBUTOS Y MÉTODOS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.1 FUNDAMENTOS</div>
+    <h2>Atributos y Métodos</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>Atributos</h3>
+        <div class="box">
+          <strong>📋 Definición</strong>
+          <p>Cada objeto tiene atributos que lo <strong>describen y lo hacen único</strong>. Por ejemplo, la clase <em>Vehículo</em> tiene atributos como color, tamaño, capacidad de carga y potencia.</p>
+        </div>
+        <div class="box box-info">
+          <strong>🏎️ Contextual: Auto de Fórmula 1</strong>
+          <p>Sus atributos pueden ser: escudería, neumáticos, material de construcción, aerodinámica… aunque <strong>hereda</strong> los atributos base de la superclase Vehículo.</p>
+        </div>
+        <div class="box box-accent" style="margin-top:1rem">
+          <strong>💡 Clave</strong>
+          <p>Los atributos dependen del <strong>contexto</strong> del sistema. No son fijos; se definen según las necesidades del negocio.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Métodos</h3>
+        <div class="box">
+          <strong>⚡ Definición</strong>
+          <p>Los métodos son las <strong>acciones que puede realizar</strong> un objeto de una clase. Por convención se incluye un paréntesis al final, ya que los métodos en POO incluyen parámetros.</p>
+        </div>
+        <div class="box box-info">
+          <strong>🚗 Ejemplo: clase Automóvil</strong>
+          <ul style="margin:.5rem 0">
+            <li><span class="code">acelerar()</span></li>
+            <li><span class="code">frenar()</span></li>
+            <li><span class="code">girarDerecha()</span></li>
+            <li><span class="code">girarIzquierda()</span></li>
+            <li><span class="code">transportar(pasajeros)</span></li>
+          </ul>
+        </div>
+        <div class="box box-warn" style="margin-top:1rem">
+          <strong>⚠️ Nota</strong>
+          <p>Para el diagrama de clases no es necesario dividir los métodos en acciones de mayor detalle.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 6 · RELACIONES: ASOCIACIONES Y MULTIPLICIDAD
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.1 FUNDAMENTOS</div>
+    <h2>Asociaciones y Multiplicidad</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>Asociaciones</h3>
+        <div class="box">
+          <strong>🔗 Definición</strong>
+          <p>En un grupo de clases es posible establecer las <strong>relaciones que existen entre ellas</strong> a través de asociaciones. Se dibujan con una línea continua; de forma opcional se incluye una leyenda explicativa sobre la línea.</p>
+        </div>
+        <div class="box box-accent">
+          <strong>📌 Ejemplo</strong>
+          <p style="font-family:'Roboto Mono',monospace;font-size:.93rem">Cliente ─────── Factura<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"genera"</p>
+        </div>
+      </div>
+      <div>
+        <h3>Multiplicidad</h3>
+        <p>Se incluye en cada extremo de la asociación para describir <strong>cómo se relacionan</strong> las clases en cantidad:</p>
+        <table>
+          <thead><tr><th>Símbolo</th><th>Significado</th></tr></thead>
+          <tbody>
+            <tr><td><strong>1</strong></td><td>Uno y sólo uno</td></tr>
+            <tr><td><strong>0..1</strong></td><td>Cero o uno</td></tr>
+            <tr><td><strong>n..m</strong></td><td>Desde n hasta m</td></tr>
+            <tr><td><strong>*</strong></td><td>Varios (muchos)</td></tr>
+            <tr><td><strong>0..*</strong></td><td>Cero o varios</td></tr>
+            <tr><td><strong>1..*</strong></td><td>Uno o varios</td></tr>
+          </tbody>
+        </table>
+        <div class="box box-info" style="margin-top:.5rem">
+          <strong>🧾 Ejemplo de lectura</strong>
+          <p>Un <strong>Cliente</strong> genera <strong>1..*</strong> Facturas. Una <strong>Factura</strong> pertenece a <strong>1</strong> Cliente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 7 · AGREGACIÓN, COMPOSICIÓN Y HERENCIA
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.1 FUNDAMENTOS</div>
+    <h2>Agregación, Composición y Herencia</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-3">
+      <div class="card card-primary">
+        <h4>🧩 Agregación</h4>
+        <p>Un objeto puede estar <strong>formado por otros objetos</strong>. La parte puede existir de forma independiente del todo.</p>
+        <div style="margin-top:1rem;text-align:center;font-family:'Roboto Mono',monospace;font-size:.88rem;color:#4a0080">
+          Automóvil ◇──── Rueda<br>
+          Automóvil ◇──── Motor<br>
+          Automóvil ◇──── Volante
+        </div>
+        <p style="margin-top:.8rem;font-size:.93rem">Las ruedas pueden existir sin el auto.</p>
+      </div>
+      <div class="card" style="border-color:#c084fc">
+        <h4 style="color:#7b2fbf">💎 Composición</h4>
+        <p>Es una <strong>agregación esencial</strong>. Sin el componente, el objeto no podría existir. Relación de dependencia total.</p>
+        <div style="margin-top:1rem;text-align:center;font-family:'Roboto Mono',monospace;font-size:.88rem;color:#4a0080">
+          Persona ◆──── Corazón
+        </div>
+        <p style="margin-top:.8rem;font-size:.93rem">Pedro es un objeto de la clase Persona. Sin corazón, Pedro no existiría.</p>
+        <p style="font-size:.88rem;color:#9d4edd;font-weight:700">Se dibuja con un rombo relleno ◆</p>
+      </div>
+      <div class="card" style="border-color:#a855f7">
+        <h4 style="color:#4a0080">🧬 Herencia</h4>
+        <p>Una clase puede <strong>heredar atributos y métodos</strong> de una clase superior llamada <em>superclase</em>.</p>
+        <div style="margin-top:1rem;text-align:center;font-family:'Roboto Mono',monospace;font-size:.85rem;color:#4a0080;line-height:2">
+          Vehículo (superclase)<br>
+          &nbsp;&nbsp;&nbsp;△<br>
+          ┌───┬────┬┴─────┐<br>
+          Auto Taxi Bus Camion
+        </div>
+        <p style="margin-top:.8rem;font-size:.93rem">Todas las subclases heredan los atributos y métodos de <em>Vehículo</em>.</p>
+      </div>
+    </div>
+    <div class="box box-accent" style="margin-top:1.5rem">
+      <strong>🔑 Resumen de relaciones UML</strong>
+      <p><span class="tag">Asociación</span> línea continua &nbsp;|&nbsp; <span class="tag">Agregación</span> rombo vacío ◇ &nbsp;|&nbsp; <span class="tag">Composición</span> rombo relleno ◆ &nbsp;|&nbsp; <span class="tag">Herencia</span> flecha con triángulo △</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 8 · ESTRUCTURA DEL DIAGRAMA DE CLASES
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.2 CREACIÓN DEL MODELO</div>
+    <h2>El Diagrama de Clases UML</h2>
+  </div>
+  <div class="content">
+    <p>El diagrama de clases se construye usando una <strong>caja rectangular dividida en tres compartimentos</strong>:</p>
+    <div class="grid grid-2" style="align-items:start;margin-top:1.5rem">
+      <div style="text-align:center">
+        <div class="class-box" style="margin:0 auto">
+          <div class="class-name">Sistema_Seguridad</div>
+          <div class="class-attrs">
+            <div class="class-row"><span>–</span> zonaMonitoreo : String</div>
+            <div class="class-row"><span>–</span> estadoAlarma : Boolean</div>
+            <div class="class-row"><span>–</span> nivelSensor : Integer</div>
+          </div>
+          <div class="class-methods">
+            <div class="class-row"><span>+</span> activarAlarma()</div>
+            <div class="class-row"><span>+</span> monitorearZona(zona)</div>
+            <div class="class-row"><span>+</span> reportarIncidente()</div>
+            <div class="class-row"><span>+</span> registrarEvento()</div>
+          </div>
+        </div>
+        <p style="font-size:.85rem;color:#7b2fbf;margin-top:.8rem;font-style:italic">Ejemplo: clase Sistema de Seguridad (Pressman, 2010)</p>
+      </div>
+      <div>
+        <h3>Compartimentos</h3>
+        <div class="box">
+          <strong>1️⃣ Nombre de la Clase</strong>
+          <p>En la parte superior. Debe ser lo más <strong>corto y descriptivo</strong> posible. Por convención en <em>CamelCase</em> o con guión bajo.</p>
+        </div>
+        <div class="box box-info">
+          <strong>2️⃣ Atributos</strong>
+          <p>Listado en la parte central. Describen las <strong>características</strong> de la clase. Se indica el nombre y tipo de dato.</p>
+        </div>
+        <div class="box box-accent">
+          <strong>3️⃣ Métodos</strong>
+          <p>En la parte inferior. Son las <strong>acciones</strong> que puede realizar la clase. Siempre incluyen paréntesis <span class="code">()</span> al final.</p>
+        </div>
+        <div class="box box-warn" style="margin-top:.5rem">
+          <strong>💡 Nota</strong>
+          <p>Algunos diagramas solo muestran el nombre de la clase, dejando atributos y métodos en blanco para mayor claridad visual.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 9 · ANÁLISIS GRAMATICAL
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.2 CREACIÓN DEL MODELO</div>
+    <h2>Análisis Gramatical para Detectar Clases</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>📖 Método de Pressman (2010)</strong>
+      <p>A partir de la descripción de los escenarios de los casos de uso, se subrayan los <strong>sustantivos</strong> (posibles clases) y los <strong>verbos</strong> (posibles métodos).</p>
+    </div>
+    <h3>Ejemplo: Estación Meteorológica</h3>
+    <div class="example-text">
+      Una <strong>estación meteorológica</strong> es <em>instalada</em> en una <strong>zona abierta o en el techo de una casa</strong>. Contiene <strong>sensores atmosféricos</strong> que <em>recopilan</em> <strong>información</strong> del <strong>medio ambiente circundante</strong> cada 5 minutos. Esta <strong>información</strong> es <em>enviada</em> a un <strong>servidor</strong> que <em>analiza</em> cada <strong>parámetro</strong> y va <em>generando</em> un <strong>reporte</strong> que puede ser <em>recuperado</em> por el <strong>usuario</strong> desde una <strong>página Web</strong>.
+    </div>
+    <div class="grid grid-2" style="margin-top:1.3rem">
+      <div class="card card-primary">
+        <h4>📦 Sustantivos → Clases candidatas</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem">
+          <span class="tag">EstacionMeteorologica</span>
+          <span class="tag">SensorAtmosferico</span>
+          <span class="tag">Servidor</span>
+          <span class="tag">Reporte</span>
+          <span class="tag">Usuario</span>
+          <span class="tag">PaginaWeb</span>
+          <span class="tag">Parametro</span>
+        </div>
+      </div>
+      <div class="card">
+        <h4>⚡ Verbos → Métodos candidatos</h4>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem">
+          <span class="tag" style="background:#f0fdf4;color:#166534;border-color:#16a34a">instalar()</span>
+          <span class="tag" style="background:#f0fdf4;color:#166534;border-color:#16a34a">recopilar()</span>
+          <span class="tag" style="background:#f0fdf4;color:#166534;border-color:#16a34a">enviar()</span>
+          <span class="tag" style="background:#f0fdf4;color:#166534;border-color:#16a34a">analizar()</span>
+          <span class="tag" style="background:#f0fdf4;color:#166534;border-color:#16a34a">generarReporte()</span>
+          <span class="tag" style="background:#f0fdf4;color:#166534;border-color:#16a34a">recuperar()</span>
+        </div>
+      </div>
+    </div>
+    <div class="box box-accent" style="margin-top:1rem">
+      <strong>🔄 Proceso Iterativo</strong>
+      <p>El análisis es <strong>iterativo</strong> hasta definir clases + atributos + métodos para construir el diagrama completo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 10 · TAXONOMÍA DE CLASES
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.2 CREACIÓN DEL MODELO</div>
+    <h2>Taxonomía de Clases</h2>
+  </div>
+  <div class="content">
+    <p>Una vez detectados los sustantivos, se clasifican en la siguiente taxonomía para determinar qué tipo de clase representan:</p>
+    <div style="column-count:2;column-gap:1.4rem;margin-top:1rem">
+      <div class="tax-item" style="break-inside:avoid;margin-bottom:.8rem">
+        <div class="tax-icon">🌐</div>
+        <div class="tax-text"><strong>Entidades externas</strong><p>Cosas o sistemas ajenos que requieren información del sistema.</p></div>
+      </div>
+      <div class="tax-item" style="break-inside:avoid;margin-bottom:.8rem">
+        <div class="tax-icon">📦</div>
+        <div class="tax-text"><strong>Cosas</strong><p>Entidades internas al sistema que intercambian información.</p></div>
+      </div>
+      <div class="tax-item" style="break-inside:avoid;margin-bottom:.8rem">
+        <div class="tax-icon">⚡</div>
+        <div class="tax-text"><strong>Ocurrencias o eventos</strong><p>Permiten identificar acciones o cambios de estado de las cosas.</p></div>
+      </div>
+      <div class="tax-item" style="break-inside:avoid;margin-bottom:.8rem">
+        <div class="tax-icon">👤</div>
+        <div class="tax-text"><strong>Roles</strong><p>Personas que realizan alguna función específica dentro del sistema.</p></div>
+      </div>
+      <div class="tax-item" style="break-inside:avoid;margin-bottom:.8rem">
+        <div class="tax-icon">🏢</div>
+        <div class="tax-text"><strong>Unidades organizacionales</strong><p>Áreas o departamentos que requieren o generan información.</p></div>
+      </div>
+      <div class="tax-item" style="break-inside:avoid;margin-bottom:.8rem">
+        <div class="tax-icon">📍</div>
+        <div class="tax-text"><strong>Lugares</strong><p>Espacios físicos donde se realizan actividades que generan información.</p></div>
+      </div>
+      <div class="tax-item" style="break-inside:avoid;margin-bottom:.8rem">
+        <div class="tax-icon">🔧</div>
+        <div class="tax-text"><strong>Estructuras</strong><p>Herramientas o dispositivos que sirven como interfaz entre el sistema y las personas.</p></div>
+      </div>
+    </div>
+    <div class="box box-warn" style="margin-top:1rem">
+      <strong>⚠️ No todas las clases son válidas</strong>
+      <p>Deben aplicarse filtros para eliminar clases redundantes, irrelevantes, vagas o que estén fuera del alcance del sistema.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 11 · MODELO CRC – INTRODUCCIÓN
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.3 MODELO CRC</div>
+    <h2>Modelo CRC: Clase – Responsabilidad – Colaborador</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>📖 Definición</strong>
+      <p>Serie de tarjetas con información de las clases propuesta por <strong>Kent Beck y Ward Cunningham (1989)</strong> para generar un inventario de clases y facilitar la documentación de los requerimientos del sistema.</p>
+    </div>
+    <div class="grid grid-3" style="margin-top:1.3rem">
+      <div class="card card-primary">
+        <h4>📄 Formato Físico o Virtual</h4>
+        <p>Pueden ser tarjetas físicas de <strong>4 × 6 pulgadas</strong> o tarjetas virtuales usando una plantilla. Son revisables por todo el equipo del proyecto.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🗂️ Tres secciones por tarjeta</h4>
+        <p><strong>1.</strong> Nombre de la clase<br><strong>2.</strong> Responsabilidades<br><strong>3.</strong> Colaboradores</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🔄 Tipos de Clases CRC</h4>
+        <p><strong>Entidad:</strong> almacenadas en BD<br><strong>Frontera:</strong> interfaz usuario–software<br><strong>Colaborador:</strong> administra otras clases</p>
+      </div>
+    </div>
+    <div class="box box-accent" style="margin-top:1.3rem">
+      <strong>💡 ¿Por qué usar CRC?</strong>
+      <p>Mientras el diagrama de clases muestra la <em>estructura estática</em>, las tarjetas CRC describen el <em>comportamiento dinámico</em>: qué hace cada clase y con quién colabora para cumplir sus responsabilidades.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 12 · RESPONSABILIDADES Y COLABORADORES
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.3 MODELO CRC</div>
+    <h2>Responsabilidades y Colaboradores</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>Responsabilidades</h3>
+        <div class="box">
+          <strong>📌 Definición</strong>
+          <p>Establecen las <strong>acciones más relevantes</strong> que puede realizar la clase o el servicio que provee. Describen la razón de ser de la clase (lo que <em>saben</em> o lo que <em>hacen</em>).</p>
+        </div>
+        <h3>Recomendaciones (Pressman, 2010)</h3>
+        <ul>
+          <li>La inteligencia del sistema debe estar <strong>distribuida entre las clases</strong>.</li>
+          <li>Cada responsabilidad enunciada del modo <strong>más general posible</strong>.</li>
+          <li>La información y el comportamiento deben <strong>residir dentro de la misma clase</strong>.</li>
+          <li>La información sobre una cosa debe estar en <strong>una sola clase</strong>.</li>
+          <li>Cuando sea apropiado, las responsabilidades deben <strong>compartirse</strong> entre clases relacionadas.</li>
+        </ul>
+        <div class="box box-warn" style="margin-top:1rem">
+          <strong>⚠️ Límite de responsabilidades</strong>
+          <p>Una clase no debe tener <strong>más de 5 responsabilidades</strong>. Si se requieren más, lo mejor es dividir en dos tarjetas con clases más específicas.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Colaboradores</h3>
+        <div class="box">
+          <strong>🤝 Definición</strong>
+          <p>Describen qué tipo de <strong>objetos o clases se les puede pedir ayuda</strong> para cumplir con una responsabilidad específica.</p>
+        </div>
+        <h3>Tipos de Clases en CRC</h3>
+        <div class="card card-primary" style="margin-bottom:1rem">
+          <h4>🗄️ Clases de Entidad</h4>
+          <p>Por lo general expresan cosas que son almacenadas en una base de datos.</p>
+        </div>
+        <div class="card card-primary" style="margin-bottom:1rem">
+          <h4>🖥️ Clases de Frontera</h4>
+          <p>Permiten expresar una interfaz de intercambio de información entre el usuario y el software.</p>
+        </div>
+        <div class="card card-primary">
+          <h4>⚙️ Clases de Colaborador</h4>
+          <p>Su objetivo principal es la administración de otras clases: crear, modificar o eliminar clases entidad o frontera.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 13 · EJEMPLO CRC – BIBLIOTECA
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">7.3 MODELO CRC</div>
+    <h2>Ejemplo CRC: Sistema de Biblioteca</h2>
+  </div>
+  <div class="content">
+    <p>Observa cómo 4 tarjetas CRC describen las clases de un sistema de biblioteca y se relacionan cuando se presta un libro:</p>
+    <div class="grid grid-2" style="margin-top:1.2rem;gap:1.2rem">
+      <!-- Tarjeta 1 -->
+      <div class="crc-card">
+        <div class="crc-header">📚 Libro</div>
+        <div class="crc-body">
+          <div class="crc-col">
+            <div class="crc-col-title">Responsabilidades</div>
+            <div class="crc-item">Conocer su ISBN</div>
+            <div class="crc-item">Conocer su título y autor</div>
+            <div class="crc-item">Indicar si está disponible</div>
+            <div class="crc-item">Registrar préstamo</div>
+          </div>
+          <div class="crc-col">
+            <div class="crc-col-title">Colaboradores</div>
+            <div class="crc-item">Catálogo</div>
+            <div class="crc-item">Préstamo</div>
+          </div>
+        </div>
+      </div>
+      <!-- Tarjeta 2 -->
+      <div class="crc-card">
+        <div class="crc-header">👤 Socio</div>
+        <div class="crc-body">
+          <div class="crc-col">
+            <div class="crc-col-title">Responsabilidades</div>
+            <div class="crc-item">Conocer su número de socio</div>
+            <div class="crc-item">Conocer sus datos personales</div>
+            <div class="crc-item">Solicitar préstamo</div>
+            <div class="crc-item">Devolver libro</div>
+          </div>
+          <div class="crc-col">
+            <div class="crc-col-title">Colaboradores</div>
+            <div class="crc-item">Préstamo</div>
+            <div class="crc-item">Bibliotecario</div>
+          </div>
+        </div>
+      </div>
+      <!-- Tarjeta 3 -->
+      <div class="crc-card">
+        <div class="crc-header">🏷️ Préstamo</div>
+        <div class="crc-body">
+          <div class="crc-col">
+            <div class="crc-col-title">Responsabilidades</div>
+            <div class="crc-item">Registrar fecha de préstamo</div>
+            <div class="crc-item">Registrar fecha de devolución</div>
+            <div class="crc-item">Calcular multa por retraso</div>
+          </div>
+          <div class="crc-col">
+            <div class="crc-col-title">Colaboradores</div>
+            <div class="crc-item">Libro</div>
+            <div class="crc-item">Socio</div>
+            <div class="crc-item">Bibliotecario</div>
+          </div>
+        </div>
+      </div>
+      <!-- Tarjeta 4 -->
+      <div class="crc-card">
+        <div class="crc-header">📋 Catálogo</div>
+        <div class="crc-body">
+          <div class="crc-col">
+            <div class="crc-col-title">Responsabilidades</div>
+            <div class="crc-item">Registrar nuevo libro</div>
+            <div class="crc-item">Buscar libro por título</div>
+            <div class="crc-item">Listar libros disponibles</div>
+          </div>
+          <div class="crc-col">
+            <div class="crc-col-title">Colaboradores</div>
+            <div class="crc-item">Libro</div>
+            <div class="crc-item">Bibliotecario</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 14 · EJERCICIO PRÁCTICO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">EJERCICIO PRÁCTICO</div>
+    <h2>Ejercicio: Sistema de Estación Meteorológica</h2>
+  </div>
+  <div class="content">
+    <div class="activity-section">
+      <div class="activity-title">🌦️ Caso: Estación Meteorológica</div>
+      <div class="activity-box">
+        <h4>📋 Descripción del Escenario</h4>
+        <p>Una estación meteorológica instalada en una zona abierta recopila información del medio ambiente cada 5 minutos. Los datos son enviados a un servidor que analiza cada parámetro y genera un reporte que el usuario puede recuperar desde una página web.</p>
+      </div>
+      <div class="grid grid-2" style="margin-top:1rem">
+        <div class="activity-box">
+          <h4>🎯 Tarea 1: Análisis Gramatical</h4>
+          <p>Subraya todos los sustantivos y verbos del escenario. Clasifica cada sustantivo según la taxonomía de clases (entidad externa, cosa, rol, lugar, etc.).</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 2: Diagrama de Clases UML</h4>
+          <p>Construye el diagrama de clases con al menos 4 clases. Incluye atributos, métodos, asociaciones y multiplicidades. Identifica relaciones de herencia o composición si aplica.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 3: Tarjetas CRC</h4>
+          <p>Elabora una tarjeta CRC para cada clase identificada. Define sus responsabilidades (máximo 5 por clase) y sus colaboradores.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 4: Validación</h4>
+          <p>Verifica que las responsabilidades están correctamente distribuidas entre las clases, que ninguna clase tenga más de 5 responsabilidades y que los colaboradores estén correctamente identificados.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 15 · ACTIVIDAD EVALUABLE
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">ACTIVIDAD EVALUABLE</div>
+    <h2>Entregable: Modelo de Clases de Tu Proyecto</h2>
+  </div>
+  <div class="content">
+    <div class="box box-warn">
+      <strong>📌 Instrucciones Generales</strong>
+      <p>Aplica los conceptos del Tema 7 al sistema de información que está desarrollando tu equipo. Utiliza los casos de uso elaborados previamente como punto de partida para el análisis gramatical.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Análisis Gramatical de tus Casos de Uso</h4>
+        <p>Toma la documentación de los casos de uso del Tema 6 y subraya sustantivos y verbos. Clasifica los sustantivos usando la taxonomía de clases y filtra los que no apliquen al sistema.</p>
+      </div>
+      <div class="step">
+        <h4>Diagrama de Clases UML</h4>
+        <p>Construye el diagrama con mínimo 5 clases. Cada clase debe incluir nombre, atributos y métodos. Representa las asociaciones con su multiplicidad, y señala las relaciones de agregación, composición o herencia que existan.</p>
+      </div>
+      <div class="step">
+        <h4>Tarjetas CRC</h4>
+        <p>Elabora una tarjeta CRC por cada clase del diagrama. Clasifica cada clase como entidad, frontera o colaborador. Define sus responsabilidades (máx. 5) y sus colaboradores.</p>
+      </div>
+      <div class="step">
+        <h4>Justificación y Validación</h4>
+        <p>Incluye un breve párrafo justificando las decisiones de diseño: por qué se definieron esas clases, cómo se relacionan y cómo el modelo cubre los requerimientos identificados.</p>
+      </div>
+    </div>
+    <div class="box box-success" style="margin-top:1rem">
+      <strong>📅 Criterios de Evaluación</strong>
+      <p>Diagrama de Clases correcto (35%) · Tarjetas CRC completas (30%) · Aplicación de la taxonomía (20%) · Justificación y coherencia (15%)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 16 · CIERRE / RESUMEN
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">CIERRE</div>
+    <h2>Puntos Clave del Tema 7</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-3">
+      <div class="card card-primary">
+        <h4>🧩 Paradigma OO</h4>
+        <p>El modelado de clases hace una analogía del mundo real, base de los lenguajes de programación modernos.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>📦 Clase y Objeto</h4>
+        <p>La clase es el molde; el objeto es la instancia concreta. Cada objeto tiene atributos, métodos y estados.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🔗 Relaciones UML</h4>
+        <p>Asociación, multiplicidad, agregación (◇), composición (◆) y herencia (△) describen cómo interactúan las clases.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🔍 Análisis Gramatical</h4>
+        <p>Sustantivos → Clases. Verbos → Métodos. Es un proceso iterativo que refina el modelo.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🗂️ Tarjetas CRC</h4>
+        <p>Inventario de clases con responsabilidades y colaboradores. Máximo 5 responsabilidades por clase.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🔄 Proceso Adaptable</h4>
+        <p>El diagrama de clases se adapta durante el diseño. Surgirán más clases y asociaciones en fases posteriores.</p>
+      </div>
+    </div>
+    <div class="box box-accent" style="margin-top:1.5rem">
+      <strong>🎯 Conclusión</strong>
+      <p>Los diagramas de clases y las tarjetas CRC son herramientas muy útiles en la ingeniería de requerimientos: <strong>establecen claramente las partes del sistema</strong>, son sencillos de generar y proveen información valiosa para el equipo de desarrollo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 17 · CHECKPOINT + GLOSARIO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">CHECKPOINT</div>
+    <h2>Verificación de Competencias y Glosario</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>🎯 Asegúrate de poder:</strong>
+    </div>
+    <div class="grid grid-2" style="margin-top:1.2rem">
+      <div class="card card-accent">
+        <h4>✅ Competencia 1</h4>
+        <p>Reconocer los conceptos fundamentales del diseño orientado a objetos para construir diagramas UML como parte de las especificaciones de un sistema.</p>
+      </div>
+      <div class="card card-accent">
+        <h4>✅ Competencia 2</h4>
+        <p>Utilizar el paradigma del diseño orientado a objetos para generar diagramas de clases y tarjetas CRC que aclaren los requerimientos del cliente.</p>
+      </div>
+    </div>
+    <h3 style="margin-top:1.8rem">Glosario</h3>
+    <div class="glos-item">
+      <strong>Paradigma</strong>
+      <p>Estructura de conceptos aplicados a un contexto que sirven para interpretar una realidad o una forma de ver el mundo.</p>
+    </div>
+    <div class="glos-item">
+      <strong>Taxonomía</strong>
+      <p>Clasificación de conceptos que están relacionados entre sí, organizada en categorías y subcategorías.</p>
+    </div>
+    <div class="glos-item">
+      <strong>Superclase</strong>
+      <p>Clase "padre" de la que una subclase hereda atributos y métodos. Por ejemplo: Vehículo es superclase de Automóvil, Camioneta y Autobús.</p>
+    </div>
+    <div class="glos-item">
+      <strong>Análisis gramatical</strong>
+      <p>Técnica propuesta por Pressman para identificar clases (sustantivos) y métodos (verbos) a partir de la descripción de casos de uso.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 18 · REFERENCIAS Y RECURSOS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">REFERENCIAS Y RECURSOS</div>
+    <h2>Bibliografía y Recursos Adicionales</h2>
+  </div>
+  <div class="content">
+    <h3>Bibliografía Obligatoria</h3>
+    <div class="box">
+      <strong>[1]</strong> Pressman, R. (2010). <em>Ingeniería de Software. Un enfoque práctico</em> (7ª ed.). México: McGraw Hill.<br>
+      <span style="font-size:.9rem;color:#6b7280">→ Ver sección 6.5: Modelado basado en clases</span>
+    </div>
+    <div class="box">
+      <strong>[2]</strong> Pohl, K. y Rupp, C. (2011). <em>Requirements Engineering Fundamentals</em>. EE. UU: Rocky Nook.<br>
+      <span style="font-size:.9rem;color:#6b7280">→ Ver Figura 6.8: Important modeling elements of class diagrams of UML</span>
+    </div>
+    <h3 style="margin-top:1.5rem">Lecturas Recomendadas</h3>
+    <div class="box box-info">
+      <strong>[3]</strong> Álvarez, H. (1997). <em>Clases y objetos</em>.<br>
+      <span style="font-size:.9rem;color:#6b7280">fpsalmon.usc.es/genp/doc/cursos/poo/clases.html</span>
+    </div>
+    <div class="box box-info">
+      <strong>[4]</strong> Beck, K. y Cunningham, W. (1989). <em>A Laboratory for Teaching Object-Oriented Thinking</em>.<br>
+      <span style="font-size:.9rem;color:#6b7280">c2.com/doc/oopsla89/paper.html</span>
+    </div>
+    <div class="box box-info">
+      <strong>[5]</strong> Börstler, J. y Schulte, C. (2005). <em>Teaching OO Modelling with CRC-cards and Roleplaying Games</em>.<br>
+      <span style="font-size:.9rem;color:#6b7280">citeseerx.ist.psu.edu</span>
+    </div>
+    <div class="box box-accent" style="margin-top:.5rem">
+      <strong>🔗 Herramientas para crear Diagramas de Clases</strong>
+      <p>Lucidchart · draw.io · StarUML · Visual Paradigm · PlantUML — todas soportan notación UML estándar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 19 · CIERRE FINAL
+════════════════════════════════════════════ -->
+<div class="slide cover">
+  <h1>¡Excelente Trabajo!</h1>
+  <div class="line"></div>
+  <p class="subtitle">Fin del Tema 7 · Modelos de Clases</p>
+  <p class="meta" style="z-index:1;position:relative;margin-top:1rem">TI13312 Ingeniería de Requerimientos de Software · Universidad Tecmilenio</p>
+  <p class="help" style="margin-top:3rem;z-index:1;position:relative">Ahora puedes construir diagramas de clases y tarjetas CRC de forma profesional 🧩</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">19</span></div>
+<div class="nav">
+  <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+  <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+document.getElementById('total').textContent=total;
+
+function show(n){
+  if(n<0)n=0;
+  if(n>=total)n=total-1;
+  slides.forEach(s=>s.classList.remove('active'));
+  slides[n].classList.add('active');
+  current=n;
+  document.getElementById('current').textContent=n+1;
+  document.getElementById('prev').disabled=(n===0);
+  document.getElementById('next').disabled=(n===total-1);
+  document.getElementById('progressBar').style.width=((n+1)/total*100)+'%';
+}
+
+function nav(dir){show(current+dir);}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')nav(-1);
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();nav(1);}
+});
+
+show(0);
+</script>
+</body>
+</html>

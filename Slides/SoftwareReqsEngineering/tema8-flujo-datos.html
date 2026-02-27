@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tema 8 – Modelo de Flujos de Datos</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Lato',sans-serif;background:#f5f5f5;color:#2d3b45;overflow:hidden}
+.container{width:100vw;height:100vh}
+.slide{display:none;width:100%;height:100%;padding:3.5rem 6rem;flex-direction:column}
+.slide.active{display:flex}
+
+/* PORTADA */
+.cover{background:linear-gradient(135deg,#1a3a6b,#1e4fa0,#2563c4);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-150px;right:-150px;width:420px;height:420px;border-radius:50%;background:rgba(255,255,255,.07)}
+.cover::after{content:'';position:absolute;bottom:-100px;left:-100px;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.05)}
+.cover h1{font-size:4rem;font-weight:900;color:#fff;letter-spacing:-1px;position:relative;z-index:1;margin-bottom:1.2rem;line-height:1.1}
+.cover .subtitle{font-size:1.75rem;color:#fff;opacity:.95;z-index:1;margin-bottom:.7rem;font-weight:300}
+.cover .line{width:140px;height:5px;background:#fff;margin:1.8rem auto;z-index:1;border-radius:3px}
+.cover .meta{margin-top:1rem;font-size:1.05rem;color:#fff;opacity:.8;z-index:1}
+.cover .help{margin-top:2.5rem;font-size:.95rem;color:#fff;opacity:.65;z-index:1}
+.cover .badge{display:inline-block;background:rgba(255,255,255,.2);border:2px solid rgba(255,255,255,.5);color:#fff;padding:.4rem 1.2rem;border-radius:30px;font-size:.9rem;font-weight:700;margin-bottom:1.5rem;z-index:1;position:relative}
+
+/* HEADER DE SLIDE */
+.slide-header{margin-bottom:1.8rem;flex-shrink:0;border-bottom:4px solid #2563c4;padding-bottom:1.1rem}
+.slide-number{color:#2563c4;font-size:.7rem;font-weight:700;letter-spacing:4px;text-transform:uppercase;margin-bottom:.5rem}
+h2{font-size:2.6rem;color:#1a3a6b;font-weight:900;letter-spacing:-.5px}
+
+/* CONTENIDO */
+.content{flex:1;overflow-y:auto;padding-right:1.2rem}
+.content::-webkit-scrollbar{width:7px}
+.content::-webkit-scrollbar-track{background:#e4e4e4;border-radius:4px}
+.content::-webkit-scrollbar-thumb{background:#2563c4;border-radius:4px}
+p{font-size:1.06rem;line-height:1.8;margin-bottom:1.2rem;color:#394b59}
+h3{color:#1a3a6b;font-size:1.5rem;font-weight:700;margin:1.5rem 0 .9rem}
+h4{color:#1e4fa0;font-size:1.1rem;font-weight:700;margin-bottom:.7rem}
+ul{list-style:none;margin:1rem 0}
+ul li{font-size:1.04rem;line-height:1.75;margin-bottom:.8rem;padding-left:2rem;position:relative;color:#394b59}
+ul li::before{content:'●';position:absolute;left:0;color:#2563c4;font-size:1.2rem;font-weight:700}
+ol{margin:1rem 0 1rem 1.5rem}
+ol li{font-size:1.04rem;line-height:1.75;margin-bottom:.8rem;color:#394b59}
+
+/* BOXES */
+.box{background:#fff;border-left:6px solid #2563c4;padding:1.6rem 1.8rem;margin:1.4rem 0;border-radius:0 8px 8px 0;box-shadow:0 3px 15px rgba(37,99,196,.1)}
+.box strong{color:#1a3a6b;display:block;margin-bottom:.7rem;font-size:1.1rem;font-weight:700}
+.box p{margin-bottom:.5rem;color:#394b59}
+.box-info{background:#f0f5ff;border-left-color:#1e4fa0}
+.box-info strong{color:#1e4fa0}
+.box-warn{background:#fffbf0;border-left-color:#d4820f}
+.box-warn strong{color:#d4820f}
+.box-accent{background:#e8f0fe;border-left-color:#1a3a6b}
+.box-accent strong{color:#1a3a6b}
+.box-success{background:#f0fdf4;border-left-color:#16a34a}
+.box-success strong{color:#15803d}
+
+/* GRIDS Y CARDS */
+.grid{display:grid;gap:1.4rem;margin:1.4rem 0}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.card{background:#fff;padding:1.5rem;border-radius:10px;border:2px solid #e0e0e0;box-shadow:0 2px 10px rgba(0,0,0,.05);transition:all .3s}
+.card:hover{border-color:#2563c4;box-shadow:0 4px 18px rgba(37,99,196,.15)}
+.card h4{color:#1a3a6b;margin-bottom:.8rem}
+.card p{font-size:1rem;margin-bottom:.4rem;color:#394b59}
+.card-primary{border-color:#2563c4;background:linear-gradient(135deg,#fff,#eef3ff)}
+.card-accent{border-color:#1e4fa0;background:#f0f5ff}
+.em{color:#2563c4;font-weight:700}
+.code{background:#1e2d3d;color:#7dd3fc;padding:.3rem .7rem;border-radius:5px;font-family:'Roboto Mono',monospace;font-size:.88rem}
+
+/* SYMBOL CARDS */
+.symbol-card{background:#fff;border:3px solid #2563c4;border-radius:12px;padding:1.3rem;text-align:center;box-shadow:0 3px 14px rgba(37,99,196,.13)}
+.symbol-shape{width:60px;height:60px;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.shape-rect{background:#e8f0fe;border:3px solid #2563c4;border-radius:4px}
+.shape-arrow{background:#fef9e7;border:3px solid #d4820f;border-radius:50%}
+.shape-circle{background:#f0fdf4;border:3px solid #16a34a;border-radius:50%}
+.shape-open{background:#fdf2f8;border:3px dashed #9333ea;border-top:none;border-bottom:3px solid #9333ea}
+
+/* STEPS */
+.steps{counter-reset:step;margin:1.4rem 0}
+.step{counter-increment:step;position:relative;padding:1.4rem 1.4rem 1.4rem 4.8rem;margin-bottom:1.3rem;background:#fff;border-radius:10px;border-left:5px solid #2563c4;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.step::before{content:counter(step);position:absolute;left:1.2rem;top:50%;transform:translateY(-50%);width:2.4rem;height:2.4rem;background:#2563c4;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:1.2rem}
+.step h4{color:#1a3a6b;font-size:1.1rem;margin-bottom:.6rem}
+.step p{font-size:.99rem;color:#394b59;line-height:1.7;margin-bottom:0}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:1.3rem 0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);border-radius:8px;overflow:hidden}
+th,td{padding:.9rem 1rem;text-align:left;border-bottom:1px solid #e8e8e8;font-size:.97rem}
+th{background:linear-gradient(135deg,#1a3a6b,#2563c4);color:#fff;font-weight:700;font-size:.88rem;text-transform:uppercase}
+tr:last-child td{border-bottom:none}
+tr:hover{background:#f0f5ff}
+td strong{color:#1a3a6b}
+
+/* NOTATION BOX */
+.notation{background:#1e2d3d;color:#e2e8f0;padding:1.4rem 1.8rem;border-radius:10px;margin:1.2rem 0;font-family:'Roboto Mono',monospace;font-size:.93rem;line-height:2}
+.notation .op{color:#7dd3fc;font-weight:700}
+.notation .struct{color:#86efac}
+.notation .comment{color:#94a3b8;font-style:italic}
+
+/* ACTIVITY */
+.activity-section{background:linear-gradient(135deg,#e8f0fe,#d6e4ff);padding:2.2rem;border-radius:15px;border:4px solid #2563c4;margin:1.8rem 0;box-shadow:0 5px 22px rgba(37,99,196,.18)}
+.activity-title{color:#1a3a6b;font-size:1.9rem;font-weight:900;margin-bottom:1.3rem;text-align:center}
+.activity-box{background:#fff;padding:1.6rem;border-radius:10px;margin:1rem 0;border-left:5px solid #2563c4}
+.activity-box h4{color:#1a3a6b}
+
+/* GLOSSARY */
+.glos-item{background:#fff;border-radius:8px;padding:1.1rem 1.4rem;margin-bottom:1rem;border-left:5px solid #1e4fa0;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.glos-item strong{color:#1a3a6b;font-size:1.05rem}
+.glos-item p{margin:0;margin-top:.4rem;font-size:.99rem}
+
+/* CIERRE */
+.close-cover{background:linear-gradient(135deg,#1a3a6b,#1e4fa0,#2563c4);justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}
+.close-cover::before{content:'';position:absolute;top:-120px;right:-120px;width:380px;height:380px;border-radius:50%;background:rgba(255,255,255,.07)}
+.close-cover h1{font-size:3.8rem;color:#fff;font-weight:900;z-index:1;position:relative}
+.close-cover .subtitle{font-size:1.6rem;color:#fff;opacity:.9;z-index:1;margin-top:.8rem}
+.close-cover .line{width:120px;height:5px;background:#fff;margin:1.6rem auto;border-radius:3px;z-index:1}
+
+/* NAVEGACIÓN */
+.nav{position:fixed;bottom:2.5rem;right:2.5rem;display:flex;gap:1.4rem;z-index:1000}
+.btn{width:68px;height:68px;background:linear-gradient(135deg,#2563c4,#1e4fa0);border:none;border-radius:50%;color:#fff;font-size:1.7rem;cursor:pointer;box-shadow:0 5px 22px rgba(37,99,196,.35);transition:all .3s;font-weight:700;display:flex;align-items:center;justify-content:center}
+.btn:hover:not(:disabled){background:linear-gradient(135deg,#1e4fa0,#1a3a6b);transform:scale(1.1);box-shadow:0 8px 28px rgba(37,99,196,.5)}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.counter{position:fixed;bottom:2.5rem;left:2.5rem;background:#fff;padding:.9rem 1.8rem;border-radius:30px;border:3px solid #2563c4;color:#1a3a6b;font-weight:700;z-index:1000;box-shadow:0 4px 18px rgba(37,99,196,.18);font-size:1.05rem}
+.progress-bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,#2563c4,#1e4fa0);z-index:2000;transition:width .3s ease}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .slide{padding:2.5rem 3rem}
+  .cover h1{font-size:3rem}
+  h2{font-size:2.1rem}
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:680px){
+  .slide{padding:2rem 1.4rem}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+  h2{font-size:1.8rem}
+  .cover h1{font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+
+<!-- ══════════════════════════════════════════
+     SLIDE 1 · PORTADA
+════════════════════════════════════════════ -->
+<div class="slide cover active">
+  <div class="badge">Ingeniería de Requerimientos de Software</div>
+  <h1>Modelo de Flujos de Datos</h1>
+  <div class="line"></div>
+  <p class="subtitle">Tema 8 · Análisis Estructurado</p>
+  <p class="meta">TI13312 | Universidad Tecmilenio &nbsp;·&nbsp; Nivel: Intermedio-Avanzado</p>
+  <p class="help">→ Navega con las flechas del teclado o los botones</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 2 · INTRODUCCIÓN / CONTEXTO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">INTRODUCCIÓN</div>
+    <h2>¿Por qué modelar flujos de datos?</h2>
+  </div>
+  <div class="content">
+    <div class="box">
+      <strong>🏢 Contexto Empresarial</strong>
+      <p>Cualquier aplicación de software que administra información requiere del ingreso de datos para transformarlos en <strong>información útil para la toma de decisiones</strong>.</p>
+    </div>
+    <div class="grid grid-2">
+      <div class="card card-primary">
+        <h4>📋 Ejemplo: Sistema de Contabilidad</h4>
+        <p><strong>Entrada:</strong> datos de facturas, clientes, artículos, cantidades y precios ingresados por el vendedor.</p>
+        <p><strong>Salida:</strong> reportes de ingresos, clientes frecuentes, artículos más vendidos, nivel de inventario.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🎯 Decisiones Gerenciales</h4>
+        <p>Con esa información el gerente puede: generar promociones, identificar clientes inactivos, reconocer vendedores productivos y detectar tiendas con bajas ventas.</p>
+      </div>
+    </div>
+    <div class="box box-accent" style="margin-top:1.5rem">
+      <strong>💡 Preguntas Detonadoras</strong>
+      <ul style="margin-top:.5rem">
+        <li>¿Existe alguna forma gráfica para expresar las necesidades y transformación de información?</li>
+        <li>¿Cómo se describen las partes que componen la información?</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 3 · OBJETIVOS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">OBJETIVOS</div>
+    <h2>Objetivos de Aprendizaje</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>🎯 Al concluir este tema podrás:</strong>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Interpretar herramientas de modelado</h4>
+        <p>Reconocer las herramientas que permiten expresar gráficamente los procesos internos de las empresas y sus flujos de información.</p>
+      </div>
+      <div class="step">
+        <h4>Construir Diagramas de Flujo de Datos</h4>
+        <p>Aplicar los cuatro símbolos básicos y las 7 reglas del juego para crear DFDs de contexto, nivel 1 y nivel 2.</p>
+      </div>
+      <div class="step">
+        <h4>Elaborar un Diccionario de Datos</h4>
+        <p>Documentar estructuras de datos y elementos, describiendo su formato, longitud, tipo y criterio de validación.</p>
+      </div>
+      <div class="step">
+        <h4>Validar requerimientos con el usuario</h4>
+        <p>Usar los diagramas como herramienta de comunicación con los stakeholders para identificar huecos y ambigüedades en los requerimientos.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 4 · ¿QUÉ ES EL DFD?
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.1 FUNDAMENTOS</div>
+    <h2>¿Qué es el Diagrama de Flujo de Datos?</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>📖 Definición</strong>
+      <p>El DFD es una <strong>técnica de análisis estructurado</strong> que permite observar de forma gráfica los procesos de datos que utiliza una organización. No es parte formal de UML, pero es ampliamente utilizada en proyectos de ingeniería de software.</p>
+    </div>
+    <div class="box box-accent">
+      <strong>💬 Pressman (2010)</strong>
+      <p>"El modelo de datos y el diagrama de flujo de datos es todo lo que se necesita para obtener una visión significativa de los requerimientos de algunas aplicaciones de software."</p>
+    </div>
+    <h3>¿Para quién es útil el DFD?</h3>
+    <div class="grid grid-3">
+      <div class="card">
+        <h4>🔬 Ingeniero de Requerimientos</h4>
+        <p>Modela flujos de información independiente de su implantación física, sin definir si los procesos son manuales o automáticos.</p>
+      </div>
+      <div class="card">
+        <h4>👤 Usuario Final (Stakeholder)</h4>
+        <p>Comprende los diagramas fácilmente porque no requieren conocimientos técnicos detallados. Puede proponer cambios antes del desarrollo.</p>
+      </div>
+      <div class="card">
+        <h4>🏗️ Ingeniero Diseñador</h4>
+        <p>Identifica estructuras de datos necesarias, repositorios e interfaces fundamentales que deben implementarse.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 5 · VENTAJAS DEL DFD
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.1 FUNDAMENTOS</div>
+    <h2>Ventajas del Modelo de Flujo de Datos</h2>
+  </div>
+  <div class="content">
+    <div class="box box-warn">
+      <strong>📚 Según Kendall y Kendall (2011)</strong>
+    </div>
+    <div class="grid grid-2">
+      <div class="card card-primary">
+        <h4>🔓 Libertad de implementación</h4>
+        <p>Permite al equipo diseñar la solución tecnológica más adecuada sin restricciones impuestas por el diagrama.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🔗 Comprensión de interrelaciones</h4>
+        <p>Facilita entender cómo sistemas y subsistemas se comunican y dependen entre sí.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>💬 Comunicación con el usuario</h4>
+        <p>Detalla el sistema actual de forma que el usuario pueda validar y sugerir mejoras antes del desarrollo.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>✅ Verificación de completitud</h4>
+        <p>Permite determinar si se han definido todos los datos y procesos necesarios para el sistema.</p>
+      </div>
+    </div>
+    <div class="box box-success" style="margin-top:1.5rem">
+      <strong>🏠 Analogía del Plano de una Casa</strong>
+      <p>El DFD es como el plano de construcción de una casa: si se le explican los símbolos al cliente, puede reconocer las áreas y distribución con anticipación y proponer cambios <em>antes</em> de que se construya.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 6 · 4 SÍMBOLOS BÁSICOS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.2 CREACIÓN DEL MODELO</div>
+    <h2>Los 4 Símbolos Básicos del DFD</h2>
+  </div>
+  <div class="content">
+    <p>El DFD utiliza una combinación de <strong>4 símbolos básicos</strong> para representar todos los componentes del sistema:</p>
+    <div class="grid grid-4" style="margin-top:1.5rem">
+      <div class="symbol-card">
+        <div class="symbol-shape shape-rect" style="border-radius:0">
+          <span>▭</span>
+        </div>
+        <h4 style="text-align:center;color:#1a3a6b">Entidad</h4>
+        <p style="font-size:.93rem;text-align:center;color:#394b59">Cualquier sistema, persona, departamento o área que <strong>ingresa o solicita</strong> información. Queda fuera de los límites del sistema.</p>
+        <p style="font-size:.85rem;text-align:center;margin-top:.6rem;color:#6b7280">Ej: <em class="em">estudiante, contabilidad, sistema de nóminas</em></p>
+      </div>
+      <div class="symbol-card" style="border-color:#d4820f">
+        <div class="symbol-shape shape-arrow">
+          <span>→</span>
+        </div>
+        <h4 style="text-align:center;color:#d4820f">Flujo de Datos</h4>
+        <p style="font-size:.93rem;text-align:center;color:#394b59"><strong>Flecha</strong> que representa la transferencia de información de un origen a un destino. Su etiqueta nombra los datos.</p>
+        <p style="font-size:.85rem;text-align:center;margin-top:.6rem;color:#6b7280">Ej: <em class="em">datos de factura, reporte mensual</em></p>
+      </div>
+      <div class="symbol-card" style="border-color:#16a34a">
+        <div class="symbol-shape shape-circle">
+          <span>○</span>
+        </div>
+        <h4 style="text-align:center;color:#16a34a">Proceso</h4>
+        <p style="font-size:.93rem;text-align:center;color:#394b59"><strong>Círculo o burbuja</strong> que representa una <strong>transformación de datos</strong>. Los datos de entrada salen con diferente etiqueta.</p>
+        <p style="font-size:.85rem;text-align:center;margin-top:.6rem;color:#6b7280">Ej: <em class="em">1. Registrar venta, 2. Generar reporte</em></p>
+      </div>
+      <div class="symbol-card" style="border-color:#9333ea">
+        <div class="symbol-shape shape-open" style="width:60px;height:40px;margin:10px auto 1rem">
+          <span style="font-size:1.5rem">≡</span>
+        </div>
+        <h4 style="text-align:center;color:#9333ea">Almacén de Datos</h4>
+        <p style="font-size:.93rem;text-align:center;color:#394b59"><strong>Rectángulo abierto</strong> que representa un repositorio donde se guardan datos: bases de datos, archivos, registros.</p>
+        <p style="font-size:.85rem;text-align:center;margin-top:.6rem;color:#6b7280">Ej: <em class="em">D1 Clientes, D2 Facturas</em></p>
+      </div>
+    </div>
+    <div class="box box-warn" style="margin-top:1.5rem">
+      <strong>💡 Sugerencia</strong>
+      <p>Para evitar saturar el diagrama con demasiadas flechas, es posible <strong>replicar las entidades</strong> necesarias. Usa siempre el mismo nombre: <span class="code">estudiante</span> es diferente a <span class="code">universitario</span>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 7 · LAS 7 REGLAS DEL JUEGO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.2 CREACIÓN DEL MODELO</div>
+    <h2>Las 7 Reglas del Juego</h2>
+  </div>
+  <div class="content">
+    <p>Para crear un DFD correcto debes seguir estas reglas esenciales:</p>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Regla</th><th>Por qué importa</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>Un DFD debe tener <strong>al menos 1 proceso</strong>.</td><td>Sin proceso no hay transformación de datos.</td></tr>
+        <tr><td><strong>2</strong></td><td>Todo proceso debe tener <strong>al menos un flujo de entrada y uno de salida</strong>.</td><td>Los procesos no pueden operar sin datos.</td></tr>
+        <tr><td><strong>3</strong></td><td>Los flujos de datos que entran y salen de un proceso <strong>deben cambiar de etiqueta</strong>.</td><td>La transformación implica un cambio en los datos.</td></tr>
+        <tr><td><strong>4</strong></td><td><strong>No deben existir conexiones directas</strong> entre entidades, entre almacenes, ni entre entidades y almacenes.</td><td>Esas comunicaciones no son parte del sistema.</td></tr>
+        <tr><td><strong>5</strong></td><td>Las <strong>entradas y salidas de niveles inferiores</strong> deben corresponder con las de niveles superiores.</td><td>Garantiza consistencia y trazabilidad.</td></tr>
+        <tr><td><strong>6</strong></td><td><strong>Ningún elemento</strong> puede permanecer incomunicado.</td><td>Todos los componentes deben estar conectados.</td></tr>
+        <tr><td><strong>7</strong></td><td>Un DFD <strong>no debe tener más de 9 procesos</strong> por simplicidad.</td><td>Mantiene el diagrama comprensible y legible.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 8 · NIVELES DEL DFD
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.2 CREACIÓN DEL MODELO</div>
+    <h2>Niveles del Diagrama de Flujo de Datos</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-3">
+      <div class="card card-primary">
+        <h4>🌐 Nivel 0 – Contexto</h4>
+        <p>Vista <strong>más general</strong> del sistema. Contiene un solo proceso que representa todo el sistema y las entidades externas que participan.</p>
+        <p style="margin-top:.8rem;font-size:.93rem">Preguntas clave: ¿Quiénes participan? ¿Qué información entra y sale?</p>
+      </div>
+      <div class="card">
+        <h4>🔍 Nivel 1 – Detalle inicial</h4>
+        <p>"Zoom" sobre el proceso central del Nivel 0. Muestra los procesos principales y los almacenes de datos. La numeración va de izquierda a derecha y de arriba a abajo.</p>
+      </div>
+      <div class="card">
+        <h4>🔬 Nivel 2 – Sub-procesos</h4>
+        <p>Detalla lo que sucede <em>dentro</em> de los procesos del Nivel 1. Los sub-procesos del proceso 1 se numeran 1.1, 1.2, 1.3… facilitando la trazabilidad.</p>
+      </div>
+    </div>
+    <div class="box box-info" style="margin-top:1.5rem">
+      <strong>📌 Procesos Primitivos</strong>
+      <p>No todos los procesos requieren subniveles. Si un proceso no se descompone en subprocesos, se denomina <span class="em">proceso primitivo</span>. En el ejemplo del libro, el Proceso 2 y el Proceso 4 son procesos primitivos.</p>
+    </div>
+    <div class="box box-accent" style="margin-top:1rem">
+      <strong>🔗 Consistencia entre niveles</strong>
+      <p>Las entidades, flujos de entrada y flujos de salida del Nivel 0 deben aparecer también en el Nivel 1. El Nivel 2 puede incluir flujos y almacenes adicionales que no aparecen en los niveles superiores.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 9 · DICCIONARIO DE DATOS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.3 DICCIONARIO DE DATOS</div>
+    <h2>¿Qué es un Diccionario de Datos?</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>📖 Definición</strong>
+      <p>Colección de datos ordenados alfabéticamente que define su <strong>estructura</strong>. Según Kendall y Kendall (2011), su objetivo principal es <strong>mantener limpios los datos</strong>, es decir, consistentes en todo el sistema.</p>
+    </div>
+    <div class="grid grid-2" style="margin-top:1.4rem">
+      <div class="card card-primary">
+        <h4>✅ Consistencia correcta</h4>
+        <p>Si la región norte es <span class="code">"N"</span>, siempre debe usarse <span class="code">"N"</span> en todo el sistema.</p>
+      </div>
+      <div class="card" style="border-color:#e53e3e">
+        <h4 style="color:#c53030">❌ Inconsistencia a evitar</h4>
+        <p>Usar <span class="code">"N"</span>, <span class="code">"Nte"</span>, <span class="code">"north"</span> y <span class="code">"norte"</span> para el mismo concepto.</p>
+      </div>
+    </div>
+    <h3 style="margin-top:1.5rem">Ejemplo cotidiano: El Ticket del Supermercado</h3>
+    <div class="box box-accent">
+      <strong>🧾 Ticket de Compra</strong>
+      <p style="font-family:'Roboto Mono',monospace;font-size:.93rem;margin-top:.5rem">
+        Ticket = nombre_establecimiento + dirección_establecimiento + fecha_compra + artículo_comprado + precio_unitario + cantidad + subtotal + total + método_pago + <strong>(cambio)</strong>
+      </p>
+      <p style="margin-top:.8rem"><strong>Método de pago</strong> = [efectivo, tarjeta de crédito, tarjeta de débito]</p>
+      <p style="margin-top:.5rem"><em>Nota: el paréntesis indica dato opcional; los corchetes indican valores mutuamente excluyentes.</em></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 10 · NOTACIÓN DEL DICCIONARIO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.3 DICCIONARIO DE DATOS</div>
+    <h2>Notación para Estructuras de Datos</h2>
+  </div>
+  <div class="content">
+    <p>El diccionario de datos utiliza operadores estándar para describir las estructuras:</p>
+    <table>
+      <thead>
+        <tr><th>Operador</th><th>Significado</th><th>Ejemplo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="code">=</span></td><td>Está compuesto por</td><td>Dirección = calle + número + colonia + ciudad</td></tr>
+        <tr><td><span class="code">+</span></td><td>Y (concatenación)</td><td>nombre + apellido_paterno + apellido_materno</td></tr>
+        <tr><td><span class="code">{ }</span></td><td>Los elementos se <strong>repetirán</strong></td><td>{artículo_comprado}</td></tr>
+        <tr><td><span class="code">[ ]</span></td><td>Algún dato de una lista (mutuamente excluyentes)</td><td>[efectivo, tarjeta_crédito, tarjeta_débito]</td></tr>
+        <tr><td><span class="code">( )</span></td><td>El elemento puede o <strong>no ser incluido</strong></td><td>(cambio)</td></tr>
+      </tbody>
+    </table>
+    <h3>Ejemplo completo: Dirección del establecimiento</h3>
+    <div class="notation">
+      <span class="struct">Dirección_Establecimiento</span> <span class="op">=</span> calle <span class="op">+</span> número <span class="op">+</span> colonia <span class="op">+</span> ciudad <span class="op">+</span> país <span class="op">+</span> código_postal<br>
+      <span class="struct">Método_Pago</span> <span class="op">=</span> <span class="op">[</span>efectivo<span class="op">,</span> tarjeta_crédito<span class="op">,</span> tarjeta_débito<span class="op">]</span><br>
+      <span class="struct">Detalle_Compra</span> <span class="op">=</span> <span class="op">{</span>artículo_comprado <span class="op">+</span> precio_unitario <span class="op">+</span> cantidad<span class="op">}</span> <span class="op">+</span> subtotal<br>
+      <span class="comment">-- Las subestructuras se definen de forma independiente</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 11 · DESCRIPCIÓN DE ELEMENTO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.3 DICCIONARIO DE DATOS</div>
+    <h2>Descripción de Elementos de Datos</h2>
+  </div>
+  <div class="content">
+    <p>Cada <strong>elemento de dato</strong> (campo) se documenta con la siguiente ficha:</p>
+    <div class="grid grid-2" style="gap:1.2rem">
+      <div>
+        <h3>Descripción del Elemento</h3>
+        <table>
+          <thead><tr><th>Campo</th><th>Descripción</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ID</strong></td><td>Identificador consecutivo único</td><td><span class="code">CUST_01</span></td></tr>
+            <tr><td><strong>Nombre</strong></td><td>Nombre del elemento</td><td>Número de cliente</td></tr>
+            <tr><td><strong>Alias</strong></td><td>Sinónimo del elemento</td><td>Número de consumidor</td></tr>
+            <tr><td><strong>Descripción</strong></td><td>Descripción breve</td><td>Identifica a la persona en la transacción</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Tipos de Datos Básicos</h3>
+        <table>
+          <thead><tr><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Bit / Boolean</strong></td><td>Valor 1 ó 0, verdadero o falso</td></tr>
+            <tr><td><strong>Carácter</strong></td><td>Cualquier valor alfanumérico</td></tr>
+            <tr><td><strong>Fecha</strong></td><td>dd/mm/aa — Ej: 30/05/25</td></tr>
+            <tr><td><strong>Numérico entero</strong></td><td>Cualquier valor entero</td></tr>
+            <tr><td><strong>Numérico decimal</strong></td><td>Valor con punto decimal</td></tr>
+            <tr><td><strong>Moneda</strong></td><td>Ej: <span class="code">$999,999.99</span></td></tr>
+            <tr><td><strong>Autonumérico</strong></td><td>Consecutivo único, no se repite</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 12 · CARACTERÍSTICAS Y VALIDACIÓN
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">8.3 DICCIONARIO DE DATOS</div>
+    <h2>Características y Validación del Elemento</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2" style="gap:1.3rem">
+      <div>
+        <h3>Características del Elemento</h3>
+        <table>
+          <thead><tr><th>Campo</th><th>Descripción</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Longitud</strong></td><td>N.° de caracteres o dígitos</td><td>Teléfono: 10</td></tr>
+            <tr><td><strong>Formato entrada/salida</strong></td><td>9=dígito, X=carácter, separadores: / - |</td><td><span class="code">(999) 999-99-99</span></td></tr>
+            <tr><td><strong>Valor por defecto</strong></td><td>Valor inicial sin ingresar dato</td><td>País: México</td></tr>
+            <tr><td><strong>Tipo de valor</strong></td><td>Continuo o Discreto</td><td>—</td></tr>
+            <tr><td><strong>Formato</strong></td><td>Alfabético / Alfanumérico / Fecha / Numérico</td><td>Alfanumérico</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Criterio de Validación</h3>
+        <table>
+          <thead><tr><th>Campo</th><th>Descripción</th><th>Ejemplo</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Continuo</strong></td><td>Valores desde límite inferior a límite superior</td><td>Lim_Inf: 5, Lim_Sup: 10</td></tr>
+            <tr><td><strong>Discreto</strong></td><td>Valores específicos predefinidos</td><td>AGS / Aguascalientes<br>BCN / Baja California</td></tr>
+            <tr><td><strong>Comentarios</strong></td><td>Notas adicionales</td><td>La lista de ciudades depende del país elegido</td></tr>
+          </tbody>
+        </table>
+        <div class="box box-info" style="margin-top:1rem">
+          <strong>📌 Formato de entrada</strong>
+          <p style="font-family:'Roboto Mono',monospace;font-size:.9rem"><strong>9</strong> = dígito &nbsp;|&nbsp; <strong>X</strong> = carácter<br>Separadores: / - | , .</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 13 · EJEMPLO INTEGRADOR
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">EJEMPLOS</div>
+    <h2>Ejemplo Integrador: Sistema de Ventas</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>🎯 Escenario</strong>
+      <p>Una tienda departamental necesita modelar su sistema de ventas. Identifiquemos sus componentes para construir el DFD.</p>
+    </div>
+    <div class="grid grid-2" style="margin-top:1.3rem">
+      <div>
+        <h3>Entidades</h3>
+        <ul>
+          <li><strong>Cliente</strong> — solicita compra y recibe ticket</li>
+          <li><strong>Vendedor</strong> — ingresa datos de la venta</li>
+          <li><strong>Servidor de Pagos</strong> — entidad externa secundaria</li>
+          <li><strong>Sistema de Inventario</strong> — actualiza stock</li>
+        </ul>
+        <h3>Almacenes de Datos</h3>
+        <ul>
+          <li><span class="code">D1</span> — Clientes</li>
+          <li><span class="code">D2</span> — Productos / Inventario</li>
+          <li><span class="code">D3</span> — Facturas / Ventas</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Estructura del Flujo Principal</h3>
+        <div class="notation" style="font-size:.87rem">
+          <span class="struct">Factura</span> <span class="op">=</span> id_factura <span class="op">+</span> fecha <span class="op">+</span><br>
+          &nbsp;&nbsp;datos_cliente <span class="op">+</span> <span class="op">{</span>línea_producto<span class="op">}</span> <span class="op">+</span><br>
+          &nbsp;&nbsp;subtotal <span class="op">+</span> impuesto <span class="op">+</span> total <span class="op">+</span><br>
+          &nbsp;&nbsp;método_pago <span class="op">+</span> <span class="op">(</span>cambio<span class="op">)</span><br><br>
+          <span class="struct">Línea_Producto</span> <span class="op">=</span> id_producto <span class="op">+</span><br>
+          &nbsp;&nbsp;descripción <span class="op">+</span> cantidad <span class="op">+</span> precio_unitario<br><br>
+          <span class="struct">Método_Pago</span> <span class="op">=</span><br>
+          &nbsp;&nbsp;<span class="op">[</span>efectivo<span class="op">,</span> tarjeta_crédito<span class="op">,</span> tarjeta_débito<span class="op">]</span>
+        </div>
+      </div>
+    </div>
+    <div class="box box-accent" style="margin-top:1rem">
+      <strong>💡 Observación</strong>
+      <p>La <em>Factura</em> incluye subestructuras (datos_cliente, línea_producto, método_pago) que se definen por separado en el diccionario de datos.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 14 · EJERCICIO PRÁCTICO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">EJERCICIO PRÁCTICO</div>
+    <h2>Ejercicio: Modelado de una Biblioteca Digital</h2>
+  </div>
+  <div class="content">
+    <div class="activity-section">
+      <div class="activity-title">📚 Caso: Sistema de Biblioteca Digital</div>
+      <div class="activity-box">
+        <h4>📋 Descripción del Escenario</h4>
+        <p>Una universidad desea modelar su sistema de biblioteca digital. Los estudiantes buscan y descargan libros. Los bibliotecarios registran nuevos materiales. El sistema genera reportes de uso para la dirección académica.</p>
+      </div>
+      <div class="grid grid-2" style="margin-top:1rem">
+        <div class="activity-box">
+          <h4>🎯 Tarea 1: Construye el DFD Nivel 0</h4>
+          <p>Identifica: entidades externas, el proceso principal del sistema y los flujos de entrada y salida. Verifica que se cumplan las 7 reglas del juego.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 2: DFD Nivel 1</h4>
+          <p>Descompón el sistema en al menos 4 procesos: Buscar material, Descargar libro, Registrar material nuevo, Generar reporte. Añade los almacenes necesarios.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 3: Diccionario de Datos</h4>
+          <p>Documenta la estructura <strong>Registro_Libro</strong> usando la notación del diccionario. Incluye al menos 6 elementos de datos con su tipo, longitud y formato.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 4: Elemento de Datos</h4>
+          <p>Describe el elemento <strong>ISBN</strong> con su ficha completa: ID, nombre, alias, descripción, longitud, formato de entrada, tipo de valor y criterio de validación.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 15 · ACTIVIDAD EVALUABLE
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">ACTIVIDAD EVALUABLE</div>
+    <h2>Entregable: Modelado de Tu Proyecto</h2>
+  </div>
+  <div class="content">
+    <div class="box box-warn">
+      <strong>📌 Instrucciones Generales</strong>
+      <p>Aplica los conceptos del Tema 8 al sistema de información que está desarrollando tu equipo durante el curso.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>DFD de Contexto (Nivel 0)</h4>
+        <p>Dibuja el diagrama identificando todas las entidades externas y los flujos de información que entran y salen del sistema. Usa un proceso único que represente el sistema completo.</p>
+      </div>
+      <div class="step">
+        <h4>DFD Nivel 1</h4>
+        <p>Descompón el sistema en los procesos principales (mínimo 4, máximo 9). Incluye los almacenes de datos y valida la consistencia con el Nivel 0.</p>
+      </div>
+      <div class="step">
+        <h4>Diccionario de Datos</h4>
+        <p>Documenta al menos 3 estructuras de datos con su notación completa. Para cada estructura incluye al menos 5 elementos documentados con la ficha completa.</p>
+      </div>
+      <div class="step">
+        <h4>Verificación de Reglas</h4>
+        <p>Incluye una tabla de verificación donde confirmes el cumplimiento de cada una de las 7 reglas del juego para tu diagrama.</p>
+      </div>
+    </div>
+    <div class="box box-success" style="margin-top:1rem">
+      <strong>📅 Criterios de Evaluación</strong>
+      <p>Correctitud del DFD (40%) · Completitud del diccionario (30%) · Verificación de reglas (20%) · Presentación y claridad (10%)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 16 · CIERRE / RESUMEN
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">CIERRE</div>
+    <h2>Puntos Clave del Tema 8</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-3">
+      <div class="card card-primary">
+        <h4>📊 DFD como herramienta</h4>
+        <p>Técnica de análisis estructurado para modelar gráficamente flujos de información, comprensible sin conocimientos técnicos.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🔲 4 Símbolos</h4>
+        <p>Entidad, Flujo de datos, Proceso y Almacén de datos son los únicos elementos necesarios.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>🎮 7 Reglas</h4>
+        <p>Garantizan que el diagrama sea correcto, consistente y comprensible para todos los involucrados.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>📡 Niveles</h4>
+        <p>Nivel 0 (contexto), Nivel 1 (procesos principales) y Nivel 2+ (subprocesos detallados con trazabilidad).</p>
+      </div>
+      <div class="card card-primary">
+        <h4>📖 Diccionario de Datos</h4>
+        <p>Complementa el DFD documentando estructuras y elementos de datos con su notación estándar.</p>
+      </div>
+      <div class="card card-primary">
+        <h4>✅ Consistencia</h4>
+        <p>El diccionario mantiene datos limpios y consistentes en todo el sistema, evitando ambigüedades.</p>
+      </div>
+    </div>
+    <div class="box box-accent" style="margin-top:1.5rem">
+      <strong>🏠 Analogía Final</strong>
+      <p>Al dibujar el DFD es posible identificar <em>huecos de información</em> que requieran mayor detalle o definición más clara. Es como los planos de una casa: el cliente puede proponer cambios <strong>antes de que se construya</strong>, ahorrando tiempo y dinero en correcciones posteriores.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 17 · CHECKPOINT
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">CHECKPOINT</div>
+    <h2>¿Qué debes poder hacer?</h2>
+  </div>
+  <div class="content">
+    <div class="box box-info">
+      <strong>🎯 Asegúrate de poder:</strong>
+    </div>
+    <div class="grid grid-2" style="margin-top:1.3rem">
+      <div class="card card-accent">
+        <h4>✅ Competencia 1</h4>
+        <p>Interpretar las herramientas que ayudan a modelar sistemas para documentar los procesos internos de las empresas.</p>
+      </div>
+      <div class="card card-accent">
+        <h4>✅ Competencia 2</h4>
+        <p>Aplicar los diagramas de flujos de datos y el diccionario de datos como herramientas de la ingeniería de requerimientos para documentar el sistema.</p>
+      </div>
+      <div class="card card-accent">
+        <h4>✅ Competencia 3</h4>
+        <p>Verificar el cumplimiento de las 7 reglas del juego en cualquier DFD que construyas o revises.</p>
+      </div>
+      <div class="card card-accent">
+        <h4>✅ Competencia 4</h4>
+        <p>Documentar estructuras y elementos de datos usando la notación estándar del diccionario de datos con criterios de validación.</p>
+      </div>
+    </div>
+
+    <!-- GLOSARIO -->
+    <h3 style="margin-top:1.8rem">Glosario Básico</h3>
+    <div class="glos-item">
+      <strong>Flujo de información</strong>
+      <p>Transferencia de datos relacionados de un origen a un destino con la finalidad de proveer información útil para realizar alguna acción.</p>
+    </div>
+    <div class="glos-item">
+      <strong>Diagrama</strong>
+      <p>Dibujo que permite la abstracción de conceptos a través de elementos gráficos, con el objetivo de solucionar un problema.</p>
+    </div>
+    <div class="glos-item">
+      <strong>Proceso primitivo</strong>
+      <p>Proceso que no se descompone en subprocesos y por tanto no requiere un diagrama de nivel inferior.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 18 · RECURSOS Y REFERENCIAS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <div class="slide-number">REFERENCIAS Y RECURSOS</div>
+    <h2>Bibliografía y Recursos Adicionales</h2>
+  </div>
+  <div class="content">
+    <h3>Bibliografía Obligatoria</h3>
+    <div class="box">
+      <strong>[1]</strong> Kendall, E. y Kendall, J. (2011). <em>Systems analysis and design</em> (8ª ed.). New Jersey: Prentice Hall.
+    </div>
+    <div class="box">
+      <strong>[2]</strong> Pressman, R. (2010). <em>Ingeniería de Software. Un enfoque práctico</em> (7ª ed.). México: McGraw Hill.
+    </div>
+    <h3 style="margin-top:1.5rem">Lecturas Recomendadas</h3>
+    <div class="box box-info">
+      <strong>[3]</strong> Zuloaga, L. (2015). <em>Diagrama de flujo de datos</em>. Repositorio Universidad de Belgrano.<br>
+      <span style="font-size:.9rem;color:#6b7280">repositorio.ub.edu.ar/handle/123456789/5156</span>
+    </div>
+    <div class="box box-info">
+      <strong>[4]</strong> Yourdon, E. (2009). <em>Chapter 9: Dataflow Diagrams</em>.<br>
+      <span style="font-size:.9rem;color:#6b7280">static1.squarespace.com — Yourdon DFD.pdf</span>
+    </div>
+    <div class="box box-info">
+      <strong>[5]</strong> Berzal, F. (s.f.). <em>Diagramas de flujos de datos y diccionario de datos</em>.<br>
+      <span style="font-size:.9rem;color:#6b7280">elvex.ugr.es/idbis/db/docs/design/X-DFDs.pdf</span>
+    </div>
+    <div class="box box-accent" style="margin-top:.5rem">
+      <strong>🔗 Herramientas para crear DFDs</strong>
+      <p>Lucidchart · draw.io · Visio · Creately · Miro — todas permiten usar los 4 símbolos estándar del DFD.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 19 · CIERRE FINAL
+════════════════════════════════════════════ -->
+<div class="slide cover close-cover">
+  <h1>¡Excelente Trabajo!</h1>
+  <div class="line"></div>
+  <p class="subtitle">Fin del Tema 8 · Modelo de Flujos de Datos</p>
+  <p class="meta" style="z-index:1;position:relative;margin-top:1rem">TI13312 Ingeniería de Requerimientos de Software · Universidad Tecmilenio</p>
+  <p class="help" style="margin-top:3rem;z-index:1;position:relative">Ahora puedes modelar y documentar flujos de datos de forma profesional 📊</p>
+</div>
+
+</div><!-- /container -->
+
+<!-- CONTROLES -->
+<div class="counter"><span id="current">1</span> / <span id="total">19</span></div>
+<div class="nav">
+  <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+  <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+document.getElementById('total').textContent=total;
+
+function show(n){
+  if(n<0)n=0;
+  if(n>=total)n=total-1;
+  slides.forEach(s=>s.classList.remove('active'));
+  slides[n].classList.add('active');
+  current=n;
+  document.getElementById('current').textContent=n+1;
+  document.getElementById('prev').disabled=(n===0);
+  document.getElementById('next').disabled=(n===total-1);
+  document.getElementById('progressBar').style.width=((n+1)/total*100)+'%';
+}
+
+function nav(dir){show(current+dir);}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')nav(-1);
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();nav(1);}
+});
+
+show(0);
+</script>
+</body>
+</html>
