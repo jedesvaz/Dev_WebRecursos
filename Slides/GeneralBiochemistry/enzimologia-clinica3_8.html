@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enzimología Clínica — Máximo Valdovinos</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   PALETA — INSPIRADA EN AZULES ELÉCTRICOS
+   Fondo claro · Texto oscuro
+   Azul índigo profundo  #1B2F6E
+   Azul medio            #2255CC
+   Azul cielo brillante  #3B82F6
+   Teal acento           #0D9A84
+   Plata/gris frío       #6B7A99
+   Fondo crema-hielo     #F0F4FF
+   Fondo tarjetas        #FFFFFF
+   Texto principal       #0F1C3F
+   Texto medio           #2D3A60
+══════════════════════════════════════════ */
+:root{
+  --bg:        #F0F4FF;
+  --bg-card:   #FFFFFF;
+  --bg-alt:    #E4ECFF;
+  --indigo:    #1B2F6E;
+  --blue:      #2255CC;
+  --sky:       #3B82F6;
+  --teal:      #0D9A84;
+  --silver:    #6B7A99;
+  --silver-l:  #C8D2E8;
+  --text:      #0F1C3F;
+  --text-mid:  #2D3A60;
+  --text-soft: #5A6A8A;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow:hidden;
+  /* Textura sutil: puntos pequeños */
+  background-image: radial-gradient(circle, rgba(34,85,204,.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.container{width:100vw;height:100vh;position:relative}
+
+/* ══════════════════════════════
+   SLIDES
+══════════════════════════════ */
+.slide{
+  display:none;width:100%;height:100%;
+  padding:2.8rem 5.5rem 2rem;
+  flex-direction:column;
+  position:relative;
+}
+.slide.active{display:flex}
+
+/* Línea lateral — borde izq de contenido */
+.slide:not(.cover)::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;width:6px;
+  background:linear-gradient(180deg,var(--blue) 0%,var(--teal) 100%);
+}
+
+/* ══════════════════════════════
+   PORTADA
+══════════════════════════════ */
+.cover{
+  background:var(--indigo);
+  padding:0;overflow:hidden;
+  position:relative;
+}
+.cover::before{display:none}
+
+/* Rejilla de fondo tipo circuito */
+.cover-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(59,130,246,.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59,130,246,.12) 1px, transparent 1px);
+  background-size:52px 52px;
+}
+
+/* Punto brillante top-right */
+.cover-glow{
+  position:absolute;
+  top:-80px;right:-80px;
+  width:460px;height:460px;
+  background:radial-gradient(circle, rgba(59,130,246,.35) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover-glow2{
+  position:absolute;
+  bottom:-60px;left:5%;
+  width:300px;height:300px;
+  background:radial-gradient(circle, rgba(13,154,132,.25) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+/* Partículas decorativas */
+.particle{
+  position:absolute;
+  border-radius:50%;
+  animation:float 6s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-12px)}
+}
+
+.cover-content{
+  position:relative;z-index:1;
+  padding:4.5rem 6rem;
+  display:flex;flex-direction:column;
+  height:100%;
+}
+
+.cover-kicker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.75rem;letter-spacing:5px;
+  text-transform:uppercase;
+  color:rgba(59,130,246,.8);
+  margin-bottom:2.5rem;
+}
+
+.cover h1{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;
+  font-size:6rem;
+  line-height:.95;
+  letter-spacing:-2px;
+  color:#E8F0FF;
+  margin-bottom:.4rem;
+}
+.cover h1 .accent{
+  color:var(--sky);
+  display:block;
+}
+
+.cover-sub{
+  font-family:'DM Sans',sans-serif;
+  font-weight:300;
+  font-size:1.15rem;
+  color:rgba(200,210,232,.75);
+  font-style:italic;
+  margin-top:1.4rem;
+}
+
+.cover-rule{
+  width:80px;height:4px;
+  background:linear-gradient(90deg,var(--sky),var(--teal));
+  margin:2.2rem 0;
+}
+
+.cover-tags{
+  display:flex;gap:.8rem;flex-wrap:wrap;
+  margin-top:.5rem;
+}
+.cover-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;letter-spacing:2px;
+  padding:.35rem 1rem;
+  border:1px solid rgba(59,130,246,.4);
+  color:rgba(200,210,232,.7);
+  border-radius:2px;
+  text-transform:uppercase;
+}
+
+.cover-footer{
+  margin-top:auto;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;
+  color:rgba(107,122,153,.6);
+  letter-spacing:1px;
+}
+
+/* ══════════════════════════════
+   SLIDE HEADER
+══════════════════════════════ */
+.slide-header{
+  flex-shrink:0;
+  margin-bottom:1.5rem;
+  display:flex;align-items:flex-end;gap:1rem;
+}
+.chip{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;letter-spacing:3px;font-weight:700;
+  text-transform:uppercase;
+  padding:.28rem .85rem;
+  border-radius:2px;flex-shrink:0;
+  background:var(--blue);color:#fff;
+}
+.chip.teal  {background:var(--teal)}
+.chip.indigo{background:var(--indigo)}
+.chip.silver{background:var(--silver);color:#fff}
+.chip.sky   {background:var(--sky)}
+
+h2{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:2.1rem;
+  color:var(--indigo);letter-spacing:-.5px;
+  line-height:1.05;
+}
+
+/* ══════════════════════════════
+   CONTENIDO
+══════════════════════════════ */
+.content{flex:1;overflow-y:auto;padding-right:.6rem}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-track{background:var(--bg-alt);border-radius:3px}
+.content::-webkit-scrollbar-thumb{background:var(--sky);border-radius:3px}
+
+p{font-size:1.02rem;line-height:1.85;margin-bottom:.9rem;color:var(--text-mid)}
+h3{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:600;font-size:1.3rem;
+  color:var(--blue);margin:1.3rem 0 .65rem;letter-spacing:-.2px;
+}
+h4{font-size:1rem;font-weight:600;color:var(--indigo);margin-bottom:.45rem}
+ul{list-style:none;margin:.8rem 0}
+ul li{
+  font-size:1rem;line-height:1.78;
+  margin-bottom:.6rem;padding-left:1.6rem;
+  position:relative;color:var(--text-mid);
+}
+ul li::before{
+  content:'▸';position:absolute;left:0;
+  color:var(--blue);font-size:.9rem;
+}
+
+/* ══════════════════════════════
+   CAJAS
+══════════════════════════════ */
+.box{
+  background:var(--bg-card);
+  border-left:5px solid var(--blue);
+  padding:1.1rem 1.4rem;margin:.9rem 0;
+  border-radius:0 8px 8px 0;
+  box-shadow:0 2px 12px rgba(27,47,110,.07);
+}
+.box strong{color:var(--indigo);display:block;margin-bottom:.4rem;font-size:1rem;font-weight:700}
+.box p{margin-bottom:.2rem;color:var(--text-mid)}
+.box-teal   {border-left-color:var(--teal);background:#f0fbf9}
+.box-teal strong{color:var(--teal)}
+.box-sky    {border-left-color:var(--sky);background:#f0f7ff}
+.box-sky strong{color:var(--blue)}
+.box-indigo {border-left-color:var(--indigo);background:#f4f6ff}
+.box-indigo strong{color:var(--indigo)}
+.box-silver {border-left-color:var(--silver);background:#f7f8fc}
+.box-silver strong{color:var(--silver)}
+
+/* Quote */
+.quote{
+  background:var(--indigo);
+  color:#e8f0ff;
+  border-radius:8px;
+  padding:1.2rem 1.5rem 1.2rem 3rem;
+  margin:1rem 0;
+  position:relative;
+  font-style:italic;font-size:1.03rem;line-height:1.75;
+}
+.quote::before{
+  content:'"';
+  position:absolute;left:.7rem;top:.1rem;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:3.5rem;color:var(--sky);line-height:1;font-style:normal;
+}
+.quote cite{
+  display:block;margin-top:.5rem;font-style:normal;
+  font-size:.8rem;color:rgba(200,210,232,.65);
+  font-family:'JetBrains Mono',monospace;letter-spacing:.5px;
+}
+
+/* ══════════════════════════════
+   GRIDS Y CARDS
+══════════════════════════════ */
+.grid{display:grid;gap:1rem;margin:1rem 0}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+
+.card{
+  background:var(--bg-card);padding:1.2rem 1.3rem;
+  border-radius:8px;border-top:4px solid var(--blue);
+  box-shadow:0 2px 10px rgba(27,47,110,.08);
+  transition:transform .2s,box-shadow .2s;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(27,47,110,.12)}
+.card h4{color:var(--indigo)}
+.card p{font-size:.96rem;color:var(--text-soft);margin-bottom:.2rem}
+.card.teal  {border-top-color:var(--teal)}
+.card.teal h4{color:var(--teal)}
+.card.sky   {border-top-color:var(--sky)}
+.card.sky h4{color:var(--blue)}
+.card.silver{border-top-color:var(--silver)}
+.card.silver h4{color:var(--silver)}
+.card.indigo{border-top-color:var(--indigo)}
+.card.indigo h4{color:var(--indigo)}
+
+/* ══════════════════════════════
+   TIMELINE
+══════════════════════════════ */
+.timeline{
+  position:relative;padding:0;margin:1.2rem 0;
+}
+.timeline-line{
+  position:absolute;
+  left:24px;top:12px;bottom:12px;width:2px;
+  background:linear-gradient(180deg,var(--blue),var(--teal));
+}
+.tl-item{
+  display:flex;gap:1.2rem;margin-bottom:1.1rem;
+  position:relative;
+}
+.tl-dot{
+  flex-shrink:0;
+  width:22px;height:22px;
+  border-radius:50%;
+  background:var(--blue);
+  border:3px solid var(--bg);
+  box-shadow:0 0 0 2px var(--blue);
+  margin-top:.2rem;
+  z-index:1;
+}
+.tl-dot.teal{background:var(--teal);box-shadow:0 0 0 2px var(--teal)}
+.tl-dot.sky {background:var(--sky);box-shadow:0 0 0 2px var(--sky)}
+.tl-body{
+  background:var(--bg-card);
+  border:1px solid var(--silver-l);
+  border-radius:8px;
+  padding:.9rem 1.2rem;flex:1;
+  box-shadow:0 1px 6px rgba(27,47,110,.06);
+}
+.tl-year{
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:1.3rem;
+  color:var(--blue);margin-bottom:.1rem;
+}
+.tl-body p{font-size:.93rem;margin-bottom:0;color:var(--text-soft)}
+.tl-body strong{color:var(--text-mid)}
+
+/* ══════════════════════════════
+   STEPS
+══════════════════════════════ */
+.steps{counter-reset:s;margin:1rem 0}
+.step{
+  counter-increment:s;
+  position:relative;
+  padding:.95rem 1.1rem .95rem 3.8rem;
+  margin-bottom:.85rem;
+  background:var(--bg-card);
+  border-radius:8px;border-left:4px solid var(--blue);
+  box-shadow:0 1px 6px rgba(27,47,110,.06);
+}
+.step::before{
+  content:counter(s, decimal-leading-zero);
+  position:absolute;left:.85rem;top:50%;transform:translateY(-50%);
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:1.3rem;
+  color:var(--blue);letter-spacing:-.5px;
+}
+.step h4{color:var(--indigo);font-size:.98rem;margin-bottom:.3rem}
+.step p{font-size:.94rem;color:var(--text-soft);line-height:1.68;margin-bottom:0}
+
+/* ══════════════════════════════
+   TABLA
+══════════════════════════════ */
+table{
+  width:100%;border-collapse:collapse;
+  margin:.9rem 0;background:var(--bg-card);
+  box-shadow:0 2px 8px rgba(27,47,110,.07);
+  border-radius:8px;overflow:hidden;font-size:.93rem;
+}
+th,td{padding:.75rem .9rem;text-align:left;border-bottom:1px solid var(--bg-alt)}
+th{
+  background:var(--indigo);color:#E8F0FF;
+  font-weight:700;font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;letter-spacing:2px;text-transform:uppercase;
+}
+tr:last-child td{border-bottom:none}
+tr:hover{background:var(--bg-alt)}
+td strong{color:var(--indigo)}
+td code{
+  background:var(--bg-alt);color:var(--blue);
+  padding:.12rem .4rem;border-radius:3px;
+  font-family:'JetBrains Mono',monospace;font-size:.82rem;
+}
+
+/* ══════════════════════════════
+   FORMULA BOX
+══════════════════════════════ */
+.formula-box{
+  background:var(--indigo);
+  color:#E8F0FF;
+  border-radius:8px;
+  padding:1rem 1.5rem;
+  margin:.9rem 0;
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.05rem;
+  letter-spacing:.5px;
+  border-left:5px solid var(--teal);
+}
+.formula-box .label{
+  font-size:.65rem;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(59,130,246,.8);display:block;margin-bottom:.5rem;
+}
+.formula-box .eq{color:var(--sky);font-weight:700;font-size:1.1rem}
+
+/* ══════════════════════════════
+   DIAGRAMA NÚCLEO CORTEZA
+══════════════════════════════ */
+.nucleus-diagram{
+  display:flex;align-items:center;justify-content:center;
+  padding:1.5rem 0;position:relative;
+}
+.layer{
+  position:relative;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.layer-outer{
+  width:220px;height:220px;
+  background:rgba(59,130,246,.1);
+  border:3px solid rgba(59,130,246,.35);
+}
+.layer-mid{
+  position:absolute;
+  width:155px;height:155px;
+  background:rgba(27,47,110,.12);
+  border:2.5px solid rgba(27,47,110,.35);
+}
+.layer-inner{
+  position:absolute;
+  width:88px;height:88px;
+  background:var(--teal);
+  border:3px solid #fff;
+  box-shadow:0 0 0 2px var(--teal);
+}
+.layer-label{
+  position:absolute;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;font-weight:700;letter-spacing:.5px;
+  white-space:nowrap;text-transform:uppercase;
+}
+.layer-inner .layer-label{color:#fff;font-size:.68rem;text-align:center;letter-spacing:.3px;line-height:1.3}
+.diagram-legend{
+  display:flex;flex-direction:column;gap:.6rem;margin-left:2.5rem;
+}
+.legend-item{display:flex;align-items:center;gap:.7rem}
+.legend-dot{
+  width:12px;height:12px;border-radius:50%;flex-shrink:0;
+}
+
+/* ══════════════════════════════
+   GLOSARIO
+══════════════════════════════ */
+.glos-item{
+  background:var(--bg-card);border-radius:6px;
+  padding:.85rem 1.1rem;margin-bottom:.65rem;
+  border-left:4px solid var(--teal);
+  box-shadow:0 1px 4px rgba(27,47,110,.05);
+}
+.glos-item strong{color:var(--teal);font-size:.97rem}
+.glos-item p{margin:0;margin-top:.2rem;font-size:.93rem;color:var(--text-soft)}
+
+/* ══════════════════════════════
+   TAG PILLS
+══════════════════════════════ */
+.tag{
+  display:inline-block;
+  background:var(--bg-alt);
+  border:1.5px solid var(--silver-l);
+  color:var(--text-mid);
+  border-radius:20px;
+  padding:.15rem .75rem;font-size:.82rem;font-weight:600;
+  margin:.15rem .1rem;
+  font-family:'JetBrains Mono',monospace;
+}
+.tag.b{background:#ddeeff;border-color:var(--sky);color:var(--blue)}
+.tag.t{background:#d8f7f2;border-color:var(--teal);color:var(--teal)}
+
+/* ══════════════════════════════
+   BADGE de sección
+══════════════════════════════ */
+.section-badge{
+  display:inline-block;
+  background:var(--bg-alt);
+  color:var(--blue);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  padding:.25rem .85rem;border-radius:2px;
+  border:1px solid var(--silver-l);
+  margin-bottom:.6rem;
+}
+
+/* ══════════════════════════════
+   ACTIVIDAD
+══════════════════════════════ */
+.activity-section{
+  background:var(--bg-card);
+  border:2px solid var(--blue);
+  border-radius:10px;padding:1.6rem;margin:1rem 0;
+  box-shadow:0 4px 18px rgba(27,47,110,.10);
+}
+.activity-title{
+  font-family:'Barlow Condensed',sans-serif;
+  color:var(--indigo);font-size:1.6rem;font-weight:800;
+  margin-bottom:1rem;text-align:center;letter-spacing:-.4px;
+}
+.activity-box{
+  background:var(--bg-alt);padding:1rem 1.2rem;
+  border-radius:6px;margin:.65rem 0;border-left:4px solid var(--blue);
+}
+.activity-box h4{color:var(--indigo)}
+
+/* ══════════════════════════════
+   CONCLUSIONES — numbered
+══════════════════════════════ */
+.conclusion-item{
+  display:flex;gap:1rem;align-items:flex-start;
+  background:var(--bg-card);
+  border-radius:8px;padding:.9rem 1.1rem;
+  margin-bottom:.75rem;
+  box-shadow:0 1px 6px rgba(27,47,110,.06);
+  border-left:4px solid var(--blue);
+}
+.conclusion-item:nth-child(even){border-left-color:var(--teal)}
+.conclusion-num{
+  flex-shrink:0;
+  width:2rem;height:2rem;
+  border-radius:50%;
+  background:var(--blue);color:#fff;
+  font-family:'Barlow Condensed',sans-serif;
+  font-weight:800;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.conclusion-item:nth-child(even) .conclusion-num{background:var(--teal)}
+.conclusion-item p{font-size:.97rem;color:var(--text-mid);margin:0;line-height:1.72}
+
+/* ══════════════════════════════
+   NAVEGACIÓN
+══════════════════════════════ */
+.progress-bar{
+  position:fixed;top:0;left:0;height:4px;
+  background:linear-gradient(90deg,var(--blue),var(--sky),var(--teal));
+  z-index:2000;transition:width .3s;
+  box-shadow:0 1px 8px rgba(59,130,246,.4);
+}
+.counter{
+  position:fixed;bottom:2rem;left:2rem;
+  background:var(--bg-card);
+  padding:.55rem 1.2rem;
+  border:2px solid var(--silver-l);
+  border-radius:4px;color:var(--indigo);
+  font-weight:700;z-index:1000;
+  box-shadow:0 2px 10px rgba(27,47,110,.10);
+  font-family:'JetBrains Mono',monospace;font-size:.88rem;
+}
+.nav{position:fixed;bottom:2rem;right:2rem;display:flex;gap:.8rem;z-index:1000}
+.btn{
+  width:50px;height:50px;
+  background:var(--blue);border:none;border-radius:4px;
+  color:#fff;font-size:1.2rem;cursor:pointer;
+  box-shadow:0 3px 12px rgba(27,47,110,.25);
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+}
+.btn:hover:not(:disabled){background:var(--indigo);transform:translateY(-1px);box-shadow:0 5px 18px rgba(27,47,110,.35)}
+.btn:disabled{opacity:.28;cursor:not-allowed;box-shadow:none}
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media(max-width:1024px){
+  .slide{padding:2.2rem 2.8rem}
+  h2{font-size:1.75rem}
+  .grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:680px){
+  .slide{padding:1.8rem 1.4rem}
+  h2{font-size:1.4rem}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+
+<!-- ══════════════════════════════════════
+  SLIDE 1 · PORTADA
+══════════════════════════════════════ -->
+<div class="slide cover active">
+  <div class="cover-grid"></div>
+  <div class="cover-glow"></div>
+  <div class="cover-glow2"></div>
+
+  <!-- Partículas -->
+  <div class="particle" style="width:14px;height:14px;background:rgba(59,130,246,.45);top:18%;right:15%;animation-delay:0s"></div>
+  <div class="particle" style="width:8px;height:8px;background:rgba(13,154,132,.5);top:28%;right:22%;animation-delay:1.5s"></div>
+  <div class="particle" style="width:18px;height:18px;background:rgba(59,130,246,.2);top:65%;right:8%;animation-delay:3s"></div>
+  <div class="particle" style="width:10px;height:10px;background:rgba(13,154,132,.4);bottom:20%;right:18%;animation-delay:2s"></div>
+  <div class="particle" style="width:6px;height:6px;background:rgba(200,210,232,.3);top:40%;right:6%;animation-delay:0.8s"></div>
+
+  <div class="cover-content">
+    <div class="cover-kicker">Bioqúimica General </div>
+    <h1>
+      ENZIMOLOGÍA
+      <span class="accent">CLÍNICA</span>
+    </h1>
+    <div class="cover-sub">Diagnóstico enzimático · Biosensores · Biorreactores · Nanotecnología</div>
+    <div class="cover-rule"></div>
+    <div class="cover-tags">
+      <span class="cover-tag">Antecedentes históricos</span>
+      <span class="cover-tag">Clasificación enzimática</span>
+      <span class="cover-tag">Nomenclatura</span>
+      <span class="cover-tag">Procedimiento AST</span>
+      <span class="cover-tag">Microgeles & Nanopartículas</span>
+    </div>
+    <div class="cover-footer" style="margin-top:auto">
+      Fuentes: Valdovinos, M. (2024). YouTube · Grupo MATNABIO, UCM — OTRI ComplutransfeR
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 2 · ANTECEDENTES HISTÓRICOS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip">Antecedentes</span>
+    <h2>Historia de la Enzimología Clínica</h2>
+  </div>
+  <div class="content">
+    <div class="timeline">
+      <div class="timeline-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot sky"></div>
+        <div class="tl-body">
+          <div class="tl-year">1908</div>
+          <p><strong>Wohlgemuth</strong> — Primera medición de <strong>amilasa en orina</strong> como ayuda diagnóstica. Algunas de estas primeras observaciones aún son utilizadas hoy.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-year">1920 – 1930</div>
+          <p><strong>Kay, King, Bodansky y Roberts</strong> — Estudios sobre <strong>fosfatasa alcalina</strong> en enfermedades óseas y hepáticas. Las mediciones de actividad enzimática en suero tienen aquí su origen sistemático.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-year">Poco después de 1930</div>
+          <p><strong>Kutscher, Wolbergs y Gutman</strong> — Reconocen el valor diagnóstico de la <strong>fosfatasa ácida</strong> en el cáncer de próstata.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot sky"></div>
+        <div class="tl-body">
+          <div class="tl-year">1943</div>
+          <p><strong>Warburg y Christian</strong> — Observan el incremento de <strong>enzimas glicolíticas</strong> en el suero de ratas con tumores. Fase importante de la enzimología sérica.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot teal"></div>
+        <div class="tl-body" style="border-left:3px solid var(--teal)">
+          <div class="tl-year" style="color:var(--teal)">1955 ★ Hito moderno</div>
+          <p><strong>LaDue, Wroblewski y Karmen</strong> — Informan el ascenso transitorio en suero de <strong>glutámico oxalacético transaminasa (AST)</strong> luego de un infarto de miocardio. Marca el inicio de la etapa moderna de la enzimología diagnóstica.</p>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic">Fuente: Valdovinos, M. (2024). Enzimología Clínica [Video]. YouTube. https://www.youtube.com/watch?v=2T_paDNC0mc</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 3 · INTRODUCCIÓN Y DEFINICIÓN
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip teal">Introducción</span>
+    <h2>¿Qué es la Enzimología Clínica?</h2>
+  </div>
+  <div class="content">
+    <div class="quote">
+      "La enzimología es una rama especial dentro de la bioquímica clínica, en la cual se aplica la ciencia de las enzimas al diagnóstico y tratamiento de enfermedades. Es uno de los campos más importantes de la química clínica contemporánea."
+      <cite>— Valdovinos, M. (2024)</cite>
+    </div>
+    <div class="grid grid-2" style="margin-top:1rem">
+      <div class="box box-sky">
+        <strong>📊 Importancia en el laboratorio</strong>
+        <p>Los ensayos enzimáticos superan el <strong>20–25%</strong> del trabajo total de los hospitales. Entre <strong>12 y 15 enzimas</strong> son evaluadas rutinariamente.</p>
+      </div>
+      <div class="box box-teal">
+        <strong>🧪 Definición de enzima</strong>
+        <p>Catalizador biológico — proteína que <strong>acelera la velocidad de una reacción química específica</strong> en la célula. No se destruye durante la reacción y se reutiliza una y otra vez.</p>
+      </div>
+    </div>
+    <div class="grid grid-3" style="margin-top:.5rem">
+      <div class="card">
+        <h4>🧬 Proteína catalítica</h4>
+        <p>Son macromoléculas con actividad catalítica sobre sustratos específicos. Esta propiedad es la base de los métodos de análisis enzimáticos.</p>
+      </div>
+      <div class="card teal">
+        <h4>⚡ Altamente específica</h4>
+        <p>Una célula contiene miles de tipos distintos de moléculas enzimáticas — cada una específica para una reacción química particular.</p>
+      </div>
+      <div class="card sky">
+        <h4>♻️ Reutilizable</h4>
+        <p>Una sola molécula puede catalizar millones de reacciones. No se consume en el proceso, lo que la distingue de los reactivos convencionales.</p>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic;margin-top:.5rem">Fuente: Valdovinos, M. (2024). Enzimología Clínica [Video]. YouTube. https://www.youtube.com/watch?v=2T_paDNC0mc</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 4 · CLASIFICACIÓN — DIVISIÓN 1
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip">Clasificación</span>
+    <h2>División 1: Plasma Específicas vs. No Plasma Específicas</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <div class="section-badge">Plasma específicas</div>
+        <div class="box box-sky">
+          <strong>Características</strong>
+          <p>Cumplen su función específicamente en el plasma. Son de síntesis hepática. Su valor clínico está dado por la <strong>disminución</strong> de su actividad en plasma.</p>
+        </div>
+        <div class="box">
+          <strong>Ejemplos</strong>
+          <p><span class="tag b">Colinesterasa</span> <span class="tag b">Factores de coagulación</span> <span class="tag b">Proteínas del sistema fibrinolítico</span></p>
+        </div>
+      </div>
+      <div>
+        <div class="section-badge">No plasma específicas</div>
+        <div class="box box-teal">
+          <strong>Características</strong>
+          <p>Función a nivel intracelular o en el tracto gastrointestinal. En el plasma su función se desconoce aún, aunque se encuentran de vez en cuando. Se cree que su presencia es producto del <strong>turnover</strong> normal entre célula y circulación.</p>
+        </div>
+        <div class="box">
+          <strong>Valor clínico</strong>
+          <p>Está dado por el <strong>aumento</strong> de su actividad en plasma. A través de sus variaciones se intenta conocer la localización y naturaleza de los cambios patológicos de los tejidos.</p>
+        </div>
+        <div class="box box-sky">
+          <strong>Ejemplos</strong>
+          <p><span class="tag t">AST</span> <span class="tag t">Creatina fosfoquinasa (CPK)</span> <span class="tag t">Aldolasa</span></p>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic">Fuente: Valdovinos, M. (2024). Enzimología Clínica [Video]. YouTube. https://www.youtube.com/watch?v=2T_paDNC0mc</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 5 · CLASIFICACIÓN — DIVISIÓN 2
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip indigo">Clasificación</span>
+    <h2>División 2: Exocitoenzimas y Endocitoenzimas</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div class="box box-silver">
+        <strong>Exocitoenzimas</strong>
+        <ul>
+          <li>Provenientes de glándulas exócrinas (páncreas, próstata, mucosa gástrica)</li>
+          <li>No cumplen su función en circulación</li>
+          <li>Presentan un nivel de actividad dentro de un rango de referencia</li>
+          <li>Ejemplos: <span class="tag">Amilasa</span> <span class="tag">Quimiotripsina</span> <span class="tag">Fosfatasa ácida prostática</span></li>
+        </ul>
+      </div>
+      <div>
+        <div class="box box-indigo">
+          <strong>Endocitoenzimas</strong>
+          <p>Sintetizadas y actúan dentro de la célula. Muy importantes para la enzimología clínica. Se sub-dividen en dos grupos:</p>
+        </div>
+        <div class="grid grid-2" style="margin-top:.8rem">
+          <div class="card sky">
+            <h4>Ubicuas</h4>
+            <p>Ampliamente distribuidas en todos los tejidos. La mayoría de las enzimas pertenece a este grupo.</p>
+            <p><span class="tag b">Láctico deshidrogenasa (LDH)</span></p>
+          </div>
+          <div class="card teal">
+            <h4>Órgano específicas ★</h4>
+            <p>Las más valiosas clínicamente. Actúan en procesos metabólicos altamente específicos. Incluyen las <strong>isoenzimas</strong>.</p>
+            <p><span class="tag t">5'-Nucleotidasa</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic;margin-top:.8rem">Fuente: Valdovinos, M. (2024). Enzimología Clínica [Video]. YouTube. https://www.youtube.com/watch?v=2T_paDNC0mc</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 6 · NOMENCLATURA — 6 CLASES
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip sky">Nomenclatura</span>
+    <h2>Clasificación por Acción Catalítica — 6 Clases</h2>
+  </div>
+  <div class="content">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Clase</th><th>Acción</th><th>Ejemplo</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td><strong>Oxidorreductasas</strong></td>
+          <td>Transferencia de H⁺ o e⁻ de un sustrato a otro</td>
+          <td><em>Succinato deshidrogenasa · Citocromo c oxidasa</em></td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td><strong>Hidrolasas</strong></td>
+          <td>Reacciones de hidrólisis</td>
+          <td><em>Lactasa: Lactosa + H₂O → Glucosa + Galactosa</em></td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td><strong>Transferasas</strong></td>
+          <td>Transferencia de un grupo químico (≠ H) entre sustratos</td>
+          <td><em>Glucoquinasa: Glucosa + ATP → ADP + Glucosa-6-P</em></td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td><strong>Liasas</strong></td>
+          <td>Ruptura o soldadura de sustratos</td>
+          <td><em>Ácido acetoacético ⇌ CO₂ + Acetona (reversible)</em></td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td><strong>Isomerasas</strong></td>
+          <td>Interconversión de isómeros (cambios en la composición química)</td>
+          <td><em>Gliceraldehído-3-P ⇌ Dihidroxiacetona-P (fosfotriosa isomerasa)</em></td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td><strong>Ligasas</strong></td>
+          <td>Unión de dos sustratos con hidrólisis simultánea de ATP/GTP</td>
+          <td><em>Piruvato carboxilasa: Piruvato + CO₂ + ATP → Oxalacetato + ADP + Pᵢ</em></td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic">Fuente: Valdovinos, M. (2024). Enzimología Clínica [Video]. YouTube. https://www.youtube.com/watch?v=2T_paDNC0mc</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 7 · PRINCIPIOS DEL ANÁLISIS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip">Principios</span>
+    <h2>Principios del Análisis Enzimático</h2>
+  </div>
+  <div class="content">
+    <div class="box box-indigo" style="margin-bottom:1rem">
+      <strong>Concepto clave</strong>
+      <p>La concentración de la mayoría de las enzimas en circulación es muy baja en condiciones fisiológicas. Por ello, el estudio en laboratorio se basa en la demostración <em>in vitro</em> de su <strong>actividad catalítica</strong>, no de su masa directamente.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <h4>⚖️ Balance entrada/salida</h4>
+        <p>El nivel de actividad en sangre = <strong>tasa de entrada desde las células</strong> − tasa de inactivación o remoción. La presencia basal refleja el turnover celular normal.</p>
+        <p>Las enzimas son eliminadas a través de los sistemas retículo-endotelial, biliar o renal.</p>
+      </div>
+      <div class="card teal">
+        <h4>📏 Medición por velocidad</h4>
+        <p>La cantidad de enzima presente en un fluido biológico es difícil de determinar en términos absolutos. Se resuelve midiendo la <strong>velocidad de la reacción catalizada</strong> usando un sustrato específico.</p>
+        <p>Bajo condiciones óptimas: <strong>velocidad ∝ cantidad de enzima.</strong></p>
+      </div>
+      <div class="card sky">
+        <h4>🔬 Métodos de determinación</h4>
+        <p>Se puede determinar la actividad enzimática analizando en condiciones óptimas de reacción:</p>
+        <ul style="margin:.4rem 0">
+          <li>La <strong>aparición de algún producto</strong></li>
+          <li>La <strong>desaparición del sustrato</strong></li>
+          <li>La <strong>variación de un factor</strong> (cofactores, etc.)</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic;margin-top:.5rem">Fuente: Valdovinos, M. (2024). Enzimología Clínica [Video]. YouTube. https://www.youtube.com/watch?v=2T_paDNC0mc</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 8 · PROCEDIMIENTO AST
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip teal">Aplicación Clínica</span>
+    <h2>Procedimiento: AST (Aspartato Aminotransferasa)</h2>
+  </div>
+  <div class="content">
+    <div class="box box-sky" style="margin-bottom:1rem">
+      <strong>¿Qué es el AST?</strong>
+      <p>Enzima intracelular presente en niveles altos en músculo del corazón, células del hígado y músculo esquelético. Se emplea principalmente para diagnóstico y seguimiento junto con la alanina aminotransferasa (ALT) y la fosfatasa alcalina.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Extracción de muestra sanguínea</h4>
+        <p>Con jeringa desechable o vacutainer. Almacenar en tubo rojo.</p>
+      </div>
+      <div class="step">
+        <h4>Centrifugación y separación de suero</h4>
+        <p>Centrifugar el tubo rojo para separar el suero sanguíneo.</p>
+      </div>
+      <div class="step">
+        <h4>Calibración del espectrofotómetro</h4>
+        <p>Calibrar a cero con agua destilada (recomendado sobre el uso de aire).</p>
+      </div>
+      <div class="step">
+        <h4>Mezcla de reactivos</h4>
+        <p>1 mL del reactivo AST + 100 µL de suero/plasma sanguíneo en un tubo.</p>
+      </div>
+      <div class="step">
+        <h4>Incubación y lectura</h4>
+        <p>Mezclar, incubar 1 minuto. Leer la absorbancia inicial. Continuar leyendo cada minuto durante 3 minutos → 3 resultados.</p>
+      </div>
+      <div class="step">
+        <h4>Cálculo del promedio y resultado final</h4>
+        <p>Calcular el promedio del incremento de absorbancia por minuto. Aplicar la fórmula:</p>
+      </div>
+    </div>
+    <div class="formula-box">
+      <span class="label">Fórmula</span>
+      <span class="eq">(ΔAbs₁ + ΔAbs₂ + ΔAbs₃) / 3 min  ×  1750  =  U/L de AST</span>
+      <div style="margin-top:.5rem;font-size:.85rem;color:rgba(200,210,232,.7)">Ejemplo del video: resultado = <strong style="color:var(--sky)">15.05 U/L de AST</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 9 · BIOSENSORES Y BIORREACTORES
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip teal">Nanotecnología</span>
+    <h2>Biosensores, Biorreactores y Vehículos de Fármacos</h2>
+  </div>
+  <div class="content">
+    <div class="box box-teal" style="margin-bottom:1rem">
+      <strong>Aplicación industrial y biomédica de enzimas inmovilizadas</strong>
+      <p>Los sistemas gelificados (microgeles y nanogeles) permiten inmovilizar enzimas y principios activos para fabricar biosensores específicos, biorreactores reutilizables y sistemas de liberación controlada de fármacos.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <h4>🔬 Biosensores amperométricos</h4>
+        <p>Enzimas redox inmovilizadas en microgeles actúan como el componente biológico. Ej: glucosa oxidasa → <strong>sensor de glucosa</strong> de alta especificidad.</p>
+        <p>También se usan propiedades de <strong>amortiguamiento de fluorescencia</strong> para fabricar sensores ópticos.</p>
+      </div>
+      <div class="card teal">
+        <h4>⚗️ Biorreactores</h4>
+        <p>Las enzimas protegidas por la matriz polimérica preservan su actividad durante <strong>largos períodos de tiempo</strong>. El sistema puede ser recuperado y reutilizado.</p>
+        <p>Alta relación superficie/volumen en las partículas facilita el contacto con el sustrato.</p>
+      </div>
+      <div class="card sky">
+        <h4>💊 Vehículos de fármacos</h4>
+        <p>Nanopartículas híbridas encapsulan principios activos <strong>hidrofóbicos</strong> (dispersados en PCL) para su dispensación controlada en medios acuosos o vía oral/sueros.</p>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic;margin-top:.5rem">Fuente: Grupo MATNABIO, UCM. https://www.ucm.es/otri/complutransfer-biosensores-biorreactores-y-vehiculos-de-farmacos</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 10 · MICROGELES Y MÉTODO EMULSIÓN
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip sky">Tecnología</span>
+    <h2>Microgeles y Nanogeles — Inmovilización Enzimática</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>Método de emulsión concentrada</h3>
+        <div class="box box-sky">
+          <strong>¿Cómo funciona?</strong>
+          <p>Se prepara una emulsión con <strong>fase acuosa &gt; 75%</strong> del volumen total. Las gotas dispersadas forman estructuras poliédricas separadas por una pequeña película de fase oleosa.</p>
+        </div>
+        <ul>
+          <li>La polimerización ocurre <em>dentro</em> de las estructuras al añadir el agente iniciador</li>
+          <li>La enzima, disuelta previamente en fase acuosa, queda <strong>encapsulada</strong></li>
+          <li>Alta relación superficie/volumen → mayor contacto con sustrato</li>
+          <li>Alto rendimiento de encapsulación enzimática</li>
+          <li>La matriz polimérica <strong>protege la enzima</strong> → larga vida útil</li>
+          <li>Permite recuperación y reutilización del sistema</li>
+        </ul>
+        <div class="box box-teal" style="margin-top:.8rem">
+          <strong>Síntesis de microgeles monodispersos</strong>
+          <p>Por polimerización radical en solución acuosa de <strong>N-isopropilacrilamida</strong>. Tamaño controlable entre 5 nm y 1000 µm.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Tamaño de poro y difusión</h3>
+        <div class="box">
+          <strong>Control del tamaño de poro</strong>
+          <p>Variando la concentración de <strong>entrecruzante</strong> se puede controlar el tamaño de poro de los materiales y la <strong>difusión de sustratos</strong> a través de la matriz polimérica.</p>
+        </div>
+        <h3 style="margin-top:1rem">Caracterización</h3>
+        <ul>
+          <li>Determinación de <strong>tamaño y estructura</strong> de partículas sintetizadas</li>
+          <li>Partículas orgánicas, inorgánicas e <strong>híbridas</strong> de baja polidispersidad</li>
+          <li>Amplia variedad de enzimas encapsulables con este método</li>
+        </ul>
+        <div class="box box-indigo" style="margin-top:.8rem">
+          <strong>Aplicaciones de uso externo e interno</strong>
+          <p>Uso externo: biosensores, biorreactores, cremas y geles cosméticos. Uso interno: encapsulación de medicamentos para dispensación oral o en sueros.</p>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic;margin-top:.5rem">Fuente: Grupo MATNABIO, UCM. https://www.ucm.es/otri/complutransfer-biosensores-biorreactores-y-vehiculos-de-farmacos</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 11 · NANOPARTÍCULAS HÍBRIDAS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip indigo">Nanotecnología</span>
+    <h2>Nanopartículas Híbridas — Estructura Núcleo@Corteza</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <!-- Diagrama visual del núcleo@corteza -->
+        <div class="nucleus-diagram">
+          <div class="layer layer-outer">
+            <span class="layer-label" style="top:-22px;left:50%;transform:translateX(-50%);color:var(--sky);font-size:.65rem">PEG + PCL (corteza polimérica)</span>
+            <div class="layer layer-mid">
+              <span class="layer-label" style="top:-18px;left:50%;transform:translateX(-50%);color:var(--blue);font-size:.62rem">Capa de sílice (SiO₂)</span>
+              <div class="layer layer-inner">
+                <span class="layer-label" style="position:relative;transform:none;top:auto;left:auto;text-align:center">Fe₃O₄<br><span style="font-size:.6rem">Núcleo<br>magnético</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="diagram-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div><span style="font-size:.9rem;color:var(--text-mid)">Núcleo magnético (Fe₂O₃ / Fe₃O₄)</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(27,47,110,.3);border:2px solid var(--indigo)"></div><span style="font-size:.9rem;color:var(--text-mid)">Capa de sílice funcionalizable</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(59,130,246,.2);border:2px solid var(--sky)"></div><span style="font-size:.9rem;color:var(--text-mid)">Corteza polimérica (PEG + PCL)</span></div>
+        </div>
+      </div>
+      <div>
+        <h3>Ruta de síntesis</h3>
+        <div class="steps">
+          <div class="step">
+            <h4>Síntesis del núcleo magnético</h4>
+            <p>Fe₂O₃ / Fe₃O₄ recubierto de sílice mediante microemulsión inversa.</p>
+          </div>
+          <div class="step">
+            <h4>Funcionalización de la sílice</h4>
+            <p>La capa de SiO₂ se funcionaliza, permitiendo la unión covalente de enzimas y principios activos, o el crecimiento de polímeros biocompatibles.</p>
+          </div>
+          <div class="step">
+            <h4>Unión de PEG y PCL</h4>
+            <p>PEG (cubierta hidrofílica) permite la dispersión en medios acuosos. PCL transporta sustancias hidrofóbicas.</p>
+          </div>
+          <div class="step">
+            <h4>Recuperación magnética</h4>
+            <p>El núcleo magnético permite recuperar el sistema aplicando un campo magnético externo.</p>
+          </div>
+        </div>
+        <div class="box box-teal" style="margin-top:.5rem">
+          <strong>Nanopartículas inorgánicas disponibles</strong>
+          <p><span class="tag t">Fe₂O₃/Fe₃O₄ magnéticas</span> <span class="tag b">Au, Ag ópticas</span> <span class="tag">NaYF₄:Yb,Er upconversion</span> <span class="tag">SiO₂</span></p>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic;margin-top:.5rem">Fuente: Grupo MATNABIO, UCM. https://www.ucm.es/otri/complutransfer-biosensores-biorreactores-y-vehiculos-de-farmacos</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 12 · VENTAJAS Y GRUPO MATNABIO
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip silver">Ventajas</span>
+    <h2>Ventajas del Sistema y Grupo MATNABIO — UCM</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2" style="margin-bottom:1rem">
+      <div>
+        <h3>Reducción de costes de producción</h3>
+        <ul>
+          <li>Principios activos que aseguran <strong>alta biodisponibilidad</strong> con tiempos de caducidad largos</li>
+          <li>Bajo impacto ambiental — uso de productos <strong>biocompatibles y biodegradables</strong></li>
+          <li>Recuperación y <strong>reutilización</strong> de sistemas basados en micro/nanopartículas magnéticas</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Distribución y manejo</h3>
+        <ul>
+          <li><strong>Facilidad de manejo</strong> y aplicación clínica o industrial</li>
+          <li>Almacenamiento sencillo de los sistemas</li>
+          <li>Repercusión positiva sobre un <strong>porcentaje elevado de la población</strong></li>
+          <li>Solubilidad controlada en medios acuosos</li>
+        </ul>
+      </div>
+    </div>
+    <div class="activity-section">
+      <div class="activity-title">Grupo MATNABIO — Universidad Complutense de Madrid</div>
+      <div class="grid grid-2">
+        <div class="activity-box">
+          <h4>📍 Ubicación y trayectoria</h4>
+          <p>Departamento de Química en Ciencias Farmacéuticas, Facultad de Farmacia, UCM. Más de <strong>10 años</strong> trabajando en estructura, caracterización y propiedades de sistemas coloidales y polímeros de interés biomédico.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🔬 Capacidades técnicas</h4>
+          <p>Síntesis de partículas orgánicas, inorgánicas e híbridas de baja polidispersidad. Tamaños entre <strong>5 nm y 1000 µm</strong>. Métodos de síntesis y caracterización de nanopartículas híbridas con estructura núcleo@corteza.</p>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic;margin-top:.5rem">Fuente: Grupo MATNABIO, UCM. https://www.ucm.es/otri/complutransfer-biosensores-biorreactores-y-vehiculos-de-farmacos</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 13 · CONCLUSIONES
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip teal">Conclusiones</span>
+    <h2>Conclusiones</h2>
+  </div>
+  <div class="content">
+    <div class="conclusion-item">
+      <div class="conclusion-num">1</div>
+      <p>La enzimología clínica desempeña un papel esencial en la medicina moderna al proporcionar una ventaja única para comprender la salud y las enfermedades a nivel molecular, incluyendo <strong>diagnóstico preciso y temprano</strong>, monitoreo del tratamiento y avance de la investigación médica.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num">2</div>
+      <p>Al medir la <strong>actividad catalítica</strong> de las enzimas — no su masa directamente — los profesionales de la salud obtienen información valiosa sobre el funcionamiento de órganos y tejidos, lo que permite tomar decisiones terapéuticas más informadas.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num">3</div>
+      <p>Las enzimas <strong>órgano específicas</strong> (isoenzimas) son las más valiosas clínicamente por su alta especificidad en procesos metabólicos, lo que permite localizar con precisión el tejido afectado.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num">4</div>
+      <p>Los microgeles y nanogeles, mediante el método de <strong>polimerización en emulsión concentrada</strong>, permiten inmovilizar enzimas con alto rendimiento, preservando su actividad por largos períodos y facilitando la reutilización del sistema.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num">5</div>
+      <p>Las nanopartículas híbridas núcleo@corteza combinan propiedades magnéticas u ópticas con la capacidad de <strong>transportar enzimas y principios activos</strong>, abriendo nuevas posibilidades en biosensores, biorreactores y sistemas de liberación controlada de fármacos.</p>
+    </div>
+    <p style="font-size:.82rem;color:var(--text-soft);font-style:italic;margin-top:.5rem">Fuentes: Valdovinos, M. (2024). YouTube · Grupo MATNABIO, UCM</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 14 · BIBLIOGRAFÍA
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip indigo">Bibliografía</span>
+    <h2>Referencias Bibliográficas</h2>
+  </div>
+  <div class="content">
+    <div class="box box-sky" style="margin-bottom:1.2rem">
+      <strong>Fuente audiovisual</strong>
+      <p>Valdovinos, M. (2024). <em>Enzimología Clínica</em> [Video]. YouTube.</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--blue);margin-top:.4rem">https://www.youtube.com/watch?v=2T_paDNC0mc</p>
+    </div>
+    <div class="box box-teal">
+      <strong>Artículo técnico institucional</strong>
+      <p>Grupo MATNABIO (s.f.). <em>Biosensores, Biorreactores y Vehículos de Fármacos a partir de Enzimas y Principios Activos Inmovilizados en Microgeles y Nanopartículas Híbridas</em>. Oficina de Transferencia de Resultados de Investigación (OTRI) — Universidad Complutense de Madrid.</p>
+      <p style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--teal);margin-top:.4rem">https://www.ucm.es/otri/complutransfer-biosensores-biorreactores-y-vehiculos-de-farmacos</p>
+    </div>
+    <div class="box box-indigo" style="margin-top:1rem">
+      <strong>Sobre el Grupo MATNABIO</strong>
+      <p>Materiales Nanoestructurados Bioactivos · Departamento de Química en Ciencias Farmacéuticas · Facultad de Farmacia · Universidad Complutense de Madrid. Grupo dedicado más de una década al estudio de sistemas coloidales y polímeros de interés biomédico, con desarrollo de métodos para obtención de partículas orgánicas, inorgánicas e híbridas de baja polidispersidad (5 nm – 1000 µm).</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">14</span></div>
+<div class="nav">
+  <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+  <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+  if (n < 0) n = 0;
+  if (n >= total) n = total - 1;
+  slides.forEach(s => s.classList.remove('active'));
+  slides[n].classList.add('active');
+  current = n;
+  document.getElementById('current').textContent = n + 1;
+  document.getElementById('prev').disabled = (n === 0);
+  document.getElementById('next').disabled = (n === total - 1);
+  document.getElementById('progressBar').style.width = ((n + 1) / total * 100) + '%';
+}
+
+function nav(dir) { show(current + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') nav(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); nav(1);
+  }
+});
+
+show(0);
+</script>
+</body>
+</html>

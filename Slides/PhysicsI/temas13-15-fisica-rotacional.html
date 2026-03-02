@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Temas 13–15 · Dinámica Rotacional y Gravitación</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   PALETA OAXACA
+   Terracota · Barro rojo · Verde jade · Oro mezcal
+   Índigo huipil · Crema amate · Negro copal
+═══════════════════════════════════════════════════ */
+:root{
+  --terracota:   #C0522A;
+  --barro:       #8B2E0A;
+  --jade:        #3D7A5F;
+  --jade-lite:   #5EA882;
+  --oro:         #D4922C;
+  --oro-lite:    #F2C06A;
+  --indigo:      #2E3A7A;
+  --indigo-lite: #4A5BA8;
+  --crema:       #F5ECD7;
+  --crema-dark:  #E8D9BC;
+  --negro:       #1A120A;
+  --cafe:        #5C3620;
+  --rosa-oax:    #C45C7A;
+  --bg:          #FAF3E8;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--negro);
+  overflow:hidden;
+}
+
+/* ── PATRÓN GEOMÉTRICO OAXAQUEÑO (fondo sutil) ── */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 18px, rgba(192,82,42,.04) 18px, rgba(192,82,42,.04) 19px),
+    repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(61,122,95,.04) 18px, rgba(61,122,95,.04) 19px);
+  pointer-events:none;
+  z-index:0;
+}
+
+.container{width:100vw;height:100vh;position:relative;z-index:1}
+
+/* ══════════════════════
+   SLIDES
+══════════════════════ */
+.slide{
+  display:none;width:100%;height:100%;
+  padding:3rem 5.5rem;
+  flex-direction:column;
+  position:relative;
+}
+.slide.active{display:flex}
+
+/* ── FRANJA LATERAL DECORATIVA ── */
+.slide:not(.cover)::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:8px;
+  background:linear-gradient(180deg, var(--terracota), var(--oro), var(--jade));
+  border-radius:0 4px 4px 0;
+}
+
+/* ══════════════════════
+   PORTADA
+══════════════════════ */
+.cover{
+  background:linear-gradient(135deg, var(--barro) 0%, var(--terracota) 40%, var(--cafe) 100%);
+  justify-content:center;align-items:center;text-align:center;
+  overflow:hidden;padding:4rem;
+}
+.cover::before{display:none}
+
+/* Decoración geométrica tipo tapete oaxaqueño */
+.cover-deco{
+  position:absolute;inset:0;overflow:hidden;pointer-events:none;
+}
+.cover-deco::before{
+  content:'';
+  position:absolute;
+  top:-80px;right:-80px;
+  width:360px;height:360px;
+  border:40px solid rgba(242,192,106,.15);
+  border-radius:50%;
+}
+.cover-deco::after{
+  content:'';
+  position:absolute;
+  bottom:-60px;left:-60px;
+  width:300px;height:300px;
+  border:30px solid rgba(94,168,130,.15);
+  border-radius:50%;
+}
+/* Rombo central decorativo */
+.cover-diamond{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%) rotate(45deg);
+  width:600px;height:600px;
+  border:2px solid rgba(255,255,255,.06);
+  pointer-events:none;
+}
+
+.cover-badge{
+  display:inline-block;
+  background:rgba(242,192,106,.25);
+  border:2px solid rgba(242,192,106,.6);
+  color:var(--oro-lite);
+  padding:.4rem 1.4rem;
+  border-radius:2px;
+  font-family:'DM Mono',monospace;
+  font-size:.82rem;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:2rem;
+  position:relative;z-index:1;
+}
+.cover h1{
+  font-family:'Fraunces',serif;
+  font-size:4.2rem;
+  font-weight:900;
+  color:#fff;
+  line-height:1.05;
+  letter-spacing:-1px;
+  position:relative;z-index:1;
+  margin-bottom:.8rem;
+}
+.cover h1 em{
+  color:var(--oro-lite);
+  font-style:italic;
+  display:block;
+  font-size:2.6rem;
+  font-weight:400;
+}
+.cover-line{
+  width:80px;height:4px;
+  background:linear-gradient(90deg,var(--oro-lite),var(--jade-lite));
+  margin:1.6rem auto;
+  position:relative;z-index:1;
+}
+.cover .subtitle{
+  font-size:1.15rem;color:rgba(255,255,255,.85);
+  z-index:1;position:relative;margin-bottom:.5rem;
+  font-weight:300;letter-spacing:.5px;
+}
+.cover .meta{
+  font-size:.95rem;color:rgba(255,255,255,.6);
+  z-index:1;position:relative;margin-top:1rem;
+  font-family:'DM Mono',monospace;
+}
+.cover .help{
+  margin-top:2.8rem;
+  font-size:.88rem;color:rgba(255,255,255,.45);
+  z-index:1;position:relative;
+  letter-spacing:1px;
+}
+
+/* ══════════════════════
+   SLIDE HEADER
+══════════════════════ */
+.slide-header{
+  margin-bottom:1.6rem;flex-shrink:0;
+  display:flex;align-items:flex-end;gap:1.4rem;
+  border-bottom:3px solid var(--crema-dark);
+  padding-bottom:1rem;
+}
+.slide-tag{
+  background:var(--terracota);
+  color:#fff;
+  font-family:'DM Mono',monospace;
+  font-size:.65rem;
+  font-weight:500;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  padding:.35rem .9rem;
+  border-radius:2px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.slide-tag.jade{background:var(--jade)}
+.slide-tag.oro{background:var(--oro);color:var(--negro)}
+.slide-tag.indigo{background:var(--indigo)}
+.slide-tag.rosa{background:var(--rosa-oax)}
+
+h2{
+  font-family:'Fraunces',serif;
+  font-size:2.3rem;
+  font-weight:700;
+  color:var(--barro);
+  line-height:1.1;
+}
+
+/* ══════════════════════
+   CONTENIDO
+══════════════════════ */
+.content{flex:1;overflow-y:auto;padding-right:1rem}
+.content::-webkit-scrollbar{width:6px}
+.content::-webkit-scrollbar-track{background:var(--crema-dark);border-radius:3px}
+.content::-webkit-scrollbar-thumb{background:var(--terracota);border-radius:3px}
+
+p{font-size:1.04rem;line-height:1.82;margin-bottom:1.1rem;color:#3a2515}
+h3{
+  font-family:'Fraunces',serif;
+  color:var(--cafe);font-size:1.45rem;font-weight:700;
+  margin:1.5rem 0 .8rem;
+}
+h4{color:var(--terracota);font-size:1.05rem;font-weight:700;margin-bottom:.6rem}
+ul{list-style:none;margin:1rem 0}
+ul li{
+  font-size:1.02rem;line-height:1.78;margin-bottom:.75rem;
+  padding-left:1.8rem;position:relative;color:#3a2515;
+}
+ul li::before{
+  content:'◆';
+  position:absolute;left:0;
+  color:var(--terracota);font-size:.75rem;top:.35rem;
+}
+
+/* ══════════════════════
+   BOXES
+══════════════════════ */
+.box{
+  background:#fff;
+  border-left:5px solid var(--terracota);
+  padding:1.4rem 1.6rem;
+  margin:1.2rem 0;
+  border-radius:0 6px 6px 0;
+  box-shadow:2px 4px 16px rgba(139,46,10,.08);
+}
+.box strong{color:var(--barro);display:block;margin-bottom:.6rem;font-size:1.05rem;font-weight:700}
+.box p{margin-bottom:.4rem;color:#3a2515}
+.box-jade{border-left-color:var(--jade);background:#f0f8f4}
+.box-jade strong{color:var(--jade)}
+.box-oro{border-left-color:var(--oro);background:#fdf6e8}
+.box-oro strong{color:var(--cafe)}
+.box-indigo{border-left-color:var(--indigo);background:#f0f2f9}
+.box-indigo strong{color:var(--indigo)}
+.box-rosa{border-left-color:var(--rosa-oax);background:#fdf0f4}
+.box-rosa strong{color:var(--rosa-oax)}
+
+/* ══════════════════════
+   FÓRMULA (estilo pizarrón)
+══════════════════════ */
+.formula{
+  background:var(--negro);
+  color:var(--crema);
+  padding:1.4rem 1.8rem;
+  border-radius:8px;
+  margin:1.2rem 0;
+  font-family:'DM Mono',monospace;
+  font-size:1.05rem;
+  line-height:2;
+  border:2px solid var(--cafe);
+  position:relative;
+}
+.formula::before{
+  content:'ECUACIÓN';
+  position:absolute;top:-10px;left:16px;
+  background:var(--terracota);color:#fff;
+  font-size:.6rem;letter-spacing:3px;padding:.2rem .7rem;border-radius:2px;
+  font-family:'DM Mono',monospace;
+}
+.formula .var{color:var(--oro-lite);font-weight:500}
+.formula .eq{color:var(--jade-lite)}
+.formula .unit{color:#94a3b8;font-size:.88rem}
+.formula .label{color:var(--rosa-oax);font-size:.88rem;font-style:italic}
+
+/* ══════════════════════
+   GRIDS Y CARDS
+══════════════════════ */
+.grid{display:grid;gap:1.2rem;margin:1.2rem 0}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+
+.card{
+  background:#fff;padding:1.4rem;
+  border-radius:8px;
+  border-top:4px solid var(--terracota);
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  transition:transform .2s,box-shadow .2s;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.card h4{color:var(--barro);margin-bottom:.7rem}
+.card p{font-size:.98rem;color:#3a2515;margin-bottom:.3rem}
+.card.jade{border-top-color:var(--jade)}
+.card.jade h4{color:var(--jade)}
+.card.oro{border-top-color:var(--oro)}
+.card.oro h4{color:var(--cafe)}
+.card.indigo{border-top-color:var(--indigo)}
+.card.indigo h4{color:var(--indigo)}
+.card.rosa{border-top-color:var(--rosa-oax)}
+.card.rosa h4{color:var(--rosa-oax)}
+
+/* ══════════════════════
+   TABLA DE MOMENTOS DE INERCIA
+══════════════════════ */
+table{
+  width:100%;border-collapse:collapse;
+  margin:1.2rem 0;background:#fff;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+  border-radius:8px;overflow:hidden;
+}
+th,td{padding:.85rem 1rem;text-align:left;border-bottom:1px solid var(--crema-dark);font-size:.95rem}
+th{
+  background:linear-gradient(90deg,var(--barro),var(--terracota));
+  color:#fff;font-weight:700;font-size:.83rem;
+  text-transform:uppercase;letter-spacing:1px;
+}
+tr:last-child td{border-bottom:none}
+tr:hover{background:var(--crema)}
+td code{
+  background:var(--negro);color:var(--oro-lite);
+  padding:.15rem .5rem;border-radius:3px;
+  font-family:'DM Mono',monospace;font-size:.85rem;
+}
+td strong{color:var(--barro)}
+
+/* ══════════════════════
+   OBJETO RÍGIDO VISUAL
+══════════════════════ */
+.objeto-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:1.2rem 0;
+}
+.objeto-card{
+  background:#fff;border-radius:8px;
+  border:2px solid var(--crema-dark);
+  padding:1rem;text-align:center;
+  transition:border-color .2s;
+}
+.objeto-card:hover{border-color:var(--terracota)}
+.objeto-shape{
+  width:54px;height:54px;margin:0 auto .8rem;
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+}
+.objeto-card h5{
+  font-size:.85rem;color:var(--cafe);font-weight:700;margin-bottom:.4rem;
+}
+.objeto-card .inercia{
+  font-family:'DM Mono',monospace;
+  font-size:.82rem;color:var(--indigo);
+  background:var(--crema);
+  padding:.25rem .5rem;border-radius:3px;
+}
+.orden-badge{
+  display:inline-block;
+  background:var(--jade);color:#fff;
+  font-size:.7rem;font-weight:700;
+  padding:.15rem .5rem;border-radius:2px;margin-top:.4rem;
+  font-family:'DM Mono',monospace;
+}
+
+/* ══════════════════════
+   STEPS / LEYES
+══════════════════════ */
+.steps{counter-reset:step;margin:1.2rem 0}
+.step{
+  counter-increment:step;
+  position:relative;
+  padding:1.2rem 1.2rem 1.2rem 4.5rem;
+  margin-bottom:1.1rem;
+  background:#fff;border-radius:8px;
+  border-left:4px solid var(--terracota);
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.step::before{
+  content:counter(step);
+  position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);
+  width:2.2rem;height:2.2rem;
+  background:var(--terracota);color:#fff;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:1.1rem;font-family:'Fraunces',serif;
+}
+.step h4{color:var(--barro);font-size:1.05rem;margin-bottom:.5rem}
+.step p{font-size:.97rem;color:#3a2515;line-height:1.7;margin-bottom:0}
+
+/* Ley especial */
+.ley{
+  background:linear-gradient(135deg,#fff,var(--crema));
+  border:2px solid var(--oro);
+  border-radius:10px;padding:1.3rem 1.5rem;
+  margin-bottom:1.1rem;
+  position:relative;overflow:hidden;
+}
+.ley::before{
+  content:'';
+  position:absolute;top:0;left:0;bottom:0;width:5px;
+  background:var(--oro);
+}
+.ley-num{
+  font-family:'Fraunces',serif;
+  font-size:.78rem;font-weight:900;
+  color:var(--oro);letter-spacing:2px;
+  text-transform:uppercase;margin-bottom:.4rem;
+}
+.ley h4{color:var(--cafe);margin-bottom:.5rem;font-size:1rem}
+.ley p{font-size:.95rem;color:#3a2515;margin:0}
+
+/* ══════════════════════
+   ACTIVIDAD
+══════════════════════ */
+.activity-section{
+  background:linear-gradient(135deg,#fff5e8,#fdebd0);
+  padding:2rem;border-radius:12px;
+  border:3px solid var(--terracota);
+  margin:1.5rem 0;
+  box-shadow:0 6px 24px rgba(192,82,42,.15);
+}
+.activity-title{
+  font-family:'Fraunces',serif;
+  color:var(--barro);font-size:1.8rem;font-weight:900;
+  margin-bottom:1.2rem;text-align:center;
+}
+.activity-box{
+  background:#fff;padding:1.3rem;
+  border-radius:8px;margin:.8rem 0;
+  border-left:4px solid var(--terracota);
+}
+.activity-box h4{color:var(--barro)}
+
+/* ══════════════════════
+   TAPETE DECORATIVO (slide header deco)
+══════════════════════ */
+.tapete{
+  position:absolute;right:4rem;top:2.5rem;
+  width:48px;opacity:.18;
+  display:flex;flex-direction:column;gap:4px;
+}
+.tapete span{
+  display:block;height:4px;border-radius:2px;
+  background:var(--terracota);
+}
+.tapete span:nth-child(2){width:75%;background:var(--jade)}
+.tapete span:nth-child(3){width:50%;background:var(--oro)}
+.tapete span:nth-child(4){width:75%;background:var(--jade)}
+.tapete span:nth-child(5){width:100%;background:var(--terracota)}
+
+/* ══════════════════════
+   GLOSARIO
+══════════════════════ */
+.glos-item{
+  background:#fff;border-radius:6px;
+  padding:1rem 1.3rem;margin-bottom:.8rem;
+  border-left:4px solid var(--jade);
+  box-shadow:0 1px 5px rgba(0,0,0,.05);
+}
+.glos-item strong{color:var(--jade);font-size:1rem}
+.glos-item p{margin:0;margin-top:.3rem;font-size:.97rem}
+
+/* ══════════════════════
+   DATO CURIOSO
+══════════════════════ */
+.curiosity{
+  background:var(--negro);color:var(--crema);
+  border-radius:8px;padding:1.3rem 1.5rem;
+  margin:1.2rem 0;
+  border-left:5px solid var(--oro-lite);
+}
+.curiosity strong{color:var(--oro-lite);display:block;margin-bottom:.4rem}
+.curiosity p{color:var(--crema);margin:0;font-size:.97rem;line-height:1.75}
+
+/* ══════════════════════
+   NAVEGACIÓN
+══════════════════════ */
+.progress-bar{
+  position:fixed;top:0;left:0;height:3px;
+  background:linear-gradient(90deg,var(--terracota),var(--oro),var(--jade));
+  z-index:2000;transition:width .3s ease;
+}
+.counter{
+  position:fixed;bottom:2rem;left:2rem;
+  background:#fff;padding:.7rem 1.5rem;
+  border-radius:2px;
+  border:2px solid var(--terracota);
+  color:var(--barro);font-weight:700;
+  z-index:1000;box-shadow:0 3px 14px rgba(192,82,42,.2);
+  font-size:1rem;font-family:'DM Mono',monospace;
+}
+.nav{
+  position:fixed;bottom:2rem;right:2rem;
+  display:flex;gap:1rem;z-index:1000;
+}
+.btn{
+  width:56px;height:56px;
+  background:var(--terracota);
+  border:none;border-radius:2px;
+  color:#fff;font-size:1.4rem;cursor:pointer;
+  box-shadow:0 4px 16px rgba(192,82,42,.4);
+  transition:all .25s;
+  display:flex;align-items:center;justify-content:center;
+}
+.btn:hover:not(:disabled){
+  background:var(--barro);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(192,82,42,.5);
+}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* ══════════════════════
+   RESPONSIVE
+══════════════════════ */
+@media(max-width:1024px){
+  .slide{padding:2.2rem 2.8rem}
+  .cover h1{font-size:3rem}
+  h2{font-size:1.9rem}
+  .grid-3,.grid-4,.objeto-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:680px){
+  .slide{padding:1.8rem 1.4rem}
+  .grid-2,.grid-3,.grid-4,.objeto-grid{grid-template-columns:1fr}
+  h2{font-size:1.6rem}
+  .cover h1{font-size:2rem}
+  .tapete{display:none}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+
+<!-- ══════════════════════════════════════════
+     SLIDE 1 · PORTADA
+════════════════════════════════════════════ -->
+<div class="slide cover active">
+  <div class="cover-deco"></div>
+  <div class="cover-diamond"></div>
+  <div class="cover-badge">Física  I: Dinámica y Cinemática</div>
+  <h1>
+    Dinámica Rotacional
+    <em>Equilibrio y Gravitación</em>
+  </h1>
+  <div class="cover-line"></div>
+  <p class="subtitle">Temas 13, 14 y 15 </p>
+  <p class="meta">Momentos de inercia · Elasticidad · Leyes de Kepler</p>
+  <p class="help">→ Flechas del teclado o botones para navegar</p>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 2 · INTRODUCCIÓN / CONTEXTO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag">Contexto</span>
+    <h2>¿Por qué estudiar la rotación y la gravitación?</h2>
+  </div>
+  <div class="content">
+    <p>Una de las áreas más fascinantes de la mecánica es la <strong>dinámica rotacional</strong>, que estudia y analiza las causas que producen la rotación mediante conceptos como momento de inercia, momento de torsión y momento angular.</p>
+    <div class="grid grid-3">
+      <div class="card">
+        <h4>🚪 ¿Por qué la perilla va al borde?</h4>
+        <p>La perilla de una puerta se coloca en el extremo y no en el centro. La distancia al eje de rotación maximiza el torque con la misma fuerza.</p>
+      </div>
+      <div class="card jade">
+        <h4>🚲 ¿Por qué llantas de disco?</h4>
+        <p>Algunas bicicletas de carreras usan llantas de disco. La distribución de masa cambia el momento de inercia y por tanto la resistencia a la rotación.</p>
+      </div>
+      <div class="card oro">
+        <h4>⚽ ¿Esfera sólida vs hueca?</h4>
+        <p>Dos esferas con la misma masa no llegan al mismo tiempo en un plano inclinado. El momento de inercia determina cuál llega primero.</p>
+      </div>
+    </div>
+    <div class="curiosity">
+      <strong>🌍 Gravitación: preguntas que cambiaron la ciencia</strong>
+      <p>¿Por qué la Luna rota alrededor de la Tierra cada 28 días? ¿A qué se deben las mareas? ¿Por qué los planetas tienen órbitas elípticas? Todo esto se explica con la <strong>Ley de Gravitación Universal</strong> de Newton y las <strong>Leyes de Kepler</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 3 · OBJETIVOS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag jade">Objetivos</span>
+    <h2>Lo que aprenderás</h2>
+  </div>
+  <div class="content">
+    <div class="steps">
+      <div class="step">
+        <h4>Calcular momentos de inercia de cuerpos rígidos</h4>
+        <p>Aplicar la integral de masa para obtener el momento de inercia de barras, cilindros, discos, esferas y placas, y comparar su resistencia relativa a la rotación.</p>
+      </div>
+      <div class="step">
+        <h4>Aplicar el teorema de trabajo y energía rotacional</h4>
+        <p>Relacionar el torque neto con el cambio en la energía cinética rotacional mediante la ecuación análoga al teorema trabajo-energía de la traslación.</p>
+      </div>
+      <div class="step">
+        <h4>Usar el teorema del impulso y el momento angular</h4>
+        <p>Calcular el impulso angular y determinar cambios en el momento angular de un sistema rotante.</p>
+      </div>
+      <div class="step">
+        <h4>Analizar equilibrio estático y módulos elásticos</h4>
+        <p>Aplicar las dos condiciones de equilibrio y calcular deformaciones usando los módulos de Young, corte y volumétrico.</p>
+      </div>
+      <div class="step">
+        <h4>Resolver problemas de gravitación y órbitas</h4>
+        <p>Usar la ley de gravitación universal y las tres leyes de Kepler para analizar movimiento de planetas y satélites.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 4 · MOMENTO DE INERCIA – DEFINICIÓN
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag">Tema 13</span>
+    <h2>Momento de Inercia</h2>
+  </div>
+  <div class="content">
+    <div class="box box-jade">
+      <strong>📐 Definición</strong>
+      <p>El momento de inercia <strong>I</strong> es una cantidad física que mide la <strong>resistencia a la rotación</strong> de un objeto rígido. Es el análogo rotacional de la masa en la traslación.</p>
+    </div>
+    <div class="formula">
+      <span class="label">Definición integral:</span><br>
+      <span class="var">I</span> <span class="eq">=</span> ∫ <span class="var">r²</span> <span class="var">dm</span>  <span class="unit">   [kg·m²]</span><br><br>
+      <span class="label">Usando densidad volumétrica (ρ = m/V):</span><br>
+      <span class="var">I</span> <span class="eq">=</span> ∫ <span class="var">r²</span> <span class="var">ρ</span> <span class="var">dV</span><br><br>
+      <span class="label">Densidad lineal: </span><span class="var">λ = M/L = ρA</span>  <span class="unit">   [kg/m]</span><br>
+      <span class="label">Densidad superficial: </span><span class="var">σ = M/A</span>  <span class="unit">   [kg/m²]</span>
+    </div>
+    <div class="grid grid-2">
+      <div class="box box-oro">
+        <strong>📌 Clave</strong>
+        <p><strong>r</strong> es la distancia del eje de giro al centro de masa del elemento de masa. Entre mayor sea la distancia, mayor es el momento de inercia.</p>
+      </div>
+      <div class="box box-indigo">
+        <strong>🔢 Condición de homogeneidad</strong>
+        <p>Si el objeto es homogéneo (densidad constante), la integral se puede evaluar directamente para la geometría conocida.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 5 · TABLA DE MOMENTOS DE INERCIA
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag">Tema 13</span>
+    <h2>Momentos de Inercia por Geometría</h2>
+  </div>
+  <div class="content">
+    <p>Aplicando la integral de momento de inercia, Serway y Jewett (2018) obtienen expresiones para cuerpos rígidos comunes con <strong>m</strong> = masa y <strong>r</strong> = radio:</p>
+    <table>
+      <thead>
+        <tr><th>Objeto rígido</th><th>Fórmula (I)</th><th>Valor (m=1 kg, r=1 m)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Aro / Cascarón cilíndrico delgado</strong></td><td><code>I = mr²</code></td><td><strong>1.00 kg·m²</strong></td></tr>
+        <tr><td>Cilindro hueco grueso</td><td><code>I = ½m(r₁²+r₂²)</code></td><td>—</td></tr>
+        <tr><td>Disco / Cilindro sólido</td><td><code>I = ½mr²</code></td><td>0.50 kg·m²</td></tr>
+        <tr><td>Esfera hueca (cascarón)</td><td><code>I = ⅔mr²</code></td><td>0.67 kg·m²</td></tr>
+        <tr><td><strong>Esfera sólida</strong></td><td><code>I = ⅖mr²</code></td><td><strong>0.40 kg·m²</strong></td></tr>
+        <tr><td>Barra delgada (eje en centro)</td><td><code>I = 1/12 mL²</code></td><td>—</td></tr>
+        <tr><td>Barra delgada (eje en extremo)</td><td><code>I = ⅓mL²</code></td><td>—</td></tr>
+        <tr><td>Placa rectangular</td><td><code>I = 1/12 m(a²+b²)</code></td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="box box-jade">
+      <strong>🏁 Orden de llegada en plano inclinado (menor I → llega primero)</strong>
+      <p>1° Esfera sólida (I = 0.40) → 2° Disco y Cilindro (I = 0.50) → 3° Esfera hueca (I = 0.67) → 4° Aro / Cascarón cilíndrico (I = 1.00)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 6 · ENERGÍA CINÉTICA ROTACIONAL
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag">Tema 13 · 13.1</span>
+    <h2>Energía Cinética Rotacional y Trabajo</h2>
+  </div>
+  <div class="content">
+    <div class="formula">
+      <span class="label">Energía cinética rotacional:</span><br>
+      <span class="var">K</span><sub>rot</sub> <span class="eq">=</span> ½ <span class="var">I</span> <span class="var">ω²</span>  <span class="unit">   [J = kg·m²/s²]</span><br><br>
+      <span class="label">Teorema Trabajo – Energía Cinética Rotacional:</span><br>
+      <span class="var">W</span><sub>neto</sub> <span class="eq">=</span> ½ <span class="var">I</span> <span class="var">ω</span><sub>f</sub>² <span class="eq">−</span> ½ <span class="var">I</span> <span class="var">ω</span><sub>o</sub>² <span class="eq">=</span> Δ<span class="var">K</span><sub>rot</sub>
+    </div>
+    <div class="box box-oro">
+      <strong>📖 Interpretación</strong>
+      <p>El trabajo neto aplicado a un cuerpo rígido produce un cambio en su energía cinética rotacional. Es el análogo exacto del teorema trabajo-energía para movimiento traslacional.</p>
+    </div>
+    <h3>Ejemplo resuelto — Disco de afilar cuchillos</h3>
+    <div class="box">
+      <strong>Datos:</strong>
+      <p>K<sub>rot</sub> = 750 J &nbsp;|&nbsp; I = 0.099 kg·m² &nbsp;|&nbsp; W<sub>neto</sub> = 32 kJ</p>
+      <p><strong>a)</strong> Velocidad angular:</p>
+      <p style="font-family:'DM Mono',monospace;font-size:.95rem;color:var(--indigo)">ω = √(2K/I) = √(2×750 / 0.099) ≈ <strong>123.1 rad/s</strong></p>
+      <p><strong>b)</strong> Velocidad angular inicial si W<sub>neto</sub> = 32 kJ:</p>
+      <p style="font-family:'DM Mono',monospace;font-size:.95rem;color:var(--indigo)">ω₀ = √(ω_f² − 2W/I) → despejando de la ecuación anterior</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 7 · MOMENTO ANGULAR E IMPULSO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag">Tema 13 · 13.1</span>
+    <h2>Momento Angular e Impulso Angular</h2>
+  </div>
+  <div class="content">
+    <div class="formula">
+      <span class="label">Momento angular:</span><br>
+      <span class="var">L</span> <span class="eq">=</span> <span class="var">I</span> <span class="var">ω</span>  <span class="unit">   [kg·m²/s]</span><br><br>
+      <span class="label">Segunda Ley de Newton rotacional:</span><br>
+      <span class="var">τ</span><sub>neta</sub> <span class="eq">=</span> <span class="var">I</span> <span class="var">α</span><br><br>
+      <span class="label">Teorema Impulso – Momento Angular:</span><br>
+      <span class="var">τ</span><sub>neta</sub> · <span class="var">t</span> <span class="eq">=</span> <span class="var">L</span><sub>f</sub> <span class="eq">−</span> <span class="var">L</span><sub>o</sub> <span class="eq">=</span> Δ<span class="var">L</span>
+    </div>
+    <div class="grid grid-2">
+      <div class="box box-jade">
+        <strong>🔄 Conservación del Momento Angular</strong>
+        <p>Si la <strong>torca neta externa = 0</strong>, el momento angular se conserva:</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.95rem;margin-top:.5rem">I₀ω₀ = I_f ω_f = constante</p>
+        <p style="margin-top:.5rem">Ejemplo: patinador que recoge los brazos — disminuye I, aumenta ω.</p>
+      </div>
+      <div class="box box-rosa">
+        <strong>✈️ Ejemplo: Hélice de turbina</strong>
+        <p>I = 2.5 kg·m² &nbsp;|&nbsp; ω = (40 rad/s³)t²</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.9rem;margin-top:.5rem">L(t) = Iω = 2.5(40t²) = 100t² kg·m²/s</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.9rem">L(t=3s) = 900 kg·m²/s</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.9rem">τ(t) = dL/dt = 200t N·m</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.9rem">τ(t=3s) = 600 N·m</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 8 · EQUILIBRIO ESTÁTICO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag oro">Tema 14</span>
+    <h2>Equilibrio Estático</h2>
+  </div>
+  <div class="content">
+    <div class="box box-oro">
+      <strong>🏗️ Contexto</strong>
+      <p>El equilibrio y la elasticidad son fundamentales para el diseño de estructuras: puentes, espectaculares, grúas y escaleras. Entender estas condiciones permite construir con seguridad.</p>
+    </div>
+    <div class="grid grid-2">
+      <div>
+        <h3>Dos condiciones de equilibrio</h3>
+        <div class="formula" style="margin-top:.8rem">
+          <span class="label">1ª condición (traslacional):</span><br>
+          Σ<span class="var">F</span> <span class="eq">=</span> 0  <span class="unit"> → ΣFₓ=0, ΣFᵧ=0</span><br><br>
+          <span class="label">2ª condición (rotacional):</span><br>
+          Σ<span class="var">τ</span> <span class="eq">=</span> 0  <span class="unit"> → Σtorcas respecto a cualquier punto = 0</span>
+        </div>
+        <div class="box box-jade" style="margin-top:.8rem">
+          <strong>💡 Conservación del Momento Angular</strong>
+          <p>Si Στ<sub>ext</sub> = 0 → L se conserva: <strong>I₀ω₀ = I_f ω_f</strong></p>
+        </div>
+      </div>
+      <div>
+        <h3>Ejemplo: Estrella de Neutrones</h3>
+        <div class="box">
+          <strong>Datos:</strong>
+          <p>Estrella original: R₀ = 1×10⁴ km, T₀ = 30 días<br>
+          Después de supernova: R_f = 4 km</p>
+          <p style="margin-top:.7rem"><strong>Por conservación (I = k·m·r²):</strong></p>
+          <p style="font-family:'DM Mono',monospace;font-size:.88rem;color:var(--indigo)">
+            T_f/T₀ = (R_f/R₀)²<br>
+            T_f = 30 × (4/10000)² días<br>
+            T_f ≈ <strong>4.8 × 10⁻⁵ días ≈ 4.1 s</strong>
+          </p>
+          <p style="margin-top:.5rem;font-size:.9rem">¡Una estrella de neutrones gira varias veces por segundo!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 9 · ELASTICIDAD
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag oro">Tema 14</span>
+    <h2>Elasticidad y Módulos Elásticos</h2>
+  </div>
+  <div class="content">
+    <div class="box box-oro">
+      <strong>🧱 Definición</strong>
+      <p>La elasticidad es la propiedad que permite a un material deformarse por fuerzas externas y recuperar su forma original al retirarlas. Se define el <strong>módulo elástico</strong> como: <br>Módulo Elástico = Esfuerzo / Deformación</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <h4>📏 Módulo de Young (Y)</h4>
+        <p>Mide la resistencia a un <strong>cambio en longitud</strong>. Se usa para barras y alambres bajo tensión o compresión.</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.85rem;margin-top:.6rem;color:var(--indigo)">Y = (F/A) / (ΔL/L₀)</p>
+        <p style="font-size:.85rem;color:var(--cafe)">Acero: Y ≈ 20×10¹⁰ Pa</p>
+      </div>
+      <div class="card jade">
+        <h4>↔️ Módulo de Corte (S)</h4>
+        <p>Mide la resistencia al <strong>movimiento de planos paralelos</strong> dentro de un sólido.</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.85rem;margin-top:.6rem;color:var(--indigo)">S = (F/A) / (Δx/h)</p>
+        <p style="font-size:.85rem;color:var(--cafe)">Unidades: Pa [N/m²]</p>
+      </div>
+      <div class="card indigo">
+        <h4>🫧 Módulo Volumétrico (B)</h4>
+        <p>Mide la resistencia a <strong>cambios de volumen</strong>. Aplica a sólidos y líquidos.</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.85rem;margin-top:.6rem;color:var(--indigo)">B = −ΔP / (ΔV/V₀)</p>
+        <p style="font-size:.85rem;color:var(--cafe)">Latón: B ≈ 6.1×10¹⁰ Pa</p>
+      </div>
+    </div>
+    <h3>Ejemplo: Esfera de latón sumergida</h3>
+    <div class="box">
+      <strong>Datos:</strong>
+      <p>ΔP = 2.7×10⁷ − 1.5×10⁵ ≈ 2.685×10⁷ N/m² &nbsp;|&nbsp; V = 0.55 m³ &nbsp;|&nbsp; B = 6.1×10¹⁰ Pa</p>
+      <p style="font-family:'DM Mono',monospace;font-size:.93rem;margin-top:.5rem;color:var(--indigo)">ΔV = −(ΔP · V) / B = −(2.685×10⁷ × 0.55) / 6.1×10¹⁰ ≈ <strong>−2.42×10⁻⁴ m³</strong></p>
+      <p style="font-size:.9rem">El signo negativo indica que el volumen <strong>disminuye</strong> al aumentar la presión.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 10 · LEY DE GRAVITACIÓN UNIVERSAL
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag indigo">Tema 15</span>
+    <h2>Ley de Gravitación Universal</h2>
+  </div>
+  <div class="content">
+    <div class="formula">
+      <span class="label">Ley de Newton de la Gravitación Universal:</span><br>
+      <span class="var">F</span> <span class="eq">=</span> <span class="var">G</span> · (<span class="var">m</span>₁ · <span class="var">m</span>₂) / <span class="var">r</span>²  <span class="unit">   [N]</span><br><br>
+      <span class="label">Constante gravitacional:</span>
+      <span class="var">  G = 6.67 × 10⁻¹¹ N·m²/kg²</span><br><br>
+      <span class="label">Gravedad superficial (planeta de masa M y radio R):</span><br>
+      <span class="var">g</span> <span class="eq">=</span> <span class="var">G</span> · <span class="var">M</span> / <span class="var">R</span>²<br><br>
+      <span class="label">Velocidad orbital de un satélite:</span><br>
+      <span class="var">v</span> <span class="eq">=</span> √(<span class="var">GM</span> / <span class="var">R</span>)
+    </div>
+    <div class="grid grid-2">
+      <div class="box box-indigo">
+        <strong>🌍 Para la Tierra</strong>
+        <p>M = 5.9736 × 10²⁴ kg &nbsp;|&nbsp; R = 6371 km</p>
+        <p style="font-family:'DM Mono',monospace;margin-top:.5rem;font-size:.93rem">g = GM/R² ≈ <strong>9.8 m/s²</strong></p>
+      </div>
+      <div class="box box-jade">
+        <strong>⚖️ Ejemplo: Balanza de Cavendish</strong>
+        <p>m₁ = 0.015 kg &nbsp;|&nbsp; m₂ = 0.60 kg &nbsp;|&nbsp; r = 0.054 m</p>
+        <p style="font-family:'DM Mono',monospace;margin-top:.5rem;font-size:.9rem">F = G·m₁·m₂/r² = <br>(6.67×10⁻¹¹ × 0.015 × 0.60) / (0.054)²</p>
+        <p style="font-family:'DM Mono',monospace;font-size:.93rem;color:var(--jade)">F ≈ <strong>2.06 × 10⁻⁷ N</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 11 · LEYES DE KEPLER
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag indigo">Tema 15</span>
+    <h2>Las Tres Leyes de Kepler</h2>
+  </div>
+  <div class="content">
+    <div class="box box-indigo">
+      <strong>🔭 Johannes Kepler (1571–1630)</strong>
+      <p>Astrónomo alemán que desarrolló las leyes del movimiento planetario basándose en las observaciones de su maestro <strong>Tycho Brahe</strong>.</p>
+    </div>
+    <div class="ley">
+      <div class="ley-num">Primera Ley · Ley de las Órbitas</div>
+      <h4>Los planetas se mueven en órbitas elípticas alrededor del Sol</h4>
+      <p>El Sol se encuentra en uno de los focos de la elipse. El eje mayor es 2a (semieje mayor = a). La excentricidad e (0 &lt; e &lt; 1) mide cuán "aplastada" es la elipse.</p>
+    </div>
+    <div class="ley">
+      <div class="ley-num">Segunda Ley · Ley de las Áreas</div>
+      <h4>El radio vector barre áreas iguales en tiempos iguales</h4>
+      <p>Refleja la conservación del momento angular: <strong>L = mv₁r₁ = mv₂r₂</strong>. El planeta se mueve más rápido en el <em>perihelio</em> (más cerca del Sol) y más lento en el <em>afelio</em> (más lejos).</p>
+    </div>
+    <div class="ley">
+      <div class="ley-num">Tercera Ley · Ley de los Periodos</div>
+      <h4>T² es proporcional a a³</h4>
+      <p><strong>T² = K·a³</strong> &nbsp;|&nbsp; Para órbitas alrededor del Sol: K<sub>S</sub> = 4π²/(GM<sub>S</sub>) = 2.97×10⁻¹⁹ s²/m³</p>
+      <p>Relación entre dos planetas: <strong>(T₁/T₂)² = (a₁/a₂)³</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 12 · EJEMPLOS INTEGRADOS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag rosa">Ejemplos</span>
+    <h2>Ejemplos Resueltos Integrados</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>🏋️ Acróbata con pesas giratorias</h3>
+        <div class="box">
+          <strong>Datos:</strong>
+          <p>I (cuerpo, brazos extendidos) = 3 kg·m² &nbsp;|&nbsp; Pesa = 5 kg c/u &nbsp;|&nbsp; r₀ = 1 m &nbsp;|&nbsp; r_f = 0.20 m &nbsp;|&nbsp; T₀ = 2 s</p>
+          <p style="font-family:'DM Mono',monospace;font-size:.88rem;margin-top:.6rem;color:var(--indigo)">
+            ω₀ = 2π/T = π rad/s<br>
+            I₀(pelotas) = 2×5×1² = 10 kg·m²<br>
+            I_total₀ = 3 + 10 = 13 kg·m²<br><br>
+            I_f(pelotas) = 2×5×0.2² = 0.40 kg·m²<br>
+            I_total_f = 2.2 + 0.40 = 2.60 kg·m²<br><br>
+            ω_f = I₀ω₀/I_f = 13π/2.6 = <strong>5π ≈ 15.7 rad/s</strong>
+          </p>
+        </div>
+      </div>
+      <div>
+        <h3>🛰️ Satélite en órbita</h3>
+        <div class="box box-jade">
+          <strong>Datos hipotéticos:</strong>
+          <p>Satélite a 400 km sobre la Tierra<br>R_órbita = 6371 + 400 = 6771 km = 6.771×10⁶ m</p>
+          <p style="font-family:'DM Mono',monospace;font-size:.88rem;margin-top:.6rem;color:var(--jade)">
+            v = √(GM/R)<br>
+            v = √(6.67×10⁻¹¹ × 5.97×10²⁴ / 6.77×10⁶)<br>
+            v ≈ <strong>7,670 m/s ≈ 7.67 km/s</strong>
+          </p>
+        </div>
+        <div class="box box-oro" style="margin-top:.8rem">
+          <strong>🌟 Planeta enano Ceres</strong>
+          <p>a = 4.14×10⁸ m &nbsp;|&nbsp; e = 0.076</p>
+          <p style="font-family:'DM Mono',monospace;font-size:.88rem;margin-top:.4rem">
+            T² = K_S · a³ → T = √(K_S · a³)
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 13 · EJERCICIO PRÁCTICO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag rosa">Ejercicio Práctico</span>
+    <h2>Actividad: Plano Inclinado con Objetos Rodantes</h2>
+  </div>
+  <div class="content">
+    <div class="activity-section">
+      <div class="activity-title">🎯 Dinámica Rotacional y Gravitación Terrestre</div>
+      <div class="grid grid-2">
+        <div class="activity-box">
+          <h4>🔩 Materiales necesarios</h4>
+          <p>Cuatro objetos rodantes: esfera sólida, esfera hueca, aro y disco. Una tabla de 1 metro de largo (plano inclinado). Cinta métrica, reloj y cámara fotográfica.</p>
+        </div>
+        <div class="activity-box">
+          <h4>📋 Etapa 1: Momentos de inercia</h4>
+          <p>Escribe en la tabla la expresión de I para cada objeto rodante. Compara sus valores: ¿cuál tiene mayor resistencia a la rotación?</p>
+        </div>
+        <div class="activity-box">
+          <h4>⏱️ Etapa 2: Mediciones en el plano</h4>
+          <p>Mide el tiempo que tarda cada objeto en recorrer el plano. Usa las ecuaciones de dinámica rotacional para calcular su velocidad lineal final y angular.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🌍 Etapa 3: Gravedad en varios puntos</h4>
+          <p>Usa las ecuaciones de gravedad para calcular la fuerza gravitacional sobre una persona de 70 kg en el polo norte, el ecuador y la cima del Everest.</p>
+        </div>
+      </div>
+      <div class="box" style="margin-top:1rem;border-left-color:var(--terracota)">
+        <strong>📝 Entregables</strong>
+        <p>Fotografía del sistema físico · Tabla de momentos de inercia · Tabla de velocidades · Cálculo de gravedad en los tres puntos · Conclusiones sobre la influencia del momento de inercia en la rotación.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 14 · ACTIVIDAD EVALUABLE
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag rosa">Actividad Evaluable</span>
+    <h2>Problemas: Dinámica Rotacional y Gravitación</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>Parte 1 — Momentos de inercia</h3>
+        <ul>
+          <li>Barra delgada: m = 4 kg, L = 0.8 m (eje en centro)</li>
+          <li>Esfera sólida: m = 5 kg, r = 14 cm (eje propio)</li>
+          <li>Cilindro hueco: m = 3 kg, r = 22 cm</li>
+          <li>Placa rectangular: m = 4.5 kg</li>
+          <li>Esfera hueca: m = 6 kg, r = 25 cm</li>
+        </ul>
+        <h3 style="margin-top:1.2rem">Parte 2 — Trabajo y Momento Angular</h3>
+        <ul>
+          <li>Polea: F = 65 N, r = 0.15 m, I = 2.5×10⁻³ kg·m² (1 m de cuerda)</li>
+          <li>Acróbata: brazos extendidos → manos en abdomen</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Parte 3 — Equilibrio y Elasticidad</h3>
+        <ul>
+          <li>Varilla de acero: L = 2 m, A = 0.35 cm², carga = 650 kg, Y = 20×10¹⁰ Pa</li>
+          <li>Balancín: equilibrar hermanos en posiciones distintas</li>
+        </ul>
+        <h3 style="margin-top:1.2rem">Parte 4 — Gravitación y Kepler</h3>
+        <ul>
+          <li>Fuerza gravitacional Tierra–Satélite</li>
+          <li>Planeta enano Ceres: a = 4.14×10⁸ m, e = 0.076, m<sub>S</sub> = 1.99×10³⁰ kg</li>
+          <li>Aplicar 3ª Ley de Kepler para determinar período orbital</li>
+        </ul>
+        <div class="box box-jade" style="margin-top:1rem">
+          <strong>📌 Entregable</strong>
+          <p>Actividad impresa contestada, documentada y fundamentada.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 15 · CIERRE / RESUMEN
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag jade">Cierre</span>
+    <h2>Síntesis de los Temas 13, 14 y 15</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-3">
+      <div class="card">
+        <h4>⚙️ Tema 13: Momento de inercia</h4>
+        <p>Análogo rotacional de la masa. Determina la resistencia a la rotación. Menor I → llega primero en el plano inclinado.</p>
+      </div>
+      <div class="card jade">
+        <h4>🔄 Energía y Momento Angular</h4>
+        <p>K<sub>rot</sub> = ½Iω². Si Στ = 0 → L se conserva: I₀ω₀ = I_fω_f (patinador, estrella de neutrones).</p>
+      </div>
+      <div class="card oro">
+        <h4>🏗️ Tema 14: Equilibrio</h4>
+        <p>Dos condiciones: ΣF = 0 y Στ = 0. Base para diseño de estructuras civiles y mecánicas.</p>
+      </div>
+      <div class="card">
+        <h4>🧱 Elasticidad</h4>
+        <p>Módulos de Young (longitud), Corte (planos) y Volumétrico (volumen). Deformación reversible antes del límite elástico.</p>
+      </div>
+      <div class="card indigo">
+        <h4>🌍 Tema 15: Gravitación</h4>
+        <p>F = Gm₁m₂/r². Permite calcular g en cualquier planeta, velocidad orbital de satélites y el movimiento de cuerpos celestes.</p>
+      </div>
+      <div class="card rosa">
+        <h4>🪐 Leyes de Kepler</h4>
+        <p>1ª Órbitas elípticas. 2ª Áreas iguales (L conservado). 3ª T² ∝ a³. Válidas para cualquier sistema orbital.</p>
+      </div>
+    </div>
+    <div class="curiosity" style="margin-top:1.2rem">
+      <strong>🎯 Conexión fundamental</strong>
+      <p>La mecánica rotacional es la extensión natural de la mecánica traslacional. Cada concepto traslacional (masa, fuerza, impulso, trabajo, energía cinética) tiene su análogo rotacional. Dominarlos es esencial para la ingeniería de sistemas mecánicos, aeroespaciales y civiles.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 16 · CHECKPOINT + GLOSARIO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag jade">Checkpoint</span>
+    <h2>Verificación y Glosario</h2>
+  </div>
+  <div class="content">
+    <div class="box box-jade">
+      <strong>✅ Asegúrate de poder:</strong>
+      <ul style="margin-top:.5rem">
+        <li>Calcular I para barras, cilindros, discos y esferas</li>
+        <li>Aplicar el Teorema Trabajo–Energía Cinética Rotacional</li>
+        <li>Calcular el momento angular y aplicar su conservación</li>
+        <li>Resolver equilibrio estático con las dos condiciones</li>
+        <li>Usar los módulos de Young, Corte y Volumétrico</li>
+        <li>Calcular fuerzas gravitacionales y velocidades orbitales</li>
+        <li>Aplicar las tres leyes de Kepler a planetas y satélites</li>
+      </ul>
+    </div>
+    <h3 style="margin-top:1.2rem">Glosario esencial</h3>
+    <div class="grid grid-2">
+      <div>
+        <div class="glos-item">
+          <strong>Momento de inercia (I)</strong>
+          <p>Medida de la resistencia de un cuerpo rígido a cambiar su estado de rotación. Unidades: kg·m².</p>
+        </div>
+        <div class="glos-item">
+          <strong>Torque / Momento de torsión (τ)</strong>
+          <p>Medida de la capacidad de una fuerza para producir rotación. τ = r × F [N·m].</p>
+        </div>
+        <div class="glos-item">
+          <strong>Velocidad angular (ω)</strong>
+          <p>Rapidez con que varía el ángulo de rotación. Unidades: rad/s.</p>
+        </div>
+      </div>
+      <div>
+        <div class="glos-item">
+          <strong>Momento angular (L)</strong>
+          <p>L = Iω. Cantidad conservada cuando la torca neta externa es cero.</p>
+        </div>
+        <div class="glos-item">
+          <strong>Límite elástico</strong>
+          <p>Esfuerzo máximo que puede soportar un material sin deformación permanente.</p>
+        </div>
+        <div class="glos-item">
+          <strong>Semieje mayor (a)</strong>
+          <p>La mitad del eje más largo de una elipse. Aparece en la 3ª ley de Kepler: T² = Ka³.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 17 · REFERENCIAS
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="tapete"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="slide-header">
+    <span class="slide-tag">Bibliografía</span>
+    <h2>Referencias y Recursos</h2>
+  </div>
+  <div class="content">
+    <h3>Libros de texto</h3>
+    <div class="box">
+      <strong>[1] Libro de texto principal</strong>
+      <p>Serway, R. y Jewett, J. (2018). <em>Física para ciencias e ingeniería, Vol. 1</em> (10ª ed.). México: CENGAGE Learning.<br>
+      <span style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--cafe)">ISBN: 9786075266695</span></p>
+      <p>Capítulos: 10 (Rotación), 11 (Cantidad de movimiento angular), 12 (Equilibrio), 13 (Gravitación)</p>
+    </div>
+    <div class="box box-jade">
+      <strong>[2] Libro de apoyo</strong>
+      <p>Young, H. y Freedman, R. (2018). <em>Sears y Zemansky Física Universitaria con Física Moderna</em>. México: Pearson.<br>
+      <span style="font-family:'DM Mono',monospace;font-size:.85rem;color:var(--jade)">ISBN: 9786073244404</span></p>
+    </div>
+    <h3 style="margin-top:1.3rem">Recursos digitales</h3>
+    <div class="grid grid-2">
+      <div class="box box-oro">
+        <strong>🎬 Video educativo</strong>
+        <p>Scienza Education. (2020). <em>Ley de gravitación universal</em>.<br>
+        youtube.com/watch?v=nz3v_GpsDTc</p>
+      </div>
+      <div class="box box-indigo">
+        <strong>🖥️ Simuladores interactivos</strong>
+        <p>PhET Interactive Simulations (University of Colorado). Simuladores de "Gravedad y Órbitas" y de objetos rodantes en planos inclinados.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SLIDE 18 · PORTADA DE CIERRE
+════════════════════════════════════════════ -->
+<div class="slide cover">
+  <div class="cover-deco"></div>
+  <div class="cover-diamond"></div>
+  <div class="cover-badge">lscn1804 · Física para Ingeniería</div>
+  <h1>
+    ¡Buen trabajo!
+    <em>Sigue explorando el universo</em>
+  </h1>
+  <div class="cover-line"></div>
+  <p class="subtitle">Temas 13, 14 y 15 · Dinámica Rotacional · Equilibrio · Gravitación</p>
+  <p class="meta">Universidad Tecmilenio © · Todos los Derechos Reservados</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">18</span></div>
+<div class="nav">
+  <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+  <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+  if (n < 0) n = 0;
+  if (n >= total) n = total - 1;
+  slides.forEach(s => s.classList.remove('active'));
+  slides[n].classList.add('active');
+  current = n;
+  document.getElementById('current').textContent = n + 1;
+  document.getElementById('prev').disabled = (n === 0);
+  document.getElementById('next').disabled = (n === total - 1);
+  document.getElementById('progressBar').style.width = ((n + 1) / total * 100) + '%';
+}
+
+function nav(dir) { show(current + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') nav(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); nav(1);
+  }
+});
+
+show(0);
+</script>
+</body>
+</html>
