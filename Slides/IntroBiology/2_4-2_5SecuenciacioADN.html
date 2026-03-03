@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Secuenciación del ADN</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:ital,wght@0,300;0,400;0,700;1,300&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--white:#FFFFFF;--silver:#C0C0C0;--green:#00B140;--red:#E60012;--blue:#0072CE;--pink:#E6007E;--bg:#F8F9FA;--dark:#1A1A2E;--text:#1C1C2E;--text-m:#3A3A5C;--text-s:#666688;--light-g:#E8F5EE;--light-b:#E0F0FF;--light-r:#FFE8EA;--light-p:#FFE0F0;--border:#D0D0E0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(0,114,206,.055) 1px,transparent 1px);background-size:26px 26px;pointer-events:none;z-index:0}
+.container{width:100vw;height:100vh;position:relative;z-index:1}
+.slide{display:none;width:100%;height:100%;padding:2.4rem 5rem 1.8rem;flex-direction:column;position:relative;overflow:hidden}
+.slide.active{display:flex}
+.slide:not(.cover)::before{content:'';position:absolute;left:0;top:0;bottom:0;width:8px}
+.slide:nth-child(4n+2)::before{background:var(--blue)}
+.slide:nth-child(4n+3)::before{background:var(--green)}
+.slide:nth-child(4n+4)::before{background:var(--red)}
+.slide:nth-child(4n+5)::before{background:var(--pink)}
+.slide:not(.cover)::after{content:'';position:absolute;right:2rem;top:0;width:3px;height:100%;background:linear-gradient(180deg,var(--silver) 0%,transparent 100%);opacity:.22}
+.cover{background:var(--dark);padding:0;position:relative;overflow:hidden}
+.cover::before,.cover::after{display:none}
+.cover-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(192,192,192,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(192,192,192,.07) 1px,transparent 1px);background-size:44px 44px}
+.cover-stripes{position:absolute;bottom:0;left:0;right:0;height:10px;display:flex}
+.cover-stripes span{flex:1}
+.ps-dots{position:absolute;top:2rem;right:2rem;display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.ps-dot{width:26px;height:26px;border-radius:50%;opacity:.9}
+.cover-content{position:relative;z-index:1;padding:4rem 5.5rem;display:flex;flex-direction:column;height:100%}
+.cover-kicker{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:5px;text-transform:uppercase;color:var(--silver);margin-bottom:2rem;opacity:.7}
+.cover h1{font-family:'Bebas Neue',sans-serif;font-size:5.5rem;line-height:.95;letter-spacing:2px;color:var(--white)}
+.cover h1 .l1{color:var(--blue)}.cover h1 .l2{color:var(--green)}.cover h1 .l3{color:var(--red)}
+.cover-rule{display:flex;margin:1.8rem 0 1.5rem;height:5px;width:300px}
+.cover-rule span{flex:1}
+.cover-sub{font-weight:300;font-size:1.1rem;color:rgba(255,255,255,.7);line-height:1.9;font-style:italic}
+.cover-topics{margin-top:1.5rem;display:flex;flex-direction:column;gap:.55rem}
+.cover-topic{display:flex;align-items:center;gap:.8rem;font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:1.5px;color:rgba(192,192,192,.75);text-transform:uppercase}
+.cover-topic .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cover-footer{margin-top:auto;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:1.5px;color:rgba(192,192,192,.4)}
+.slide-header{flex-shrink:0;display:flex;align-items:center;gap:.85rem;margin-bottom:1.3rem}
+.chip{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:3px;font-weight:700;text-transform:uppercase;padding:.28rem .85rem;border-radius:3px;flex-shrink:0;color:#fff}
+.chip.blue{background:var(--blue)}.chip.green{background:var(--green)}.chip.red{background:var(--red)}.chip.pink{background:var(--pink)}.chip.silver{background:var(--silver);color:var(--dark)}
+h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:1px;color:var(--dark);line-height:1.05}
+.content{flex:1;overflow-y:auto;padding-right:.5rem}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--silver);border-radius:3px}
+p{font-size:1rem;line-height:1.85;margin-bottom:.85rem;color:var(--text-m)}
+h3{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:1px;color:var(--blue);margin:1.2rem 0 .6rem}
+h4{font-size:.97rem;font-weight:700;color:var(--dark);margin-bottom:.4rem}
+ul{list-style:none;margin:.7rem 0}
+ul li{font-size:.98rem;line-height:1.78;margin-bottom:.55rem;padding-left:1.5rem;position:relative;color:var(--text-m)}
+ul li::before{content:'▸';position:absolute;left:0;color:var(--blue);font-size:.9rem}
+.box{background:var(--white);border-left:5px solid var(--blue);padding:1rem 1.3rem;margin:.85rem 0;border-radius:0 8px 8px 0;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.box strong{color:var(--dark);display:block;margin-bottom:.35rem;font-weight:700}
+.box p{margin-bottom:.15rem;color:var(--text-m)}
+.box.green{border-left-color:var(--green);background:var(--light-g)}.box.green strong{color:var(--green)}
+.box.red{border-left-color:var(--red);background:var(--light-r)}.box.red strong{color:var(--red)}
+.box.pink{border-left-color:var(--pink);background:var(--light-p)}.box.pink strong{color:var(--pink)}
+.box.silver{border-left-color:var(--silver);background:#f5f5f8}.box.silver strong{color:var(--text-m)}
+.grid{display:grid;gap:.9rem;margin:.8rem 0}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--white);padding:1.1rem 1.2rem;border-radius:8px;border-top:4px solid var(--blue);box-shadow:0 2px 8px rgba(0,0,0,.07);transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.11)}
+.card h4{color:var(--dark)}.card p{font-size:.94rem;color:var(--text-s);margin-bottom:.2rem}
+.card.green{border-top-color:var(--green)}.card.green h4{color:var(--green)}
+.card.red{border-top-color:var(--red)}.card.red h4{color:var(--red)}
+.card.pink{border-top-color:var(--pink)}.card.pink h4{color:var(--pink)}
+.card.silver{border-top-color:var(--silver)}.card.silver h4{color:var(--text-m)}
+table{width:100%;border-collapse:collapse;margin:.8rem 0;background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.06);border-radius:8px;overflow:hidden;font-size:.93rem}
+th,td{padding:.7rem .85rem;text-align:left;border-bottom:1px solid #EEEEF4}
+th{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:700}
+.th-blue{background:var(--blue);color:#fff}.th-green{background:var(--green);color:#fff}
+.th-red{background:var(--red);color:#fff}.th-pink{background:var(--pink);color:#fff}
+.th-silver{background:var(--silver);color:var(--dark)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f5f5fc}
+td strong{color:var(--dark)}
+.compare-table td:first-child{font-weight:700;color:var(--dark);background:#f8f8fc;width:35%}
+.steps{counter-reset:s;margin:.8rem 0}
+.step{counter-increment:s;position:relative;padding:.85rem 1rem .85rem 3.5rem;margin-bottom:.75rem;background:var(--white);border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,.06);border-left:4px solid var(--blue)}
+.step.green{border-left-color:var(--green)}.step.red{border-left-color:var(--red)}.step.pink{border-left-color:var(--pink)}
+.step::before{content:counter(s,decimal-leading-zero);position:absolute;left:.8rem;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--blue)}
+.step.green::before{color:var(--green)}.step.red::before{color:var(--red)}.step.pink::before{color:var(--pink)}
+.step h4{color:var(--dark);font-size:.97rem;margin-bottom:.28rem}
+.step p{font-size:.93rem;color:var(--text-s);line-height:1.65;margin:0}
+.timeline{position:relative;margin:1rem 0}
+.tl-line{position:absolute;left:20px;top:14px;bottom:14px;width:2px;background:linear-gradient(180deg,var(--blue),var(--green),var(--red),var(--pink))}
+.tl-item{display:flex;gap:1rem;margin-bottom:1rem;position:relative}
+.tl-dot{flex-shrink:0;width:20px;height:20px;border-radius:50%;border:3px solid var(--white);box-shadow:0 0 0 2px currentColor;margin-top:.25rem;z-index:1}
+.tl-body{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.8rem 1.1rem;flex:1;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.tl-year{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;margin-bottom:.1rem}
+.tl-body p{font-size:.93rem;margin-bottom:0;color:var(--text-s)}
+.tag{display:inline-block;border-radius:20px;padding:.14rem .7rem;font-size:.8rem;font-weight:700;margin:.12rem .08rem;font-family:'Share Tech Mono',monospace}
+.tag.b{background:var(--light-b);border:1.5px solid rgba(0,114,206,.3);color:var(--blue)}
+.tag.g{background:var(--light-g);border:1.5px solid rgba(0,177,64,.3);color:var(--green)}
+.tag.r{background:var(--light-r);border:1.5px solid rgba(230,0,18,.3);color:var(--red)}
+.tag.p{background:var(--light-p);border:1.5px solid rgba(230,0,126,.3);color:var(--pink)}
+.tag.s{background:#f0f0f5;border:1.5px solid var(--border);color:var(--text-m)}
+.nt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin:.8rem 0}
+.nt-block{border-radius:6px;padding:.75rem .6rem;text-align:center}
+.nt-block .letter{font-family:'Bebas Neue',sans-serif;font-size:2rem;line-height:1}
+.nt-block .name{font-size:.75rem;font-weight:700;margin-top:.2rem}
+.nt-block .desc{font-size:.7rem;opacity:.75;font-family:'Share Tech Mono',monospace;margin-top:.15rem}
+.conclusion-item{display:flex;gap:1rem;align-items:flex-start;background:var(--white);border-radius:8px;padding:.85rem 1rem;margin-bottom:.7rem;box-shadow:0 1px 5px rgba(0,0,0,.06)}
+.conclusion-num{flex-shrink:0;width:2rem;height:2rem;border-radius:50%;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;display:flex;align-items:center;justify-content:center}
+.conclusion-item p{font-size:.97rem;color:var(--text-m);margin:0;line-height:1.72}
+.src{font-size:.78rem;color:var(--text-s);font-style:italic;margin-top:.6rem}
+.progress-bar{position:fixed;top:0;left:0;height:5px;background:linear-gradient(90deg,var(--blue),var(--green),var(--red),var(--pink));z-index:2000;transition:width .3s;box-shadow:0 1px 8px rgba(0,114,206,.35)}
+.counter{position:fixed;bottom:1.8rem;left:1.8rem;background:var(--white);padding:.5rem 1.1rem;border:2px solid var(--border);border-radius:4px;color:var(--dark);font-weight:700;z-index:1000;font-family:'Share Tech Mono',monospace;font-size:.85rem;box-shadow:0 2px 8px rgba(0,0,0,.09)}
+.nav{position:fixed;bottom:1.8rem;right:1.8rem;display:flex;gap:.7rem;z-index:1000}
+.btn{width:48px;height:48px;border:none;border-radius:4px;color:#fff;font-size:1.1rem;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.15);transition:all .18s;display:flex;align-items:center;justify-content:center}
+.btn:nth-child(1){background:var(--blue)}.btn:nth-child(2){background:var(--green)}
+.btn:hover:not(:disabled){filter:brightness(1.12);transform:translateY(-1px)}.btn:disabled{opacity:.3;cursor:not-allowed}
+@media(max-width:1024px){.slide{padding:2rem 2.5rem}h2{font-size:1.65rem}.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.slide{padding:1.6rem 1.2rem}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}h2{font-size:1.35rem}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+<div class="slide cover active">
+  <div class="cover-bg"></div>
+  <div class="cover-stripes"><span style="background:var(--blue)"></span><span style="background:var(--red)"></span><span style="background:var(--green)"></span><span style="background:var(--pink)"></span><span style="background:var(--silver)"></span></div>
+  <div class="ps-dots"><div class="ps-dot" style="background:var(--blue)"></div><div class="ps-dot" style="background:var(--red)"></div><div class="ps-dot" style="background:var(--green)"></div><div class="ps-dot" style="background:var(--pink)"></div></div>
+  <div class="cover-content">
+    <div class="cover-kicker">Biología 1 · Genética Molecular</div>
+    <h1><span class="l1">SECUENCIACIÓN</span><br><span class="l2">REPLICACIÓN</span><br><span class="l3">PCR</span></h1>
+    <div class="cover-rule"><span style="background:var(--blue)"></span><span style="background:var(--red)"></span><span style="background:var(--green)"></span><span style="background:var(--pink)"></span><span style="background:var(--silver)"></span></div>
+    <div class="cover-sub">ADN recombinante · Control genético de la replicación · Pruebas de PCR · Secuenciación del ADN</div>
+    <div class="cover-topics">
+      <div class="cover-topic"><div class="dot" style="background:var(--blue)"></div>2.3 Control genético de la replicación</div>
+      <div class="cover-topic"><div class="dot" style="background:var(--green)"></div>2.4 Replicación in vitro del ADN (PCR)</div>
+      <div class="cover-topic"><div class="dot" style="background:var(--red)"></div>2.5 Secuenciación del ADN</div>
+      <div class="cover-topic"><div class="dot" style="background:var(--pink)"></div>Procariotas vs. Eucariotas · Métodos Sanger y Automático</div>
+    </div>
+    
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip blue">2.3</span><h2>Control Genético de la Replicación: Generalidades</h2></div>
+  <div class="content">
+    <div class="box"><strong>Esquema general común a procariotas y eucariotas</strong><p>La replicación es <strong>semiconservativa</strong>, <strong>bidireccional</strong> y las horquillas de replicación tienen cadenas <strong>conductoras</strong> y <strong>retardadas</strong> en ambos tipos celulares.</p></div>
+    <p>Las diferencias fundamentales se relacionan con tres aspectos:</p>
+    <div class="grid grid-3">
+      <div class="card"><h4>&#x1F9EC; ADN polimerasas</h4><p>Número de tipos de ADN polimerasas diferentes que intervienen en cada proceso.</p></div>
+      <div class="card green"><h4>Orígenes y términos</h4><p>Número de orígenes y términos de replicación presentes en cada molécula de ADN.</p></div>
+      <div class="card red"><h4>Cromosomas</h4><p>Naturaleza de los cromosomas: circulares en procariotas, lineales en eucariotas.</p></div>
+    </div>
+    <div class="grid grid-2" style="margin-top:.4rem">
+      <div class="box green"><strong>Orígenes de replicación</strong><p>Segmentos del ADN con <strong>secuencias específicas</strong> donde se inicia la replicación.</p></div>
+      <div class="box red"><strong>Términos de replicación</strong><p>Secuencias que indican <strong>dónde debe terminar</strong> la replicación.</p></div>
+    </div>
+    <p class="src">Fuente: Video — Replicación en procariotas y eucariotas</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip green">2.3</span><h2>Replicación en Procariotas</h2></div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <div class="box green"><strong>Un único origen de replicación</strong><p>La mayoría de los genomas procariotas tiene un <strong>solo origen</strong> de replicación → un solo <strong>replicón</strong>.</p></div>
+        <div class="box"><strong>Dos términos de replicación</strong><p>Uno para cada cadena, situados en el <strong>polo opuesto</strong> al origen, un poco más allá de donde se cruzan las horquillas que avanzan en sentidos opuestos.</p></div>
+        <div class="box silver"><strong>Tres tipos de ADN polimerasas</strong><p><span class="tag b">ADN Pol I</span> <span class="tag b">ADN Pol II</span> <span class="tag b">ADN Pol III</span></p></div>
+      </div>
+      <div>
+        <div class="box"><strong>Cromosoma circular</strong><p>El cromosoma procariota es una molécula de ADN <strong>circular</strong>. Al finalizar la replicación, los grupos 3'OH quedan frente al ARN del cebador.</p></div>
+        <div class="box green"><strong>Resolución del extremo circular</strong><p>Cuando el ARN del cebador es eliminado, el <strong>hueco puede rellenarse</strong> por ADN que la ADN polimerasa forma a partir del extremo 3'OH disponible. No se pierde información genética.</p></div>
+      </div>
+    </div>
+    <p class="src">Fuente: Video — Replicación en procariotas y eucariotas</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip red">2.3</span><h2>Replicación en Eucariotas</h2></div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <div class="box"><strong>Múltiples orígenes de replicación</strong><p>Genomas mucho más grandes; velocidad de replicación <strong>10× menor</strong> que en procariotas (por el empaquetamiento en cromatina). Poseen <strong>numerosos orígenes</strong> en cada cromosoma, separados entre 30,000 y 300,000 pb.</p></div>
+        <div class="box red"><strong>Datos del genoma humano</strong><p><strong>~30,000 orígenes</strong> de replicación. Cada cromosoma contiene numerosos replicones.</p></div>
+        <div class="box silver"><strong>Cinco tipos de ADN polimerasas</strong><p><span class="tag b">alfa</span> <span class="tag g">beta</span> <span class="tag r">gamma</span> <span class="tag p">delta</span> <span class="tag s">épsilon</span></p></div>
+      </div>
+      <div>
+        <div class="box"><strong>Términos sin posición fija</strong><p>Salvo los extremos, los términos para cada replicón <strong>no tienen ubicación fija</strong>. La replicación termina donde las horquillas contiguas que avanzan en sentidos opuestos se encuentran.</p></div>
+        <div class="box red"><strong>Cromosomas lineales — problema del extremo</strong><p>Al eliminar el cebador, <strong>no puede sustituirse por ADN</strong> porque no hay extremo 3'OH libre. El segmento monocatenario restante se degrada. Los cromosomas se acortarían progresivamente.</p></div>
+      </div>
+    </div>
+    <p class="src">Fuente: Video — Replicación en procariotas y eucariotas</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip pink">2.3</span><h2>Solución al Problema del Extremo: Telómeros</h2></div>
+  <div class="content">
+    <div class="box pink"><strong>El problema del acortamiento</strong><p>Al eliminar el cebador en extremos de cromosomas lineales, el segmento monocatenario se degrada. Esto implicaría que los cromosomas se <strong>irían acortando progresivamente</strong>, perdiéndose genes de los extremos.</p></div>
+    <div class="box green" style="margin-top:.6rem"><strong>La solución: secuencias teloméricas</strong><p>Los extremos de los cromosomas eucariotas contienen <strong>secuencias cortas no codificantes</strong> que se repiten cientos de veces, funcionando como buffer protector frente al acortamiento.</p></div>
+    <div class="grid grid-3" style="margin-top:.7rem">
+      <div class="card pink"><h4>Nombre</h4><p>Se denominan <strong>telómeros</strong>.</p></div>
+      <div class="card green"><h4>Secuencia en vertebrados</h4><p>En todos los vertebrados, la secuencia repetida es: <strong>TTAGGG</strong></p></div>
+      <div class="card"><h4>Función</h4><p>Protegen los genes codificantes: son las primeras secuencias que se pierden en cada ronda de replicación.</p></div>
+    </div>
+    <p class="src">Fuente: Video — Replicación en procariotas y eucariotas</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip blue">2.3</span><h2>Comparativa: Procariotas vs. Eucariotas</h2></div>
+  <div class="content">
+    <table>
+      <thead><tr><th class="th-silver">Característica</th><th class="th-blue">Procariotas</th><th class="th-green">Eucariotas</th></tr></thead>
+      <tbody class="compare-table">
+        <tr><td>Orígenes de replicación</td><td>1 solo — 1 replicón</td><td>Múltiples (30–300 kb); humano: ~30,000</td></tr>
+        <tr><td>Términos de replicación</td><td>2 fijos (polo opuesto al origen)</td><td>Sin posición fija; donde se encuentran horquillas opuestas</td></tr>
+        <tr><td>Tipos de ADN polimerasa</td><td><strong>3:</strong> Pol I, II, III</td><td><strong>5:</strong> alfa, beta, gamma, delta, épsilon</td></tr>
+        <tr><td>Velocidad de replicación</td><td>Mayor</td><td>~10× más lenta (cromatina)</td></tr>
+        <tr><td>Naturaleza del cromosoma</td><td><strong>Circular</strong></td><td><strong>Lineal</strong></td></tr>
+        <tr><td>Problema del extremo</td><td>No existe (circular)</td><td>Sí — resuelto con <strong>telómeros</strong> (TTAGGG × n)</td></tr>
+        <tr><td>Empaquetamiento ADN</td><td>Sin cromatina</td><td>ADN en <strong>cromatina</strong></td></tr>
+      </tbody>
+    </table>
+    <p class="src">Fuente: Video — Replicación en procariotas y eucariotas</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip green">2.4</span><h2>Replicación In Vitro del ADN — Pruebas de PCR</h2></div>
+  <div class="content">
+    <div class="box green"><strong>¿Qué es la PCR?</strong><p>La PCR (Reacción en Cadena de la Polimerasa) es una forma confiable y precisa de diagnosticar ciertas enfermedades infecciosas, algunos tipos de cáncer y ciertos cambios genéticos. Busca pequeñas cantidades de material genético de un patógeno o células anormales en muestras de sangre, saliva, mucosidad o tejido.</p></div>
+    <div class="grid grid-2" style="margin-top:.5rem">
+      <div>
+        <h3 style="color:var(--blue)">Material genético buscado</h3>
+        <div class="box"><strong>ADN</strong><p>Contiene la información genética necesaria para el desarrollo de los seres vivos. Se copia de una generación a la siguiente. La mayoría de los virus y patógenos contienen ADN.</p></div>
+        <div class="box pink"><strong>ARN</strong><p>Contiene información copiada del ADN. Muchos tipos ayudan a producir proteínas. Algunos virus utilizan ARN para transportar su información genética.</p></div>
+      </div>
+      <div>
+        <h3 style="color:var(--green)">Ventaja principal: amplificación</h3>
+        <div class="box green"><strong>Detección en fases tempranas</strong><p>A diferencia de otras pruebas, la PCR detecta señales en las <strong>fases más tempranas</strong> de la infección, incluso cuando hay cantidades mínimas de patógeno, antes de que el cuerpo genere anticuerpos.</p></div>
+        <div class="box"><strong>El proceso de amplificación</strong><p>Una pequeña cantidad de material genético se <strong>copia múltiples veces</strong>, haciendo que los patógenos sean mucho más fáciles de detectar.</p></div>
+      </div>
+    </div>
+    <p class="src">Fuente: MedlinePlus / NIH — Pruebas de PCR</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip red">2.4</span><h2>Usos y Tipos de Pruebas de PCR</h2></div>
+  <div class="content">
+    <div class="grid grid-3">
+      <div class="card"><h4>Enfermedades infecciosas</h4><p>Diagnosticar enfermedades como COVID-19, VIH, hepatitis, entre otras, incluso en fases muy tempranas.</p></div>
+      <div class="card green"><h4>Cambios genéticos</h4><p>Identificar cambios genéticos que pueden causar o predisponer a enfermedades hereditarias.</p></div>
+      <div class="card red"><h4>Cáncer</h4><p>Encontrar cantidades pequeñas de células cancerosas que podrían pasar desapercibidas en otras pruebas.</p></div>
+    </div>
+    <div class="box" style="margin-top:.7rem"><strong>Ventaja sobre pruebas de anticuerpos</strong><p>Los <strong>anticuerpos</strong> son proteínas del sistema inmunitario producidas para atacar sustancias extrañas. Otras pruebas pueden no detectar los primeros signos de enfermedad porque el organismo aún no ha tenido tiempo de desarrollar esta respuesta. La PCR no depende de ella.</p></div>
+    <h3 style="color:var(--pink);margin-top:.7rem">Nombres y tipos alternativos</h3>
+    <div class="grid grid-4">
+      <div class="card pink"><h4>RT-PCR</h4><p>PCR de transcripción inversa</p></div>
+      <div class="card"><h4>qPCR</h4><p>PCR cuantitativa</p></div>
+      <div class="card green"><h4>Tiempo real</h4><p>Monitorea la amplificación en tiempo real</p></div>
+      <div class="card" style="border-top-color:var(--blue)"><h4 style="color:var(--blue)">RCP</h4><p>Siglas en español de la reacción</p></div>
+    </div>
+    <p class="src">Fuente: MedlinePlus / NIH — Pruebas de PCR</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip pink">2.5</span><h2>Secuenciación del ADN — Métodos Generales</h2></div>
+  <div class="content">
+    <div class="box pink"><strong>¿Qué es la secuenciación del ADN?</strong><p>Proceso para determinar la secuencia exacta de nucleótidos. Se emplean dos métodos: el <strong>enzimático de terminación de cadena (Sanger)</strong> y el de <strong>secuenciación automática</strong>. Ambos comparten los mismos tres pasos generales.</p></div>
+    <div class="steps">
+      <div class="step pink"><h4>Síntesis de nuevos fragmentos de ADN</h4><p>Síntesis de fragmentos complementarios usando nucleótidos marcados (radioactivos o fluorescentes).</p></div>
+      <div class="step pink"><h4>Separación por electroforesis</h4><p>Separación de los fragmentos según su tamaño mediante electroforesis en gel.</p></div>
+      <div class="step pink"><h4>Identificación de nucleótidos y lectura de la secuencia</h4><p>Identificar cada nucleótido por su marcador para determinar la secuencia completa del ADN.</p></div>
+    </div>
+    <div class="grid grid-2" style="margin-top:.4rem">
+      <div class="card"><h4>Método de Terminación de Cadena (MTC)</h4><p>Método de Sanger o Desoxi. Marcadores radioactivos o fluorescentes. Lectura en autoradiografía o forma automatizada.</p></div>
+      <div class="card pink"><h4>Secuenciación Automática</h4><p>Colores fluorescentes. Computadora lee mediante rayo láser. Mayor eficiencia, menor tiempo, almacenamiento digital.</p></div>
+    </div>
+    <p class="src">Fuente: Portal Académico CCH-UNAM — Secuenciación</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip blue">2.5</span><h2>Método de Sanger — Requerimientos</h2></div>
+  <div class="content">
+    <div class="box" style="margin-bottom:.7rem"><strong>Base del método</strong><p>Desnaturalización del ADN dúplex y elongación de las cadenas por ADN polimerasa. Requiere una molécula de ADN de no más de <strong>500 pb</strong>, más ADN polimerasa, cebadores apropiados y cuatro dNTP.</p></div>
+    <div class="grid grid-2">
+      <div>
+        <h3 style="color:var(--blue)">dNTPs — sustratos naturales</h3>
+        <div class="nt-grid">
+          <div class="nt-block" style="background:var(--light-b)"><div class="letter" style="color:var(--blue)">A</div><div class="name" style="color:var(--blue)">dATP</div><div class="desc">Adenina</div></div>
+          <div class="nt-block" style="background:var(--light-g)"><div class="letter" style="color:var(--green)">G</div><div class="name" style="color:var(--green)">dGTP</div><div class="desc">Guanina</div></div>
+          <div class="nt-block" style="background:var(--light-r)"><div class="letter" style="color:var(--red)">C</div><div class="name" style="color:var(--red)">dCTP</div><div class="desc">Citosina</div></div>
+          <div class="nt-block" style="background:var(--light-p)"><div class="letter" style="color:var(--pink)">T</div><div class="name" style="color:var(--pink)">dTTP</div><div class="desc">Timina</div></div>
+        </div>
+        <p style="font-size:.86rem;color:var(--text-s)">Solo uno se marca radioactivamente. Contienen el azúcar 2-desoxirribosa.</p>
+      </div>
+      <div>
+        <h3 style="color:var(--pink)">ddNTPs — terminadores de cadena</h3>
+        <div class="nt-grid">
+          <div class="nt-block" style="background:#FFF9C4"><div class="letter" style="color:#B8860B">A</div><div class="name" style="color:#B8860B">ddATP</div><div class="desc">amarillo</div></div>
+          <div class="nt-block" style="background:var(--light-b)"><div class="letter" style="color:var(--blue)">G</div><div class="name" style="color:var(--blue)">ddGTP</div><div class="desc">azul</div></div>
+          <div class="nt-block" style="background:var(--light-g)"><div class="letter" style="color:var(--green)">C</div><div class="name" style="color:var(--green)">ddCTP</div><div class="desc">verde</div></div>
+          <div class="nt-block" style="background:var(--light-r)"><div class="letter" style="color:var(--red)">T</div><div class="name" style="color:var(--red)">ddTTP</div><div class="desc">rojo</div></div>
+        </div>
+        <p style="font-size:.86rem;color:var(--text-s)">Carecen de OH en la desoxirribosa — síntesis se detiene siempre en el mismo nucleótido.</p>
+      </div>
+    </div>
+    <p class="src">Fuente: Portal Académico CCH-UNAM — Secuenciación</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip green">2.5</span><h2>Sanger — Síntesis de Fragmentos y Electroforesis</h2></div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3 style="color:var(--green)">Síntesis de fragmentos</h3>
+        <div class="box green"><strong>Un tubo por nucleótido</strong><p>Cada dNTP se agrega a un tubo diferente con todos los requerimientos. En cada tubo se produce una mezcla de cadenas de <strong>diferente longitud</strong> que terminan todas en el mismo nucleótido marcado. Todos contienen el cebador en el extremo 5'.</p></div>
+        <div class="box"><strong>¿Por qué se detiene la síntesis?</strong><p>Los ddNTP carecen de <strong>dos grupos hidroxilos (3,2-desoxirribosa)</strong>. El nucleótido siguiente no puede realizar el enlace, por lo que la síntesis se detiene cada vez que el ddNTP específico se une al extremo creciente.</p></div>
+      </div>
+      <div>
+        <h3 style="color:var(--blue)">Electroforesis en gel de acrilamida</h3>
+        <div class="box"><strong>Separación por tamaño y carga</strong><p>Gel vertical de acrilamida <strong>0.5 mm × 50 cm</strong>. Los 4 tubos se vacían en 4 carriles diferentes. Las bandas indican la posición y tipo del nucleótido correspondiente.</p></div>
+        <div class="box silver"><strong>Lectura de la autoradiografía</strong><p>Las bandas indican posición y tipo de nucleótido. Lectura en dirección <strong>5'→3'</strong>: de menor a mayor tamaño (de abajo hacia arriba del gel). También puede hacerse de forma automatizada.</p></div>
+      </div>
+    </div>
+    <p class="src">Fuente: Portal Académico CCH-UNAM — Secuenciación</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip red">2.5</span><h2>Secuenciación Automática — Diferencias y Ventajas</h2></div>
+  <div class="content">
+    <div class="box red"><strong>Misma base que Sanger, tres diferencias clave</strong></div>
+    <div class="steps" style="margin-top:.6rem">
+      <div class="step green"><h4>Marcador fluorescente (no radioactivo)</h4><p>Se utilizan <strong>colores fluorescentes</strong> unidos a los nucleótidos. Más seguro y permite lectura automatizada por láser.</p></div>
+      <div class="step"><h4>Un solo carril (no cuatro)</h4><p>La detección de todos los nucleótidos se realiza <strong>simultáneamente en un solo carril</strong>, en lugar de cuatro carriles separados.</p></div>
+      <div class="step pink"><h4>Computadora para análisis de la secuencia</h4><p>Se emplea una <strong>computadora programada</strong> para analizar la secuencia mediante rayo láser. Los resultados se almacenan de forma digital.</p></div>
+    </div>
+    <div class="grid grid-3" style="margin-top:.5rem">
+      <div class="card green"><h4>Menor tiempo</h4><p>La secuenciación se realiza en menor tiempo que el método manual.</p></div>
+      <div class="card"><h4>Mayor eficiencia</h4><p>Análisis simultáneo con mayor precisión y reproducibilidad.</p></div>
+      <div class="card red"><h4>Datos digitales</h4><p>Resultados almacenables digitalmente para análisis bioinformático.</p></div>
+    </div>
+    <p class="src">Fuente: Portal Académico CCH-UNAM — Secuenciación</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip pink">2.5</span><h2>Comparativa: Sanger vs. Secuenciación Automática</h2></div>
+  <div class="content">
+    <table>
+      <thead><tr><th class="th-silver">Aspecto</th><th class="th-blue">Sanger / MTC (manual)</th><th class="th-pink">Secuenciación Automática</th></tr></thead>
+      <tbody>
+        <tr><td>Marcador</td><td>Radioactivo (o fluorescente)</td><td><strong>Fluorescente</strong></td></tr>
+        <tr><td>Número de carriles</td><td><strong>4 carriles</strong> (uno por nucleótido)</td><td><strong>1 solo carril</strong> (todos simultáneos)</td></tr>
+        <tr><td>Detección</td><td>Autoradiografía / película fotográfica</td><td>Rayo láser + software</td></tr>
+        <tr><td>Lectura</td><td>Manual (de abajo hacia arriba, 5'→3')</td><td>Automatizada por computadora</td></tr>
+        <tr><td>Almacenamiento</td><td>Física (placa de autoradiografía)</td><td><strong>Digital</strong></td></tr>
+        <tr><td>Costo de implementación</td><td>Menor</td><td>Mayor (pero decrece con el avance tecnológico)</td></tr>
+        <tr><td>Eficiencia / velocidad</td><td>Menor</td><td><strong>Mayor</strong></td></tr>
+      </tbody>
+    </table>
+    <p class="src">Fuente: Portal Académico CCH-UNAM — Secuenciación</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip green">Resumen</span><h2>Conclusiones y Puntos Clave</h2></div>
+  <div class="content">
+    <div class="conclusion-item"><div class="conclusion-num" style="background:var(--blue)">1</div><p>La replicación del ADN es <strong>semiconservativa y bidireccional</strong> en ambos tipos de células, pero procariotas y eucariotas difieren en número de orígenes, tipos de ADN polimerasa y naturaleza del cromosoma.</p></div>
+    <div class="conclusion-item"><div class="conclusion-num" style="background:var(--green)">2</div><p>Los <strong>eucariotas poseen múltiples orígenes de replicación</strong> (~30,000 en humanos) y 5 tipos de ADN polimerasas (alfa, beta, gamma, delta, épsilon); los procariotas tienen 1 origen y 3 polimerasas (I, II, III).</p></div>
+    <div class="conclusion-item"><div class="conclusion-num" style="background:var(--red)">3</div><p>El <strong>problema del extremo</strong> en cromosomas lineales eucariotas se resuelve con los <strong>telómeros</strong> — secuencias repetidas no codificantes (TTAGGG en vertebrados).</p></div>
+    <div class="conclusion-item"><div class="conclusion-num" style="background:var(--pink)">4</div><p>La <strong>PCR amplifica</strong> secuencias específicas de ADN o ARN, permitiendo diagnóstico temprano de enfermedades infecciosas, cambios genéticos y cáncer, incluso antes del desarrollo de anticuerpos.</p></div>
+    <div class="conclusion-item"><div class="conclusion-num" style="background:var(--blue)">5</div><p>La <strong>secuenciación del ADN</strong> (Sanger y automática) determina la secuencia de nucleótidos mediante síntesis con ddNTPs terminadores, electroforesis y lectura por autoradiografía o láser fluorescente.</p></div>
+    <p class="src">Fuentes: Portal Académico CCH-UNAM · Video replicación procariotas/eucariotas · MedlinePlus/NIH</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="slide-header"><span class="chip silver">Bibliografía</span><h2>Referencias — Formato IEEE</h2></div>
+  <div class="content">
+    <div class="box">
+      <strong style="font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--blue)">[1]</strong>
+      <p>Escuela Nacional Colegio de Ciencias y Humanidades, UNAM, "Secuenciación," <em>Portal Académico del CCH</em>, 2017. [En línea]. Disponible en: https://e1.portalacademico.cch.unam.mx/alumno/biologia1/unidad3/ingenieriagenetica/ADNrecombinante/secuenciacion. [Accedido: 2026].</p>
+    </div>
+    <div class="box green">
+      <strong style="font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--green)">[2]</strong>
+      <p>"Diferencias entre la replicación del ADN en procariotas y eucariotas," <em>YouTube</em>. [En línea]. Disponible en: https://www.youtube.com/watch?v=clNoifLdo7I. [Accedido: 2026].</p>
+    </div>
+    <div class="box pink">
+      <strong style="font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--pink)">[3]</strong>
+      <p>MedlinePlus, "Pruebas de PCR," <em>Biblioteca Nacional de Medicina de EE. UU.</em>, 2024. [En línea]. Disponible en: https://medlineplus.gov/spanish/pruebas-de-laboratorio/pruebas-de-pcr/. [Accedido: 2026].</p>
+    </div>
+    <div class="box silver" style="margin-top:.5rem"><strong>Derechos</strong><p>Contenido del Portal Académico del CCH reproducido con fines educativos, sin objeto comercial, de conformidad con el artículo 148 de la Ley Federal del Derecho de Autor. © 2017 UNAM · CCH.</p></div>
+  </div>
+</div>
+</div>
+<div class="counter"><span id="current">1</span> / <span id="total">15</span></div>
+<div class="nav"><button class="btn" id="prev" onclick="nav(-1)">&#9668;</button><button class="btn" id="next" onclick="nav(1)">&#9658;</button></div>
+<script>
+let current=0;const slides=document.querySelectorAll('.slide');const total=slides.length;
+document.getElementById('total').textContent=total;
+function show(n){if(n<0)n=0;if(n>=total)n=total-1;slides.forEach(s=>s.classList.remove('active'));slides[n].classList.add('active');current=n;document.getElementById('current').textContent=n+1;document.getElementById('prev').disabled=(n===0);document.getElementById('next').disabled=(n===total-1);document.getElementById('progressBar').style.width=((n+1)/total*100)+'%'}
+function nav(dir){show(current+dir)}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowUp')nav(-1);if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();nav(1)}});
+show(0);
+</script>
+</body>
+</html>

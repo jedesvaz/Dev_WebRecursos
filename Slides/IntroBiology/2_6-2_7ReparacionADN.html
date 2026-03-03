@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reparación del ADN — 2.6 y 2.7</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:ital,wght@0,300;0,400;0,700;0,900;1,300&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════
+   PALETA
+   Indigo    #4B3F72  (consola)
+   Verde     #2BB673  (botón A)
+   Rojo      #E63946  (botón B)
+   Gris      #D6D6D6  (botón X/Y)
+   Amarillo  #FFD200  (C-Stick)
+   Grafito   #5A5A5A  (Joystick)
+   Fondo     #FFFFFF
+═══════════════════════════════════ */
+:root{
+  --indigo: #4B3F72;
+  --green:  #2BB673;
+  --red:    #E63946;
+  --gray:   #D6D6D6;
+  --yellow: #FFD200;
+  --dark:   #5A5A5A;
+  --white:  #FFFFFF;
+  --bg:     #FAFAFA;
+  --text:   #1A1A2A;
+  --text-m: #3A3A50;
+  --text-s: #6A6A80;
+  --light-i:#EDE9F6;
+  --light-g:#E6F7EE;
+  --light-r:#FDECEA;
+  --light-y:#FFFBDE;
+  --border: #E0DFF0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Nunito",sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
+body::before{
+  content:"";position:fixed;inset:0;
+  background-image:radial-gradient(circle,rgba(75,63,114,.05) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;z-index:0;
+}
+.container{width:100vw;height:100vh;position:relative;z-index:1}
+
+/* ── SLIDES ── */
+.slide{display:none;width:100%;height:100%;padding:2.4rem 5rem 1.8rem;flex-direction:column;position:relative;overflow:hidden}
+.slide.active{display:flex}
+.slide:not(.cover)::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px}
+.slide:nth-child(4n+2)::before{background:var(--indigo)}
+.slide:nth-child(4n+3)::before{background:var(--green)}
+.slide:nth-child(4n+4)::before{background:var(--red)}
+.slide:nth-child(4n+5)::before{background:var(--yellow)}
+.slide:not(.cover)::after{content:"";position:absolute;right:0;top:0;width:4px;height:100%;background:linear-gradient(180deg,var(--gray) 0%,transparent 100%);opacity:.4}
+
+/* ── PORTADA ── */
+.cover{background:var(--indigo);padding:0;position:relative;overflow:hidden}
+.cover::before,.cover::after{display:none}
+.cover-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+/* Glow decorativo */
+.cover-glow{position:absolute;top:-80px;right:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(43,182,115,.22) 0%,transparent 65%);pointer-events:none}
+.cover-glow2{position:absolute;bottom:-60px;left:5%;width:320px;height:320px;background:radial-gradient(circle,rgba(255,210,0,.12) 0%,transparent 65%);pointer-events:none}
+/* Botones decorativos (círculos) */
+.btn-deco{position:absolute;border-radius:50%;opacity:.9}
+.cover-stripes{position:absolute;bottom:0;left:0;right:0;height:8px;display:flex}
+.cover-stripes span{flex:1}
+.cover-content{position:relative;z-index:1;padding:4rem 5.5rem;display:flex;flex-direction:column;height:100%}
+.cover-kicker{font-family:"Share Tech Mono",monospace;font-size:.72rem;letter-spacing:5px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:1.8rem}
+.cover h1{font-family:"Bebas Neue",sans-serif;font-size:5rem;line-height:.95;letter-spacing:2px;color:var(--white)}
+.cover h1 .l1{color:var(--yellow)}
+.cover h1 .l2{color:var(--green)}
+.cover-rule{display:flex;height:5px;width:280px;margin:1.6rem 0 1.3rem}
+.cover-rule span{flex:1}
+.cover-sub{font-weight:300;font-size:1.05rem;color:rgba(255,255,255,.7);line-height:1.9;font-style:italic}
+.cover-topics{margin-top:1.4rem;display:flex;flex-direction:column;gap:.55rem}
+.cover-topic{display:flex;align-items:center;gap:.8rem;font-family:"Share Tech Mono",monospace;font-size:.75rem;letter-spacing:1.5px;color:rgba(255,255,255,.65);text-transform:uppercase}
+.cover-topic .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cover-footer{margin-top:auto;font-family:"Share Tech Mono",monospace;font-size:.65rem;letter-spacing:1.5px;color:rgba(255,255,255,.3)}
+
+/* ── HEADER ── */
+.slide-header{flex-shrink:0;display:flex;align-items:center;gap:.85rem;margin-bottom:1.25rem}
+.chip{font-family:"Share Tech Mono",monospace;font-size:.62rem;letter-spacing:3px;font-weight:700;text-transform:uppercase;padding:.28rem .85rem;border-radius:3px;flex-shrink:0;color:#fff}
+.chip.i{background:var(--indigo)}
+.chip.g{background:var(--green)}
+.chip.r{background:var(--red)}
+.chip.y{background:var(--yellow);color:var(--text)}
+.chip.d{background:var(--dark)}
+.chip.gr{background:var(--gray);color:var(--text)}
+h2{font-family:"Bebas Neue",sans-serif;font-size:2rem;letter-spacing:1px;color:var(--indigo);line-height:1.05}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;padding-right:.5rem}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--gray);border-radius:3px}
+p{font-size:.98rem;line-height:1.85;margin-bottom:.85rem;color:var(--text-m)}
+h3{font-family:"Bebas Neue",sans-serif;font-size:1.3rem;letter-spacing:1px;color:var(--indigo);margin:1.1rem 0 .6rem}
+h4{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.35rem}
+ul{list-style:none;margin:.65rem 0}
+ul li{font-size:.96rem;line-height:1.78;margin-bottom:.5rem;padding-left:1.5rem;position:relative;color:var(--text-m)}
+ul li::before{content:"▸";position:absolute;left:0;color:var(--indigo);font-size:.9rem}
+
+/* ── CAJAS ── */
+.box{background:var(--white);border-left:5px solid var(--indigo);padding:.95rem 1.3rem;margin:.8rem 0;border-radius:0 8px 8px 0;box-shadow:0 2px 10px rgba(75,63,114,.08)}
+.box strong{color:var(--indigo);display:block;margin-bottom:.3rem;font-weight:700}
+.box p{margin-bottom:.15rem;color:var(--text-m)}
+.box.g{border-left-color:var(--green);background:var(--light-g)}.box.g strong{color:var(--green)}
+.box.r{border-left-color:var(--red);background:var(--light-r)}.box.r strong{color:var(--red)}
+.box.y{border-left-color:var(--yellow);background:var(--light-y)}.box.y strong{color:#8A7000}
+.box.d{border-left-color:var(--dark);background:#f5f5f5}.box.d strong{color:var(--dark)}
+.box.gr{border-left-color:var(--gray);background:#f9f9f9}.box.gr strong{color:var(--dark)}
+
+/* ── GRIDS / CARDS ── */
+.grid{display:grid;gap:.85rem;margin:.75rem 0}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--white);padding:1.05rem 1.15rem;border-radius:8px;border-top:4px solid var(--indigo);box-shadow:0 2px 8px rgba(75,63,114,.09);transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(75,63,114,.14)}
+.card h4{color:var(--indigo)}
+.card p{font-size:.92rem;color:var(--text-s);margin-bottom:.2rem}
+.card.g{border-top-color:var(--green)}.card.g h4{color:var(--green)}
+.card.r{border-top-color:var(--red)}.card.r h4{color:var(--red)}
+.card.y{border-top-color:var(--yellow)}.card.y h4{color:#8A7000}
+.card.d{border-top-color:var(--dark)}.card.d h4{color:var(--dark)}
+.card.gr{border-top-color:var(--gray)}.card.gr h4{color:var(--dark)}
+
+/* ── TABLA ── */
+table{width:100%;border-collapse:collapse;margin:.75rem 0;background:var(--white);box-shadow:0 2px 8px rgba(75,63,114,.07);border-radius:8px;overflow:hidden;font-size:.91rem}
+th,td{padding:.68rem .82rem;text-align:left;border-bottom:1px solid #EEEEF6}
+th{font-family:"Share Tech Mono",monospace;font-size:.63rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:700}
+.thi{background:var(--indigo);color:#fff}.thg{background:var(--green);color:#fff}
+.thr{background:var(--red);color:#fff}.thy{background:var(--yellow);color:var(--text)}
+.thd{background:var(--dark);color:#fff}.thgr{background:var(--gray);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--light-i)}
+td strong{color:var(--indigo)}
+.col1{font-weight:700;color:var(--text);background:#f8f7fc;width:32%}
+
+/* ── STEPS ── */
+.steps{counter-reset:s;margin:.75rem 0}
+.step{counter-increment:s;position:relative;padding:.8rem 1rem .8rem 3.4rem;margin-bottom:.7rem;background:var(--white);border-radius:8px;box-shadow:0 1px 6px rgba(75,63,114,.07);border-left:4px solid var(--indigo)}
+.step.g{border-left-color:var(--green)}.step.r{border-left-color:var(--red)}.step.y{border-left-color:var(--yellow)}
+.step::before{content:counter(s,decimal-leading-zero);position:absolute;left:.75rem;top:50%;transform:translateY(-50%);font-family:"Bebas Neue",sans-serif;font-size:1.35rem;color:var(--indigo)}
+.step.g::before{color:var(--green)}.step.r::before{color:var(--red)}.step.y::before{color:#8A7000}
+.step h4{color:var(--text);font-size:.95rem;margin-bottom:.25rem}
+.step p{font-size:.9rem;color:var(--text-s);line-height:1.65;margin:0}
+
+/* ── TAGS ── */
+.tag{display:inline-block;border-radius:20px;padding:.12rem .65rem;font-size:.78rem;font-weight:700;margin:.1rem .07rem;font-family:"Share Tech Mono",monospace}
+.tag.i{background:var(--light-i);border:1.5px solid rgba(75,63,114,.3);color:var(--indigo)}
+.tag.g{background:var(--light-g);border:1.5px solid rgba(43,182,115,.3);color:var(--green)}
+.tag.r{background:var(--light-r);border:1.5px solid rgba(230,57,70,.3);color:var(--red)}
+.tag.y{background:var(--light-y);border:1.5px solid rgba(255,210,0,.5);color:#8A7000}
+.tag.d{background:#f0f0f0;border:1.5px solid var(--gray);color:var(--dark)}
+
+/* ── CONCLUSIONES ── */
+.conclusion-item{display:flex;gap:.9rem;align-items:flex-start;background:var(--white);border-radius:8px;padding:.82rem .95rem;margin-bottom:.65rem;box-shadow:0 1px 5px rgba(75,63,114,.07)}
+.conclusion-num{flex-shrink:0;width:1.9rem;height:1.9rem;border-radius:50%;color:#fff;font-family:"Bebas Neue",sans-serif;font-size:1.05rem;display:flex;align-items:center;justify-content:center}
+.conclusion-item p{font-size:.95rem;color:var(--text-m);margin:0;line-height:1.7}
+
+/* ── ACTIVIDAD ── */
+.activity-box{
+  background:var(--light-y);
+  border:2.5px solid var(--yellow);
+  border-radius:10px;
+  padding:1.4rem 1.6rem;
+  margin:.9rem 0;
+  position:relative;
+}
+.activity-box::before{
+  content:"ACTIVIDAD";
+  position:absolute;top:-12px;left:1.2rem;
+  font-family:"Share Tech Mono",monospace;
+  font-size:.65rem;letter-spacing:4px;font-weight:700;
+  background:var(--yellow);color:var(--text);
+  padding:.2rem .75rem;border-radius:3px;
+}
+.activity-box h4{font-family:"Bebas Neue",sans-serif;font-size:1.35rem;letter-spacing:.5px;color:var(--text);margin-bottom:.6rem}
+.activity-box p{color:var(--text-m);font-size:.97rem}
+.activity-box .ref{
+  margin-top:.85rem;
+  font-family:"Share Tech Mono",monospace;font-size:.76rem;
+  color:var(--indigo);word-break:break-all;
+  background:rgba(75,63,114,.07);padding:.5rem .8rem;border-radius:5px;
+}
+.activity-box .emphasis{
+  background:var(--white);border-left:4px solid var(--indigo);
+  padding:.65rem 1rem;border-radius:0 6px 6px 0;margin-top:.75rem;
+  font-size:.93rem;color:var(--text-m);
+}
+
+.src{font-size:.76rem;color:var(--text-s);font-style:italic;margin-top:.55rem}
+
+/* ── PROGRESS / NAV ── */
+.progress-bar{position:fixed;top:0;left:0;height:5px;background:linear-gradient(90deg,var(--indigo),var(--green),var(--red),var(--yellow));z-index:2000;transition:width .3s;box-shadow:0 1px 8px rgba(75,63,114,.35)}
+.counter{position:fixed;bottom:1.8rem;left:1.8rem;background:var(--white);padding:.48rem 1.05rem;border:2px solid var(--border);border-radius:4px;color:var(--indigo);font-weight:700;z-index:1000;font-family:"Share Tech Mono",monospace;font-size:.83rem;box-shadow:0 2px 8px rgba(75,63,114,.1)}
+.nav{position:fixed;bottom:1.8rem;right:1.8rem;display:flex;gap:.7rem;z-index:1000}
+.btn{width:46px;height:46px;border:none;border-radius:50%;color:#fff;font-size:1rem;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.15);transition:all .18s;display:flex;align-items:center;justify-content:center;font-family:"Bebas Neue",sans-serif;font-size:1.1rem}
+.btn:nth-child(1){background:var(--red)}
+.btn:nth-child(2){background:var(--green)}
+.btn:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-2px) scale(1.07)}
+.btn:disabled{opacity:.28;cursor:not-allowed}
+
+@media(max-width:1024px){.slide{padding:2rem 2.5rem}h2{font-size:1.6rem}.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.slide{padding:1.5rem 1.2rem}.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}h2{font-size:1.3rem}}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+
+<!-- ═══════ S1 · PORTADA ═══════ -->
+<div class="slide cover active">
+  <div class="cover-bg"></div>
+  <div class="cover-glow"></div>
+  <div class="cover-glow2"></div>
+  <div class="cover-stripes">
+    <span style="background:var(--green)"></span>
+    <span style="background:var(--red)"></span>
+    <span style="background:var(--yellow)"></span>
+    <span style="background:var(--gray)"></span>
+    <span style="background:var(--dark)"></span>
+  </div>
+  <!-- Botones decorativos -->
+  <div class="btn-deco" style="width:32px;height:32px;background:var(--green);top:2.2rem;right:2.2rem"></div>
+  <div class="btn-deco" style="width:22px;height:22px;background:var(--red);top:2rem;right:4.5rem"></div>
+  <div class="btn-deco" style="width:18px;height:18px;background:var(--yellow);top:4rem;right:2.8rem"></div>
+  <div class="btn-deco" style="width:14px;height:14px;background:var(--gray);top:3.2rem;right:1.2rem"></div>
+
+  <div class="cover-content">
+    <div class="cover-kicker">Biología 1 · Genética Molecular</div>
+    <h1>
+      <span class="l1">REPARACIÓN</span><br>
+      <span class="l2">DEL ADN</span>
+    </h1>
+    <div class="cover-rule">
+      <span style="background:var(--green)"></span>
+      <span style="background:var(--red)"></span>
+      <span style="background:var(--yellow)"></span>
+      <span style="background:var(--gray)"></span>
+      <span style="background:var(--dark)"></span>
+    </div>
+    <div class="cover-sub">Lesiones al material genético · Agentes mutagénicos · Sistemas de reparación</div>
+    <div class="cover-topics">
+      <div class="cover-topic"><div class="dot" style="background:var(--green)"></div>2.6 Clasificación de tipos de lesión al ADN</div>
+      <div class="cover-topic"><div class="dot" style="background:var(--red)"></div>2.6 Agentes mutagénicos físicos y químicos</div>
+      <div class="cover-topic"><div class="dot" style="background:var(--yellow)"></div>2.7 Sistemas de reparación del ADN</div>
+      <div class="cover-topic"><div class="dot" style="background:var(--gray)"></div>Corrección de errores durante la replicación</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ S2 · 2.6 INTRODUCCIÓN ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip i">2.6</span><h2>Reparación del Material Genético — Introducción</h2></div>
+  <div class="content">
+    <div class="box">
+      <strong>¿Por qué es necesaria la reparación del ADN?</strong>
+      <p>La replicación del ADN es un proceso altamente preciso, pero pueden ocurrir errores ocasionales. Si no se corrigen, pueden conducir a consecuencias graves como el cáncer. Los mecanismos de reparación corrigen la mayoría de los errores.</p>
+    </div>
+    <div class="grid grid-3" style="margin-top:.6rem">
+      <div class="card g">
+        <h4>✅ Corrección exitosa</h4>
+        <p>La mayoría de los errores son detectados y corregidos durante o después de la replicación por enzimas especializadas.</p>
+      </div>
+      <div class="card r">
+        <h4>⚠️ Mutación permanente</h4>
+        <p>En casos raros donde la reparación falla, el error se convierte en una <strong>mutación permanente</strong> en la secuencia del ADN.</p>
+      </div>
+      <div class="card y">
+        <h4>🔬 Enzimas defectuosas</h4>
+        <p>En algunos casos, las propias enzimas de reparación están mutadas o son defectuosas, impidiendo la corrección de errores.</p>
+      </div>
+    </div>
+    <div class="box g" style="margin-top:.5rem">
+      <strong>Fuentes de daño al ADN</strong>
+      <p>Los errores durante la replicación no son la única fuente de daño. El ADN también puede dañarse por agentes ambientales (rayos UV, radiación, sustancias químicas) o por reacciones naturales espontáneas dentro del organismo.</p>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>. Disponible en: https://bio.libretexts.org/...14.6</p>
+  </div>
+</div>
+
+<!-- ═══════ S3 · TIPOS DE MUTACIONES ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip g">2.6</span><h2>Clasificación de Lesiones al ADN — Mutaciones</h2></div>
+  <div class="content">
+    <div class="box">
+      <strong>Mutación</strong>
+      <p>Cambio permanente en la secuencia de nucleótidos del genoma. Pueden surgir por errores durante la replicación o por daño al ADN.</p>
+    </div>
+    <table>
+      <thead>
+        <tr><th class="thi">Tipo</th><th class="thg">Descripción</th><th class="thr">Ejemplo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="col1">Mutación silenciosa</td><td>No se expresa; no altera la función de la proteína</td><td>Cambio de codon sinónimo</td></tr>
+        <tr><td class="col1">Sustitución — Transición</td><td>Una purina/pirimidina es reemplazada por una base del mismo tipo</td><td>Adenina → Guanina (purina → purina)</td></tr>
+        <tr><td class="col1">Sustitución — Transversión</td><td>Una purina es reemplazada por una pirimidina o viceversa</td><td>Citosina (pirimidina) → Adenina (purina)</td></tr>
+        <tr><td class="col1">Inserción</td><td>Adición de una o más bases a la secuencia</td><td>Causa cambio en marco de lectura</td></tr>
+        <tr><td class="col1">Deleción</td><td>Remoción de una o más bases de la secuencia</td><td>Causa cambio en marco de lectura</td></tr>
+        <tr><td class="col1">Translocación</td><td>Un fragmento de un cromosoma se mueve a otro cromosoma o región</td><td>Cromosoma 9 → 22 (leucemia)</td></tr>
+      </tbody>
+    </table>
+    <div class="box y">
+      <strong>Mutaciones inducidas vs. espontáneas</strong>
+      <p><strong>Inducidas:</strong> resultan de exposición a químicos, rayos UV, rayos X u otro agente ambiental. <strong>Espontáneas:</strong> ocurren sin exposición ambiental; resultado de reacciones naturales del organismo.</p>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S4 · AGENTES MUTAGÉNICOS FÍSICOS ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip r">2.6</span><h2>Agentes Mutagénicos Físicos</h2></div>
+  <div class="content">
+    <div class="box r">
+      <strong>¿Qué son los agentes mutagénicos?</strong>
+      <p>Factores que aumentan la frecuencia de mutaciones por encima de la tasa espontánea, causando daño directo o indirecto al ADN. Los agentes físicos actúan principalmente a través de la energía (radiación).</p>
+    </div>
+    <div class="grid grid-2" style="margin-top:.6rem">
+      <div>
+        <div class="box r">
+          <strong>☀️ Radiación ultravioleta (UV)</strong>
+          <p>Causa la formación de <strong>dímeros de pirimidina</strong> — especialmente dímeros de timina. Las timinas adyacentes se enlazan covalentemente, distorsionando la estructura de la doble hélice y causando problemas durante la replicación.</p>
+          <p style="margin-top:.4rem;font-size:.9rem">Ejemplo clínico: <span class="tag r">Xeroderma pigmentosa</span> — incapacidad de reparar dímeros de timina por defecto en la enzima de reparación por escisión de nucleótidos.</p>
+        </div>
+        <div class="box">
+          <strong>☢️ Rayos X y radiación ionizante</strong>
+          <p>Inducen roturas en las cadenas simples y dobles del ADN, así como modificaciones en las bases nitrogenadas. Pueden causar deleciones, translocaciones y aberraciones cromosómicas.</p>
+        </div>
+      </div>
+      <div>
+        <div class="box d">
+          <strong>🔴 Xeroderma pigmentosa (XP)</strong>
+          <p>Condición bien estudiada causada por defectos en la reparación por escisión de nucleótidos. Las personas afectadas no pueden reparar los dímeros de timina formados por exposición a UV.</p>
+          <ul>
+            <li>Piel altamente sensible a los rayos UV solares</li>
+            <li>Los dímeros de timina distorsionan la doble hélice</li>
+            <li>Problemas graves durante la replicación del ADN</li>
+            <li>Mayor riesgo de desarrollar cáncer de piel</li>
+          </ul>
+        </div>
+        <div class="box y">
+          <strong>🌡️ Temperatura extrema</strong>
+          <p>El calor puede causar depurinación espontánea — pérdida de bases purinas — y desaminación de citosina a uracilo, generando lesiones que deben ser reparadas.</p>
+        </div>
+      </div>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S5 · AGENTES MUTAGÉNICOS QUÍMICOS ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip y">2.6</span><h2>Agentes Mutagénicos Químicos</h2></div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3 style="color:var(--red)">Análogos de bases</h3>
+        <div class="box r">
+          <strong>Sustituyen bases normales durante la replicación</strong>
+          <p>Se incorporan en lugar de una base normal y causan apareamientos incorrectos en rondas posteriores de replicación.</p>
+          <p><span class="tag r">5-bromouracilo</span> — análogo de timina, se empareja con guanina en lugar de adenina</p>
+          <p style="margin-top:.3rem"><span class="tag r">2-aminopurina</span> — análogo de adenina, se empareja con citosina</p>
+        </div>
+        <h3 style="color:var(--dark);margin-top:.8rem">Agentes alquilantes</h3>
+        <div class="box d">
+          <strong>Modifican directamente las bases</strong>
+          <p>Añaden grupos alquilo a las bases del ADN, alterando su estructura y capacidad de apareamiento. Ej.: <span class="tag d">mostazas nitrogenadas</span>, <span class="tag d">etilmetanosulfonato (EMS)</span>.</p>
+        </div>
+      </div>
+      <div>
+        <h3 style="color:var(--indigo)">Agentes intercalantes</h3>
+        <div class="box">
+          <strong>Se insertan entre las bases del ADN</strong>
+          <p>Moléculas planas que se intercalan entre pares de bases, causando inserciones o deleciones durante la replicación al distorsionar la geometría de la cadena.</p>
+          <p style="margin-top:.3rem"><span class="tag i">Bromuro de etidio</span> <span class="tag i">Acridinas</span> <span class="tag i">Proflavina</span></p>
+        </div>
+        <h3 style="color:var(--green);margin-top:.8rem">Agentes desaminantes</h3>
+        <div class="box g">
+          <strong>Eliminan grupos amino de las bases</strong>
+          <p>La desaminación convierte citosina en uracilo, que se empareja con adenina en lugar de guanina, causando transiciones G·C → A·T. El <span class="tag g">ácido nitroso</span> es un ejemplo clásico.</p>
+        </div>
+        <div class="box y" style="margin-top:.5rem">
+          <strong>Hidroxilamina</strong>
+          <p>Reacciona con citosina, convirtiendo pares G·C en A·T mediante transiciones.</p>
+        </div>
+      </div>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S6 · TABLA COMPARATIVA AGENTES ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip d">2.6</span><h2>Resumen: Agentes Mutagénicos y Tipos de Daño</h2></div>
+  <div class="content">
+    <table>
+      <thead>
+        <tr><th class="thi">Agente</th><th class="thgr">Tipo</th><th class="thg">Mecanismo</th><th class="thr">Efecto en ADN</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="col1">Radiación UV</td><td>Físico</td><td>Energía electromagnética</td><td>Dímeros de pirimidina (timina)</td></tr>
+        <tr><td class="col1">Rayos X / γ</td><td>Físico</td><td>Radiación ionizante</td><td>Roturas de cadena simple y doble</td></tr>
+        <tr><td class="col1">Análogos de bases</td><td>Químico</td><td>Incorporación errónea</td><td>Apareamientos incorrectos</td></tr>
+        <tr><td class="col1">Agentes alquilantes</td><td>Químico</td><td>Adición de grupos alquilo</td><td>Bases modificadas, mal apareamiento</td></tr>
+        <tr><td class="col1">Agentes intercalantes</td><td>Químico</td><td>Inserción entre bases</td><td>Inserciones / deleciones (frameshift)</td></tr>
+        <tr><td class="col1">Agentes desaminantes</td><td>Químico</td><td>Eliminación de grupo amino</td><td>Transiciones (C → U)</td></tr>
+        <tr><td class="col1">Temperatura / Hidrólisis</td><td>Físico / Espontáneo</td><td>Depurinación, desaminación</td><td>Pérdida de bases, transiciones</td></tr>
+      </tbody>
+    </table>
+    <div class="grid grid-2" style="margin-top:.6rem">
+      <div class="box g">
+        <strong>Consecuencias en la replicación</strong>
+        <p>Los daños al ADN pueden bloquear la horquilla de replicación, causar que la ADN polimerasa incorpore bases incorrectas, o generar mutaciones en células hijas si no se repara a tiempo.</p>
+      </div>
+      <div class="box r">
+        <strong>Consecuencias clínicas</strong>
+        <p>Acumulación de mutaciones en células somáticas → cáncer. Mutaciones en células germinales → transmisión hereditaria (ej. hemofilia, xeroderma pigmentosa).</p>
+      </div>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S7 · 2.7 CORRECCIÓN POR LECTURA DE PRUEBA ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip i">2.7</span><h2>Sistema 1: Corrección por Lectura de Prueba (Proofreading)</h2></div>
+  <div class="content">
+    <div class="box">
+      <strong>Mecanismo primario — ocurre durante la replicación</strong>
+      <p>La mayoría de los errores durante la replicación son corregidos <em>inmediatamente</em> por la ADN polimerasa mediante la lectura de prueba de cada base recién añadida.</p>
+    </div>
+    <div class="steps">
+      <div class="step g">
+        <h4>Síntesis de la nueva base</h4>
+        <p>La ADN polimerasa añade una nueva base al extremo 3'OH de la cadena en crecimiento.</p>
+      </div>
+      <div class="step">
+        <h4>Verificación del apareamiento</h4>
+        <p>La polimerasa verifica si la base recién añadida se ha apareado correctamente con la base complementaria en la cadena molde.</p>
+      </div>
+      <div class="step g">
+        <h4>Si el apareamiento es correcto</h4>
+        <p>Se añade el siguiente nucleótido y la síntesis continúa normalmente.</p>
+      </div>
+      <div class="step r">
+        <h4>Si la base es incorrecta</h4>
+        <p>La enzima realiza un corte en el enlace fosfodiéster y libera el nucleótido incorrecto. Esta acción es realizada por la <strong>actividad exonucleasa de la ADN polimerasa III</strong>. Una vez removido el nucleótido incorrecto, se añade uno nuevo.</p>
+      </div>
+    </div>
+    <div class="box y">
+      <strong>Importancia del proofreading en la replicación</strong>
+      <p>Gracias a este mecanismo, la tasa de error de la ADN polimerasa se reduce de ~1 en 10⁵ a ~1 en 10⁷ nucleótidos. Combinado con otros sistemas de reparación, la fidelidad total de la replicación alcanza ~1 error en 10⁹ nucleótidos.</p>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S8 · REPARACIÓN POR ESCISIÓN DE BASES ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip g">2.7</span><h2>Sistema 2: Reparación por Escisión de Bases (BER)</h2></div>
+  <div class="content">
+    <div class="box g">
+      <strong>¿Cuándo actúa?</strong>
+      <p>Corrige bases dañadas o modificadas químicamente (ej. por desaminación, oxidación, o alquilación) sin que se haya producido rotura en la cadena. Es el sistema de reparación más frecuente para lesiones de base única.</p>
+    </div>
+    <div class="steps">
+      <div class="step g">
+        <h4>Reconocimiento de la base dañada</h4>
+        <p>Una ADN glicosilasa reconoce y elimina específicamente la base dañada, dejando un sitio AP (apurínico/apirimidínico) — un sitio sin base.</p>
+      </div>
+      <div class="step">
+        <h4>Incisión en el sitio AP</h4>
+        <p>Una endonucleasa AP (AP endonucleasa) realiza un corte en el esqueleto de azúcar-fosfato en el lado 5' del sitio AP.</p>
+      </div>
+      <div class="step g">
+        <h4>Remoción del azúcar dañado</h4>
+        <p>Una fosfodiesterasa elimina el residuo de azúcar-fosfato restante, dejando un hueco de un nucleótido en la cadena.</p>
+      </div>
+      <div class="step">
+        <h4>Resíntesis y ligación</h4>
+        <p>La <strong>ADN polimerasa</strong> rellena el hueco copiando la cadena molde. La <strong>ADN ligasa</strong> sella el enlace fosfodiéster restante.</p>
+      </div>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S9 · REPARACIÓN DE APAREAMIENTOS ERRÓNEOS ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip r">2.7</span><h2>Sistema 3: Reparación de Apareamientos Erróneos (Mismatch Repair)</h2></div>
+  <div class="content">
+    <div class="box r">
+      <strong>Actúa después de la replicación</strong>
+      <p>Algunos errores no son corregidos durante la replicación. La reparación de apareamientos erróneos (MMR) detecta y corrige las bases incorrectamente añadidas <em>después</em> de que la replicación ha concluido.</p>
+    </div>
+    <div class="grid grid-2">
+      <div>
+        <div class="steps" style="counter-reset:s">
+          <div class="step r">
+            <h4>Detección del apareamiento incorrecto</h4>
+            <p>Enzimas especializadas reconocen la base incorporada incorrectamente en la cadena recién sintetizada (ej. un apareamiento G·T donde debería ser G·C).</p>
+          </div>
+          <div class="step">
+            <h4>Escisión de la base errónea</h4>
+            <p>Las enzimas eliminan el nucleótido incorrecto de la cadena recién sintetizada mediante acción de nucleasas.</p>
+          </div>
+          <div class="step r">
+            <h4>Resíntesis y ligación</h4>
+            <p>El hueco es rellenado con la base correcta por la ADN polimerasa. La ADN ligasa sella el enlace fosfodiéster.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="box">
+          <strong>¿Cómo identifica la cadena correcta?</strong>
+          <p>Las enzimas deben distinguir cuál de las dos cadenas tiene el error. En <em>E. coli</em>, la respuesta está en la metilación:</p>
+          <ul>
+            <li>Después de la replicación, la base nitrogenada <strong>adenina</strong> adquiere un grupo metilo en la cadena parental</li>
+            <li>La cadena recién sintetizada <strong>carece de grupos metilo</strong></li>
+            <li>La ADN polimerasa elimina las bases incorrectas de la cadena <strong>no metilada</strong> (nueva)</li>
+          </ul>
+        </div>
+        <div class="box y" style="margin-top:.6rem">
+          <strong>En eucariotas</strong>
+          <p>El mecanismo no está completamente entendido, pero se cree que involucra el reconocimiento de <strong>muescas no selladas (unsealed nicks)</strong> en la cadena nueva, y la asociación a corto plazo de proteínas de replicación con la cadena hija.</p>
+        </div>
+      </div>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S10 · REPARACIÓN POR ESCISIÓN DE NUCLEÓTIDOS ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip y">2.7</span><h2>Sistema 4: Reparación por Escisión de Nucleótidos (NER)</h2></div>
+  <div class="content">
+    <div class="box y">
+      <strong>Sistema empleado especialmente para daños por UV</strong>
+      <p>La reparación por escisión de nucleótidos (NER) elimina bases incorrectas haciendo cortes a <strong>ambos lados</strong> de la lesión (en los extremos 3' y 5') y reemplazando el segmento completo.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Reconocimiento de la lesión</h4>
+        <p>El complejo de reconocimiento de daño al ADN identifica lesiones volumosas que distorsionan la doble hélice, como dímeros de timina o aductos causados por agentes químicos.</p>
+      </div>
+      <div class="step y">
+        <h4>Corte a ambos lados (3' y 5')</h4>
+        <p>Las enzimas de escisión realizan cortes en el esqueleto fosfodiéster a ambos lados de la base dañada, removiendo un segmento de ~12–24 nucleótidos (en procariotas) o ~25–29 nucleótidos (en eucariotas).</p>
+      </div>
+      <div class="step g">
+        <h4>Remoción del segmento dañado</h4>
+        <p>El fragmento de ADN de cadena simple que contiene la lesión es extraído junto con las proteínas asociadas.</p>
+      </div>
+      <div class="step">
+        <h4>Resíntesis y sellado</h4>
+        <p>La <strong>ADN polimerasa</strong> rellena el hueco copiando la cadena molde intacta. La <strong>ADN ligasa</strong> crea el enlace fosfodiéster final, sellando la cadena reparada.</p>
+      </div>
+    </div>
+    <div class="box r">
+      <strong>Conexión con xeroderma pigmentosa</strong>
+      <p>En individuos con XP, un defecto en las enzimas de NER impide la reparación de los dímeros de timina. Los dímeros distorsionan la estructura de la doble hélice y causan problemas graves durante la replicación, aumentando significativamente el riesgo de cáncer de piel.</p>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S11 · TABLA COMPARATIVA SISTEMAS ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip i">2.7</span><h2>Comparativa: Sistemas de Reparación del ADN</h2></div>
+  <div class="content">
+    <table>
+      <thead>
+        <tr><th class="thi">Sistema</th><th class="thgr">¿Cuándo actúa?</th><th class="thg">Lesión corregida</th><th class="thr">Enzimas clave</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col1">Proofreading (lectura de prueba)</td>
+          <td>Durante la replicación</td>
+          <td>Base incorrectamente incorporada</td>
+          <td>ADN Pol III (actividad exonucleasa 3'→5')</td>
+        </tr>
+        <tr>
+          <td class="col1">Reparación por escisión de bases (BER)</td>
+          <td>Post-replicación; cualquier momento</td>
+          <td>Bases dañadas/modificadas; sitios AP</td>
+          <td>ADN glicosilasa, AP endonucleasa, ADN Pol, Ligasa</td>
+        </tr>
+        <tr>
+          <td class="col1">Reparación de apareamientos erróneos (MMR)</td>
+          <td>Inmediatamente después de la replicación</td>
+          <td>Bases mal apareadas</td>
+          <td>MutS, MutL, MutH (procariotas); MSH, MLH (eucariotas)</td>
+        </tr>
+        <tr>
+          <td class="col1">Reparación por escisión de nucleótidos (NER)</td>
+          <td>Post-replicación; cualquier momento</td>
+          <td>Dímeros UV, aductos voluminosos</td>
+          <td>Complejo XP, ADN Pol, ADN Ligasa</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="grid grid-2" style="margin-top:.6rem">
+      <div class="box g">
+        <strong>Consecuencias de fallo en la reparación</strong>
+        <p>Si muchas mutaciones se acumulan en células somáticas pueden llevar a <strong>cáncer</strong> (división celular descontrolada). Si ocurren en células germinales, se transmiten a la siguiente generación.</p>
+      </div>
+      <div class="box r">
+        <strong>Genes de reparación y cáncer</strong>
+        <p>Mutaciones en genes de reparación están implicadas en cáncer pancreático, cáncer de colon, cáncer colorrectal y cáncer de piel (xeroderma pigmentosa).</p>
+      </div>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>.</p>
+  </div>
+</div>
+
+<!-- ═══════ S12 · CONCLUSIONES ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip g">Resumen</span><h2>Conclusiones — Unidades 2.6 y 2.7</h2></div>
+  <div class="content">
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background:var(--indigo)">1</div>
+      <p>El ADN puede sufrir lesiones por <strong>agentes físicos</strong> (UV, radiación ionizante) o <strong>químicos</strong> (análogos de bases, alquilantes, intercalantes). Si no se reparan, estas lesiones generan mutaciones permanentes.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background:var(--green)">2</div>
+      <p>Las mutaciones se clasifican en <strong>sustituciones</strong> (transiciones y transversiones), <strong>inserciones</strong>, <strong>deleciones</strong> y <strong>translocaciones</strong>. Las mutaciones de marco de lectura (frameshift) son especialmente perjudiciales.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background:var(--red)">3</div>
+      <p>El <strong>proofreading</strong> de la ADN polimerasa (actividad exonucleasa 3'→5' de Pol III) corrige la mayoría de errores durante la replicación, reduciendo la tasa de error hasta ~1 en 10⁷.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background:var(--yellow);color:var(--text)">4</div>
+      <p>La <strong>reparación de apareamientos erróneos (MMR)</strong> actúa post-replicación. En <em>E. coli</em> usa la metilación para identificar la cadena correcta; la cadena nueva (no metilada) es la que contiene el error.</p>
+    </div>
+    <div class="conclusion-item">
+      <div class="conclusion-num" style="background:var(--dark)">5</div>
+      <p>La <strong>reparación por escisión de nucleótidos (NER)</strong> elimina segmentos de ADN dañado a ambos lados de la lesión. Su deficiencia causa xeroderma pigmentosa, una condición con alto riesgo de cáncer de piel.</p>
+    </div>
+    <p class="src">[1] OpenStax General Biology. "DNA Repair." <em>LibreTexts Biology</em>. [2] Artículo UNAM — Revista Educación Química.</p>
+  </div>
+</div>
+
+<!-- ═══════ S13 · ACTIVIDAD ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip y">Actividad</span><h2>Actividad Integradora</h2></div>
+  <div class="content">
+    <div class="activity-box">
+      <h4>Resumen crítico de artículo científico</h4>
+      <p>Lee el siguiente artículo publicado en la <em>Revista Educación Química</em> de la UNAM y elabora un resumen de <strong>máximo una cuartilla</strong>.</p>
+      <div class="ref">
+        [2] M. Pérez-Urizar et al., "Replicación del ADN y reparación de errores," <em>Revista Educación Química</em>, UNAM, 2016.<br>
+        Disponible en: https://revistas.unam.mx/index.php/req/article/download/63519/55708
+      </div>
+      <div class="emphasis">
+        <strong>Énfasis del resumen:</strong> Al elaborar tu resumen, enfócate en los temas vistos en el bloque de <strong>Replicación</strong> de la clase:
+        <ul style="margin:.5rem 0">
+          <li>Conexión entre replicación y mecanismos de reparación</li>
+          <li>Papel de la ADN polimerasa en la fidelidad de la copia</li>
+          <li>Diferencias entre replicación en procariotas y eucariotas que influyen en la reparación</li>
+          <li>Importancia de los sistemas de reparación para la estabilidad del genoma</li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid grid-2" style="margin-top:.6rem">
+      <div class="box g">
+        <strong>Formato del resumen</strong>
+        <ul>
+          <li>Máximo 1 cuartilla (aproximadamente 250–300 palabras)</li>
+          <li>Incluir: idea principal, argumentos relevantes a Replicación, conclusión personal</li>
+          <li>Citar el artículo en formato IEEE al final</li>
+        </ul>
+      </div>
+      <div class="box">
+        <strong>Criterios de evaluación</strong>
+        <ul>
+          <li>Comprensión del contenido del artículo</li>
+          <li>Relación explícita con los temas de Replicación del bloque</li>
+          <li>Redacción propia (no copia literal)</li>
+          <li>Referencia correcta en formato IEEE</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ S14 · BIBLIOGRAFÍA ═══════ -->
+<div class="slide">
+  <div class="slide-header"><span class="chip gr">Bibliografía</span><h2>Referencias — Formato IEEE</h2></div>
+  <div class="content">
+    <div class="box">
+      <strong style="font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--indigo)">[1]</strong>
+      <p>OpenStax, "DNA Repair," in <em>General Biology 1e</em>, LibreTexts Biology, 2016. [En línea]. Disponible en: https://bio.libretexts.org/Bookshelves/Introductory_and_General_Biology/General_Biology_1e_(OpenStax)/3%3A_Genetics/14%3A_DNA_Structure_and_Function/14.6%3A_DNA_Repair. [Accedido: 2026].</p>
+    </div>
+    <div class="box g">
+      <strong style="font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--green)">[2]</strong>
+      <p>Revista Educación Química, UNAM, "Replicación del ADN y sistemas de reparación," <em>Revista Educación Química</em>, vol. 27, 2016. [En línea]. Disponible en: https://revistas.unam.mx/index.php/req/article/download/63519/55708. [Accedido: 2026].</p>
+    </div>
+    <div class="box y" style="margin-top:.5rem">
+      <strong>Derechos y uso</strong>
+      <p>El contenido de OpenStax está disponible bajo licencia Creative Commons Attribution 4.0 (CC BY 4.0). Reproducido con fines educativos. El artículo de la Revista Educación Química es acceso abierto — UNAM.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">14</span></div>
+<div class="nav">
+  <button class="btn" id="prev" onclick="nav(-1)">&#9664;</button>
+  <button class="btn" id="next" onclick="nav(1)">&#9654;</button>
+</div>
+
+<script>
+let current=0;
+const slides=document.querySelectorAll(".slide");
+const total=slides.length;
+document.getElementById("total").textContent=total;
+function show(n){
+  if(n<0)n=0;if(n>=total)n=total-1;
+  slides.forEach(s=>s.classList.remove("active"));
+  slides[n].classList.add("active");current=n;
+  document.getElementById("current").textContent=n+1;
+  document.getElementById("prev").disabled=(n===0);
+  document.getElementById("next").disabled=(n===total-1);
+  document.getElementById("progressBar").style.width=((n+1)/total*100)+"%";
+}
+function nav(dir){show(current+dir)}
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft"||e.key==="ArrowUp")nav(-1);
+  if(e.key==="ArrowRight"||e.key==="ArrowDown"||e.key===" "){e.preventDefault();nav(1)}
+});
+show(0);
+</script>
+</body>
+</html>
