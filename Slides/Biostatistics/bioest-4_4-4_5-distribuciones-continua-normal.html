@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 1 — Distribuciones Continua y Normal · Bioestadística</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Paleta: naranjos en flor y cerros del sur de México */
+  --tierra:     #3d2b1f;
+  --siena:      #7a3e1e;
+  --terracota:  #c0521e;
+  --naranja:    #e07b39;
+  --naranja2:   #f0a55a;
+  --flor:       #f5c97a;
+  --crema:      #faf3e0;
+  --crema-mid:  #f0e4c4;
+  --oliva:      #6b7c45;
+  --oliva2:     #8f9e5a;
+  --musgo:      #4a5c2e;
+  --cerro:      #b5a06a;
+  --cerro2:     #d4c08a;
+  --bg:         #fdf6e8;
+  --bg-warm:    #f7ead0;
+  --text-dark:  #2a1a0e;
+  --text-mid:   #5c3d22;
+  --text-soft:  #8a6040;
+  --border:     rgba(192,82,30,0.18);
+  --shadow:     0 4px 24px rgba(61,43,31,0.12);
+  --shadow-lg:  0 8px 40px rgba(61,43,31,0.18);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+  overflow: hidden;
+}
+
+/* ── PROGRESS ─────────────────────────── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: linear-gradient(90deg, var(--terracota), var(--naranja), var(--flor));
+  transition: width 0.4s ease;
+  z-index: 9999;
+  box-shadow: 0 0 12px rgba(224,123,57,0.5);
+}
+
+/* ── SLIDES ───────────────────────────── */
+.slide {
+  display: none;
+  flex-direction: column;
+  width: 100vw; height: 100vh;
+  overflow-y: auto;
+  animation: aparecer 0.45s ease;
+}
+.slide.active { display: flex; }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.slide::-webkit-scrollbar { width: 5px; }
+.slide::-webkit-scrollbar-track { background: var(--crema-mid); }
+.slide::-webkit-scrollbar-thumb { background: var(--naranja); border-radius: 10px; }
+
+/* ═══ PORTADA ══════════════════════════ */
+.slide-cover {
+  background: var(--tierra);
+  justify-content: center; align-items: center;
+  min-height: 100vh; position: relative; overflow: hidden;
+}
+
+.cover-pattern {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 30% 70%, rgba(192,82,30,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 20%, rgba(240,165,90,0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(107,124,69,0.15) 0%, transparent 60%);
+}
+
+/* Ondas de cerro al fondo */
+.cover-hills {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 220px; z-index: 0;
+}
+.hill {
+  position: absolute; bottom: 0; border-radius: 50% 50% 0 0;
+}
+.hill-1 { width: 70%; height: 160px; left: -10%; background: rgba(107,124,69,0.25); }
+.hill-2 { width: 55%; height: 130px; left: 30%; background: rgba(74,92,46,0.3); }
+.hill-3 { width: 45%; height: 110px; left: 60%; background: rgba(42,55,25,0.35); }
+
+.cover-content {
+  position: relative; z-index: 1;
+  text-align: center; padding: 2rem;
+  max-width: 860px; width: 100%;
+}
+
+.cover-chip {
+  display: inline-block;
+  background: rgba(245,201,122,0.15);
+  border: 1px solid rgba(245,201,122,0.4);
+  color: var(--flor);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase;
+  padding: 0.38rem 1.1rem; border-radius: 2px; margin-bottom: 1.6rem;
+}
+
+.cover-clase {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem; color: var(--naranja2);
+  letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1rem;
+}
+
+.cover-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  font-weight: 700; line-height: 1.1;
+  color: var(--crema); margin-bottom: 0.6rem;
+}
+.cover-title .hi { color: var(--naranja2); font-style: italic; }
+
+.cover-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(0.95rem, 2vw, 1.2rem);
+  font-weight: 300; color: rgba(250,243,224,0.7);
+  margin-bottom: 2.2rem;
+}
+
+.cover-divider {
+  width: 70px; height: 2px; margin: 0 auto 2rem;
+  background: linear-gradient(90deg, var(--terracota), var(--flor));
+  box-shadow: 0 0 10px rgba(224,123,57,0.4);
+}
+
+.cover-tags {
+  display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.tag {
+  padding: 0.35rem 0.9rem; border-radius: 20px; font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.3px;
+}
+.tag-t { background: rgba(192,82,30,0.25); border: 1px solid rgba(192,82,30,0.5); color: var(--naranja2); }
+.tag-n { background: rgba(107,124,69,0.25); border: 1px solid rgba(107,124,69,0.5); color: var(--oliva2); }
+
+.cover-meta {
+  font-family: 'DM Mono', monospace; font-size: 0.72rem;
+  color: rgba(250,243,224,0.4); letter-spacing: 1px;
+}
+.cover-meta span { color: rgba(250,243,224,0.65); }
+
+/* ═══ SLIDE HEADER ═════════════════════ */
+.slide-header {
+  background: var(--crema);
+  border-bottom: 2px solid var(--crema-mid);
+  padding: 0.9rem 2rem;
+  display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
+  position: relative;
+}
+.slide-header::after {
+  content: '';
+  position: absolute; bottom: -2px; left: 0;
+  width: 80px; height: 2px;
+  background: linear-gradient(90deg, var(--terracota), var(--naranja));
+}
+
+.header-dot {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.dot-t { background: rgba(192,82,30,0.12); border: 1px solid rgba(192,82,30,0.3); }
+.dot-n { background: rgba(107,124,69,0.12); border: 1px solid rgba(107,124,69,0.3); }
+.dot-o { background: rgba(122,62,30,0.12); border: 1px solid rgba(122,62,30,0.3); }
+.dot-f { background: rgba(240,165,90,0.15); border: 1px solid rgba(240,165,90,0.4); }
+
+.header-text { flex: 1; }
+.header-label {
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  color: var(--text-soft); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 0.1rem;
+}
+.header-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.55rem); font-weight: 700;
+  color: var(--text-dark);
+}
+.ht  { color: var(--terracota); }
+.hn  { color: var(--oliva); }
+.ho  { color: var(--siena); }
+.hf  { color: var(--naranja); }
+
+/* ═══ SLIDE BODY ════════════════════════ */
+.slide-body {
+  flex: 1; padding: 1.4rem 2rem;
+  background: var(--bg); overflow-y: auto;
+}
+
+/* ── GRIDS ──────────────────────────── */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.1rem; }
+.ga { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.1rem; }
+
+/* ── CARDS ──────────────────────────── */
+.card {
+  background: var(--crema); border: 1px solid var(--crema-mid);
+  border-radius: 10px; padding: 1.1rem; transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: var(--shadow); }
+.card-t { border-top: 3px solid var(--terracota); }
+.card-n { border-top: 3px solid var(--oliva); }
+.card-o { border-top: 3px solid var(--naranja); }
+.card-f { border-top: 3px solid var(--flor); }
+
+.card-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+.card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700; font-size: 1rem;
+  color: var(--text-dark); margin-bottom: 0.4rem;
+}
+.card-body { font-size: 0.84rem; color: var(--text-mid); line-height: 1.6; }
+
+/* ── BOXES ──────────────────────────── */
+.box {
+  border-radius: 10px; padding: 1rem 1.2rem;
+  margin-bottom: 0.9rem; font-size: 0.87rem; line-height: 1.65;
+}
+.box-t { background: rgba(192,82,30,0.08); border-left: 4px solid var(--terracota); }
+.box-n { background: rgba(107,124,69,0.09); border-left: 4px solid var(--oliva); }
+.box-o { background: rgba(240,165,90,0.12); border-left: 4px solid var(--naranja); }
+.box-f { background: rgba(245,201,122,0.15); border-left: 4px solid var(--flor); }
+.box-c { background: var(--crema); border: 1px solid var(--crema-mid); }
+
+.box-lbl {
+  font-family: 'DM Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.4rem; opacity: 0.6;
+}
+
+/* ── SECTION TITLE ──────────────────── */
+.sec {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--text-dark); margin-bottom: 0.75rem;
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.sec::after { content: ''; flex: 1; height: 1px; background: var(--crema-mid); }
+
+/* ── LISTA ──────────────────────────── */
+ul.li { list-style: none; padding: 0; }
+ul.li li {
+  padding: 0.45rem 0 0.45rem 1.3rem; position: relative;
+  font-size: 0.86rem; color: var(--text-mid); line-height: 1.55;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+ul.li li:last-child { border-bottom: none; }
+ul.li li::before {
+  content: '◆'; position: absolute; left: 0; top: 0.52rem;
+  color: var(--terracota); font-size: 0.45rem;
+}
+ul.li.n li::before { color: var(--oliva); }
+ul.li.o li::before { color: var(--naranja); }
+
+strong { color: var(--text-dark); }
+
+/* ── TABLA ──────────────────────────── */
+.tw { overflow-x: auto; border-radius: 10px; border: 1px solid var(--crema-mid); }
+table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+thead tr { background: rgba(192,82,30,0.08); border-bottom: 2px solid var(--terracota); }
+thead th {
+  font-family: 'Outfit', sans-serif; font-weight: 600;
+  font-size: 0.8rem; color: var(--terracota); text-align: left;
+  padding: 0.7rem 1rem; letter-spacing: 0.5px;
+}
+tbody tr { border-bottom: 1px solid var(--crema-mid); transition: background 0.15s; }
+tbody tr:hover { background: rgba(192,82,30,0.04); }
+tbody td { padding: 0.6rem 1rem; color: var(--text-mid); vertical-align: middle; }
+tbody td:first-child { font-family: 'DM Mono', monospace; color: var(--terracota); font-size: 0.78rem; }
+
+/* ── BADGE ──────────────────────────── */
+.bdg {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.2rem 0.65rem; border-radius: 20px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.3px;
+}
+.bdg-t { background: rgba(192,82,30,0.12); color: var(--terracota); border: 1px solid rgba(192,82,30,0.3); }
+.bdg-n { background: rgba(107,124,69,0.12); color: var(--musgo); border: 1px solid rgba(107,124,69,0.3); }
+.bdg-o { background: rgba(240,165,90,0.15); color: var(--siena); border: 1px solid rgba(240,165,90,0.4); }
+.bdg-f { background: rgba(245,201,122,0.18); color: var(--siena); border: 1px solid rgba(245,201,122,0.4); }
+
+/* ── OBJETIVOS ──────────────────────── */
+.obj {
+  display: flex; gap: 1rem; align-items: flex-start;
+  padding: 0.85rem; background: var(--crema);
+  border: 1px solid var(--crema-mid); border-radius: 10px; margin-bottom: 0.7rem;
+  transition: border-color 0.2s;
+}
+.obj:hover { border-color: var(--naranja2); }
+.obj-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--terracota); color: var(--crema);
+  font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(192,82,30,0.3);
+}
+.obj-text { font-size: 0.87rem; color: var(--text-mid); line-height: 1.55; padding-top: 0.15rem; }
+
+/* ── PASOS ──────────────────────────── */
+.paso { display: flex; gap: 0; margin-bottom: 0.55rem; }
+.paso-n {
+  width: 36px; font-family: 'DM Mono', monospace; font-size: 0.68rem;
+  color: var(--terracota); padding-top: 0.5rem; flex-shrink: 0; text-align: center;
+}
+.paso-bar {
+  width: 2px; background: linear-gradient(180deg, var(--terracota), transparent);
+  margin-right: 0.8rem; flex-shrink: 0; border-radius: 2px;
+}
+.paso-box {
+  flex: 1; background: var(--crema); border: 1px solid var(--crema-mid);
+  border-radius: 10px; padding: 0.75rem 1rem;
+}
+.paso-titulo { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.93rem; color: var(--text-dark); margin-bottom: 0.25rem; }
+.paso-desc { font-size: 0.82rem; color: var(--text-mid); line-height: 1.55; }
+
+/* ── FORMULA BOX ────────────────────── */
+.formula {
+  background: var(--tierra); color: var(--crema);
+  border-radius: 10px; padding: 1.1rem 1.4rem; margin: 0.7rem 0;
+  font-family: 'DM Mono', monospace; font-size: 0.9rem;
+  text-align: center; letter-spacing: 1px;
+  box-shadow: var(--shadow);
+  position: relative; overflow: hidden;
+}
+.formula::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--terracota), var(--flor));
+}
+.formula .var { color: var(--naranja2); }
+.formula .greek { color: var(--flor); font-style: italic; font-size: 1rem; }
+.formula .lbl { font-size: 0.65rem; color: rgba(250,243,224,0.5); display: block; margin-top: 0.4rem; letter-spacing: 2px; text-transform: uppercase; }
+
+/* ── CURVA NORMAL SVG ───────────────── */
+.curve-wrap {
+  background: var(--crema); border: 1px solid var(--crema-mid);
+  border-radius: 10px; padding: 1rem; text-align: center;
+  position: relative;
+}
+.curve-caption { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--text-soft); margin-top: 0.5rem; letter-spacing: 1px; }
+
+/* ── REGLA EMPIRICA ─────────────────── */
+.empirica-wrap {
+  background: var(--crema); border: 1px solid var(--crema-mid);
+  border-radius: 10px; padding: 1.1rem; margin-bottom: 0.9rem;
+}
+.emp-row {
+  display: flex; gap: 0.5rem; align-items: center;
+  padding: 0.45rem 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.85rem;
+}
+.emp-row:last-child { border-bottom: none; }
+.emp-key { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--terracota); width: 100px; flex-shrink: 0; }
+.emp-bar-wrap { flex: 1; height: 14px; background: var(--crema-mid); border-radius: 8px; overflow: hidden; }
+.emp-bar { height: 100%; border-radius: 8px; transition: width 0.6s ease; }
+.emp-val { font-weight: 600; color: var(--text-dark); width: 45px; text-align: right; flex-shrink: 0; font-size: 0.84rem; }
+
+/* ── EJERCICIO ──────────────────────── */
+.ej-box { background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; padding: 1.2rem; margin-bottom: 0.9rem; }
+.ej-head { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.7rem; flex-wrap: wrap; }
+.ej-tag {
+  background: rgba(240,165,90,0.15); border: 1px solid var(--naranja);
+  color: var(--siena); font-family: 'DM Mono', monospace;
+  font-size: 0.63rem; letter-spacing: 2px; padding: 0.2rem 0.6rem; border-radius: 3px;
+}
+.ej-q { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.95rem; color: var(--text-dark); margin-bottom: 0.55rem; }
+.ej-opts { list-style: none; }
+.ej-opts li {
+  padding: 0.5rem 0.85rem; border: 1px solid var(--crema-mid);
+  border-radius: 7px; margin-bottom: 0.35rem; font-size: 0.84rem; color: var(--text-mid);
+  cursor: pointer; transition: all 0.2s; display: flex; gap: 0.65rem; align-items: center;
+}
+.ej-opts li:hover { border-color: var(--naranja); color: var(--text-dark); background: rgba(224,123,57,0.05); }
+.opt-l {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--crema-mid); display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700; flex-shrink: 0; color: var(--text-soft);
+}
+
+/* ── ACTIVIDAD EVAL ─────────────────── */
+.eval { display: flex; gap: 0.8rem; align-items: flex-start; padding: 0.8rem; background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; margin-bottom: 0.6rem; }
+.eval-ico { width: 34px; height: 34px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.eval-t { background: rgba(192,82,30,0.1); border: 1px solid rgba(192,82,30,0.25); }
+.eval-n { background: rgba(107,124,69,0.1); border: 1px solid rgba(107,124,69,0.25); }
+.eval-o { background: rgba(240,165,90,0.12); border: 1px solid rgba(240,165,90,0.3); }
+.eval-txt strong { font-family: 'Outfit', sans-serif; font-size: 0.9rem; display: block; margin-bottom: 0.15rem; color: var(--text-dark); }
+.eval-txt p { font-size: 0.81rem; color: var(--text-mid); line-height: 1.5; }
+
+/* ── RECURSOS ───────────────────────── */
+.rec { display: flex; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; margin-bottom: 0.55rem; transition: border-color 0.2s; }
+.rec:hover { border-color: var(--naranja); }
+.rec-ico { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+.rec-title { font-weight: 600; font-size: 0.91rem; margin-bottom: 0.15rem; color: var(--text-dark); }
+.rec-desc { font-size: 0.78rem; color: var(--text-soft); }
+.rec-url { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--terracota); display: block; margin-top: 0.15rem; word-break: break-all; }
+
+/* ── CIERRE ─────────────────────────── */
+.slide-cierre {
+  background: var(--tierra);
+  justify-content: center; align-items: center;
+  min-height: 100vh; position: relative; overflow: hidden;
+}
+.cierre-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(192,82,30,0.3) 0%, transparent 65%);
+  z-index: 0;
+}
+.cierre-hills { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; z-index: 0; }
+.cierre-content { position: relative; z-index: 1; padding: 2rem; max-width: 720px; text-align: center; }
+
+.sum-row { display: flex; gap: 0.5rem; margin-bottom: 0.45rem; font-size: 0.84rem; text-align: left; }
+.sum-k { width: 140px; font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--naranja2); flex-shrink: 0; padding-top: 0.1rem; }
+.sum-v { color: rgba(250,243,224,0.75); line-height: 1.5; flex: 1; }
+
+/* ── NAV ────────────────────────────── */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(250,243,224,0.97);
+  border-top: 1px solid var(--crema-mid);
+  padding: 0.55rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 1000; backdrop-filter: blur(8px);
+}
+.nav-btn {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.45rem 1rem; border-radius: 6px;
+  font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 0.83rem;
+  border: 1px solid var(--crema-mid); background: var(--crema);
+  color: var(--text-soft); cursor: pointer; transition: all 0.2s;
+}
+.nav-btn:hover:not(:disabled) {
+  border-color: var(--terracota); color: var(--terracota);
+  box-shadow: 0 2px 10px rgba(192,82,30,0.15);
+}
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+.ctr { font-family: 'DM Mono', monospace; font-size: 0.76rem; color: var(--text-soft); }
+.ctr span { color: var(--terracota); font-size: 0.95rem; font-weight: 700; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 260px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--crema-mid); transition: all 0.2s; cursor: pointer; border: none; padding: 0; }
+.dot.active { background: var(--terracota); transform: scale(1.35); box-shadow: 0 0 6px rgba(192,82,30,0.4); }
+
+.nav-sp { height: 68px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .slide-body { padding: 1rem; }
+  .slide-header { padding: 0.75rem 1rem; }
+  .g2,.g3 { grid-template-columns: 1fr; }
+  .cover-title { font-size: 2rem; }
+  .nav { padding: 0.45rem 0.8rem; }
+  .nav-btn { padding: 0.38rem 0.7rem; font-size: 0.76rem; }
+  .dots { max-width: 180px; }
+}
+@media (max-width: 480px) {
+  .dots { display: none; }
+  .cover-title { font-size: 1.7rem; }
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="pb"></div>
+
+<!-- ═══ SLIDE 1 — PORTADA ═══════════════════════ -->
+<div class="slide slide-cover active" id="s1">
+  <div class="cover-pattern"></div>
+  <div class="cover-hills">
+    <div class="hill hill-1"></div>
+    <div class="hill hill-2"></div>
+    <div class="hill hill-3"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-chip">🌸 Bioestadística Aplicada</div>
+    <div class="cover-clase">Clase 1 de 2 · Unidad 4</div>
+    <h1 class="cover-title">
+      Distribuciones<br><span class="hi">Continua y Normal</span>
+    </h1>
+    <p class="cover-subtitle">Variables aleatorias continuas, funciones de densidad<br>y la distribución normal estándar</p>
+    <div class="cover-divider"></div>
+    <div class="cover-tags">
+      <span class="tag tag-t">📐 Tema 4.4 — Dist. Continua</span>
+      <span class="tag tag-n">🔔 Tema 4.5 — Dist. Normal</span>
+    </div>
+    <p class="cover-meta">Nivel Principiante &nbsp;|&nbsp; <span>Bioestadística Aplicada</span></p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ═══ SLIDE 2 — INTRODUCCIÓN ═══════════════════ -->
+<div class="slide" id="s2">
+  <div class="slide-header">
+    <div class="header-dot dot-t">🌿</div>
+    <div class="header-text">
+      <div class="header-label">Slide 02 · Introducción</div>
+      <div class="header-title">¿Discreta o <span class="ht">Continua</span>? El contexto importa</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2" style="margin-bottom:1rem">
+      <div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">El Problema</div>
+          Para una variable aleatoria <strong>discreta</strong> tiene sentido preguntar la probabilidad de un valor exacto. Para una variable <strong>continua</strong>, esto no funciona. Por ejemplo: ¿cuál es la probabilidad de que alguien espere <em>exactamente</em> 7.211916 minutos el autobús?
+        </div>
+        <div class="box box-n">
+          <div class="box-lbl" style="color:var(--oliva)">La Solución</div>
+          Con variables continuas siempre preguntamos por <strong>intervalos</strong>: ¿cuánto vale P(5 &lt; X &lt; 10)? La probabilidad se calcula como un <strong>área</strong> bajo una curva llamada función de densidad.
+        </div>
+      </div>
+      <div>
+        <div class="sec" style="margin-top:0">Comparación Discreta vs. Continua</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Aspecto</th><th>Discreta</th><th>Continua</th></tr></thead>
+            <tbody>
+              <tr><td>Valores</td><td>Contables (1, 2, 3…)</td><td>Intervalo de reales</td></tr>
+              <tr><td>P(X = a)</td><td>Puede ser &gt; 0</td><td>Siempre = 0</td></tr>
+              <tr><td>Probabilidad</td><td>Suma de puntos</td><td>Área bajo curva</td></tr>
+              <tr><td>Herramienta</td><td>Tabla de distribución</td><td>Función de densidad f(x)</td></tr>
+              <tr><td>Ejemplos</td><td>N° de hijos, lanzar dado</td><td>Estatura, tiempo, temperatura</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="box box-f">
+      <div class="box-lbl" style="color:var(--siena)">Propiedad clave</div>
+      Para cualquier variable aleatoria continua X: <strong>P(a ≤ X ≤ b) = P(a &lt; X ≤ b) = P(a ≤ X &lt; b) = P(a &lt; X &lt; b)</strong> — incluir o excluir los extremos no cambia el resultado porque el área de un punto es cero.
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3 — OBJETIVOS ══════════════════════ -->
+<div class="slide" id="s3">
+  <div class="slide-header">
+    <div class="header-dot dot-o">🎯</div>
+    <div class="header-text">
+      <div class="header-label">Slide 03 · Objetivos</div>
+      <div class="header-title">¿Qué <span class="ho">aprenderás</span> en esta clase?</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="obj">
+      <div class="obj-num">1</div>
+      <div class="obj-text"><strong>Comprender qué es una variable aleatoria continua</strong> y por qué las probabilidades se calculan como áreas bajo una función de densidad.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-num" style="background:var(--oliva)">2</div>
+      <div class="obj-text"><strong>Calcular probabilidades en la distribución uniforme continua</strong> usando el área de rectángulos como introducción intuitiva al concepto de densidad.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-num" style="background:var(--naranja)">3</div>
+      <div class="obj-text"><strong>Identificar las características de la distribución normal</strong>: forma de campana, parámetros μ y σ, simetría y regla empírica (68-95-99.7).</div>
+    </div>
+    <div class="obj">
+      <div class="obj-num" style="background:var(--cerro);color:var(--tierra)">4</div>
+      <div class="obj-text"><strong>Usar la distribución normal estándar Z</strong> para transformar variables y calcular probabilidades usando la tabla acumulada.</div>
+    </div>
+    <div class="box box-t" style="margin-top:0.5rem">
+      <div class="box-lbl" style="color:var(--terracota)">Temas de esta sesión</div>
+      <strong>4.4 Distribución Continua</strong> · <strong>4.5 Distribución Normal</strong>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 4 — DISTRIBUCIÓN CONTINUA ═══════════ -->
+<div class="slide" id="s4">
+  <div class="slide-header">
+    <div class="header-dot dot-t">📐</div>
+    <div class="header-text">
+      <div class="header-label">Slide 04 · Tema 4.4</div>
+      <div class="header-title">Distribución <span class="ht">Continua</span>: Función de Densidad</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="sec">Definición</div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">Función de Densidad f(x)</div>
+          La distribución de probabilidad de una variable aleatoria continua X asigna probabilidades a <strong>intervalos</strong> usando f(x). La probabilidad de que X tome un valor en [a, b] es el <strong>área</strong> de la región bajo la curva y = f(x) entre a y b.
+        </div>
+        <div class="sec">Condiciones obligatorias de f(x)</div>
+        <ul class="li">
+          <li><strong>f(x) ≥ 0</strong> para todo x (nunca es negativa)</li>
+          <li>El <strong>área total</strong> bajo la curva es exactamente <strong>1</strong></li>
+          <li>P(X = a) = 0 para cualquier valor puntual a</li>
+        </ul>
+        <div class="box box-n" style="margin-top:0.8rem">
+          <div class="box-lbl" style="color:var(--oliva)">Analogía intuitiva</div>
+          Imagina un histograma con barras cada vez más delgadas: al hacerlas infinitamente finas, el contorno forma la curva de densidad y el área total sigue siendo 1 (100% de los datos).
+        </div>
+      </div>
+      <div>
+        <div class="sec">Ejemplo: Distribución Uniforme</div>
+        <div class="box box-o">
+          <div class="box-lbl" style="color:var(--siena)">Caso del autobús</div>
+          Buses cada 30 min → X uniforme en [0, 30] con f(x) = 1/30. ¿Probabilidad de esperar máx. 10 min?
+        </div>
+        <div class="formula">
+          P(0 ≤ X ≤ 10) = base × altura<br>
+          = <span class="var">10</span> × <span class="var">1/30</span> = <span class="greek">1/3 ≈ 0.333</span>
+          <span class="lbl">área del rectángulo bajo f(x) = 1/30</span>
+        </div>
+        <div class="sec">Más ejemplos uniformes</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Evento</th><th>Cálculo</th><th>Probabilidad</th></tr></thead>
+            <tbody>
+              <tr><td>X &gt; 0.75 en [0,1]</td><td>(1−0.75)×1</td><td>0.25</td></tr>
+              <tr><td>X ≤ 0.2 en [0,1]</td><td>(0.2−0)×1</td><td>0.20</td></tr>
+              <tr><td>0.4 &lt; X &lt; 0.7 en [0,1]</td><td>(0.7−0.4)×1</td><td>0.30</td></tr>
+              <tr><td>X ≤ 10 en [0,30]</td><td>10×(1/30)</td><td>0.333</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 5 — DISTRIBUCIÓN NORMAL ════════════ -->
+<div class="slide" id="s5">
+  <div class="slide-header">
+    <div class="header-dot dot-n">🔔</div>
+    <div class="header-text">
+      <div class="header-label">Slide 05 · Tema 4.5</div>
+      <div class="header-title">Distribución <span class="hn">Normal</span>: La Campana de Gauss</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="sec">¿Qué es la Distribución Normal?</div>
+        <div class="box box-n">
+          La distribución más utilizada en estadística. Describe fenómenos naturales donde los datos <strong>se acumulan alrededor de un valor central</strong> y disminuyen simétricamente hacia los extremos.
+        </div>
+        <div class="sec">Parámetros</div>
+        <ul class="li n">
+          <li><strong>μ (mu)</strong> — Media: determina el <em>centro</em> (ubicación) de la curva</li>
+          <li><strong>σ (sigma)</strong> — Desviación estándar: determina el <em>ancho</em> (dispersión)</li>
+          <li>Se denota: <strong>X ~ N(μ, σ²)</strong></li>
+        </ul>
+        <div class="formula" style="margin-top:0.8rem">
+          f(x) = <span class="var">1</span> / (<span class="greek">σ</span>√2π) · e<sup>−½((x−μ)/σ)²</sup>
+          <span class="lbl">función de densidad normal · −∞ &lt; x &lt; ∞</span>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Propiedades esenciales</div>
+        <div class="card card-n" style="margin-bottom:0.7rem">
+          <div class="card-icon">🔔</div>
+          <div class="card-title">Forma de campana simétrica</div>
+          <div class="card-body">Siempre simétrica alrededor de μ. La media, mediana y moda coinciden exactamente en el punto central.</div>
+        </div>
+        <div class="card card-t" style="margin-bottom:0.7rem">
+          <div class="card-icon">📏</div>
+          <div class="card-title">Efecto de μ y σ</div>
+          <div class="card-body">Cambiar μ desplaza la curva sin deformarla. Cambiar σ la hace más angosta (σ pequeño) o más ancha (σ grande), siempre con área total = 1.</div>
+        </div>
+        <div class="card card-o">
+          <div class="card-icon">∞</div>
+          <div class="card-title">Asíntota horizontal</div>
+          <div class="card-body">La curva nunca toca el eje X: se aproxima sin cruzarlo (comportamiento asintótico) hacia ±∞.</div>
+        </div>
+      </div>
+    </div>
+    <div class="box box-f" style="margin-top:0.8rem">
+      <div class="box-lbl" style="color:var(--siena)">Ejemplos en la naturaleza</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+        <span class="bdg bdg-n">📏 Estatura de personas</span>
+        <span class="bdg bdg-t">🧠 Coeficiente intelectual</span>
+        <span class="bdg bdg-o">⚖️ Peso al nacer</span>
+        <span class="bdg bdg-f">🌡️ Temperatura corporal</span>
+        <span class="bdg bdg-n">📦 Contenido de envases</span>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 6 — REGLA EMPÍRICA ═════════════════ -->
+<div class="slide" id="s6">
+  <div class="slide-header">
+    <div class="header-dot dot-o">📊</div>
+    <div class="header-text">
+      <div class="header-label">Slide 06 · Tema 4.5</div>
+      <div class="header-title">Regla <span class="ho">Empírica</span> 68 — 95 — 99.7</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="sec">La Regla de las Desviaciones</div>
+        <div class="box box-o">
+          En toda distribución normal, sin importar μ o σ, las proporciones de datos dentro de k desviaciones estándar de la media son <strong>siempre las mismas</strong>. Esto se conoce como la <strong>Regla Empírica</strong>.
+        </div>
+        <div class="empirica-wrap">
+          <div class="emp-row">
+            <div class="emp-key">μ ± 1σ</div>
+            <div class="emp-bar-wrap"><div class="emp-bar" style="width:68.26%;background:linear-gradient(90deg,var(--terracota),var(--naranja))"></div></div>
+            <div class="emp-val" style="color:var(--terracota)">68.26%</div>
+          </div>
+          <div class="emp-row">
+            <div class="emp-key">μ ± 2σ</div>
+            <div class="emp-bar-wrap"><div class="emp-bar" style="width:95.44%;background:linear-gradient(90deg,var(--oliva),var(--oliva2))"></div></div>
+            <div class="emp-val" style="color:var(--oliva)">95.44%</div>
+          </div>
+          <div class="emp-row">
+            <div class="emp-key">μ ± 3σ</div>
+            <div class="emp-bar-wrap"><div class="emp-bar" style="width:99.74%;background:linear-gradient(90deg,var(--cerro),var(--flor))"></div></div>
+            <div class="emp-val" style="color:var(--siena)">99.74%</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Ejemplo Aplicado</div>
+        <div class="box box-n">
+          <div class="box-lbl" style="color:var(--oliva)">Estatura de hombres de 25 años</div>
+          μ = 69.75 pulgadas · σ = 2.59 pulgadas<br>
+          Distribución: X ~ N(69.75, 2.59²)
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Intervalo</th><th>Rango en pulgadas</th><th>% de hombres</th></tr></thead>
+            <tbody>
+              <tr><td>μ ± 1σ</td><td>67.16 – 72.34</td><td>≈ 68%</td></tr>
+              <tr><td>μ ± 2σ</td><td>64.57 – 74.93</td><td>≈ 95%</td></tr>
+              <tr><td>μ ± 3σ</td><td>61.98 – 77.52</td><td>≈ 99.7%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-t" style="margin-top:0.7rem">
+          <div class="box-lbl" style="color:var(--terracota)">Reflexión</div>
+          P(X &gt; 69.75) = 0.5 por simetría. La mitad de los hombres mide más que la media, la otra mitad menos.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 7 — NORMAL ESTÁNDAR Z ══════════════ -->
+<div class="slide" id="s7">
+  <div class="slide-header">
+    <div class="header-dot dot-f">Z</div>
+    <div class="header-text">
+      <div class="header-label">Slide 07 · Tema 4.5</div>
+      <div class="header-title">La Normal <span class="hf">Estándar Z</span> y Estandarización</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="sec">¿Qué es Z?</div>
+        <div class="box box-f">
+          <div class="box-lbl" style="color:var(--siena)">Variable Normal Estándar</div>
+          Z es una variable aleatoria normal con <strong>μ = 0</strong> y <strong>σ = 1</strong>. Se denota <strong>Z ~ N(0, 1)</strong>. La tabla acumulada nos da directamente P(Z &lt; z) para cualquier valor z.
+        </div>
+        <div class="formula">
+          Z = <span class="var">(x − μ)</span> / <span class="greek">σ</span>
+          <span class="lbl">transformación a la escala estándar</span>
+        </div>
+        <div class="box box-t" style="margin-top:0.7rem">
+          <div class="box-lbl" style="color:var(--terracota)">Interpretación de Z</div>
+          Z indica cuántas <strong>desviaciones estándar</strong> está una observación alejada de la media. Z = 2 significa "2 sigmas por encima de la media".
+        </div>
+        <div class="box box-n">
+          <div class="box-lbl" style="color:var(--oliva)">Propiedad de linealidad</div>
+          Si X ~ N(μ, σ²) y Y = aX + b, entonces Y ~ N(aμ + b, a²σ²). Las funciones lineales de normales también son normales.
+        </div>
+      </div>
+      <div>
+        <div class="sec">Cómo usar la Tabla Z</div>
+        <div class="paso">
+          <div class="paso-n">01</div>
+          <div class="paso-bar"></div>
+          <div class="paso-box">
+            <div class="paso-titulo">P(Z &lt; z): lectura directa</div>
+            <div class="paso-desc">Busca la fila con la parte entera y décima de z, la columna con la centésima. El valor de la tabla es la probabilidad acumulada desde −∞.</div>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-n">02</div>
+          <div class="paso-bar"></div>
+          <div class="paso-box">
+            <div class="paso-titulo">P(Z &gt; z): complemento</div>
+            <div class="paso-desc">P(Z &gt; z) = 1 − P(Z &lt; z). Ejemplo: P(Z &gt; 1.60) = 1 − 0.9452 = 0.0548</div>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-n">03</div>
+          <div class="paso-bar"></div>
+          <div class="paso-box">
+            <div class="paso-titulo">P(a &lt; Z &lt; b): diferencia</div>
+            <div class="paso-desc">P(a &lt; Z &lt; b) = P(Z &lt; b) − P(Z &lt; a). Ejemplo: P(0.5 &lt; Z &lt; 1.57) = 0.9418 − 0.6915 = 0.2503</div>
+          </div>
+        </div>
+        <div class="paso">
+          <div class="paso-n">04</div>
+          <div class="paso-bar" style="background:linear-gradient(180deg,var(--terracota),transparent)"></div>
+          <div class="paso-box">
+            <div class="paso-titulo">Valores extremos fuera de tabla</div>
+            <div class="paso-desc">Si z &gt; 3.99, P(Z &lt; z) ≈ 1.0000. Si z &lt; −3.99, P(Z &lt; z) ≈ 0.0000.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 8 — EJEMPLOS TABLA Z ═══════════════ -->
+<div class="slide" id="s8">
+  <div class="slide-header">
+    <div class="header-dot dot-o">💡</div>
+    <div class="header-text">
+      <div class="header-label">Slide 08 · Ejemplos</div>
+      <div class="header-title">Ejemplos <span class="ho">Resueltos</span> con la Tabla Z</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="sec">Tipo 1: Cola izquierda P(Z &lt; z)</div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">Ejemplo A</div>
+          P(Z &lt; 1.48) → fila 1.4, columna 0.08 → <strong>0.9306</strong>
+        </div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">Ejemplo B</div>
+          P(Z &lt; −0.25) → fila −0.2, columna 0.05 → <strong>0.4013</strong>
+        </div>
+
+        <div class="sec">Tipo 2: Cola derecha P(Z &gt; z)</div>
+        <div class="box box-n">
+          <div class="box-lbl" style="color:var(--oliva)">Ejemplo C</div>
+          P(Z &gt; 1.60) = 1 − P(Z &lt; 1.60) = 1 − 0.9452 = <strong>0.0548</strong>
+        </div>
+        <div class="box box-n">
+          <div class="box-lbl" style="color:var(--oliva)">Ejemplo D</div>
+          P(Z &gt; −1.02) = 1 − P(Z &lt; −1.02) = 1 − 0.1539 = <strong>0.8461</strong>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Tipo 3: Intervalo P(a &lt; Z &lt; b)</div>
+        <div class="box box-o">
+          <div class="box-lbl" style="color:var(--siena)">Ejemplo E</div>
+          P(0.5 &lt; Z &lt; 1.57) = P(Z &lt; 1.57) − P(Z &lt; 0.50)<br>
+          = 0.9418 − 0.6915 = <strong>0.2503</strong>
+        </div>
+        <div class="box box-o">
+          <div class="box-lbl" style="color:var(--siena)">Ejemplo F (signos opuestos)</div>
+          P(−2.55 &lt; Z &lt; 0.09) = P(Z &lt; 0.09) − P(Z &lt; −2.55)<br>
+          = 0.5359 − 0.0054 = <strong>0.5305</strong>
+        </div>
+
+        <div class="sec">Regla Empírica verificada</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Intervalo</th><th>P(Z)</th><th>% datos</th></tr></thead>
+            <tbody>
+              <tr><td>−1 &lt; Z &lt; 1</td><td>0.8413 − 0.1587</td><td>68.26%</td></tr>
+              <tr><td>−2 &lt; Z &lt; 2</td><td>0.9772 − 0.0228</td><td>95.44%</td></tr>
+              <tr><td>−3 &lt; Z &lt; 3</td><td>0.9987 − 0.0013</td><td>99.74%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 9 — EJERCICIO PRÁCTICO ═════════════ -->
+<div class="slide" id="s9">
+  <div class="slide-header">
+    <div class="header-dot dot-f">🌸</div>
+    <div class="header-text">
+      <div class="header-label">Slide 09 · Ejercicio Práctico</div>
+      <div class="header-title">¡A <span class="hf">practicar</span>! Preguntas de repaso</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="ej-box">
+      <div class="ej-head">
+        <span class="ej-tag">PREGUNTA 1</span>
+        <span class="bdg bdg-t">Distribución Continua</span>
+      </div>
+      <div class="ej-q">Una variable X tiene distribución uniforme en el intervalo [0, 20]. ¿Cuál es P(X ≤ 8)?</div>
+      <ul class="ej-opts">
+        <li><span class="opt-l">A</span> 0.20</li>
+        <li><span class="opt-l">B</span> 0.40 ✓ (base 8 × altura 1/20)</li>
+        <li><span class="opt-l">C</span> 0.80</li>
+        <li><span class="opt-l">D</span> 8.00</li>
+      </ul>
+    </div>
+    <div class="ej-box">
+      <div class="ej-head">
+        <span class="ej-tag">PREGUNTA 2</span>
+        <span class="bdg bdg-n">Distribución Normal</span>
+      </div>
+      <div class="ej-q">En una distribución normal N(50, 10²), ¿aproximadamente qué porcentaje de datos cae entre 30 y 70?</div>
+      <ul class="ej-opts">
+        <li><span class="opt-l">A</span> 68.26%</li>
+        <li><span class="opt-l">B</span> 95.44% ✓ (μ ± 2σ: 50 ± 20)</li>
+        <li><span class="opt-l">C</span> 99.74%</li>
+        <li><span class="opt-l">D</span> 50%</li>
+      </ul>
+    </div>
+    <div class="ej-box">
+      <div class="ej-head">
+        <span class="ej-tag">PREGUNTA 3</span>
+        <span class="bdg bdg-o">Tabla Z</span>
+      </div>
+      <div class="ej-q">Si P(Z &lt; 1.96) = 0.9750, ¿cuánto vale P(Z &gt; 1.96)?</div>
+      <ul class="ej-opts">
+        <li><span class="opt-l">A</span> 0.9750</li>
+        <li><span class="opt-l">B</span> 0.0500</li>
+        <li><span class="opt-l">C</span> 0.0250 ✓ (1 − 0.9750)</li>
+        <li><span class="opt-l">D</span> 0.4750</li>
+      </ul>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 10 — ACTIVIDAD EVALUABLE ═══════════ -->
+<div class="slide" id="s10">
+  <div class="slide-header">
+    <div class="header-dot dot-t">📝</div>
+    <div class="header-text">
+      <div class="header-label">Slide 10 · Actividad Evaluable</div>
+      <div class="header-title">Actividad: <span class="ht">Cálculo de Probabilidades Normales</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="box box-o" style="margin-bottom:1.1rem">
+      <div class="box-lbl" style="color:var(--siena)">⚡ Instrucciones</div>
+      Con la tabla Z acumulada, resuelve los siguientes problemas y entrega los procedimientos completos mostrando cada paso. Trabajo individual. Tiempo en clase: <strong>20 minutos</strong>. Entrega al final de la sesión.
+    </div>
+    <div class="eval">
+      <div class="eval-ico eval-t">1️⃣</div>
+      <div class="eval-txt">
+        <strong>Problema de estatura</strong>
+        <p>La estatura de mujeres adultas en una comunidad sigue N(160 cm, 6²). Calcula: a) P(X &gt; 168), b) P(154 &lt; X &lt; 172), c) el valor de x tal que P(X &lt; x) = 0.90. Muestra la transformación Z para cada inciso.</p>
+      </div>
+    </div>
+    <div class="eval">
+      <div class="eval-ico eval-n">2️⃣</div>
+      <div class="eval-txt">
+        <strong>Problema de producción</strong>
+        <p>Una máquina llena envases con promedio μ = 500 ml y σ = 8 ml. Se rechaza un envase si tiene menos de 484 ml o más de 516 ml. ¿Qué proporción de envases se rechaza?</p>
+      </div>
+    </div>
+    <div class="eval">
+      <div class="eval-ico eval-o">3️⃣</div>
+      <div class="eval-txt">
+        <strong>Interpretación y reflexión</strong>
+        <p>Explica con tus propias palabras: a) ¿por qué P(X = a) = 0 en variables continuas? b) ¿Qué ventaja tiene estandarizar a Z? c) Menciona 2 fenómenos de tu campo de interés que podrían seguir una distribución normal.</p>
+      </div>
+    </div>
+    <div class="g2" style="margin-top:0.5rem">
+      <div class="box box-n">
+        <div class="box-lbl" style="color:var(--oliva)">Criterios de evaluación</div>
+        <ul class="li n" style="font-size:0.8rem">
+          <li>Transformación Z correcta y mostrada</li>
+          <li>Uso correcto de la tabla acumulada</li>
+          <li>Respuesta final con unidades e interpretación</li>
+          <li>Reflexión coherente y propia</li>
+        </ul>
+      </div>
+      <div class="box box-t">
+        <div class="box-lbl" style="color:var(--terracota)">Formato de entrega</div>
+        <ul class="li" style="font-size:0.8rem">
+          <li>Hoja con nombre completo y fecha</li>
+          <li>Procedimiento paso a paso visible</li>
+          <li>Puede ser fotografía o digital (PDF)</li>
+          <li>Plataforma del curso, próxima sesión</li>
+        </ul>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 11 — RECURSOS ══════════════════════ -->
+<div class="slide" id="s11">
+  <div class="slide-header">
+    <div class="header-dot dot-n">📚</div>
+    <div class="header-text">
+      <div class="header-label">Slide 11 · Recursos y Bibliografía</div>
+      <div class="header-title">Fuentes y <span class="hn">Material de Apoyo</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="sec">Bibliografía principal</div>
+    <div class="rec">
+      <div class="rec-ico">📖</div>
+      <div>
+        <div class="rec-title" style="color:var(--terracota)">Introductory Statistics — Saylor Foundation</div>
+        <div class="rec-desc">Capítulo 5: Continuous Random Variables. Secciones 5.1 y 5.2. Fundamentos de distribución continua, uniforme y normal estándar.</div>
+        <span class="rec-url">https://saylordotorg.github.io/text_introductory-statistics/s09-continuous-random-variables.html</span>
+      </div>
+    </div>
+    <div class="rec">
+      <div class="rec-ico">🏫</div>
+      <div>
+        <div class="rec-title" style="color:var(--oliva)">Conceptos Básicos de Estadística — UNAM</div>
+        <div class="rec-desc">Páginas personales UNAM. Distribución normal, estandarización Z y aplicaciones en ciencias biológicas. Desde p. 99.</div>
+        <span class="rec-url">https://www.paginaspersonales.unam.mx/files/977/Conceptos_basicos_de_estadistica.pdf#page=99</span>
+      </div>
+    </div>
+    <div class="sec" style="margin-top:0.5rem">Material complementario recomendado</div>
+    <div class="g2">
+      <div>
+        <div class="rec">
+          <div class="rec-ico">🎬</div>
+          <div>
+            <div class="rec-title">Khan Academy — Estadística</div>
+            <div class="rec-desc">Videos en español sobre distribución normal, Z-score y tabla de probabilidades acumuladas.</div>
+            <span class="rec-url">khanacademy.org/math/statistics-probability</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="rec">
+          <div class="rec-ico">📊</div>
+          <div>
+            <div class="rec-title">Tabla Z Interactiva</div>
+            <div class="rec-desc">Calculadoras de probabilidad normal en línea para verificar resultados y visualizar áreas bajo la curva.</div>
+            <span class="rec-url">stattrek.com/online-calculator/normal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 12 — CIERRE ════════════════════════ -->
+<div class="slide slide-cover slide-cierre" id="s12">
+  <div class="cierre-bg"></div>
+  <div class="cover-hills cierre-hills">
+    <div class="hill hill-1"></div>
+    <div class="hill hill-2"></div>
+    <div class="hill hill-3"></div>
+  </div>
+  <div class="cierre-content">
+    <div class="cover-chip" style="margin-bottom:1.3rem">✅ Clase 1 — Completada</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.8rem);font-weight:700;color:var(--crema);margin-bottom:0.4rem">
+      Resumen de <span style="color:var(--naranja2);font-style:italic">lo aprendido</span>
+    </h2>
+    <div class="cover-divider"></div>
+    <div style="margin-bottom:1.4rem">
+      <div class="sum-row"><div class="sum-k">Var. continua</div><div class="sum-v">P(X=a)=0 siempre · probabilidad = área bajo f(x)</div></div>
+      <div class="sum-row"><div class="sum-k">f(x) densidad</div><div class="sum-v">f(x) ≥ 0 · área total = 1 · define toda distribución continua</div></div>
+      <div class="sum-row"><div class="sum-k">Dist. Uniforme</div><div class="sum-v">f(x) = 1/(b−a) en [a,b] · P = base × altura</div></div>
+      <div class="sum-row"><div class="sum-k">Dist. Normal</div><div class="sum-v">X~N(μ,σ²) · campana simétrica · μ centra, σ dispersa</div></div>
+      <div class="sum-row"><div class="sum-k">Regla empírica</div><div class="sum-v">μ±1σ=68% · μ±2σ=95% · μ±3σ=99.7%</div></div>
+      <div class="sum-row"><div class="sum-k">Z estándar</div><div class="sum-v">Z=(x−μ)/σ · N(0,1) · tabla acumulada P(Z&lt;z)</div></div>
+    </div>
+    <div style="display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.4rem">
+      <span class="tag tag-t">📐 Dist. Continua (4.4)</span>
+      <span class="tag tag-n">🔔 Dist. Normal (4.5)</span>
+    </div>
+    <p style="font-size:0.78rem;color:rgba(250,243,224,0.45);font-family:'DM Mono',monospace">
+      Próxima clase: Distribución Ji-Cuadrada (4.6) 🌄
+    </p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ═══ NAV ══════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nav-btn" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-center">
+    <div class="ctr">Diapositiva <span id="cn">1</span> / <span id="tn">12</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nav-btn" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+document.getElementById('tn').textContent = N;
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i===0?' active':'');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+function update() {
+  slides.forEach((s,i) => { s.classList.toggle('active', i===cur); s.scrollTop=0; });
+  dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+  document.getElementById('cn').textContent = cur+1;
+  document.getElementById('pb-btn').disabled = cur===0;
+  document.getElementById('nb-btn').disabled = cur===N-1;
+  document.getElementById('pb').style.width = ((cur+1)/N*100)+'%';
+}
+function go(d) { const n=cur+d; if(n>=0&&n<N){cur=n;update();} }
+function goTo(i) { cur=i; update(); }
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') go(-1);
+});
+update();
+</script>
+</body>
+</html>
