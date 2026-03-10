@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 9: Workplace Morale — Advanced English II</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* ── Barrancas del Cobre, Chihuahua ── */
+  /* Piedra caliza, cielo del atardecer, cobre, pino serrano, río esmeralda */
+  --roca:       #2c2418;       /* piedra oscura */
+  --roca-mid:   #4a3c2a;       /* roca media */
+  --caliza:     #c8ad84;       /* caliza dorada */
+  --caliza2:    #e0ccaa;       /* caliza clara */
+  --cobre:      #b55c25;       /* cobre vivo */
+  --cobre2:     #d97b3f;       /* cobre claro */
+  --ocre:       #e8a84e;       /* ocre atardecer */
+  --pino:       #3d5c3a;       /* pino serrano */
+  --pino2:      #5a7d55;       /* pino claro */
+  --rio:        #3a7a72;       /* río esmeralda */
+  --rio2:       #5aa69d;       /* río claro */
+  --cielo:      #7a8fa0;       /* cielo gris azulado */
+  --crema:      #f9f3e8;       /* papel crema */
+  --crema-mid:  #ede0c8;       /* crema media */
+  --bg:         #faf5ec;
+  --text-dk:    #1e160a;
+  --text-md:    #4a3820;
+  --text-lt:    #7a6045;
+  --border:     rgba(200,173,132,0.3);
+  --sh:         0 3px 20px rgba(44,36,24,0.1);
+  --sh-lg:      0 6px 36px rgba(44,36,24,0.16);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-dk);
+  overflow: hidden;
+}
+
+/* ── PROGRESS ─────────────────────────── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--cobre), var(--ocre), var(--rio));
+  transition: width 0.4s ease;
+  z-index: 9999;
+  box-shadow: 0 0 10px rgba(181,92,37,0.5);
+}
+
+/* ── SLIDES ───────────────────────────── */
+.slide { display: none; flex-direction: column; width: 100vw; height: 100vh; overflow-y: auto; animation: ri 0.4s ease; }
+.slide.active { display: flex; }
+@keyframes ri { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.slide::-webkit-scrollbar { width: 5px; }
+.slide::-webkit-scrollbar-track { background: var(--crema-mid); }
+.slide::-webkit-scrollbar-thumb { background: var(--cobre); border-radius: 10px; }
+
+/* ══════════════════════════════════════
+   PORTADA
+══════════════════════════════════════ */
+.slide-cover {
+  background: var(--roca);
+  justify-content: center; align-items: center;
+  min-height: 100vh; position: relative; overflow: hidden;
+}
+
+/* Estratos de roca como capas del cañón */
+.canyon-layers {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 55% at 15% 75%, rgba(181,92,37,0.4) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(58,122,114,0.25) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 55% 50%, rgba(61,92,58,0.18) 0%, transparent 60%);
+}
+
+/* Líneas de estrato */
+.strata {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 38px,
+      rgba(200,173,132,0.05) 38px,
+      rgba(200,173,132,0.05) 40px
+    );
+}
+
+/* Silueta del cañón */
+.canyon-silhouette {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 240px; z-index: 0;
+}
+.cs-left {
+  position: absolute; bottom: 0; left: 0;
+  width: 30%; height: 200px;
+  background: var(--roca-mid);
+  clip-path: polygon(0 100%, 0 30%, 20% 15%, 40% 40%, 60% 20%, 80% 45%, 100% 100%);
+}
+.cs-right {
+  position: absolute; bottom: 0; right: 0;
+  width: 35%; height: 220px;
+  background: rgba(44,36,24,0.7);
+  clip-path: polygon(0 100%, 20% 60%, 40% 30%, 60% 50%, 80% 20%, 100% 35%, 100% 100%);
+}
+.cs-river {
+  position: absolute; bottom: 0; left: 20%; right: 25%;
+  height: 30px; background: rgba(58,122,114,0.4); border-radius: 2px 2px 0 0;
+}
+
+.cover-content {
+  position: relative; z-index: 1;
+  text-align: center; padding: 2rem;
+  max-width: 900px; width: 100%;
+}
+
+.cover-chip {
+  display: inline-block;
+  background: rgba(232,168,78,0.15); border: 1px solid rgba(232,168,78,0.4);
+  color: var(--ocre); font-family: 'DM Mono', monospace;
+  font-size: 0.67rem; letter-spacing: 3px; text-transform: uppercase;
+  padding: 0.35rem 1rem; border-radius: 2px; margin-bottom: 1.5rem;
+}
+
+.cover-topic {
+  font-family: 'DM Mono', monospace; font-size: 0.7rem;
+  color: var(--cobre2); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1rem;
+}
+
+.cover-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  font-weight: 700; line-height: 1.1; color: var(--crema); margin-bottom: 0.6rem;
+}
+.cover-title .hi { color: var(--cobre2); font-style: italic; }
+
+.cover-subtitle {
+  font-size: clamp(0.9rem, 1.8vw, 1.1rem); font-weight: 300;
+  color: rgba(249,243,232,0.6); margin-bottom: 2.2rem; line-height: 1.6;
+}
+
+.cover-divider {
+  width: 60px; height: 2px; margin: 0 auto 2rem;
+  background: linear-gradient(90deg, var(--cobre), var(--ocre), var(--rio));
+  box-shadow: 0 0 10px rgba(181,92,37,0.4);
+}
+
+.cover-pills { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+.pill {
+  padding: 0.3rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 500;
+}
+.pill-c { background: rgba(181,92,37,0.2); border: 1px solid rgba(181,92,37,0.45); color: var(--cobre2); }
+.pill-p { background: rgba(61,92,58,0.2);  border: 1px solid rgba(61,92,58,0.45);  color: var(--pino2); }
+.pill-r { background: rgba(58,122,114,0.2); border: 1px solid rgba(58,122,114,0.45); color: var(--rio2); }
+
+.cover-meta {
+  font-family: 'DM Mono', monospace; font-size: 0.7rem;
+  color: rgba(249,243,232,0.35); letter-spacing: 1px;
+}
+.cover-meta span { color: rgba(249,243,232,0.6); }
+
+/* ══════════════════════════════════════
+   SLIDE HEADER
+══════════════════════════════════════ */
+.slide-header {
+  background: var(--crema);
+  border-bottom: 2px solid var(--crema-mid);
+  padding: 0.85rem 2rem;
+  display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
+  position: relative;
+}
+.slide-header::after {
+  content: ''; position: absolute; bottom: -2px; left: 0;
+  width: 70px; height: 2px;
+  background: linear-gradient(90deg, var(--cobre), var(--ocre));
+}
+
+.hico {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.hico-c { background: rgba(181,92,37,0.1); border: 1px solid rgba(181,92,37,0.28); }
+.hico-p { background: rgba(61,92,58,0.1);  border: 1px solid rgba(61,92,58,0.28); }
+.hico-r { background: rgba(58,122,114,0.1); border: 1px solid rgba(58,122,114,0.28); }
+.hico-o { background: rgba(232,168,78,0.13); border: 1px solid rgba(232,168,78,0.35); }
+
+.ht { flex: 1; }
+.hlbl {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  color: var(--text-lt); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 0.1rem;
+}
+.htitle {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(1rem, 2.5vw, 1.45rem); font-weight: 700; color: var(--text-dk);
+}
+.ac  { color: var(--cobre); }
+.ap  { color: var(--pino); }
+.ar  { color: var(--rio); }
+.ao  { color: var(--ocre); }
+
+/* ══════════════════════════════════════
+   SLIDE BODY
+══════════════════════════════════════ */
+.slide-body {
+  flex: 1; padding: 1.4rem 2rem;
+  background: var(--bg); overflow-y: auto;
+}
+
+/* GRIDS */
+.g2  { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+.g3  { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+.ga  { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 1rem; }
+
+/* CARDS */
+.card {
+  background: var(--crema); border: 1px solid var(--crema-mid);
+  border-radius: 10px; padding: 1rem; transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: var(--sh); }
+.card-c { border-top: 3px solid var(--cobre); }
+.card-p { border-top: 3px solid var(--pino); }
+.card-r { border-top: 3px solid var(--rio); }
+.card-o { border-top: 3px solid var(--ocre); }
+.card-k { border-top: 3px solid var(--caliza); }
+.card-ico { font-size: 1.4rem; margin-bottom: 0.55rem; }
+.card-title { font-family: 'Libre Baskerville', serif; font-weight: 700; font-size: 0.95rem; color: var(--text-dk); margin-bottom: 0.35rem; }
+.card-body  { font-size: 0.83rem; color: var(--text-md); line-height: 1.6; }
+
+/* BOXES */
+.box {
+  border-radius: 10px; padding: 0.95rem 1.15rem;
+  margin-bottom: 0.85rem; font-size: 0.86rem; line-height: 1.65;
+}
+.box-c { background: rgba(181,92,37,0.08); border-left: 4px solid var(--cobre); }
+.box-p { background: rgba(61,92,58,0.08);  border-left: 4px solid var(--pino); }
+.box-r { background: rgba(58,122,114,0.09); border-left: 4px solid var(--rio); }
+.box-o { background: rgba(232,168,78,0.1); border-left: 4px solid var(--ocre); }
+.box-k { background: var(--crema); border: 1px solid var(--crema-mid); }
+.blbl {
+  font-family: 'DM Mono', monospace; font-size: 0.6rem;
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.35rem; opacity: 0.58;
+}
+
+/* SECTION TITLE */
+.sec {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 1rem; font-weight: 700; color: var(--text-dk);
+  margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.sec::after { content: ''; flex: 1; height: 1px; background: var(--crema-mid); }
+
+/* LISTA */
+ul.ul { list-style: none; padding: 0; }
+ul.ul li {
+  padding: 0.42rem 0 0.42rem 1.25rem; position: relative;
+  font-size: 0.85rem; color: var(--text-md); line-height: 1.55;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+ul.ul li:last-child { border-bottom: none; }
+ul.ul li::before { content: '◆'; position: absolute; left: 0; top: 0.5rem; color: var(--cobre); font-size: 0.42rem; }
+ul.ul.p li::before { color: var(--pino); }
+ul.ul.r li::before { color: var(--rio); }
+ul.ul.o li::before { color: var(--ocre); }
+strong { color: var(--text-dk); }
+em     { color: var(--cobre); font-style: italic; }
+
+/* BADGE */
+.bdg {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  padding: 0.18rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 600;
+}
+.bdg-c { background: rgba(181,92,37,0.1); color: var(--cobre); border: 1px solid rgba(181,92,37,0.28); }
+.bdg-p { background: rgba(61,92,58,0.1); color: var(--pino); border: 1px solid rgba(61,92,58,0.28); }
+.bdg-r { background: rgba(58,122,114,0.1); color: var(--rio); border: 1px solid rgba(58,122,114,0.28); }
+.bdg-o { background: rgba(232,168,78,0.12); color: var(--roca-mid); border: 1px solid rgba(232,168,78,0.35); }
+
+/* TABLA */
+.tw { overflow-x: auto; border-radius: 10px; border: 1px solid var(--crema-mid); }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+thead tr { background: rgba(181,92,37,0.08); border-bottom: 2px solid var(--cobre); }
+thead th { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.78rem; color: var(--cobre); text-align: left; padding: 0.65rem 0.9rem; letter-spacing: 0.4px; }
+tbody tr { border-bottom: 1px solid var(--crema-mid); transition: background 0.15s; }
+tbody tr:hover { background: rgba(181,92,37,0.04); }
+tbody td { padding: 0.58rem 0.9rem; color: var(--text-md); vertical-align: top; line-height: 1.55; }
+tbody td:first-child { font-family: 'DM Sans', sans-serif; font-weight: 600; color: var(--text-dk); }
+tbody td em { color: var(--cobre); font-style: italic; }
+.trow-alt { background: rgba(200,173,132,0.08); }
+
+/* OBJECTIVES */
+.obj {
+  display: flex; gap: 1rem; align-items: flex-start;
+  padding: 0.8rem; background: var(--crema); border: 1px solid var(--crema-mid);
+  border-radius: 10px; margin-bottom: 0.65rem; transition: border-color 0.2s;
+}
+.obj:hover { border-color: var(--cobre2); }
+.obj-n {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--cobre); color: var(--crema);
+  font-family: 'Libre Baskerville', serif; font-weight: 700; font-size: 0.95rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(181,92,37,0.28);
+}
+.obj-t { font-size: 0.86rem; color: var(--text-md); line-height: 1.55; padding-top: 0.18rem; }
+
+/* HIGHLIGHT PHRASE */
+.phrase-card {
+  background: var(--roca);
+  border-radius: 10px; padding: 1rem 1.2rem;
+  margin-bottom: 0.55rem; position: relative; overflow: hidden;
+}
+.phrase-card::before {
+  content: '"';
+  position: absolute; top: -10px; left: 8px;
+  font-family: 'Libre Baskerville', serif;
+  font-size: 5rem; color: rgba(181,92,37,0.2); line-height: 1;
+}
+.phrase-en { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 0.95rem; color: var(--ocre); margin-bottom: 0.3rem; position: relative; z-index: 1; }
+.phrase-fn { font-family: 'DM Sans', sans-serif; font-size: 0.75rem; color: rgba(249,243,232,0.5); position: relative; z-index: 1; }
+.phrase-note { font-size: 0.78rem; color: rgba(249,243,232,0.65); margin-top: 0.35rem; position: relative; z-index: 1; line-height: 1.5; }
+
+/* MODAL VERB ROW */
+.mv-row {
+  display: flex; gap: 0.5rem; padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--crema-mid); font-size: 0.83rem; align-items: flex-start;
+}
+.mv-row:last-child { border-bottom: none; }
+.mv-fn { font-weight: 600; color: var(--text-dk); min-width: 130px; flex-shrink: 0; padding-top: 0.05rem; }
+.mv-ex { color: var(--text-md); flex: 1; line-height: 1.5; }
+.mv-ex em { font-style: italic; color: var(--cobre); }
+
+/* WRONG/RIGHT PAIR */
+.wr-pair { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; align-items: stretch; }
+.wr-wrong { flex: 1; background: rgba(181,92,37,0.06); border: 1px solid rgba(181,92,37,0.2); border-radius: 7px; padding: 0.55rem 0.8rem; font-size: 0.82rem; color: var(--text-lt); text-decoration: line-through; }
+.wr-right { flex: 1; background: rgba(61,92,58,0.07); border: 1px solid rgba(61,92,58,0.25); border-radius: 7px; padding: 0.55rem 0.8rem; font-size: 0.82rem; color: var(--text-md); }
+.wr-right strong { color: var(--pino); }
+.wr-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 0.2rem; }
+
+/* QUIZ */
+.quiz-box { background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; padding: 1.1rem; margin-bottom: 0.85rem; }
+.quiz-tag { background: rgba(181,92,37,0.1); border: 1px solid rgba(181,92,37,0.28); color: var(--cobre); font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 2px; padding: 0.18rem 0.55rem; border-radius: 3px; display: inline-block; margin-bottom: 0.55rem; }
+.quiz-q { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.93rem; color: var(--text-dk); margin-bottom: 0.5rem; }
+.quiz-opts { list-style: none; }
+.quiz-opts li { padding: 0.45rem 0.8rem; border: 1px solid var(--crema-mid); border-radius: 7px; margin-bottom: 0.32rem; font-size: 0.83rem; color: var(--text-md); cursor: pointer; transition: all 0.2s; display: flex; gap: 0.6rem; align-items: center; }
+.quiz-opts li:hover { border-color: var(--cobre); background: rgba(181,92,37,0.04); color: var(--text-dk); }
+.opt-l { width: 22px; height: 22px; border-radius: 50%; background: var(--crema-mid); display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; flex-shrink: 0; color: var(--text-lt); }
+
+/* ACTIVITY */
+.act { display: flex; gap: 0.8rem; align-items: flex-start; padding: 0.75rem; background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; margin-bottom: 0.55rem; }
+.act-ico { width: 32px; height: 32px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
+.act-c { background: rgba(181,92,37,0.09); border: 1px solid rgba(181,92,37,0.22); }
+.act-p { background: rgba(61,92,58,0.09);  border: 1px solid rgba(61,92,58,0.22); }
+.act-r { background: rgba(58,122,114,0.09); border: 1px solid rgba(58,122,114,0.22); }
+.act-txt strong { font-size: 0.88rem; display: block; margin-bottom: 0.12rem; color: var(--text-dk); }
+.act-txt p { font-size: 0.8rem; color: var(--text-md); line-height: 1.5; }
+
+/* RECURSOS */
+.rec { display: flex; gap: 0.8rem; padding: 0.75rem 0.95rem; background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; margin-bottom: 0.5rem; transition: border-color 0.2s; }
+.rec:hover { border-color: var(--cobre); }
+.rec-ico { font-size: 1.2rem; flex-shrink: 0; margin-top: 0.1rem; }
+.rec-title { font-weight: 600; font-size: 0.88rem; margin-bottom: 0.12rem; color: var(--text-dk); }
+.rec-desc { font-size: 0.77rem; color: var(--text-lt); line-height: 1.5; }
+.rec-url  { font-family: 'DM Mono', monospace; font-size: 0.67rem; color: var(--rio); display: block; margin-top: 0.12rem; word-break: break-all; }
+
+/* CIERRE */
+.slide-cierre {
+  background: var(--roca);
+  justify-content: center; align-items: center;
+  min-height: 100vh; position: relative; overflow: hidden;
+}
+.cierre-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 65% 55% at 50% 45%, rgba(181,92,37,0.3) 0%, transparent 65%); z-index: 0; }
+.cierre-content { position: relative; z-index: 1; padding: 2rem; max-width: 740px; text-align: center; }
+.sum-row { display: flex; gap: 0.5rem; margin-bottom: 0.42rem; font-size: 0.83rem; text-align: left; }
+.sum-k { width: 150px; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--cobre2); flex-shrink: 0; padding-top: 0.08rem; }
+.sum-v { color: rgba(249,243,232,0.7); line-height: 1.5; flex: 1; }
+
+/* NAV */
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(249,243,232,0.97); border-top: 1px solid var(--crema-mid); padding: 0.5rem 1.5rem; display: flex; align-items: center; justify-content: space-between; z-index: 1000; backdrop-filter: blur(8px); }
+.nav-btn { display: flex; align-items: center; gap: 0.4rem; padding: 0.42rem 0.95rem; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 0.81rem; border: 1px solid var(--crema-mid); background: var(--crema); color: var(--text-lt); cursor: pointer; transition: all 0.2s; }
+.nav-btn:hover:not(:disabled) { border-color: var(--cobre); color: var(--cobre); box-shadow: 0 2px 10px rgba(181,92,37,0.15); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 0.22rem; }
+.ctr { font-family: 'DM Mono', monospace; font-size: 0.73rem; color: var(--text-lt); }
+.ctr span { color: var(--cobre); font-size: 0.92rem; font-weight: 700; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 280px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--crema-mid); transition: all 0.2s; cursor: pointer; border: none; padding: 0; }
+.dot.active { background: var(--cobre); transform: scale(1.35); box-shadow: 0 0 6px rgba(181,92,37,0.4); }
+.nav-sp { height: 66px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .slide-body { padding: 1rem; }
+  .slide-header { padding: 0.7rem 1rem; }
+  .g2,.g3 { grid-template-columns: 1fr; }
+  .cover-title { font-size: 2rem; }
+  .nav { padding: 0.42rem 0.8rem; }
+  .nav-btn { padding: 0.36rem 0.65rem; font-size: 0.75rem; }
+  .dots { max-width: 180px; }
+  .mv-fn { min-width: 100px; }
+}
+@media (max-width: 480px) { .dots { display: none; } .cover-title { font-size: 1.75rem; } }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="pb"></div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 1 — COVER
+══════════════════════════════════════ -->
+<div class="slide slide-cover active" id="s1">
+  <div class="canyon-layers"></div>
+  <div class="strata"></div>
+  <div class="canyon-silhouette">
+    <div class="cs-left"></div>
+    <div class="cs-right"></div>
+    <div class="cs-river"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-chip">🏔 Advanced English II — Module 2</div>
+    <div class="cover-topic">Topic 9 · Workplace Communication</div>
+    <h1 class="cover-title">Workplace<br><span class="hi">Morale</span></h1>
+    <p class="cover-subtitle">Motivation, assertive communication in meetings<br>and modal verbs in professional contexts</p>
+    <div class="cover-divider"></div>
+    <div class="cover-pills">
+      <span class="pill pill-c">9.1 Morale &amp; Motivation</span>
+      <span class="pill pill-p">9.2 Language for Meetings</span>
+      <span class="pill pill-r">9.3 Modal Verbs</span>
+    </div>
+    <p class="cover-meta">Advanced Level &nbsp;|&nbsp; <span>Advanced English II</span> &nbsp;|&nbsp; <span>Universidad TecMilenio</span></p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 2 — INTRODUCTION
+══════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="slide-header">
+    <div class="hico hico-c">🌄</div>
+    <div class="ht">
+      <div class="hlbl">Slide 02 · Introduction</div>
+      <div class="htitle">What is <span class="ac">Workplace Morale</span>?</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2" style="margin-bottom:1rem">
+      <div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--cobre)">Definition</div>
+          <strong>Morale</strong> is the emotional condition that relates to the enthusiasm and positive outlook about one's work — both the activities and the environment. High workplace morale is good for business.
+        </div>
+        <div class="box box-p">
+          <div class="blbl" style="color:var(--pino)">Low Morale Impact</div>
+          When employees suffer <strong>low morale</strong>, organizations often experience:
+          <ul class="ul" style="margin-top:0.4rem">
+            <li>Higher <strong>turnover</strong> (employees leaving)</li>
+            <li>Problematic <strong>absenteeism</strong> and tardiness</li>
+            <li>Stifled <strong>creativity</strong></li>
+            <li>Reduced <strong>productivity</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sec" style="margin-top:0">What you'll cover in this topic</div>
+        <ul class="ul r">
+          <li>The basic <strong>psychology of motivation</strong> and its link to workplace morale</li>
+          <li>Differences between <strong>intrinsic and extrinsic</strong> motivation</li>
+          <li>Strategies for <strong>asserting yourself</strong> politely in meetings</li>
+          <li>The grammar extension: <strong>modal verbs</strong> in professional contexts</li>
+        </ul>
+        <div class="box box-o" style="margin-top:0.8rem">
+          <div class="blbl" style="color:var(--roca-mid)">Key Vocabulary</div>
+          <span class="bdg bdg-c">Turnover</span> <span class="bdg bdg-p">Absenteeism</span> <span class="bdg bdg-r">Knowledge worker</span> <span class="bdg bdg-o">Autonomy</span>
+          <p style="margin-top:0.5rem;font-size:0.82rem;color:var(--text-md)"><em>Turnover</em> refers to the phenomenon of employees leaving an organization and the need/cost of replacing them.</p>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 3 — OBJECTIVES
+══════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="slide-header">
+    <div class="hico hico-o">🎯</div>
+    <div class="ht">
+      <div class="hlbl">Slide 03 · Learning Objectives</div>
+      <div class="htitle">By the end of this topic, you will be able to <span class="ao">…</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="obj">
+      <div class="obj-n">1</div>
+      <div class="obj-t"><strong>Explain the relationship between morale and motivation</strong>, differentiating between group morale and individual motivation in a workplace context.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--pino)">2</div>
+      <div class="obj-t"><strong>Compare intrinsic and extrinsic motivation</strong>, identify their characteristics, and evaluate the limitations of reward-and-punishment approaches (The Carrot and the Stick).</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--rio)">3</div>
+      <div class="obj-t"><strong>Use polite and assertive language for meetings</strong> — including phrases to interrupt, prevent interruptions, and manage meeting tasks — in a professional, cross-cultural context.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--ocre);color:var(--roca)">4</div>
+      <div class="obj-t"><strong>Apply modal verbs correctly</strong> to express probability, obligation, permission, possibility, request, and advice in workplace scenarios, using appropriate substitutions where needed.</div>
+    </div>
+    <div class="box box-c" style="margin-top:0.6rem">
+      <div class="blbl" style="color:var(--cobre)">Sections</div>
+      <strong>9.1</strong> Morale &amp; Motivation &nbsp;·&nbsp; <strong>9.2</strong> Useful Language for Meetings &nbsp;·&nbsp; <strong>9.3</strong> Modal Verbs
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 4 — 9.1 MORALE VS MOTIVATION
+══════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="slide-header">
+    <div class="hico hico-c">💼</div>
+    <div class="ht">
+      <div class="hlbl">Slide 04 · Section 9.1</div>
+      <div class="htitle"><span class="ac">Morale vs. Motivation</span>: Not the Same Thing</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2" style="margin-bottom:1rem">
+      <div>
+        <div class="sec">Low vs. High Morale</div>
+        <div class="tw" style="margin-bottom:0.9rem">
+          <table>
+            <thead><tr><th>⬇ Low Morale Causes</th><th>⬆ High Morale Factors</th></tr></thead>
+            <tbody>
+              <tr><td>Disrespectful bosses</td><td>Job security</td></tr>
+              <tr class="trow-alt"><td>Unfair policies / treatment</td><td>Sense of fairness</td></tr>
+              <tr><td>Lack of recognition</td><td>Feeling appreciated</td></tr>
+              <tr class="trow-alt"><td>No room for advancement</td><td>Room for development</td></tr>
+              <tr><td>Unmanageable workload</td><td>A manageable workload</td></tr>
+              <tr class="trow-alt"><td>Unethical tasks</td><td>A sense of community</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Key Distinction</div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--cobre)">Morale</div>
+          Refers to a <strong>group's</strong> spirit or energy. "The team has high morale this quarter." It is collective.
+        </div>
+        <div class="box box-p">
+          <div class="blbl" style="color:var(--pino)">Motivation</div>
+          A <strong>personal</strong> reason for going above and beyond at work, in school, a hobby or sport. It is individual.
+        </div>
+        <div class="box box-r">
+          <div class="blbl" style="color:var(--rio)">Bottom line</div>
+          Although morale and motivation seem similar, they are <strong>not interchangeable</strong> terms. An organization can have high group morale but an individual employee may still lack personal motivation — and vice versa.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 5 — INTRINSIC MOTIVATION
+══════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="slide-header">
+    <div class="hico hico-p">🌱</div>
+    <div class="ht">
+      <div class="hlbl">Slide 05 · Section 9.1</div>
+      <div class="htitle"><span class="ap">Intrinsic</span> Motivation</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="box box-p">
+          <div class="blbl" style="color:var(--pino)">Definition</div>
+          Intrinsic motivation occurs <strong>without an external reward</strong> — no money, food or prize. It comes from the <strong>satisfaction of the activity itself</strong>. The reward is internal.
+        </div>
+        <div class="sec">Examples</div>
+        <ul class="ul p">
+          <li><strong>Video games:</strong> players replay levels hundreds of times — no money involved, just the mix of frustration and pleasure from making progress</li>
+          <li><strong>Math problems:</strong> a student perseveres because it feels rewarding to say <em>"I figured it out! I did it!"</em> — not for a grade or sticker</li>
+          <li><strong>Reading for pleasure:</strong> challenge and curiosity drive the reader, not an external prize</li>
+          <li><strong>Exercise:</strong> challenge and competition are self-rewarding</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec">Characteristics (Kendra Cherry)</div>
+        <p style="font-size:0.82rem;color:var(--text-md);margin-bottom:0.7rem">Activities that create intrinsic motivation usually involve:</p>
+        <div class="ga">
+          <div class="card card-p"><div class="card-ico">🧩</div><div class="card-title">Challenge</div><div class="card-body">The right level of difficulty keeps engagement high — not too easy, not too hard.</div></div>
+          <div class="card card-r"><div class="card-ico">🔬</div><div class="card-title">Curiosity</div><div class="card-body">The activity sparks the desire to learn, explore or discover something new.</div></div>
+          <div class="card card-c"><div class="card-ico">🎮</div><div class="card-title">Control</div><div class="card-body">A sense of autonomy over one's choices and actions increases intrinsic drive.</div></div>
+          <div class="card card-o"><div class="card-ico">🤝</div><div class="card-title">Cooperation &amp; Competition</div><div class="card-body">Working with or against others can be inherently rewarding.</div></div>
+          <div class="card card-k"><div class="card-ico">🏆</div><div class="card-title">Recognition</div><div class="card-body">Being acknowledged for skill or effort feels intrinsically meaningful.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 6 — EXTRINSIC + CARROT & STICK
+══════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="slide-header">
+    <div class="hico hico-c">🥕</div>
+    <div class="ht">
+      <div class="hlbl">Slide 06 · Section 9.1</div>
+      <div class="htitle"><span class="ac">Extrinsic</span> Motivation &amp; The Carrot and the Stick</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--cobre)">Extrinsic Motivation</div>
+          Occurs due to <strong>external rewards</strong>: good grades, money (cash bonus), fame and praise. Many experts question its <strong>long-term value</strong> because:
+        </div>
+        <ul class="ul" style="margin-bottom:0.8rem">
+          <li>External rewards can <strong>decrease enjoyment</strong> of activities that were previously rewarding on their own</li>
+          <li>As people get accustomed to rewards, motivation <strong>decreases</strong>, requiring greater rewards for the same output</li>
+          <li>It may create <strong>compliance</strong>, not creativity</li>
+        </ul>
+        <div class="box box-r">
+          <div class="blbl" style="color:var(--rio)">The Bigger Question</div>
+          When employees earn enough to live comfortably, what motivates them most is often <strong>not more money</strong>. They value: positive relationships, autonomy, a fun workplace and <strong>meaningful work</strong>.
+        </div>
+      </div>
+      <div>
+        <div class="sec">The Carrot &amp; The Stick 🫏</div>
+        <div class="box box-o">
+          <div class="blbl" style="color:var(--roca-mid)">The Analogy</div>
+          Two ways to make a donkey move: dangle a <strong>carrot</strong> (reward) or hit it with a <strong>stick</strong> (punishment). Both achieve the same short-term result.
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Workplace "Carrot"</th><th>Workplace "Stick"</th></tr></thead>
+            <tbody>
+              <tr><td>Cash bonus</td><td>Public shaming</td></tr>
+              <tr class="trow-alt"><td>Paid vacation time</td><td>Threats of job loss</td></tr>
+              <tr><td>Gift cards</td><td>Demotion warnings</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-p" style="margin-top:0.7rem">
+          <div class="blbl" style="color:var(--pino)">Expert Consensus</div>
+          For <strong>knowledge workers</strong> (employees whose contributions are creative, not physical), the carrot-and-stick approach is <strong>outdated</strong>. 21st century jobs require creativity, problem-solving and initiative — not compliance.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 7 — 9.2 LANGUAGE FOR MEETINGS
+══════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="slide-header">
+    <div class="hico hico-r">🗣️</div>
+    <div class="ht">
+      <div class="hlbl">Slide 07 · Section 9.2</div>
+      <div class="htitle">Useful Language for <span class="ar">Managing Meetings</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="box box-r" style="margin-bottom:1rem">
+      <div class="blbl" style="color:var(--rio)">Why this matters</div>
+      It is important to <strong>politely assert yourself</strong> in meetings, whether as a leader or participant. Finding the balance of "polite and assertive" in a non-native language requires understanding <strong>cultural nuances</strong> — not just grammar and vocabulary.
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Function</th><th>Phrase / Example</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>To interrupt</strong></td>
+            <td><em>"Before you finish, could I just add something?"</em><br><em>"May I interrupt for a moment?"</em><br><em>"Could we pause for a second here?"</em><br><em>"Would you mind if I add something?"</em><br><em>"Could you clarify that last point?"</em></td>
+            <td>Using <strong>"just"</strong> softens the request. Using <strong>"we"</strong> instead of "you" also softens without changing meaning.</td>
+          </tr>
+          <tr class="trow-alt">
+            <td><strong>To prevent interruptions</strong></td>
+            <td><em>"If you could, please hold your questions until the end."</em><br><em>"I'm going to get to that in just a minute."</em><br><em>"I'll come back to that question later."</em><br><em>"I'd love to hear what you have to say, but please give me just a minute to finish."</em></td>
+            <td>Acknowledge the interruption briefly, then redirect. Politeness signals respect even while holding the floor.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 8 — MEETING TASKS VOCABULARY
+══════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="slide-header">
+    <div class="hico hico-r">📋</div>
+    <div class="ht">
+      <div class="hlbl">Slide 08 · Section 9.2</div>
+      <div class="htitle">Meeting <span class="ar">Tasks Vocabulary</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="tw" style="margin-bottom:1rem">
+      <table>
+        <thead><tr><th>Expression</th><th>Meaning</th><th>Example in context</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Stick to the agenda</strong></td>
+            <td>Only discuss what pertains to the agenda</td>
+            <td><em>"This meeting lasts 25 min, so we need to stick to the agenda."</em></td>
+          </tr>
+          <tr class="trow-alt">
+            <td><strong>Brainstorm ideas</strong></td>
+            <td>Informally list ideas — say whatever comes to mind</td>
+            <td><em>"Let's brainstorm some venues for this year's awards ceremony."</em></td>
+          </tr>
+          <tr>
+            <td><strong>Hold your questions</strong></td>
+            <td>Save questions for the end</td>
+            <td><em>"Please hold your questions until the end of my presentation."</em></td>
+          </tr>
+          <tr class="trow-alt">
+            <td><strong>Make a decision</strong></td>
+            <td>Decide (not "take a decision" — common error)</td>
+            <td><em>"Let's make a decision about the Christmas party."</em></td>
+          </tr>
+          <tr>
+            <td><strong>Reach a decision</strong></td>
+            <td>As a group, agree on a decision</td>
+            <td><em>"Have we reached a decision about the price point?"</em></td>
+          </tr>
+          <tr class="trow-alt">
+            <td><strong>To implement</strong></td>
+            <td>To put into effect</td>
+            <td><em>"Today, we need to implement our new bidding process."</em></td>
+          </tr>
+          <tr>
+            <td><strong>To roll out</strong></td>
+            <td>To introduce (a program, policy, product)</td>
+            <td><em>"This week we'll roll out our new wellness program."</em></td>
+          </tr>
+          <tr class="trow-alt">
+            <td><strong>Sort out</strong></td>
+            <td>Organize / fix minor problems</td>
+            <td><em>"Please sort out the errors in your expense report."</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-o">
+      <div class="blbl" style="color:var(--roca-mid)">⚠️ Common Mistake</div>
+      Most English-speaking countries do <strong>not</strong> use "take a decision." Always use <strong>"make a decision"</strong> or <strong>"reach a decision."</strong>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 9 — 9.3 MODAL VERBS REVIEW
+══════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="slide-header">
+    <div class="hico hico-p">📝</div>
+    <div class="ht">
+      <div class="hlbl">Slide 09 · Section 9.3</div>
+      <div class="htitle"><span class="ap">Modal Verbs</span>: Functions &amp; Examples</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="box box-p" style="margin-bottom:0.9rem">
+      <div class="blbl" style="color:var(--pino)">Review</div>
+      Modal verbs are <strong>auxiliary verbs</strong> that express possibility and necessity. Focus modals: <em>can, could, may, might, must, shall, should, will, would</em>.
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Function</th><th>Example</th><th>Function</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Probability</strong></td>
+            <td><em>It <strong>should</strong> be warm by then.</em> <span style="font-size:0.75rem;color:var(--text-lt)">(= probably will be)</span></td>
+            <td><strong>To prohibit</strong></td>
+            <td><em>Employees <strong>must not</strong> smoke in the warehouse.</em></td>
+          </tr>
+          <tr class="trow-alt">
+            <td><strong>Initiative</strong></td>
+            <td><em><strong>I'll</strong> make copies of the handouts.</em></td>
+            <td><strong>Inability</strong></td>
+            <td><em>I <strong>can't</strong> go — I'll be out of town.</em></td>
+          </tr>
+          <tr>
+            <td><strong>Certainty</strong></td>
+            <td><em>She worked until midnight. She <strong>must</strong> be exhausted.</em> <span style="font-size:0.75rem;color:var(--text-lt)">(= I am sure)</span></td>
+            <td><strong>Advice</strong></td>
+            <td><em>You <strong>ought to</strong> drink more water.</em></td>
+          </tr>
+          <tr class="trow-alt">
+            <td><strong>Permission</strong></td>
+            <td><em><strong>Could</strong> I borrow your pen?</em></td>
+            <td><strong>Offer</strong></td>
+            <td><em><strong>Can I</strong> help you with your bags?</em></td>
+          </tr>
+          <tr>
+            <td><strong>Possibility</strong></td>
+            <td><em>I <strong>might</strong> have to leave early tomorrow.</em></td>
+            <td><strong>Request</strong></td>
+            <td><em><strong>Could</strong> you proofread this for me?</em></td>
+          </tr>
+          <tr class="trow-alt">
+            <td><strong>Obligation</strong></td>
+            <td><em>I <strong>have to</strong> work overtime this week.</em></td>
+            <td><strong>Not necessary</strong></td>
+            <td><em>You <strong>don't have to</strong> respond to emails after 6 PM.</em></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 10 — MODAL VERB SUBSTITUTIONS
+══════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="slide-header">
+    <div class="hico hico-p">🔄</div>
+    <div class="ht">
+      <div class="hlbl">Slide 10 · Section 9.3</div>
+      <div class="htitle">Modal Verb <span class="ap">Substitutions</span>: Avoiding Common Errors</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="box box-p" style="margin-bottom:1rem">
+      <div class="blbl" style="color:var(--pino)">Why substitutions?</div>
+      Some contexts require <strong>be able to, be allowed to</strong> and <strong>have to</strong> because two modal verbs cannot be combined — and some modal forms simply do not exist.
+    </div>
+    <div class="sec">Incorrect → Correct Substitutions</div>
+    <div class="wr-pair">
+      <div><div class="wr-label" style="color:var(--cobre)">❌ Incorrect</div><div class="wr-wrong">Will can</div></div>
+      <div><div class="wr-label" style="color:var(--pino)">✅ Correct</div><div class="wr-right">Will you <strong>be able to</strong> help me translate this document?</div></div>
+    </div>
+    <div class="wr-pair">
+      <div><div class="wr-label" style="color:var(--cobre)">❌ Incorrect</div><div class="wr-wrong">Must had / must'd / Musted</div></div>
+      <div><div class="wr-label" style="color:var(--pino)">✅ Correct</div><div class="wr-right">We <strong>had to</strong> sign a confidentiality agreement.</div></div>
+    </div>
+    <div class="wr-pair">
+      <div><div class="wr-label" style="color:var(--cobre)">❌ Incorrect</div><div class="wr-wrong">Musted not</div></div>
+      <div><div class="wr-label" style="color:var(--pino)">✅ Correct</div><div class="wr-right">The students <strong>weren't allowed to</strong> use their cell phones during class.</div></div>
+    </div>
+    <div class="wr-pair">
+      <div><div class="wr-label" style="color:var(--cobre)">❌ Incorrect</div><div class="wr-wrong">Do must</div></div>
+      <div><div class="wr-label" style="color:var(--pino)">✅ Correct</div><div class="wr-right">What <strong>must</strong> I pack for the trip?</div></div>
+    </div>
+    <div class="g2" style="margin-top:0.8rem">
+      <div class="box box-c">
+        <div class="blbl" style="color:var(--cobre)">Rule: No double modals</div>
+        Two modal verbs <strong>cannot</strong> be used together. Use <em>be able to</em> after <em>will, would, might</em>, etc.
+      </div>
+      <div class="box box-r">
+        <div class="blbl" style="color:var(--rio)">Rule: Past of "must" for obligation</div>
+        "Musted" does not exist. Use <strong>had to</strong> for past obligation: <em>"We had to work late."</em>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 11 — MODAL VERBS PRACTICE
+══════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="slide-header">
+    <div class="hico hico-o">✏️</div>
+    <div class="ht">
+      <div class="hlbl">Slide 11 · Practice</div>
+      <div class="htitle">Modal Verbs <span class="ao">Practice</span> — Answer Key</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <p style="font-size:0.84rem;color:var(--text-md);margin-bottom:0.9rem"><em>Directions: Circle the answer choice that best completes each statement.</em></p>
+    <div class="quiz-box">
+      <div class="quiz-tag">Q1</div>
+      <div class="quiz-q">We ___________ stay up late when we were kids.</div>
+      <ul class="quiz-opts">
+        <li><span class="opt-l">a</span> musted not</li>
+        <li><span class="opt-l">b</span> couldn't not</li>
+        <li><span class="opt-l">c</span> ✓ <strong>weren't allowed to</strong> — past prohibition / rule set by others</li>
+      </ul>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">Q2</div>
+          <div class="quiz-q">___________ give me a ride to work tomorrow?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Will you can</li>
+            <li><span class="opt-l">b</span> Can you will</li>
+            <li><span class="opt-l">c</span> ✓ <strong>Would you be able to</strong> — polite request, future ability</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">Q3</div>
+          <div class="quiz-q">I can't go to the party because I ___________ work tomorrow.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> could</li>
+            <li><span class="opt-l">b</span> ✓ <strong>have to</strong> — obligation</li>
+            <li><span class="opt-l">c</span> will be able to</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">Q4</div>
+          <div class="quiz-q">The party is very casual. You ___________ dress up.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> ✓ <strong>don't have to</strong> — not necessary</li>
+            <li><span class="opt-l">b</span> couldn't</li>
+            <li><span class="opt-l">c</span> aren't able to</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">Q5</div>
+          <div class="quiz-q">If it snows and the streets are icy, I ___________ work from home.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> ✓ <strong>might</strong> — possibility, not certain</li>
+            <li><span class="opt-l">b</span> must not</li>
+            <li><span class="opt-l">c</span> will can</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">Q6</div>
+          <div class="quiz-q">___________ you proofread my résumé for me?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> ✓ <strong>Could</strong> — polite request</li>
+            <li><span class="opt-l">b</span> Must</li>
+            <li><span class="opt-l">c</span> You have to</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">Q7</div>
+          <div class="quiz-q">Do we ___________ bring our laptops to the meeting?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> must</li>
+            <li><span class="opt-l">b</span> ✓ <strong>have to</strong> — obligation in question form</li>
+            <li><span class="opt-l">c</span> should</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 12 — PRODUCTIVE ACTIVITY
+══════════════════════════════════════ -->
+<div class="slide" id="s12">
+  <div class="slide-header">
+    <div class="hico hico-c">🏔</div>
+    <div class="ht">
+      <div class="hlbl">Slide 12 · Productive Activity</div>
+      <div class="htitle">Activity: <span class="ac">Assertive Meeting Roleplay</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="box box-o" style="margin-bottom:1rem">
+      <div class="blbl" style="color:var(--roca-mid)">⚡ Overview</div>
+      In groups of 3–4, simulate a workplace meeting. Apply the language from sections 9.2 and 9.3 in a realistic professional scenario. Time: <strong>20–25 minutes</strong>.
+    </div>
+    <div class="act">
+      <div class="act-ico act-c">1️⃣</div>
+      <div class="act-txt">
+        <strong>Set the scenario</strong>
+        <p>Your team must decide on a new <em>employee wellness program</em> to boost workplace morale. Each person has a different role: <strong>Meeting Leader</strong>, <strong>Skeptic</strong>, <strong>Enthusiast</strong>, <strong>Note-taker</strong>.</p>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act-ico act-p">2️⃣</div>
+      <div class="act-txt">
+        <strong>Apply meeting language (Section 9.2)</strong>
+        <p>Each student must use at least <strong>3 phrases</strong> from the meeting language table: one to <em>interrupt politely</em>, one to <em>prevent interruptions</em>, and one <em>meeting task expression</em> (e.g. "Let's stick to the agenda" / "We need to reach a decision").</p>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act-ico act-r">3️⃣</div>
+      <div class="act-txt">
+        <strong>Incorporate modal verbs (Section 9.3)</strong>
+        <p>Each participant must use at least <strong>2 modal verbs</strong> correctly — one expressing obligation or necessity, one expressing possibility or advice. Peer-evaluate for accuracy.</p>
+      </div>
+    </div>
+    <div class="g2" style="margin-top:0.5rem">
+      <div class="box box-p">
+        <div class="blbl" style="color:var(--pino)">Evaluation Criteria</div>
+        <ul class="ul p" style="font-size:0.8rem">
+          <li>Correct use of meeting phrases</li>
+          <li>Modal verbs used accurately</li>
+          <li>Polite and assertive tone maintained</li>
+          <li>Active participation and fluency</li>
+        </ul>
+      </div>
+      <div class="box box-c">
+        <div class="blbl" style="color:var(--cobre)">Delivery format</div>
+        <ul class="ul" style="font-size:0.8rem">
+          <li>In-class oral performance</li>
+          <li>Written self-assessment (1 paragraph)</li>
+          <li>Peer feedback form provided by teacher</li>
+          <li>Recording optional for self-review</li>
+        </ul>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 13 — BIBLIOGRAPHY
+══════════════════════════════════════ -->
+<div class="slide" id="s13">
+  <div class="slide-header">
+    <div class="hico hico-r">📚</div>
+    <div class="ht">
+      <div class="hlbl">Slide 13 · Bibliography &amp; Resources</div>
+      <div class="htitle">Sources &amp; <span class="ar">Further Reading</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="sec">Main Bibliography</div>
+    <div class="rec">
+      <div class="rec-ico">📗</div>
+      <div>
+        <div class="rec-title" style="color:var(--cobre)">In Company 3.0 — Intermediate Student's Book</div>
+        <div class="rec-desc">Powell, M. (2014). Thailand: Macmillan Press. Primary coursebook for Advanced English II. Topic 9 content and meeting language adapted from this source.</div>
+      </div>
+    </div>
+    <div class="rec">
+      <div class="rec-ico">🌐</div>
+      <div>
+        <div class="rec-title" style="color:var(--pino)">Intrinsic Motivation — Psychology Expert Kendra Cherry</div>
+        <div class="rec-desc">Source for the five characteristics of intrinsically motivating activities: Challenge, Curiosity, Control, Cooperation &amp; Competition, Recognition.</div>
+        <span class="rec-url">http://psychology.about.com/od/motivation/f/intrinsic-motivation.htm</span>
+      </div>
+    </div>
+    <div class="rec">
+      <div class="rec-ico">🏛</div>
+      <div>
+        <div class="rec-title" style="color:var(--rio)">Advanced English II — Universidad TecMilenio (ID13302)</div>
+        <div class="rec-desc">Official course content: Module 2 — Work Communication. Topic 9: Workplace Morale. Includes introduction, content, practice activities, homework and self-activities.</div>
+        <span class="rec-url">utm-cdn-labcontenidos-htfaarehf2gcfycs.a01.azurefd.net — lshi1018/bb/topic9.htm</span>
+      </div>
+    </div>
+    <div class="sec" style="margin-top:0.6rem">Complementary Resources</div>
+    <div class="g2">
+      <div>
+        <div class="rec">
+          <div class="rec-ico">🎬</div>
+          <div>
+            <div class="rec-title">Drive: The Surprising Truth About What Motivates Us</div>
+            <div class="rec-desc">Daniel H. Pink (2009). Key reference on intrinsic motivation and its implications for 21st-century workplaces. RSA Animate video available on YouTube.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="rec">
+          <div class="rec-ico">🗣️</div>
+          <div>
+            <div class="rec-title">Business English Pod — Meeting Language</div>
+            <div class="rec-desc">Free audio lessons and transcripts focused on professional meeting English, assertive communication, and modal verbs in workplace contexts.</div>
+            <span class="rec-url">businessenglishpod.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 14 — CLOSING
+══════════════════════════════════════ -->
+<div class="slide slide-cover slide-cierre" id="s14">
+  <div class="canyon-layers"></div>
+  <div class="strata"></div>
+  <div class="canyon-silhouette">
+    <div class="cs-left"></div>
+    <div class="cs-right"></div>
+    <div class="cs-river"></div>
+  </div>
+  <div class="cierre-content">
+    <div class="cover-chip" style="margin-bottom:1.2rem">✅ Topic 9 — Complete</div>
+    <h2 style="font-family:'Libre Baskerville',serif;font-size:clamp(1.7rem,4vw,2.8rem);font-weight:700;color:var(--crema);margin-bottom:0.4rem">
+      Key <span style="color:var(--cobre2);font-style:italic">Takeaways</span>
+    </h2>
+    <div class="cover-divider"></div>
+    <div style="margin-bottom:1.4rem">
+      <div class="sum-row"><div class="sum-k">Morale vs. Motivation</div><div class="sum-v">Morale = group spirit · Motivation = personal drive. Not interchangeable.</div></div>
+      <div class="sum-row"><div class="sum-k">Intrinsic</div><div class="sum-v">Driven by satisfaction of activity itself: challenge, curiosity, control, recognition.</div></div>
+      <div class="sum-row"><div class="sum-k">Extrinsic</div><div class="sum-v">Driven by external rewards. May reduce long-term motivation and creativity.</div></div>
+      <div class="sum-row"><div class="sum-k">Carrot &amp; Stick</div><div class="sum-v">Outdated for knowledge workers. Compliance ≠ creativity or initiative.</div></div>
+      <div class="sum-row"><div class="sum-k">Meeting Language</div><div class="sum-v">Interrupt politely · Prevent interruptions · Use "make/reach a decision."</div></div>
+      <div class="sum-row"><div class="sum-k">Modal Verbs</div><div class="sum-v">No double modals · Use be able to / had to / weren't allowed to as substitutes.</div></div>
+    </div>
+    <div style="display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.4rem">
+      <span class="pill pill-c">9.1 Morale &amp; Motivation</span>
+      <span class="pill pill-p">9.2 Meeting Language</span>
+      <span class="pill pill-r">9.3 Modal Verbs</span>
+    </div>
+    <p style="font-size:0.77rem;color:rgba(249,243,232,0.4);font-family:'DM Mono',monospace;letter-spacing:0.5px">
+      Advanced English II · Universidad TecMilenio 🏔
+    </p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ══════════════════════════════════════
+  NAVIGATION
+══════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nav-btn" id="pb-btn" onclick="go(-1)" disabled>◀ Previous</button>
+  <div class="nav-center">
+    <div class="ctr">Slide <span id="cn">1</span> / <span id="tn">14</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nav-btn" id="nb-btn" onclick="go(1)">Next ▶</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+document.getElementById('tn').textContent = N;
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i===0?' active':'');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+function update() {
+  slides.forEach((s,i) => { s.classList.toggle('active',i===cur); s.scrollTop=0; });
+  dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active',i===cur));
+  document.getElementById('cn').textContent = cur+1;
+  document.getElementById('pb-btn').disabled = cur===0;
+  document.getElementById('nb-btn').disabled = cur===N-1;
+  document.getElementById('pb').style.width = ((cur+1)/N*100)+'%';
+}
+function go(d) { const n=cur+d; if(n>=0&&n<N){cur=n;update();} }
+function goTo(i) { cur=i; update(); }
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') go(-1);
+});
+update();
+</script>
+</body>
+</html>
