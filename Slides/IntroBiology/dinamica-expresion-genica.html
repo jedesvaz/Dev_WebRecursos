@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dinámica — Expresión Génica</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --easy:    #22C55E;
+  --easy-lt: #DCFCE7;
+  --easy-dk: #14532D;
+  --mid:     #F59E0B;
+  --mid-lt:  #FEF3C7;
+  --mid-dk:  #78350F;
+  --hard:    #EF4444;
+  --hard-lt: #FEE2E2;
+  --hard-dk: #7F1D1D;
+  --ink:     #0F172A;
+  --ink-md:  #334155;
+  --ink-lt:  #64748B;
+  --bg:      #F8FAFC;
+  --white:   #FFFFFF;
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg); color: var(--ink);
+}
+
+.bubbles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.bubble  { position: absolute; border-radius: 50%; opacity: .06; animation: float linear infinite; }
+@keyframes float {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: .06; }
+  90%  { opacity: .06; }
+  100% { transform: translateY(-120px) scale(1); opacity: 0; }
+}
+
+.pb {
+  position: fixed; top: 0; left: 0; height: 4px; z-index: 999;
+  background: linear-gradient(90deg, var(--easy), var(--mid), var(--hard));
+  transition: width .4s ease;
+}
+
+/* ══ SLIDES ══════════════════════════════════════════════════════ */
+.slide {
+  display: none; flex-direction: column;
+  width: 100vw; height: 100vh; overflow-y: auto;
+  position: relative; z-index: 1;
+  animation: fadeIn .36s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.slide::-webkit-scrollbar { width: 5px; }
+.slide::-webkit-scrollbar-thumb { background: var(--mid); border-radius: 8px; }
+
+/* ══ PORTADA ══════════════════════════════════════════════════════ */
+.cover {
+  background: var(--ink); min-height: 100vh;
+  justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.cover-mesh {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 50% at 15% 30%,  rgba(34,197,94,.18)  0%, transparent 60%),
+    radial-gradient(ellipse 45% 45% at 85% 70%,  rgba(239,68,68,.15)  0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 10%,  rgba(245,158,11,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 35% 40% at 75% 20%,  rgba(99,102,241,.10) 0%, transparent 50%);
+}
+.cover-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.cover-inner {
+  position: relative; z-index: 2;
+  max-width: 880px; width: 100%; padding: 2.2rem 2.5rem;
+  text-align: center;
+}
+.cover-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.7); font-size: .72rem; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase; padding: .32rem 1.1rem;
+  border-radius: 100px; margin-bottom: 1.3rem;
+  font-family: 'Fira Code', monospace;
+}
+.cover-title {
+  font-size: clamp(2.2rem, 5.5vw, 4.2rem); font-weight: 900; line-height: 1.0;
+  color: #fff; margin-bottom: .5rem;
+}
+.cover-title .w1 { color: var(--easy); }
+.cover-title .w2 { color: var(--mid); }
+.cover-title .w3 { color: var(--hard); }
+
+/* Subtítulos numerados en portada */
+.cover-subtitles {
+  display: flex; flex-direction: column; gap: .28rem;
+  margin-bottom: 1.6rem;
+}
+.cover-sub-item {
+  display: flex; align-items: baseline; gap: .55rem;
+  justify-content: center;
+}
+.sub-num {
+  font-family: 'Fira Code', monospace; font-size: .72rem;
+  font-weight: 600; color: var(--mid); flex-shrink: 0;
+  opacity: .85;
+}
+.sub-text {
+  font-size: .92rem; color: rgba(255,255,255,.55);
+  font-weight: 600; line-height: 1.4;
+}
+
+.cover-divider {
+  width: 48px; height: 3px; margin: 0 auto 1.3rem;
+  background: linear-gradient(90deg, var(--easy), var(--mid), var(--hard));
+  border-radius: 2px;
+}
+.cover-chips {
+  display: flex; justify-content: center; gap: .55rem;
+  flex-wrap: wrap; margin-bottom: 1.5rem;
+}
+.chip {
+  display: inline-flex; align-items: center; gap: .38rem;
+  padding: .28rem .85rem; border-radius: 100px; font-weight: 700;
+  font-size: .76rem; border: 2px solid;
+}
+.chip-e { background: var(--easy-lt); color: var(--easy-dk); border-color: var(--easy); }
+.chip-m { background: var(--mid-lt);  color: var(--mid-dk);  border-color: var(--mid);  }
+.chip-h { background: var(--hard-lt); color: var(--hard-dk); border-color: var(--hard); }
+
+/* Caja de reglas en portada */
+.rules-box {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 16px; padding: .95rem 1.3rem; max-width: 640px; margin: 0 auto;
+  text-align: left;
+}
+.rules-title {
+  font-size: .68rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--mid); font-family: 'Fira Code', monospace; margin-bottom: .55rem;
+}
+.rules-item {
+  display: flex; gap: .55rem; align-items: flex-start;
+  font-size: .82rem; color: rgba(255,255,255,.62); margin-bottom: .28rem; line-height: 1.5;
+}
+.rules-item:last-child { margin-bottom: 0; }
+.rules-dot { color: var(--easy); font-size: .85rem; flex-shrink: 0; margin-top: .05rem; }
+
+/* ══ QUESTION SLIDES ════════════════════════════════════════════ */
+.q-slide { min-height: 100vh; padding-bottom: 70px; }
+
+.q-header {
+  padding: .9rem 2rem .8rem; background: var(--white);
+  border-bottom: 3px solid; display: flex; align-items: center; gap: .9rem;
+  flex-shrink: 0; position: relative;
+}
+.q-header.easy { border-color: var(--easy); background: #f0fdf4; }
+.q-header.mid  { border-color: var(--mid);  background: #fffbeb; }
+.q-header.hard { border-color: var(--hard); background: #fff1f2; }
+
+.q-deco {
+  position: absolute; right: 0; top: 0; bottom: 0; width: 5px; border-radius: 0 2px 2px 0;
+}
+.q-deco.easy { background: linear-gradient(180deg, var(--easy), #86EFAC); }
+.q-deco.mid  { background: linear-gradient(180deg, var(--mid),  #FCD34D); }
+.q-deco.hard { background: linear-gradient(180deg, var(--hard), #FCA5A5); }
+
+.q-num {
+  font-family: 'Fira Code', monospace; font-size: .63rem;
+  color: var(--ink-lt); letter-spacing: 2px; text-transform: uppercase; flex-shrink: 0;
+}
+.q-level-badge {
+  display: inline-flex; align-items: center; gap: .32rem;
+  padding: .2rem .72rem; border-radius: 100px;
+  font-weight: 800; font-size: .73rem; border: 2px solid; flex-shrink: 0;
+}
+.q-level-badge.easy { background: var(--easy-lt); color: var(--easy-dk); border-color: var(--easy); }
+.q-level-badge.mid  { background: var(--mid-lt);  color: var(--mid-dk);  border-color: var(--mid);  }
+.q-level-badge.hard { background: var(--hard-lt); color: var(--hard-dk); border-color: var(--hard); }
+
+.pts-badge {
+  margin-left: auto;
+  display: inline-flex; align-items: center; gap: .28rem;
+  padding: .22rem .75rem; border-radius: 100px;
+  font-weight: 900; font-size: .88rem; border: 2px solid; flex-shrink: 0;
+}
+.pts-badge.easy { background: var(--easy-lt); color: var(--easy-dk); border-color: var(--easy); }
+.pts-badge.mid  { background: var(--mid-lt);  color: var(--mid-dk);  border-color: var(--mid);  }
+.pts-badge.hard { background: var(--hard-lt); color: var(--hard-dk); border-color: var(--hard); }
+
+/* Cuerpo de pregunta */
+.q-body {
+  flex: 1; padding: 1.8rem 2.2rem 1.2rem;
+  display: flex; flex-direction: column; justify-content: center;
+  background: var(--bg);
+}
+.q-topic {
+  font-family: 'Fira Code', monospace; font-size: .63rem;
+  color: var(--ink-lt); letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: .75rem;
+}
+.q-text {
+  font-size: clamp(1.3rem, 2.8vw, 1.85rem); font-weight: 800;
+  color: var(--ink); line-height: 1.38; margin-bottom: 1.3rem;
+}
+.hl-e { color: var(--easy-dk); background: var(--easy-lt); padding: 0 .12em; border-radius: 4px; }
+.hl-m { color: var(--mid-dk);  background: var(--mid-lt);  padding: 0 .12em; border-radius: 4px; }
+.hl-h { color: var(--hard-dk); background: var(--hard-lt); padding: 0 .12em; border-radius: 4px; }
+
+/* Recordatorio compacto en cada slide */
+.rule-pill {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .38rem .9rem; border-radius: 100px;
+  font-size: .78rem; font-weight: 700; border: 2px solid;
+  align-self: flex-start;
+}
+.rule-pill.easy { background: var(--easy-lt); color: var(--easy-dk); border-color: var(--easy); }
+.rule-pill.mid  { background: var(--mid-lt);  color: var(--mid-dk);  border-color: var(--mid);  }
+.rule-pill.hard { background: var(--hard-lt); color: var(--hard-dk); border-color: var(--hard); }
+
+/* ══ CIERRE ══════════════════════════════════════════════════════ */
+.cover-close {
+  background: var(--ink); min-height: 100vh;
+  justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.close-inner {
+  position: relative; z-index: 2;
+  max-width: 760px; width: 100%; padding: 2.5rem; text-align: center;
+}
+.score-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; margin: 1.4rem 0;
+}
+.score-card {
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px; padding: 1rem .8rem; text-align: center;
+}
+.sc-pts   { font-size: 2rem; font-weight: 900; line-height: 1; margin-bottom: .2rem; }
+.sc-label { font-size: .75rem; color: rgba(255,255,255,.5); font-weight: 600; }
+.sc-count { font-size: .68rem; font-family: 'Fira Code', monospace; color: rgba(255,255,255,.3); margin-top: .2rem; }
+
+/* ══ NAV ════════════════════════════════════════════════════════ */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,.97); border-top: 2px solid rgba(0,0,0,.07);
+  padding: .5rem 1.4rem; display: flex; align-items: center;
+  justify-content: space-between; z-index: 1000; backdrop-filter: blur(10px);
+}
+.nb {
+  display: flex; align-items: center; gap: .4rem;
+  padding: .38rem .9rem; border-radius: 100px;
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: .8rem;
+  border: 2px solid var(--ink); background: var(--white); color: var(--ink);
+  cursor: pointer; transition: all .18s;
+}
+.nb:hover:not(:disabled) { background: var(--ink); color: #fff; }
+.nb:disabled { opacity: .25; cursor: not-allowed; }
+.nav-c  { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.ctr    { font-family: 'Fira Code', monospace; font-size: .7rem; color: var(--ink-lt); }
+.ctr span { color: var(--ink); font-weight: 700; font-size: .88rem; }
+.dots   { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; max-width: 340px; }
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 2px solid; background: transparent;
+  cursor: pointer; padding: 0; transition: all .18s;
+}
+.dot.easy-dot  { border-color: var(--easy); }
+.dot.mid-dot   { border-color: var(--mid);  }
+.dot.hard-dot  { border-color: var(--hard); }
+.dot.cover-dot { border-color: var(--ink-lt); }
+.dot.active { transform: scale(1.45); }
+.dot.active.easy-dot  { background: var(--easy); }
+.dot.active.mid-dot   { background: var(--mid);  }
+.dot.active.hard-dot  { background: var(--hard); }
+.dot.active.cover-dot { background: var(--ink);  }
+.nav-sp { height: 66px; }
+
+@media (max-width: 768px) {
+  .q-body { padding: 1.2rem 1.2rem .8rem; }
+  .q-text { font-size: 1.18rem; }
+  .score-grid { grid-template-columns: 1fr; }
+  .dots { max-width: 200px; }
+}
+@media (max-width: 480px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="bubbles" id="bubbles"></div>
+<div class="pb" id="pb"></div>
+
+<!-- ══ PORTADA ══════════════════════════════════════════════════ -->
+<div class="slide cover active" id="s0">
+  <div class="cover-mesh"></div>
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <div class="cover-badge">🧬 Biología Celular y Molecular — Dinámica en Equipo</div>
+    <h1 class="cover-title">
+      <span class="w1">Expresión</span> <span class="w2">Génica</span>
+    </h1>
+    <div class="cover-subtitles">
+      <div class="cover-sub-item">
+        <span class="sub-num">3.1</span>
+        <span class="sub-text">ARN Polimerasas</span>
+      </div>
+      <div class="cover-sub-item">
+        <span class="sub-num">3.2</span>
+        <span class="sub-text">Mecanismo de la transcripción · Promotores · Iniciación y elongación · Terminación</span>
+      </div>
+      <div class="cover-sub-item">
+        <span class="sub-num">3.3</span>
+        <span class="sub-text">Código genético</span>
+      </div>
+    </div>
+    <div class="cover-divider"></div>
+    <div class="cover-chips">
+      <span class="chip chip-e">🟢 Fácil — 1 pt &nbsp;×10</span>
+      <span class="chip chip-m">🟡 Intermedio — 2 pts ×12</span>
+      <span class="chip chip-h">🔴 Difícil — 3 pts &nbsp;×8</span>
+    </div>
+    <div class="rules-box">
+      <div class="rules-title">📋 Reglas de la dinámica</div>
+      <div class="rules-item"><span class="rules-dot">●</span>Trabajen en equipo para responder cada pregunta.</div>
+      <div class="rules-item"><span class="rules-dot">●</span><span><strong style="color:#fff">Prohibido usar modelos de lenguaje (ChatGPT, Claude, Gemini, etc.)</strong> — la respuesta será anulada.</span></div>
+      <div class="rules-item"><span class="rules-dot">●</span>Toda respuesta debe incluir la <strong style="color:#fff">fuente consultada</strong> (libro, apunte o artículo científico).</div>
+      <div class="rules-item"><span class="rules-dot">●</span><strong style="color:#fff">Deben mostrar la fuente en clase</strong> al momento de responder.</div>
+      <div class="rules-item"><span class="rules-dot">●</span><strong style="color:#fff">Expliquen la respuesta en voz alta</strong> — no basta leerla.</div>
+      <div class="rules-item"><span class="rules-dot">●</span>Puntaje máximo posible: <strong style="color:#fff">58 puntos</strong>.</div>
+    </div>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- preguntas inyectadas por JS -->
+
+<!-- ══ CIERRE ════════════════════════════════════════════════════ -->
+<div class="slide cover cover-close" id="s-close">
+  <div class="cover-mesh"></div>
+  <div class="cover-grid"></div>
+  <div class="close-inner">
+    <div class="cover-badge">🏁 Fin de la dinámica</div>
+    <h2 style="font-size:clamp(2rem,5vw,3.6rem);font-weight:900;color:#fff;line-height:1.05;margin-bottom:.5rem">
+      ¡Tiempo! 🧬
+    </h2>
+    <p style="color:rgba(255,255,255,.5);font-size:.92rem;margin-bottom:1.5rem;line-height:1.6">
+      Sumen sus puntos, presenten sus fuentes y expliquen sus respuestas en voz alta.
+    </p>
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="sc-pts" style="color:var(--easy)">1 pt</div>
+        <div class="sc-label">Por pregunta fácil</div>
+        <div class="sc-count">10 preguntas → máx. 10 pts</div>
+      </div>
+      <div class="score-card">
+        <div class="sc-pts" style="color:var(--mid)">2 pts</div>
+        <div class="sc-label">Por pregunta intermedia</div>
+        <div class="sc-count">12 preguntas → máx. 24 pts</div>
+      </div>
+      <div class="score-card">
+        <div class="sc-pts" style="color:var(--hard)">3 pts</div>
+        <div class="sc-label">Por pregunta difícil</div>
+        <div class="sc-count">8 preguntas → máx. 24 pts</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:1rem 1.3rem;max-width:520px;margin:0 auto;text-align:left">
+      <div style="font-family:'Fira Code',monospace;font-size:.6rem;color:var(--mid);letter-spacing:2px;margin-bottom:.45rem">RECORDATORIO</div>
+      <div style="font-size:.82rem;color:rgba(255,255,255,.62);line-height:1.65">
+        ⛔ Respuestas con IA <strong style="color:#fff">no son válidas</strong>.<br>
+        📖 Muestren la <strong style="color:#fff">fuente consultada</strong>.<br>
+        🎤 Expliquen su respuesta <strong style="color:#fff">en voz alta</strong>.<br>
+        🏆 Puntaje máximo: <strong style="color:var(--easy)">58 puntos</strong>.
+      </div>
+    </div>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ══ NAV ════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nb" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-c">
+    <div class="ctr">Slide <span id="cn">1</span> / <span id="tn">?</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nb" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+// ══ BANCO DE PREGUNTAS (ordenadas por nivel para alternación) ═════════════════
+const easy = [
+  { topic:'Nucleótidos',
+    text:'¿Cuáles son los <span class="hl-e">tres componentes</span> que forman un nucleótido y cómo se unen entre sí?' },
+  { topic:'Ácidos Nucleicos',
+    text:'¿En qué se diferencian la <span class="hl-e">ribosa</span> y la <span class="hl-e">desoxirribosa</span>, y en qué tipo de ácido nucleico se encuentra cada una?' },
+  { topic:'ADN — Antiparalelismo',
+    text:'¿Por qué se dice que las cadenas del ADN son <span class="hl-e">antiparalelas</span>? Explica utilizando los términos 5\' y 3\'.' },
+  { topic:'Tipos de ARN',
+    text:'¿Cuáles son los <span class="hl-e">tres tipos de ARN</span>, dónde se sintetiza cada uno y cuál es su función principal?' },
+  { topic:'Maduración del ARNm',
+    text:'¿Qué es el <span class="hl-e">splicing</span> y por qué es necesario antes de que el ARNm salga del núcleo?' },
+  { topic:'Aminoácidos',
+    text:'¿Cuántos aminoácidos forman las proteínas y cuántos son <span class="hl-e">esenciales</span> en el ser humano adulto? ¿Qué los hace esenciales?' },
+  { topic:'Código Genético',
+    text:'¿Qué es un <span class="hl-e">codón</span> y cuántos codones diferentes existen en el código genético? ¿Cuál es el codón de inicio?' },
+  { topic:'Síntesis de Proteínas',
+    text:'¿Cuáles son las <span class="hl-e">dos fases</span> del proceso de síntesis de proteínas y en qué parte de la célula ocurre cada una?' },
+  { topic:'Nucléolo',
+    text:'¿Qué función cumple el <span class="hl-e">nucléolo</span> dentro del núcleo celular?' },
+  { topic:'Ribosomas',
+    text:'¿Dónde se localizan los <span class="hl-e">ribosomas</span> dentro de la célula y de qué están formados?' },
+];
+
+const mid = [
+  { topic:'Bases Nitrogenadas — Complementariedad',
+    text:'¿Por qué la adenina siempre se une a la timina y la guanina a la citosina en el ADN? ¿Qué tipo de <span class="hl-m">enlace</span> los une y qué implicación tiene en la estabilidad de la molécula?' },
+  { topic:'Ribosoma — Sitios Activos',
+    text:'El ribosoma tiene cuatro sitios activos: <span class="hl-m">E, P, A y el sitio catalítico</span>. ¿Qué ocurre exactamente en cada uno durante la traducción?' },
+  { topic:'ADN — Intrones y Exones',
+    text:'¿Qué diferencia hay entre un <span class="hl-m">intrón</span> y un <span class="hl-m">exón</span>? ¿Por qué crees que el ADN contiene regiones que no codifican proteínas?' },
+  { topic:'Transcripción — CAP y Poli-A',
+    text:'La <span class="hl-m">caperuza CAP</span> y la <span class="hl-m">cola poli-A</span> se añaden al pre-ARNm durante la elongación. ¿Cuál es la función de cada una y qué pasaría si no estuvieran presentes?' },
+  { topic:'Código Genético — Codones vs Aminoácidos',
+    text:'¿Por qué hay más codones que aminoácidos en el código genético? ¿Qué implica esa diferencia para la célula?' },
+  { topic:'Enlace Peptídico',
+    text:'¿Qué es un <span class="hl-m">enlace peptídico</span>, entre qué grupos químicos de los aminoácidos se forma y dónde ocurre dentro del ribosoma?' },
+  { topic:'ARNt — Anticodón',
+    text:'¿Qué es el <span class="hl-m">anticodón</span>, dónde se localiza en la molécula de ARNt y cómo se relaciona con el codón del ARNm?' },
+  { topic:'Proteínas — Funciones',
+    text:'¿Cuáles son las <span class="hl-m">seis funciones principales</span> de las proteínas en los organismos? Da un ejemplo de cada una.' },
+  { topic:'Traducción — Terminación',
+    text:'¿Qué ocurre cuando el ribosoma lee un <span class="hl-m">codón de terminación</span>? Menciona los tres codones de alto y describe el proceso de liberación de la proteína.' },
+  { topic:'Bases Nitrogenadas — Tipos',
+    text:'¿Cuál es la diferencia entre las bases <span class="hl-m">púricas</span> y <span class="hl-m">pirimídicas</span>? ¿Cuáles pertenecen a cada grupo y en qué ácidos nucleicos se encuentran?' },
+  { topic:'Diversidad de Proteínas',
+    text:'¿Por qué la variedad de proteínas existentes es tan grande si solo hay <span class="hl-m">20 aminoácidos</span> disponibles?' },
+  { topic:'Envoltura Nuclear',
+    text:'¿Qué función cumple la <span class="hl-m">envoltura nuclear</span> y cómo se comunica el núcleo con el citoplasma?' },
+];
+
+const hard = [
+  { topic:'Código Genético — Degeneración',
+    text:'Se dice que el código genético es <span class="hl-h">degenerado</span>. ¿Qué significa esto y cuál es su ventaja evolutiva para los organismos?' },
+  { topic:'ARNr — Actividad Catalítica',
+    text:'¿Por qué se considera que el ARNr del ribosoma tiene <span class="hl-h">actividad catalítica</span>? ¿Cómo se llama un ARN con esta propiedad y qué importancia tiene ese descubrimiento?' },
+  { topic:'ADN en Organelos',
+    text:'El ADN se localiza en el núcleo, pero también en <span class="hl-h">mitocondrias y cloroplastos</span>. ¿Por qué estos organelos tienen su propio ADN? ¿Qué teoría lo explica?' },
+  { topic:'Transcripción — Mutación en Promotor',
+    text:'¿Qué pasaría si hubiera una mutación en la secuencia <span class="hl-h">TATAAA</span> (caja TATA) del promotor? ¿Cómo afectaría esto a la síntesis de proteínas en la célula?' },
+  { topic:'Abundancia Molecular',
+    text:'Las proteínas representan el <span class="hl-h">50% del peso seco</span> de la célula, mientras que los ácidos nucleicos solo el 5–15%. ¿Por qué las proteínas son proporcionalmente mucho más abundantes si su información está en el ADN?' },
+  { topic:'ADN vs ARN — Estructura',
+    text:'¿En qué se diferencia estructuralmente la <span class="hl-h">doble hélice del ADN</span> de la molécula de ARN? ¿Por qué crees que el ADN adoptó doble cadena y el ARN generalmente es de cadena sencilla?' },
+  { topic:'Polirribosomas',
+    text:'Durante la traducción, varios ribosomas pueden leer simultáneamente el mismo ARNm. ¿Cómo se llama esta estructura y qué <span class="hl-h">ventaja metabólica</span> representa para la célula?' },
+  { topic:'ARNm — Abundancia Relativa',
+    text:'El ARNm representa <span class="hl-h">menos del 5%</span> del ARN total de la célula, pero es el que contiene la información para fabricar proteínas. ¿Por qué crees que su cantidad es tan baja comparada con el ARNr y el ARNt?' },
+];
+
+// ══ ALTERNACIÓN E → M → H → E → M → H … ════════════════════════════════════
+// Orden: 10 fáciles, 12 intermedias, 8 difíciles = 30 preguntas
+// Alternamos ciclando los tres niveles: posición i → nivel = i % 3
+// Índices en cada arreglo avanzan independientemente
+const ordered = [];
+let ei = 0, mi = 0, hi = 0;
+
+for (let i = 0; ordered.length < 30; i++) {
+  const turn = i % 3;
+  if (turn === 0 && ei < easy.length) {
+    ordered.push({ level:'easy', pts:1, ...easy[ei++] });
+  } else if (turn === 1 && mi < mid.length) {
+    ordered.push({ level:'mid',  pts:2, ...mid[mi++]  });
+  } else if (turn === 2 && hi < hard.length) {
+    ordered.push({ level:'hard', pts:3, ...hard[hi++] });
+  }
+  // Si algún arreglo se agota, el bucle continúa tomando de los que queden
+  if (i > 200) break; // safety
+}
+
+const levelLabel = { easy:'🟢 Fácil', mid:'🟡 Intermedio', hard:'🔴 Difícil' };
+const ptsLabel   = { easy:'⭐ 1 PUNTO', mid:'⭐⭐ 2 PUNTOS', hard:'⭐⭐⭐ 3 PUNTOS' };
+
+// ══ PILL de recordatorio compacto por slide ═══════════════════════════════════
+const pillHTML = (level) =>
+  `<div class="rule-pill ${level}">📖 Muestra tu fuente &nbsp;·&nbsp; 🎤 Explica en voz alta</div>`;
+
+// ══ INYECTAR SLIDES ═══════════════════════════════════════════════════════════
+const closeEl = document.getElementById('s-close');
+
+ordered.forEach((q, idx) => {
+  const n = idx + 1;
+  const div = document.createElement('div');
+  div.className = 'slide q-slide';
+  div.id = `sq${n}`;
+  div.innerHTML = `
+    <div class="q-header ${q.level}">
+      <div class="q-deco ${q.level}"></div>
+      <span class="q-num">Pregunta ${n} / 30</span>
+      <span class="q-level-badge ${q.level}">${levelLabel[q.level]}</span>
+      <span class="pts-badge ${q.level}">${ptsLabel[q.level]}</span>
+    </div>
+    <div class="q-body">
+      <div class="q-topic">📌 ${q.topic}</div>
+      <div class="q-text">${q.text}</div>
+      ${pillHTML(q.level)}
+    </div>
+    <div class="nav-sp"></div>
+  `;
+  document.body.insertBefore(div, closeEl);
+});
+
+// ══ BURBUJAS ═════════════════════════════════════════════════════════════════
+const colors = ['#22C55E','#F59E0B','#EF4444','#6366F1','#06B6D4'];
+const bc = document.getElementById('bubbles');
+for (let i = 0; i < 18; i++) {
+  const b = document.createElement('div');
+  b.className = 'bubble';
+  const size = 30 + Math.random() * 90;
+  b.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;`
+    + `background:${colors[Math.floor(Math.random()*colors.length)]};`
+    + `animation-duration:${8+Math.random()*14}s;animation-delay:${-Math.random()*20}s;`;
+  bc.appendChild(b);
+}
+
+// ══ NAVEGACIÓN ════════════════════════════════════════════════════════════════
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+document.getElementById('tn').textContent = N;
+
+function dotClass(i) {
+  if (i === 0 || i === N-1) return 'cover-dot';
+  return ordered[i-1]?.level + '-dot' || 'cover-dot';
+}
+
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('button');
+  d.className = `dot ${dotClass(i)}${i===0?' active':''}`;
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function update() {
+  slides.forEach((s,i) => { s.classList.toggle('active', i===cur); if(i===cur) s.scrollTop=0; });
+  dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+  document.getElementById('cn').textContent = cur+1;
+  document.getElementById('pb-btn').disabled = cur===0;
+  document.getElementById('nb-btn').disabled = cur===N-1;
+  document.getElementById('pb').style.width = ((cur+1)/N*100)+'%';
+}
+function go(d) { const n=cur+d; if(n>=0&&n<N){cur=n;update();} }
+function goTo(i) { cur=i; update(); }
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if(e.key==='ArrowLeft' ||e.key==='ArrowUp')   go(-1);
+});
+update();
+</script>
+</body>
+</html>
