@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clase 2 — Distribución Ji-Cuadrada · Bioestadística</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --tierra:     #3d2b1f;
+  --siena:      #7a3e1e;
+  --terracota:  #c0521e;
+  --naranja:    #e07b39;
+  --naranja2:   #f0a55a;
+  --flor:       #f5c97a;
+  --crema:      #faf3e0;
+  --crema-mid:  #f0e4c4;
+  --oliva:      #6b7c45;
+  --oliva2:     #8f9e5a;
+  --musgo:      #4a5c2e;
+  --cerro:      #b5a06a;
+  --cerro2:     #d4c08a;
+  --bg:         #fdf6e8;
+  --bg-warm:    #f7ead0;
+  --text-dark:  #2a1a0e;
+  --text-mid:   #5c3d22;
+  --text-soft:  #8a6040;
+  --border:     rgba(192,82,30,0.18);
+  --shadow:     0 4px 24px rgba(61,43,31,0.12);
+  --shadow-lg:  0 8px 40px rgba(61,43,31,0.18);
+  /* Color especial para Ji-Cuadrada */
+  --ji:         #8b3a62;
+  --ji2:        #b85c8a;
+  --ji-light:   rgba(139,58,98,0.1);
+  --ji-border:  rgba(139,58,98,0.35);
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+  overflow: hidden;
+}
+
+/* ── PROGRESS ─────────────────────────── */
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 4px;
+  background: linear-gradient(90deg, var(--ji), var(--terracota), var(--naranja), var(--flor));
+  transition: width 0.4s ease;
+  z-index: 9999;
+  box-shadow: 0 0 12px rgba(139,58,98,0.4);
+}
+
+/* ── SLIDES ───────────────────────────── */
+.slide {
+  display: none; flex-direction: column;
+  width: 100vw; height: 100vh;
+  overflow-y: auto;
+  animation: aparecer 0.45s ease;
+}
+.slide.active { display: flex; }
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide::-webkit-scrollbar { width: 5px; }
+.slide::-webkit-scrollbar-track { background: var(--crema-mid); }
+.slide::-webkit-scrollbar-thumb { background: var(--ji); border-radius: 10px; }
+
+/* ═══ PORTADA ══════════════════════════ */
+.slide-cover {
+  background: var(--tierra);
+  justify-content: center; align-items: center;
+  min-height: 100vh; position: relative; overflow: hidden;
+}
+.cover-pattern {
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 25% 65%, rgba(139,58,98,0.35) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 25%, rgba(192,82,30,0.25) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 55% 50%, rgba(107,124,69,0.12) 0%, transparent 60%);
+}
+.cover-hills { position: absolute; bottom: 0; left: 0; right: 0; height: 200px; z-index: 0; }
+.hill { position: absolute; bottom: 0; border-radius: 50% 50% 0 0; }
+.hill-1 { width: 65%; height: 150px; left: -8%; background: rgba(139,58,98,0.2); }
+.hill-2 { width: 50%; height: 120px; left: 35%; background: rgba(107,124,69,0.22); }
+.hill-3 { width: 40%; height: 100px; left: 62%; background: rgba(42,26,18,0.4); }
+
+.cover-content {
+  position: relative; z-index: 1;
+  text-align: center; padding: 2rem;
+  max-width: 880px; width: 100%;
+}
+.cover-chip {
+  display: inline-block;
+  background: rgba(245,201,122,0.12);
+  border: 1px solid rgba(245,201,122,0.35);
+  color: var(--flor);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase;
+  padding: 0.38rem 1.1rem; border-radius: 2px; margin-bottom: 1.6rem;
+}
+.cover-clase { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--ji2); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1rem; }
+.cover-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.3rem, 5.5vw, 4rem);
+  font-weight: 700; line-height: 1.1;
+  color: var(--crema); margin-bottom: 0.6rem;
+}
+.cover-title .hi { color: var(--ji2); font-style: italic; }
+.cover-subtitle {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
+  font-weight: 300; color: rgba(250,243,224,0.65);
+  margin-bottom: 2.2rem;
+}
+.cover-divider {
+  width: 70px; height: 2px; margin: 0 auto 2rem;
+  background: linear-gradient(90deg, var(--ji), var(--naranja), var(--flor));
+  box-shadow: 0 0 10px rgba(139,58,98,0.4);
+}
+.cover-tags { display: flex; gap: 0.7rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+.tag { padding: 0.35rem 0.9rem; border-radius: 20px; font-size: 0.78rem; font-weight: 500; }
+.tag-j { background: rgba(139,58,98,0.25); border: 1px solid rgba(139,58,98,0.5); color: var(--ji2); }
+.tag-n { background: rgba(107,124,69,0.22); border: 1px solid rgba(107,124,69,0.45); color: var(--oliva2); }
+.tag-t { background: rgba(192,82,30,0.22); border: 1px solid rgba(192,82,30,0.45); color: var(--naranja2); }
+.cover-meta { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: rgba(250,243,224,0.38); letter-spacing: 1px; }
+.cover-meta span { color: rgba(250,243,224,0.6); }
+
+/* ═══ SLIDE HEADER ══════════════════════ */
+.slide-header {
+  background: var(--crema);
+  border-bottom: 2px solid var(--crema-mid);
+  padding: 0.9rem 2rem;
+  display: flex; align-items: center; gap: 1rem; flex-shrink: 0;
+  position: relative;
+}
+.slide-header::after {
+  content: ''; position: absolute; bottom: -2px; left: 0;
+  width: 80px; height: 2px;
+  background: linear-gradient(90deg, var(--ji), var(--terracota));
+}
+.header-dot {
+  width: 40px; height: 40px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.dot-j { background: var(--ji-light); border: 1px solid var(--ji-border); }
+.dot-t { background: rgba(192,82,30,0.10); border: 1px solid rgba(192,82,30,0.28); }
+.dot-n { background: rgba(107,124,69,0.10); border: 1px solid rgba(107,124,69,0.28); }
+.dot-o { background: rgba(240,165,90,0.13); border: 1px solid rgba(240,165,90,0.35); }
+
+.header-text { flex: 1; }
+.header-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-soft); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 0.1rem; }
+.header-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 700; color: var(--text-dark); }
+.hj  { color: var(--ji); }
+.ht  { color: var(--terracota); }
+.hn  { color: var(--oliva); }
+.ho  { color: var(--naranja); }
+
+/* ═══ SLIDE BODY ════════════════════════ */
+.slide-body { flex: 1; padding: 1.4rem 2rem; background: var(--bg); overflow-y: auto; }
+
+/* GRID */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+.ga { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 1rem; }
+
+/* CARDS */
+.card { background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; padding: 1.1rem; transition: box-shadow 0.2s; }
+.card:hover { box-shadow: var(--shadow); }
+.card-j { border-top: 3px solid var(--ji); }
+.card-t { border-top: 3px solid var(--terracota); }
+.card-n { border-top: 3px solid var(--oliva); }
+.card-o { border-top: 3px solid var(--naranja); }
+.card-icon { font-size: 1.5rem; margin-bottom: 0.6rem; }
+.card-title { font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1rem; color: var(--text-dark); margin-bottom: 0.4rem; }
+.card-body { font-size: 0.84rem; color: var(--text-mid); line-height: 1.6; }
+
+/* BOXES */
+.box { border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 0.9rem; font-size: 0.87rem; line-height: 1.65; }
+.box-j { background: var(--ji-light); border-left: 4px solid var(--ji); }
+.box-t { background: rgba(192,82,30,0.08); border-left: 4px solid var(--terracota); }
+.box-n { background: rgba(107,124,69,0.09); border-left: 4px solid var(--oliva); }
+.box-o { background: rgba(240,165,90,0.11); border-left: 4px solid var(--naranja); }
+.box-c { background: var(--crema); border: 1px solid var(--crema-mid); }
+.box-lbl { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.4rem; opacity: 0.62; }
+
+/* SECTION TITLE */
+.sec { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 700; color: var(--text-dark); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+.sec::after { content: ''; flex: 1; height: 1px; background: var(--crema-mid); }
+
+/* LISTA */
+ul.li { list-style: none; padding: 0; }
+ul.li li { padding: 0.45rem 0 0.45rem 1.3rem; position: relative; font-size: 0.86rem; color: var(--text-mid); line-height: 1.55; border-bottom: 1px solid rgba(0,0,0,0.04); }
+ul.li li:last-child { border-bottom: none; }
+ul.li li::before { content: '◆'; position: absolute; left: 0; top: 0.52rem; color: var(--ji); font-size: 0.45rem; }
+ul.li.n li::before { color: var(--oliva); }
+ul.li.t li::before { color: var(--terracota); }
+strong { color: var(--text-dark); }
+
+/* TABLA */
+.tw { overflow-x: auto; border-radius: 10px; border: 1px solid var(--crema-mid); }
+table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+thead tr { background: var(--ji-light); border-bottom: 2px solid var(--ji); }
+thead th { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.79rem; color: var(--ji); text-align: left; padding: 0.7rem 1rem; letter-spacing: 0.5px; }
+tbody tr { border-bottom: 1px solid var(--crema-mid); transition: background 0.15s; }
+tbody tr:hover { background: rgba(139,58,98,0.04); }
+tbody td { padding: 0.6rem 1rem; color: var(--text-mid); vertical-align: middle; }
+tbody td:first-child { font-family: 'DM Mono', monospace; color: var(--ji); font-size: 0.78rem; }
+
+/* BADGE */
+.bdg { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.65rem; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+.bdg-j { background: var(--ji-light); color: var(--ji); border: 1px solid var(--ji-border); }
+.bdg-t { background: rgba(192,82,30,0.1); color: var(--terracota); border: 1px solid rgba(192,82,30,0.3); }
+.bdg-n { background: rgba(107,124,69,0.1); color: var(--musgo); border: 1px solid rgba(107,124,69,0.28); }
+.bdg-o { background: rgba(240,165,90,0.13); color: var(--siena); border: 1px solid rgba(240,165,90,0.35); }
+
+/* OBJETIVOS */
+.obj { display: flex; gap: 1rem; align-items: flex-start; padding: 0.85rem; background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; margin-bottom: 0.7rem; transition: border-color 0.2s; }
+.obj:hover { border-color: var(--ji2); }
+.obj-num { width: 32px; height: 32px; border-radius: 50%; background: var(--ji); color: var(--crema); font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 8px rgba(139,58,98,0.3); }
+.obj-text { font-size: 0.87rem; color: var(--text-mid); line-height: 1.55; padding-top: 0.15rem; }
+
+/* PASOS */
+.paso { display: flex; gap: 0; margin-bottom: 0.55rem; }
+.paso-n { width: 36px; font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--ji); padding-top: 0.5rem; flex-shrink: 0; text-align: center; }
+.paso-bar { width: 2px; background: linear-gradient(180deg, var(--ji), transparent); margin-right: 0.8rem; flex-shrink: 0; border-radius: 2px; }
+.paso-box { flex: 1; background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; padding: 0.75rem 1rem; }
+.paso-titulo { font-weight: 600; font-size: 0.93rem; color: var(--text-dark); margin-bottom: 0.25rem; }
+.paso-desc { font-size: 0.82rem; color: var(--text-mid); line-height: 1.55; }
+
+/* FORMULA */
+.formula { background: var(--tierra); color: var(--crema); border-radius: 10px; padding: 1.1rem 1.4rem; margin: 0.7rem 0; font-family: 'DM Mono', monospace; font-size: 0.88rem; text-align: center; letter-spacing: 1px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.formula::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--ji), var(--naranja), var(--flor)); }
+.formula .var { color: var(--ji2); }
+.formula .gk  { color: var(--flor); font-style: italic; }
+.formula .lbl { font-size: 0.63rem; color: rgba(250,243,224,0.45); display: block; margin-top: 0.4rem; letter-spacing: 2px; text-transform: uppercase; }
+
+/* TABLA CONTINGENCIA */
+.conting { border-radius: 10px; overflow: hidden; border: 1px solid var(--crema-mid); margin: 0.7rem 0; }
+.conting table thead tr { background: var(--ji-light); border-bottom: 2px solid var(--ji); }
+.conting table .obs { color: var(--text-dark); font-weight: 600; font-size: 0.82rem; }
+.conting table .esp { color: var(--ji2); font-size: 0.77rem; font-family: 'DM Mono',monospace; }
+.conting table tbody td { border-right: 1px solid var(--crema-mid); }
+.conting table tbody td:last-child { border-right: none; }
+
+/* EJERCICIO */
+.ej-box { background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; padding: 1.2rem; margin-bottom: 0.9rem; }
+.ej-head { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.7rem; flex-wrap: wrap; }
+.ej-tag { background: var(--ji-light); border: 1px solid var(--ji-border); color: var(--ji); font-family: 'DM Mono', monospace; font-size: 0.63rem; letter-spacing: 2px; padding: 0.2rem 0.6rem; border-radius: 3px; }
+.ej-q { font-weight: 600; font-size: 0.95rem; color: var(--text-dark); margin-bottom: 0.55rem; }
+.ej-opts { list-style: none; }
+.ej-opts li { padding: 0.5rem 0.85rem; border: 1px solid var(--crema-mid); border-radius: 7px; margin-bottom: 0.35rem; font-size: 0.84rem; color: var(--text-mid); cursor: pointer; transition: all 0.2s; display: flex; gap: 0.65rem; align-items: center; }
+.ej-opts li:hover { border-color: var(--ji); color: var(--text-dark); background: var(--ji-light); }
+.opt-l { width: 22px; height: 22px; border-radius: 50%; background: var(--crema-mid); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; color: var(--text-soft); }
+
+/* ACTIVIDAD EVAL */
+.eval { display: flex; gap: 0.8rem; align-items: flex-start; padding: 0.8rem; background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; margin-bottom: 0.6rem; }
+.eval-ico { width: 34px; height: 34px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+.eval-j { background: var(--ji-light); border: 1px solid var(--ji-border); }
+.eval-t { background: rgba(192,82,30,0.09); border: 1px solid rgba(192,82,30,0.22); }
+.eval-n { background: rgba(107,124,69,0.09); border: 1px solid rgba(107,124,69,0.22); }
+.eval-txt strong { font-size: 0.9rem; display: block; margin-bottom: 0.15rem; color: var(--text-dark); }
+.eval-txt p { font-size: 0.81rem; color: var(--text-mid); line-height: 1.5; }
+
+/* RECURSOS */
+.rec { display: flex; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--crema); border: 1px solid var(--crema-mid); border-radius: 10px; margin-bottom: 0.55rem; transition: border-color 0.2s; }
+.rec:hover { border-color: var(--ji); }
+.rec-ico { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+.rec-title { font-weight: 600; font-size: 0.91rem; margin-bottom: 0.15rem; color: var(--text-dark); }
+.rec-desc { font-size: 0.78rem; color: var(--text-soft); }
+.rec-url { font-family: 'DM Mono', monospace; font-size: 0.67rem; color: var(--ji); display: block; margin-top: 0.15rem; word-break: break-all; }
+
+/* CIERRE */
+.slide-cierre { background: var(--tierra); justify-content: center; align-items: center; min-height: 100vh; position: relative; overflow: hidden; }
+.cierre-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 65% 55% at 50% 40%, rgba(139,58,98,0.28) 0%, transparent 65%); z-index: 0; }
+.cierre-hills { position: absolute; bottom: 0; left: 0; right: 0; height: 180px; z-index: 0; }
+.cierre-content { position: relative; z-index: 1; padding: 2rem; max-width: 720px; text-align: center; }
+.sum-row { display: flex; gap: 0.5rem; margin-bottom: 0.45rem; font-size: 0.84rem; text-align: left; }
+.sum-k { width: 145px; font-family: 'DM Mono', monospace; font-size: 0.69rem; color: var(--ji2); flex-shrink: 0; padding-top: 0.1rem; }
+.sum-v { color: rgba(250,243,224,0.72); line-height: 1.5; flex: 1; }
+
+/* NAV */
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(250,243,224,0.97); border-top: 1px solid var(--crema-mid); padding: 0.55rem 1.5rem; display: flex; align-items: center; justify-content: space-between; z-index: 1000; backdrop-filter: blur(8px); }
+.nav-btn { display: flex; align-items: center; gap: 0.4rem; padding: 0.45rem 1rem; border-radius: 6px; font-family: 'Outfit', sans-serif; font-weight: 500; font-size: 0.83rem; border: 1px solid var(--crema-mid); background: var(--crema); color: var(--text-soft); cursor: pointer; transition: all 0.2s; }
+.nav-btn:hover:not(:disabled) { border-color: var(--ji); color: var(--ji); box-shadow: 0 2px 10px rgba(139,58,98,0.15); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+.ctr { font-family: 'DM Mono', monospace; font-size: 0.76rem; color: var(--text-soft); }
+.ctr span { color: var(--ji); font-size: 0.95rem; font-weight: 700; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 260px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--crema-mid); transition: all 0.2s; cursor: pointer; border: none; padding: 0; }
+.dot.active { background: var(--ji); transform: scale(1.35); box-shadow: 0 0 6px rgba(139,58,98,0.4); }
+.nav-sp { height: 68px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .slide-body { padding: 1rem; }
+  .slide-header { padding: 0.75rem 1rem; }
+  .g2,.g3 { grid-template-columns: 1fr; }
+  .cover-title { font-size: 2rem; }
+  .nav { padding: 0.45rem 0.8rem; }
+  .nav-btn { padding: 0.38rem 0.7rem; font-size: 0.76rem; }
+  .dots { max-width: 180px; }
+}
+@media (max-width: 480px) { .dots { display: none; } .cover-title { font-size: 1.7rem; } }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="pb"></div>
+
+<!-- ═══ SLIDE 1 — PORTADA ═══════════════════════ -->
+<div class="slide slide-cover active" id="s1">
+  <div class="cover-pattern"></div>
+  <div class="cover-hills">
+    <div class="hill hill-1"></div>
+    <div class="hill hill-2"></div>
+    <div class="hill hill-3"></div>
+  </div>
+  <div class="cover-content">
+    <div class="cover-chip">🌸 Bioestadística Aplicada</div>
+    <div class="cover-clase">Clase 2 de 2 · Unidad 4</div>
+    <h1 class="cover-title">
+      Distribución<br><span class="hi">Ji-Cuadrada (χ²)</span>
+    </h1>
+    <p class="cover-subtitle">Pruebas de independencia entre factores y bondad de ajuste:<br>el estadístico χ² y sus aplicaciones</p>
+    <div class="cover-divider"></div>
+    <div class="cover-tags">
+      <span class="tag tag-j">χ² Tema 4.6 — Dist. Ji-Cuadrada</span>
+      <span class="tag tag-n">🔗 Independencia de factores</span>
+      <span class="tag tag-t">✅ Bondad de ajuste</span>
+    </div>
+    <p class="cover-meta">Nivel Principiante &nbsp;|&nbsp; <span>Bioestadística Aplicada</span></p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ═══ SLIDE 2 — INTRODUCCIÓN ═══════════════════ -->
+<div class="slide" id="s2">
+  <div class="slide-header">
+    <div class="header-dot dot-j">🌄</div>
+    <div class="header-text">
+      <div class="header-label">Slide 02 · Introducción</div>
+      <div class="header-title">¿Qué es la distribución <span class="hj">Ji-Cuadrada</span>?</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2" style="margin-bottom:1rem">
+      <div>
+        <div class="box box-j">
+          <div class="box-lbl" style="color:var(--ji)">Contexto</div>
+          En capítulos anteriores probamos hipótesis sobre medias y proporciones usando distribuciones <strong>normal</strong> y <strong>t de Student</strong>. Ahora exploramos dos nuevas distribuciones: <strong>Ji-Cuadrada (χ²)</strong> y F, que permiten probar hipótesis sobre independencia entre variables y distribuciones de frecuencias.
+        </div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">¿Para qué se usa χ²?</div>
+          <ul class="li t" style="font-size:0.84rem">
+            <li>¿Son dos variables <strong>independientes</strong> entre sí?</li>
+            <li>¿Una muestra <strong>sigue una distribución</strong> específica? (Bondad de ajuste)</li>
+            <li>Siempre con datos <strong>de conteos/frecuencias</strong></li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Características de la distribución χ²</div>
+        <div class="card card-j" style="margin-bottom:0.7rem">
+          <div class="card-icon">📈</div>
+          <div class="card-title">Solo valores positivos</div>
+          <div class="card-body">A diferencia de la normal, χ² solo toma valores ≥ 0. La curva empieza en 0 y tiene cola larga hacia la derecha (asimétrica positiva).</div>
+        </div>
+        <div class="card card-t" style="margin-bottom:0.7rem">
+          <div class="card-icon">🔢</div>
+          <div class="card-title">Grados de libertad (df)</div>
+          <div class="card-body">Hay una familia de distribuciones χ², cada una definida por su número de <strong>grados de libertad (df)</strong>. A mayor df, la curva se aplana y se desplaza a la derecha.</div>
+        </div>
+        <div class="card card-n">
+          <div class="card-icon">➡️</div>
+          <div class="card-title">Prueba unilateral derecha</div>
+          <div class="card-body">La prueba χ² siempre es de <strong>cola derecha</strong>: rechazamos H₀ cuando el estadístico es muy grande (desviación grande entre observado y esperado).</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3 — OBJETIVOS ══════════════════════ -->
+<div class="slide" id="s3">
+  <div class="slide-header">
+    <div class="header-dot dot-t">🎯</div>
+    <div class="header-text">
+      <div class="header-label">Slide 03 · Objetivos</div>
+      <div class="header-title">¿Qué <span class="ht">aprenderás</span> en esta clase?</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="obj">
+      <div class="obj-num">1</div>
+      <div class="obj-text"><strong>Identificar las características de la distribución Ji-Cuadrada</strong>: forma asimétrica, valores positivos, familia de distribuciones por df.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-num" style="background:var(--terracota)">2</div>
+      <div class="obj-text"><strong>Construir tablas de contingencia</strong> y calcular frecuencias esperadas bajo el supuesto de independencia entre dos factores.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-num" style="background:var(--oliva)">3</div>
+      <div class="obj-text"><strong>Aplicar la prueba χ² de independencia</strong> en 5 pasos, determinando el valor crítico, la región de rechazo y la decisión estadística.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-num" style="background:var(--naranja)">4</div>
+      <div class="obj-text"><strong>Aplicar la prueba de bondad de ajuste χ²</strong> para verificar si una muestra sigue una distribución teórica dada.</div>
+    </div>
+    <div class="box box-j" style="margin-top:0.5rem">
+      <div class="box-lbl" style="color:var(--ji)">Tema de esta sesión</div>
+      <strong>4.6 Distribución Ji-Cuadrada</strong> — Prueba de independencia · Bondad de ajuste · Grados de libertad · Tabla χ²
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 4 — TABLA CONTINGENCIA ════════════ -->
+<div class="slide" id="s4">
+  <div class="slide-header">
+    <div class="header-dot dot-j">📋</div>
+    <div class="header-text">
+      <div class="header-label">Slide 04 · Tema 4.6</div>
+      <div class="header-title">Tablas de <span class="hj">Contingencia</span> y Frecuencias Esperadas</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="sec">¿Qué es una tabla de contingencia?</div>
+        <div class="box box-j">
+          Organiza los <strong>conteos observados</strong> de dos factores simultáneamente. El Factor 1 define las filas y el Factor 2 define las columnas. Si el Factor 1 tiene I niveles y el Factor 2 tiene J niveles, resulta una tabla <strong>I × J</strong>.
+        </div>
+        <div class="sec">Frecuencia Esperada (E)</div>
+        <div class="formula">
+          E = <span class="var">(R × C)</span> / <span class="gk">n</span>
+          <span class="lbl">R = total fila · C = total columna · n = muestra total</span>
+        </div>
+        <div class="box box-n">
+          <div class="box-lbl" style="color:var(--oliva)">Intuición</div>
+          Si los factores son independientes, la probabilidad conjunta es el producto de las probabilidades marginales. La frecuencia esperada es lo que <em>deberíamos ver</em> si no hay relación entre las variables.
+        </div>
+      </div>
+      <div>
+        <div class="sec">Ejemplo: Género y Frecuencia Cardíaca</div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">Contexto</div>
+          Se estudia si el género del bebé se relaciona con su frecuencia cardíaca. n = 40 bebés. Punto de corte: 145 lpm.
+        </div>
+        <div class="conting">
+          <table>
+            <thead><tr><th></th><th>FC Baja (&lt;145)</th><th>FC Alta (≥145)</th><th>Total fila</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Niña</td>
+                <td><div class="obs">O = 11</div><div class="esp">E = 12.6</div></td>
+                <td><div class="obs">O = 7</div><div class="esp">E = 5.4</div></td>
+                <td><strong>R = 18</strong></td>
+              </tr>
+              <tr>
+                <td>Niño</td>
+                <td><div class="obs">O = 17</div><div class="esp">E = 15.4</div></td>
+                <td><div class="obs">O = 5</div><div class="esp">E = 6.6</div></td>
+                <td><strong>R = 22</strong></td>
+              </tr>
+              <tr>
+                <td><strong>Total col.</strong></td><td><strong>C = 28</strong></td><td><strong>C = 12</strong></td><td><strong>n = 40</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-o" style="margin-top:0.5rem">
+          <div class="box-lbl" style="color:var(--siena)">Cálculo E (ejemplo)</div>
+          Niña + FC Baja: E = (18 × 28) / 40 = <strong>12.6</strong><br>
+          Niña + FC Alta: E = (18 × 12) / 40 = <strong>5.4</strong>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 5 — ESTADÍSTICO χ² ════════════════ -->
+<div class="slide" id="s5">
+  <div class="slide-header">
+    <div class="header-dot dot-j">χ²</div>
+    <div class="header-text">
+      <div class="header-label">Slide 05 · Tema 4.6</div>
+      <div class="header-title">El Estadístico <span class="hj">χ²</span> y los Grados de Libertad</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="sec">Estadístico de prueba</div>
+        <div class="formula">
+          χ² = Σ <span class="var">(O − E)²</span> / <span class="gk">E</span>
+          <span class="lbl">suma sobre todas las celdas de la tabla</span>
+        </div>
+        <div class="box box-j">
+          <div class="box-lbl" style="color:var(--ji)">Interpretación</div>
+          Mide qué tan diferentes son los valores <strong>Observados (O)</strong> de los <strong>Esperados (E)</strong>. Si son muy parecidos → χ² pequeño → no rechazamos H₀ (independencia). Si difieren mucho → χ² grande → rechazamos H₀.
+        </div>
+        <div class="sec">Grados de libertad</div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">Prueba de Independencia (I×J)</div>
+          <div class="formula" style="padding:0.7rem 1rem;font-size:0.85rem">
+            df = <span class="var">(I − 1)</span> × <span class="var">(J − 1)</span>
+            <span class="lbl">I = niveles Factor 1 · J = niveles Factor 2</span>
+          </div>
+        </div>
+        <div class="box box-n">
+          <div class="box-lbl" style="color:var(--oliva)">Bondad de ajuste (I categorías)</div>
+          <div class="formula" style="padding:0.7rem 1rem;font-size:0.85rem">
+            df = <span class="var">I − 1</span>
+            <span class="lbl">I = número de categorías de la variable</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Condición de aplicabilidad</div>
+        <div class="box box-o">
+          <div class="box-lbl" style="color:var(--siena)">⚠️ Requisito importante</div>
+          La frecuencia <strong>esperada (E) de cada celda debe ser ≥ 5</strong> para que la distribución χ² sea una buena aproximación. Si no se cumple, se deben agrupar categorías o usar otro método.
+        </div>
+        <div class="sec">Ejemplo resuelto: Género y FC</div>
+        <div class="box box-c">
+          χ² = (11−12.6)²/12.6 + (7−5.4)²/5.4 + (17−15.4)²/15.4 + (5−6.6)²/6.6<br><br>
+          = 0.203 + 0.474 + 0.166 + 0.388 = <strong style="color:var(--ji)">χ² = 1.231</strong><br><br>
+          df = (2−1)×(2−1) = <strong>1</strong><br>
+          Valor crítico α=0.10: χ²₀.₁₀ = <strong>2.706</strong><br><br>
+          Como 1.231 &lt; 2.706 → <strong style="color:var(--oliva)">No rechazar H₀</strong><br>
+          Conclusión: no hay evidencia de relación entre género y FC.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 6 — 5 PASOS ════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="slide-header">
+    <div class="header-dot dot-t">📋</div>
+    <div class="header-text">
+      <div class="header-label">Slide 06 · Tema 4.6</div>
+      <div class="header-title">Procedimiento en <span class="ht">5 Pasos</span>: Prueba de Independencia</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="paso">
+      <div class="paso-n">01</div>
+      <div class="paso-bar"></div>
+      <div class="paso-box">
+        <div class="paso-titulo">Plantear hipótesis</div>
+        <div class="paso-desc"><strong>H₀:</strong> Los dos factores son independientes (no hay relación).<br><strong>Ha:</strong> Los dos factores NO son independientes (sí hay relación). Las hipótesis se expresan en palabras, no en símbolos matemáticos.</div>
+      </div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">02</div>
+      <div class="paso-bar"></div>
+      <div class="paso-box">
+        <div class="paso-titulo">Identificar la distribución y condiciones</div>
+        <div class="paso-desc">Se usa la distribución <strong>χ²</strong>. Verificar que cada E ≥ 5. Calcular df = (I−1)×(J−1). Establecer el nivel de significancia α.</div>
+      </div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">03</div>
+      <div class="paso-bar"></div>
+      <div class="paso-box">
+        <div class="paso-titulo">Calcular el estadístico de prueba</div>
+        <div class="paso-desc">Construir la tabla de contingencia → calcular E = (R×C)/n para cada celda → calcular χ² = Σ(O−E)²/E sumando todas las celdas.</div>
+      </div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">04</div>
+      <div class="paso-bar"></div>
+      <div class="paso-box">
+        <div class="paso-titulo">Definir la región de rechazo</div>
+        <div class="paso-desc">La prueba es siempre de <strong>cola derecha</strong>. Buscar el valor crítico χ²α en la tabla con los df calculados. Región de rechazo: [χ²α, ∞).</div>
+      </div>
+    </div>
+    <div class="paso">
+      <div class="paso-n">05</div>
+      <div class="paso-bar" style="background:linear-gradient(180deg,var(--ji),transparent)"></div>
+      <div class="paso-box">
+        <div class="paso-titulo">Tomar la decisión y concluir</div>
+        <div class="paso-desc">Si χ²calculado &gt; χ²crítico → <strong style="color:var(--ji)">Rechazar H₀</strong> (hay evidencia de dependencia). Si χ²calculado ≤ χ²crítico → <strong style="color:var(--oliva)">No rechazar H₀</strong>. Siempre concluir en el contexto del problema.</div>
+      </div>
+    </div>
+    <div class="box box-j" style="margin-top:0.5rem">
+      <div class="box-lbl" style="color:var(--ji)">Nota importante</div>
+      El mismo procedimiento de 5 pasos funciona para la prueba de bondad de ajuste; solo cambia la fórmula de df (I−1 en lugar de (I−1)×(J−1)).
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 7 — EJEMPLO COMPLETO ══════════════ -->
+<div class="slide" id="s7">
+  <div class="slide-header">
+    <div class="header-dot dot-o">💡</div>
+    <div class="header-text">
+      <div class="header-label">Slide 07 · Ejemplo Completo</div>
+      <div class="header-title">Ejemplo: <span class="ho">CEE vs GPA</span> — Independencia</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="box box-o" style="margin-bottom:0.9rem">
+      <div class="box-lbl" style="color:var(--siena)">Contexto del problema</div>
+      Un investigador quiere saber si los puntajes de un examen de admisión universitaria (CEE) predicen el rendimiento académico (GPA). Selecciona n=100 estudiantes. α = 1%.
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">Tabla de contingencia</div>
+        <div class="conting">
+          <table>
+            <thead><tr><th>CEE</th><th>GPA &lt;2.7</th><th>GPA 2.7-3.2</th><th>GPA &gt;3.2</th><th>Total</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>&lt;1800</td>
+                <td><div class="obs">O=35</div><div class="esp">E=21.32</div></td>
+                <td><div class="obs">O=12</div><div class="esp">E=18.72</div></td>
+                <td><div class="obs">O=5</div><div class="esp">E=11.96</div></td>
+                <td><strong>52</strong></td>
+              </tr>
+              <tr>
+                <td>≥1800</td>
+                <td><div class="obs">O=6</div><div class="esp">E=19.68</div></td>
+                <td><div class="obs">O=24</div><div class="esp">E=17.28</div></td>
+                <td><div class="obs">O=18</div><div class="esp">E=11.04</div></td>
+                <td><strong>48</strong></td>
+              </tr>
+              <tr><td><strong>Total</strong></td><td><strong>41</strong></td><td><strong>36</strong></td><td><strong>23</strong></td><td><strong>100</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Resolución paso a paso</div>
+        <div class="box box-j">
+          <div class="box-lbl" style="color:var(--ji)">Paso 1 — Hipótesis</div>
+          H₀: CEE y GPA son independientes<br>Ha: CEE y GPA NO son independientes
+        </div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">Paso 2 — Distribución</div>
+          Distribución χ² · I=2, J=3 → df=(2−1)×(3−1)=<strong>2</strong>
+        </div>
+        <div class="box box-n">
+          <div class="box-lbl" style="color:var(--oliva)">Paso 3 — Estadístico</div>
+          χ² = (35−21.32)²/21.32 + … = <strong style="color:var(--ji)">31.75</strong>
+        </div>
+        <div class="box box-o">
+          <div class="box-lbl" style="color:var(--siena)">Paso 4 — Región de rechazo</div>
+          χ²₀.₀₁ con df=2 → valor crítico = <strong>9.210</strong><br>
+          Región: [9.210, ∞)
+        </div>
+        <div class="box box-j">
+          <div class="box-lbl" style="color:var(--ji)">Paso 5 — Decisión</div>
+          31.75 &gt; 9.210 → <strong>Rechazar H₀</strong><br>
+          Conclusión: el CEE sí predice el GPA al 1% de significancia.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 8 — BONDAD DE AJUSTE ══════════════ -->
+<div class="slide" id="s8">
+  <div class="slide-header">
+    <div class="header-dot dot-n">🎲</div>
+    <div class="header-text">
+      <div class="header-label">Slide 08 · Tema 4.6</div>
+      <div class="header-title">Prueba de <span class="hn">Bondad de Ajuste</span> χ²</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="g2">
+      <div>
+        <div class="sec">¿Qué prueba?</div>
+        <div class="box box-n">
+          Verifica si una muestra proviene de una población con una <strong>distribución teórica específica</strong>. Se comparan frecuencias observadas contra las esperadas según la distribución asumida.
+        </div>
+        <div class="sec">Fórmula de frecuencia esperada</div>
+        <div class="formula">
+          E<sub>i</sub> = <span class="var">n × p<sub>i</sub></span>
+          <span class="lbl">n = tamaño de muestra · pᵢ = probabilidad teórica</span>
+        </div>
+        <div class="formula" style="margin-top:0.5rem">
+          df = <span class="var">I − 1</span>
+          <span class="lbl">I = número de categorías</span>
+        </div>
+        <div class="box box-t">
+          <div class="box-lbl" style="color:var(--terracota)">Hipótesis</div>
+          <strong>H₀:</strong> La distribución asumida para X es válida<br>
+          <strong>Ha:</strong> La distribución asumida para X no es válida
+        </div>
+      </div>
+      <div>
+        <div class="sec">Ejemplo: ¿El dado es justo?</div>
+        <div class="box box-o">
+          <div class="box-lbl" style="color:var(--siena)">n = 60 lanzamientos · pᵢ = 1/6 para cada cara</div>
+          Frecuencia esperada por cara: E = 60 × 1/6 = <strong>10</strong>
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Cara</th><th>Observado (O)</th><th>Esperado (E)</th><th>(O−E)²/E</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>9</td><td>10</td><td>0.10</td></tr>
+              <tr><td>2</td><td>15</td><td>10</td><td>2.50</td></tr>
+              <tr><td>3</td><td>9</td><td>10</td><td>0.10</td></tr>
+              <tr><td>4</td><td>8</td><td>10</td><td>0.40</td></tr>
+              <tr><td>5</td><td>6</td><td>10</td><td>1.60</td></tr>
+              <tr><td>6</td><td>13</td><td>10</td><td>0.90</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-j" style="margin-top:0.6rem">
+          χ² = <strong>5.60</strong> · df = 5 · χ²₀.₁₀ = 9.236<br>
+          5.60 &lt; 9.236 → <strong style="color:var(--oliva)">No rechazar H₀</strong> · El dado parece justo.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 9 — COMPARATIVA ═══════════════════ -->
+<div class="slide" id="s9">
+  <div class="slide-header">
+    <div class="header-dot dot-j">📊</div>
+    <div class="header-text">
+      <div class="header-label">Slide 09 · Resumen Comparativo</div>
+      <div class="header-title">Independencia vs. <span class="hj">Bondad de Ajuste</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="sec">Comparativa de las dos pruebas χ²</div>
+    <div class="tw" style="margin-bottom:1.2rem">
+      <table>
+        <thead><tr><th>Aspecto</th><th>Prueba de Independencia</th><th>Bondad de Ajuste</th></tr></thead>
+        <tbody>
+          <tr><td>¿Qué prueba?</td><td>Si dos factores son independientes</td><td>Si una muestra sigue distribución teórica</td></tr>
+          <tr><td>Datos</td><td>Tabla de contingencia I×J</td><td>Frecuencias de I categorías</td></tr>
+          <tr><td>E se calcula</td><td>E = (R×C)/n</td><td>E = n × pᵢ</td></tr>
+          <tr><td>df</td><td>(I−1)×(J−1)</td><td>I−1</td></tr>
+          <tr><td>Estadístico</td><td>χ² = Σ(O−E)²/E</td><td>χ² = Σ(O−E)²/E</td></tr>
+          <tr><td>Tipo de cola</td><td>Derecha (unilateral)</td><td>Derecha (unilateral)</td></tr>
+          <tr><td>Condición E</td><td>Toda E ≥ 5</td><td>Toda E ≥ 5</td></tr>
+          <tr><td>Ejemplo</td><td>CEE vs GPA, género vs FC</td><td>Dado justo, distribución étnica</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ga">
+      <div class="card card-j">
+        <div class="card-icon">🔗</div>
+        <div class="card-title">Independencia</div>
+        <div class="card-body">Dos variables categóricas. Tabla I×J. df=(I−1)(J−1). Pregunta: ¿se relacionan?</div>
+      </div>
+      <div class="card card-t">
+        <div class="card-icon">✅</div>
+        <div class="card-title">Bondad de ajuste</div>
+        <div class="card-body">Una variable. I categorías. df=I−1. Pregunta: ¿la muestra sigue esta distribución?</div>
+      </div>
+      <div class="card card-n">
+        <div class="card-icon">⚠️</div>
+        <div class="card-title">Siempre</div>
+        <div class="card-body">Misma fórmula χ²=Σ(O−E)²/E. Siempre cola derecha. Siempre E≥5 en cada celda.</div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 10 — EJERCICIO PRÁCTICO ════════════ -->
+<div class="slide" id="s10">
+  <div class="slide-header">
+    <div class="header-dot dot-o">🌸</div>
+    <div class="header-text">
+      <div class="header-label">Slide 10 · Ejercicio Práctico</div>
+      <div class="header-title">¡A <span class="ho">practicar</span>! Preguntas de repaso</div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="ej-box">
+      <div class="ej-head">
+        <span class="ej-tag">PREGUNTA 1</span>
+        <span class="bdg bdg-j">Distribución χ²</span>
+      </div>
+      <div class="ej-q">Una tabla de contingencia 3×4 se usa en una prueba χ² de independencia. ¿Cuántos grados de libertad tiene el estadístico?</div>
+      <ul class="ej-opts">
+        <li><span class="opt-l">A</span> 12</li>
+        <li><span class="opt-l">B</span> 6 ✓ — df = (3−1)×(4−1) = 2×3 = 6</li>
+        <li><span class="opt-l">C</span> 7</li>
+        <li><span class="opt-l">D</span> 11</li>
+      </ul>
+    </div>
+    <div class="ej-box">
+      <div class="ej-head">
+        <span class="ej-tag">PREGUNTA 2</span>
+        <span class="bdg bdg-t">Frecuencia Esperada</span>
+      </div>
+      <div class="ej-q">En una tabla de contingencia, una celda tiene total fila R=40, total columna C=30 y n=150. ¿Cuál es su frecuencia esperada E?</div>
+      <ul class="ej-opts">
+        <li><span class="opt-l">A</span> 12</li>
+        <li><span class="opt-l">B</span> 8 ✓ — E = (40×30)/150 = 1200/150 = 8</li>
+        <li><span class="opt-l">C</span> 70</li>
+        <li><span class="opt-l">D</span> 5</li>
+      </ul>
+    </div>
+    <div class="ej-box">
+      <div class="ej-head">
+        <span class="ej-tag">PREGUNTA 3</span>
+        <span class="bdg bdg-n">Decisión Estadística</span>
+      </div>
+      <div class="ej-q">En una prueba χ² de bondad de ajuste con df=5 y α=0.05, el valor calculado es χ²=11.07. El valor crítico es 11.071. ¿Cuál es la decisión correcta?</div>
+      <ul class="ej-opts">
+        <li><span class="opt-l">A</span> No rechazar H₀ porque χ²calc &lt; χ²crítico</li>
+        <li><span class="opt-l">B</span> Rechazar H₀ porque χ²calc ≥ χ²crítico ✓</li>
+        <li><span class="opt-l">C</span> Nunca se rechaza con df=5</li>
+        <li><span class="opt-l">D</span> La prueba es bilateral</li>
+      </ul>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 11 — ACTIVIDAD EVALUABLE ══════════ -->
+<div class="slide" id="s11">
+  <div class="slide-header">
+    <div class="header-dot dot-j">📝</div>
+    <div class="header-text">
+      <div class="header-label">Slide 11 · Actividad Evaluable</div>
+      <div class="header-title">Actividad: <span class="hj">Prueba χ² de Independencia</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="box box-j" style="margin-bottom:1.1rem">
+      <div class="box-lbl" style="color:var(--ji)">⚡ Instrucciones generales</div>
+      Aplica la prueba χ² de independencia al caso asignado, siguiendo los <strong>5 pasos</strong> completos. Muestra todos los cálculos. Trabajo en parejas. Tiempo: <strong>25 minutos</strong> en clase + entrega escrita.
+    </div>
+    <div class="eval">
+      <div class="eval-ico eval-j">1️⃣</div>
+      <div class="eval-txt">
+        <strong>Plantear las hipótesis</strong>
+        <p>Escribe H₀ y Ha en palabras relacionadas con el problema. Indica el nivel de significancia α que usarás (elige entre 5% o 1%). Justifica tu elección.</p>
+      </div>
+    </div>
+    <div class="eval">
+      <div class="eval-ico eval-t">2️⃣</div>
+      <div class="eval-txt">
+        <strong>Construir la tabla y calcular E</strong>
+        <p>Con los datos del caso: organiza la tabla de contingencia, calcula todas las frecuencias esperadas E=(R×C)/n y verifica que cada E ≥ 5. Calcula los df.</p>
+      </div>
+    </div>
+    <div class="eval">
+      <div class="eval-ico eval-n">3️⃣</div>
+      <div class="eval-txt">
+        <strong>Calcular χ² y tomar la decisión</strong>
+        <p>Calcula el estadístico χ²=Σ(O−E)²/E, busca el valor crítico en la tabla, define la región de rechazo e indica claramente si rechazas o no H₀ con su conclusión en contexto.</p>
+      </div>
+    </div>
+    <div class="g2" style="margin-top:0.5rem">
+      <div class="box box-n">
+        <div class="box-lbl" style="color:var(--oliva)">Criterios de evaluación</div>
+        <ul class="li n" style="font-size:0.8rem">
+          <li>Hipótesis correctamente planteadas</li>
+          <li>Tabla de contingencia completa (O y E)</li>
+          <li>Cálculo correcto de df y χ²</li>
+          <li>Decisión justificada con valor crítico</li>
+          <li>Conclusión en el contexto del problema</li>
+        </ul>
+      </div>
+      <div class="box box-j">
+        <div class="box-lbl" style="color:var(--ji)">Caso asignado (datos del caso)</div>
+        <p style="font-size:0.82rem;color:var(--text-mid)">Una encuesta a 200 estudiantes clasifica su <strong>tipo de dieta</strong> (vegetariana / mixta) y su <strong>nivel de actividad física</strong> (bajo / medio / alto). Los datos se distribuyen en la tabla que el docente entregará en hoja aparte. Determina si existe asociación entre dieta y actividad física.</p>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 12 — RECURSOS ══════════════════════ -->
+<div class="slide" id="s12">
+  <div class="slide-header">
+    <div class="header-dot dot-n">📚</div>
+    <div class="header-text">
+      <div class="header-label">Slide 12 · Recursos y Bibliografía</div>
+      <div class="header-title">Fuentes y <span class="hn">Material de Apoyo</span></div>
+    </div>
+  </div>
+  <div class="slide-body">
+    <div class="sec">Bibliografía principal</div>
+    <div class="rec">
+      <div class="rec-ico">📖</div>
+      <div>
+        <div class="rec-title" style="color:var(--ji)">Introductory Statistics — Saylor Foundation</div>
+        <div class="rec-desc">Capítulo 11: Chi-Square Tests and F-Tests. Secciones 11.1 (independencia) y 11.2 (bondad de ajuste). Incluye ejemplos paso a paso y tablas de valores críticos.</div>
+        <span class="rec-url">https://saylordotorg.github.io/text_introductory-statistics/s15-chi-square-tests-and-f-tests.html</span>
+      </div>
+    </div>
+    <div class="rec">
+      <div class="rec-ico">🏫</div>
+      <div>
+        <div class="rec-title" style="color:var(--oliva)">Conceptos Básicos de Estadística — UNAM</div>
+        <div class="rec-desc">Material de apoyo sobre pruebas de hipótesis y distribuciones de muestreo. Ideal para reforzar los fundamentos teóricos de la distribución χ².</div>
+        <span class="rec-url">https://www.paginaspersonales.unam.mx/files/977/Conceptos_basicos_de_estadistica.pdf</span>
+      </div>
+    </div>
+    <div class="sec" style="margin-top:0.5rem">Recursos complementarios</div>
+    <div class="g2">
+      <div>
+        <div class="rec">
+          <div class="rec-ico">🧮</div>
+          <div>
+            <div class="rec-title">Calculadora χ² en línea</div>
+            <div class="rec-desc">Herramienta interactiva para ingresar tablas de contingencia y obtener χ² calculado, df y p-valor automáticamente. Útil para verificar resultados.</div>
+            <span class="rec-url">socscistatistics.com/tests/chisquare</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="rec">
+          <div class="rec-ico">🎬</div>
+          <div>
+            <div class="rec-title">Khan Academy — Prueba χ²</div>
+            <div class="rec-desc">Videos explicativos paso a paso sobre tablas de contingencia, cálculo del estadístico y toma de decisión en la prueba Ji-Cuadrada.</div>
+            <span class="rec-url">khanacademy.org/math/statistics-probability/inference-categorical-data-chi-square-tests</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 13 — CIERRE ════════════════════════ -->
+<div class="slide slide-cover slide-cierre" id="s13">
+  <div class="cierre-bg"></div>
+  <div class="cover-hills cierre-hills">
+    <div class="hill hill-1"></div>
+    <div class="hill hill-2"></div>
+    <div class="hill hill-3"></div>
+  </div>
+  <div class="cierre-content">
+    <div class="cover-chip" style="margin-bottom:1.3rem">✅ Clase 2 — Completada</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.8rem);font-weight:700;color:var(--crema);margin-bottom:0.4rem">
+      Resumen de <span style="color:var(--ji2);font-style:italic">lo aprendido</span>
+    </h2>
+    <div class="cover-divider"></div>
+    <div style="margin-bottom:1.4rem">
+      <div class="sum-row"><div class="sum-k">Distribución χ²</div><div class="sum-v">Solo valores ≥ 0 · asimétrica positiva · familia por df · cola derecha</div></div>
+      <div class="sum-row"><div class="sum-k">Tabla contingencia</div><div class="sum-v">Organiza conteos de 2 factores · E = (R×C)/n · condición E ≥ 5</div></div>
+      <div class="sum-row"><div class="sum-k">Estadístico</div><div class="sum-v">χ² = Σ(O−E)²/E · mide desviación observado vs esperado</div></div>
+      <div class="sum-row"><div class="sum-k">Independencia</div><div class="sum-v">df = (I−1)(J−1) · H₀: independencia · rechazar si χ² > χ²crítico</div></div>
+      <div class="sum-row"><div class="sum-k">Bondad de ajuste</div><div class="sum-v">E = n·pᵢ · df = I−1 · prueba si muestra sigue dist. teórica</div></div>
+      <div class="sum-row"><div class="sum-k">5 pasos</div><div class="sum-v">Hipótesis → dist./condición → estadístico → región → decisión</div></div>
+    </div>
+    <div style="display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.4rem">
+      <span class="tag tag-j">χ² Dist. Ji-Cuadrada (4.6)</span>
+      <span class="tag tag-n">🔗 Independencia</span>
+      <span class="tag tag-t">✅ Bondad de ajuste</span>
+    </div>
+    <p style="font-size:0.78rem;color:rgba(250,243,224,0.42);font-family:'DM Mono',monospace">
+      Unidad 4 — Bioestadística Aplicada 🌸
+    </p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ═══ NAV ══════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nav-btn" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-center">
+    <div class="ctr">Diapositiva <span id="cn">1</span> / <span id="tn">13</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nav-btn" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+document.getElementById('tn').textContent = N;
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i===0?' active':'');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+function update() {
+  slides.forEach((s,i) => { s.classList.toggle('active', i===cur); s.scrollTop=0; });
+  dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+  document.getElementById('cn').textContent = cur+1;
+  document.getElementById('pb-btn').disabled = cur===0;
+  document.getElementById('nb-btn').disabled = cur===N-1;
+  document.getElementById('pb').style.width = ((cur+1)/N*100)+'%';
+}
+function go(d) { const n=cur+d; if(n>=0&&n<N){cur=n;update();} }
+function goTo(i) { cur=i; update(); }
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') go(-1);
+});
+update();
+</script>
+</body>
+</html>
