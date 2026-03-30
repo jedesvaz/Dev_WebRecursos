@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Topic 8 · Presentation Skills & Past Tenses</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/*
+  ══════════════════════════════════════════════════
+  PALETA · COLONIA NORTEÑA MEXICANA
+  ── Pavimento: gris concreto desgastado
+  ── Zacate verde: verde brillante fresco
+  ── Zacate seco: amarillo paja apagado
+  ── Adobe: marrón tierra cálido
+  ── Pintura llamativa: magenta/rosa intenso (la
+     barda pintada de algún negocio del barrio)
+  ── Extras: cielo azul medio, blanco cal
+  ══════════════════════════════════════════════════
+*/
+:root{
+  --pavimento:    #9E9B90;
+  --pavimento-d:  #6E6B60;
+  --pavimento-l:  #D4D0C4;
+  --pav-bg:       #E8E4DA;
+
+  --zacate:       #5C8A2E;
+  --zacate-d:     #3D6018;
+  --zacate-l:     #A8C878;
+
+  --seco:         #C8A83C;
+  --seco-d:       #9A7A18;
+  --seco-l:       #E8D080;
+  --seco-pale:    #F4EAC0;
+
+  --adobe:        #8C5A30;
+  --adobe-d:      #5A3210;
+  --adobe-l:      #C4885A;
+  --adobe-pale:   #F0DCC8;
+
+  --pintura:      #D4206A;   /* magenta vivido */
+  --pintura-d:    #9A1248;
+  --pintura-l:    #F070AA;
+
+  --cal:          #F8F4EC;
+  --cielo:        #5580A8;
+
+  --text:         #2A2018;
+  --text-mid:     #4E3A28;
+  --text-light:   #7A6050;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Libre Baskerville',serif;
+  background:var(--pav-bg);
+  color:var(--text);
+  overflow:hidden;
+}
+
+/* Textura de barda pintada —líneas horizontales irregulares */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 48px,
+      rgba(158,155,144,.07) 48px,
+      rgba(158,155,144,.07) 49px
+    );
+  pointer-events:none;z-index:0;
+}
+
+.container{width:100vw;height:100vh;position:relative;z-index:1}
+
+/* ═══════════════════════════
+   SLIDES
+═══════════════════════════ */
+.slide{
+  display:none;width:100%;height:100%;
+  padding:3rem 6rem;
+  flex-direction:column;
+  position:relative;
+}
+.slide.active{display:flex}
+
+/* Franja de barda pintada — izquierda */
+.slide:not(.cover)::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:12px;
+  background:var(--pintura);
+}
+.slide:not(.cover)::after{
+  content:'';
+  position:absolute;
+  left:12px;top:0;bottom:0;
+  width:6px;
+  background:var(--seco);
+}
+
+/* ═══════════════════════════
+   PORTADA
+═══════════════════════════ */
+.cover{
+  background:var(--adobe-d);
+  justify-content:flex-end;
+  align-items:flex-start;
+  padding:0;
+  overflow:hidden;
+}
+
+/* Muro de adobe — bloques CSS */
+.cover-wall{
+  position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      var(--adobe-d) 0px,
+      var(--adobe-d) 38px,
+      rgba(0,0,0,.18) 38px,
+      rgba(0,0,0,.18) 40px
+    );
+}
+.cover-wall::before{
+  content:'';
+  position:absolute;inset:0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 118px,
+      rgba(0,0,0,.12) 118px,
+      rgba(0,0,0,.12) 120px
+    );
+}
+
+/* Banda de pintura llamativa — como barda de negocio */
+.cover-banda{
+  position:absolute;
+  left:0;right:0;
+  top:0;height:30%;
+  background:var(--pintura);
+  display:flex;align-items:center;
+  padding:0 5rem;
+}
+.cover-banda::after{
+  content:'';
+  position:absolute;bottom:-14px;left:0;right:0;
+  height:14px;
+  background:var(--seco-d);
+}
+
+.cover-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:rgba(248,244,236,.75);
+  font-weight:700;
+}
+
+.cover-content{
+  position:relative;z-index:1;
+  padding:3rem 5rem 4rem;
+  display:flex;flex-direction:column;
+  justify-content:flex-end;
+  height:100%;
+}
+
+.cover h1{
+  font-family:'Unbounded',sans-serif;
+  font-size:3.8rem;
+  font-weight:900;
+  color:var(--cal);
+  line-height:1.05;
+  letter-spacing:-1.5px;
+  margin-top:2rem;
+}
+.cover h1 .accent{
+  color:var(--seco-l);
+  display:block;
+  font-size:1.9rem;
+  font-weight:400;
+  letter-spacing:-0.5px;
+  margin-top:.5rem;
+}
+
+.cover-rule{
+  width:100px;height:5px;
+  background:linear-gradient(90deg,var(--zacate),var(--seco-l),var(--pintura));
+  margin:1.8rem 0;
+}
+
+.cover .sub{
+  font-family:'Libre Baskerville',serif;
+  font-size:1.05rem;
+  color:rgba(248,244,236,.7);
+  font-style:italic;
+  margin-bottom:.4rem;
+}
+.cover .meta{
+  font-family:'Space Mono',monospace;
+  font-size:.75rem;
+  color:rgba(200,168,58,.7);
+  margin-top:1rem;
+  letter-spacing:1px;
+}
+.cover .hint{
+  font-family:'Space Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:2px;
+  color:rgba(248,244,236,.3);
+  margin-top:2.5rem;
+  text-transform:uppercase;
+}
+
+/* Zacate SVG — base */
+.cover-grass{
+  position:absolute;
+  bottom:0;left:0;right:0;height:90px;
+  z-index:2;pointer-events:none;
+}
+
+/* ═══════════════════════════
+   SLIDE HEADER
+═══════════════════════════ */
+.slide-header{
+  flex-shrink:0;
+  margin-bottom:1.6rem;
+  padding-bottom:1rem;
+  border-bottom:3px solid var(--pavimento-l);
+  display:flex;align-items:flex-end;gap:1.2rem;
+}
+.chip{
+  font-family:'Space Mono',monospace;
+  font-size:.62rem;letter-spacing:3px;
+  font-weight:700;text-transform:uppercase;
+  padding:.3rem .9rem;border-radius:2px;
+  flex-shrink:0;white-space:nowrap;
+  background:var(--adobe);color:var(--cal);
+}
+.chip.verde  {background:var(--zacate-d);color:var(--cal)}
+.chip.seco   {background:var(--seco-d);color:var(--cal)}
+.chip.pintura{background:var(--pintura);color:#fff}
+.chip.cielo  {background:var(--cielo);color:#fff}
+.chip.pav    {background:var(--pavimento-d);color:var(--cal)}
+
+h2{
+  font-family:'Unbounded',sans-serif;
+  font-size:2rem;font-weight:700;
+  color:var(--adobe-d);
+  line-height:1.1;letter-spacing:-0.5px;
+}
+
+/* ═══════════════════════════
+   CONTENIDO
+═══════════════════════════ */
+.content{flex:1;overflow-y:auto;padding-right:.8rem}
+.content::-webkit-scrollbar{width:5px}
+.content::-webkit-scrollbar-track{background:var(--pavimento-l);border-radius:3px}
+.content::-webkit-scrollbar-thumb{background:var(--pintura);border-radius:3px}
+
+p{font-size:1.03rem;line-height:1.85;margin-bottom:1rem;color:var(--text-mid);font-family:'Libre Baskerville',serif}
+h3{font-family:'Unbounded',sans-serif;font-size:1.15rem;font-weight:700;color:var(--adobe-d);margin:1.4rem 0 .75rem;letter-spacing:-.3px}
+h4{font-size:1rem;font-weight:700;color:var(--adobe);margin-bottom:.5rem;font-family:'Libre Baskerville',serif}
+ul{list-style:none;margin:.9rem 0}
+ul li{
+  font-size:1rem;line-height:1.78;margin-bottom:.65rem;
+  padding-left:1.8rem;position:relative;color:var(--text-mid);
+}
+ul li::before{
+  content:'▸';position:absolute;left:0;
+  color:var(--pintura);font-size:1rem;
+}
+
+/* ═══════════════════════════
+   CAJAS
+═══════════════════════════ */
+.box{
+  background:var(--cal);
+  border-left:6px solid var(--adobe);
+  padding:1.2rem 1.5rem;margin:1rem 0;
+  border-radius:0 6px 6px 0;
+  box-shadow:2px 3px 12px rgba(90,50,16,.08);
+}
+.box strong{color:var(--adobe-d);display:block;margin-bottom:.5rem;font-size:1.01rem;font-weight:700}
+.box p{margin-bottom:.25rem}
+.box-verde   {border-left-color:var(--zacate);background:#f0f7e8}
+.box-verde strong{color:var(--zacate-d)}
+.box-seco    {border-left-color:var(--seco-d);background:var(--seco-pale)}
+.box-seco strong{color:var(--seco-d)}
+.box-pintura {border-left-color:var(--pintura);background:#fdf0f6}
+.box-pintura strong{color:var(--pintura-d)}
+.box-cielo   {border-left-color:var(--cielo);background:#eef3f8}
+.box-cielo strong{color:var(--cielo)}
+.box-pav     {border-left-color:var(--pavimento-d);background:#f4f2ed}
+.box-pav strong{color:var(--pavimento-d)}
+
+/* Quote estilo pared pintada */
+.quote{
+  background:var(--adobe-d);
+  color:var(--cal);
+  border-radius:6px;
+  padding:1.3rem 1.6rem 1.3rem 3.2rem;
+  margin:1.1rem 0;
+  position:relative;
+  font-style:italic;
+  font-size:1.05rem;
+  line-height:1.75;
+}
+.quote::before{
+  content:'"';
+  position:absolute;left:.8rem;top:.1rem;
+  font-family:'Unbounded',sans-serif;
+  font-size:3.5rem;color:var(--seco-l);
+  line-height:1;font-style:normal;
+}
+.quote cite{
+  display:block;margin-top:.6rem;
+  font-style:normal;font-size:.82rem;
+  color:var(--seco-l);
+  font-family:'Space Mono',monospace;
+  letter-spacing:.5px;
+}
+
+/* ═══════════════════════════
+   GRIDS Y CARDS
+═══════════════════════════ */
+.grid{display:grid;gap:1.1rem;margin:1.1rem 0}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+
+.card{
+  background:var(--cal);padding:1.3rem 1.4rem;
+  border-radius:6px;
+  border-top:5px solid var(--adobe);
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+  transition:transform .2s,box-shadow .2s;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.1)}
+.card h4{color:var(--adobe-d);margin-bottom:.6rem}
+.card p{font-size:.96rem;color:var(--text-mid);margin-bottom:.25rem}
+.card.verde  {border-top-color:var(--zacate)}
+.card.verde h4{color:var(--zacate-d)}
+.card.seco   {border-top-color:var(--seco-d)}
+.card.seco h4{color:var(--seco-d)}
+.card.pintura{border-top-color:var(--pintura)}
+.card.pintura h4{color:var(--pintura-d)}
+.card.cielo  {border-top-color:var(--cielo)}
+.card.cielo h4{color:var(--cielo)}
+.card.pav    {border-top-color:var(--pavimento-d)}
+.card.pav h4{color:var(--pavimento-d)}
+
+/* ═══════════════════════════
+   GRAMMAR BOX — pizarrón
+═══════════════════════════ */
+.grammar-board{
+  background:var(--adobe-d);
+  border-radius:8px;
+  padding:1.6rem 2rem;
+  margin:1.1rem 0;
+  border:4px solid var(--adobe-l);
+  position:relative;
+}
+.grammar-board::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;
+  height:8px;
+  background:linear-gradient(90deg,var(--pintura),var(--seco),var(--zacate));
+  border-radius:4px 4px 0 0;
+}
+.grammar-label{
+  font-family:'Space Mono',monospace;
+  font-size:.65rem;letter-spacing:4px;
+  color:var(--seco-l);
+  text-transform:uppercase;margin-bottom:1rem;
+  padding-top:.3rem;
+}
+.grammar-row{
+  display:flex;align-items:baseline;gap:.8rem;
+  margin-bottom:.9rem;color:var(--cal);
+  font-size:.97rem;line-height:1.7;
+  border-bottom:1px dashed rgba(200,168,58,.2);
+  padding-bottom:.6rem;
+}
+.grammar-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.grammar-formula{
+  font-family:'Space Mono',monospace;
+  font-size:.88rem;
+  background:rgba(212,32,106,.25);
+  color:var(--pintura-l);
+  padding:.25rem .7rem;border-radius:3px;
+  white-space:nowrap;flex-shrink:0;
+}
+.grammar-ex{color:var(--seco-pale);font-style:italic;font-size:.93rem}
+.hl{color:var(--seco-l);font-weight:700;font-style:normal}
+.hl-g{color:var(--zacate-l);font-weight:700;font-style:normal}
+.hl-p{color:var(--pintura-l);font-weight:700;font-style:normal}
+
+/* ═══════════════════════════
+   TABLA
+═══════════════════════════ */
+table{
+  width:100%;border-collapse:collapse;
+  margin:1.1rem 0;background:var(--cal);
+  box-shadow:0 2px 8px rgba(0,0,0,.07);
+  border-radius:8px;overflow:hidden;
+  font-size:.93rem;
+}
+th,td{padding:.8rem .95rem;text-align:left;border-bottom:1px solid var(--pavimento-l)}
+th{
+  background:linear-gradient(90deg,var(--adobe-d),var(--adobe));
+  color:var(--cal);font-weight:700;
+  font-family:'Space Mono',monospace;
+  font-size:.72rem;letter-spacing:2px;text-transform:uppercase;
+}
+tr:last-child td{border-bottom:none}
+tr:hover{background:var(--seco-pale)}
+td code{
+  background:var(--adobe-d);color:var(--seco-l);
+  padding:.15rem .45rem;border-radius:3px;
+  font-family:'Space Mono',monospace;font-size:.82rem;
+}
+td strong{color:var(--adobe-d)}
+td em{color:var(--zacate-d);font-style:italic}
+
+/* ═══════════════════════════
+   STEPS
+═══════════════════════════ */
+.steps{counter-reset:s;margin:1.1rem 0}
+.step{
+  counter-increment:s;
+  position:relative;
+  padding:1.1rem 1.2rem 1.1rem 4.2rem;
+  margin-bottom:1rem;
+  background:var(--cal);border-radius:6px;
+  border-left:5px solid var(--adobe);
+  box-shadow:0 1px 6px rgba(0,0,0,.05);
+}
+.step::before{
+  content:counter(s);
+  position:absolute;left:1rem;top:50%;transform:translateY(-50%);
+  width:2rem;height:2rem;
+  background:var(--adobe);color:var(--cal);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'Unbounded',sans-serif;font-weight:700;font-size:.95rem;
+}
+.step h4{color:var(--adobe-d);font-size:1rem;margin-bottom:.4rem}
+.step p{font-size:.96rem;color:var(--text-mid);line-height:1.72;margin-bottom:0}
+
+/* ═══════════════════════════
+   ACTIVIDAD
+═══════════════════════════ */
+.activity-section{
+  background:linear-gradient(135deg,var(--seco-pale),var(--adobe-pale));
+  border:3px solid var(--pintura);
+  border-radius:10px;padding:1.8rem;margin:1.2rem 0;
+  box-shadow:0 5px 20px rgba(212,32,106,.12);
+}
+.activity-title{
+  font-family:'Unbounded',sans-serif;
+  color:var(--pintura-d);font-size:1.6rem;font-weight:900;
+  margin-bottom:1.1rem;text-align:center;
+  letter-spacing:-.5px;
+}
+.activity-box{
+  background:var(--cal);padding:1.1rem 1.3rem;
+  border-radius:6px;margin:.7rem 0;
+  border-left:4px solid var(--pintura);
+}
+.activity-box h4{color:var(--pintura-d)}
+
+/* ═══════════════════════════
+   GLOSARIO
+═══════════════════════════ */
+.glos-item{
+  background:var(--cal);border-radius:5px;
+  padding:.9rem 1.2rem;margin-bottom:.7rem;
+  border-left:4px solid var(--zacate);
+  box-shadow:0 1px 4px rgba(0,0,0,.05);
+}
+.glos-item strong{color:var(--zacate-d);font-size:.99rem}
+.glos-item p{margin:0;margin-top:.25rem;font-size:.95rem}
+
+/* ═══════════════════════════
+   TAG
+═══════════════════════════ */
+.tag{
+  display:inline-block;
+  background:var(--adobe-pale);
+  border:1.5px solid var(--adobe-l);
+  color:var(--adobe-d);
+  border-radius:20px;
+  padding:.18rem .8rem;font-size:.82rem;font-weight:700;
+  margin:.15rem .1rem;font-family:'Space Mono',monospace;
+}
+.tag.v{background:#e8f5e0;border-color:var(--zacate);color:var(--zacate-d)}
+.tag.p{background:#fde8f3;border-color:var(--pintura);color:var(--pintura-d)}
+.tag.s{background:var(--seco-pale);border-color:var(--seco-d);color:var(--seco-d)}
+
+/* ═══════════════════════════
+   PINTURA SIGN — letrero de negocio
+═══════════════════════════ */
+.letrero{
+  background:var(--pintura);
+  color:#fff;border-radius:4px;
+  padding:1rem 1.5rem;margin:1rem 0;
+  text-align:center;
+  font-family:'Unbounded',sans-serif;
+  font-size:1.1rem;font-weight:700;
+  letter-spacing:-.3px;
+  box-shadow:4px 4px 0 var(--pintura-d);
+  position:relative;
+}
+.letrero::before{
+  content:'';
+  position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+  width:0;height:0;
+  border-left:12px solid transparent;
+  border-right:12px solid transparent;
+  border-top:14px solid var(--pintura-d);
+}
+
+/* ═══════════════════════════
+   BARDA DECO PILL
+═══════════════════════════ */
+.barda-pill{
+  display:inline-block;
+  background:var(--pavimento-d);
+  color:var(--cal);
+  font-family:'Space Mono',monospace;
+  font-size:.7rem;letter-spacing:2px;
+  text-transform:uppercase;
+  padding:.3rem .9rem;border-radius:2px;
+  margin:.2rem;
+}
+.barda-pill.g{background:var(--zacate-d)}
+.barda-pill.s{background:var(--seco-d)}
+.barda-pill.p{background:var(--pintura)}
+
+/* ═══════════════════════════
+   NAVEGACIÓN
+═══════════════════════════ */
+.progress-bar{
+  position:fixed;top:0;left:0;height:5px;
+  background:linear-gradient(90deg,var(--pintura),var(--seco-l),var(--zacate));
+  z-index:2000;transition:width .3s;
+}
+.counter{
+  position:fixed;bottom:2rem;left:2rem;
+  background:var(--cal);padding:.6rem 1.3rem;
+  border:3px solid var(--pintura);
+  border-radius:2px;color:var(--pintura-d);
+  font-weight:700;z-index:1000;
+  box-shadow:3px 3px 0 var(--pintura-d);
+  font-family:'Space Mono',monospace;font-size:.9rem;
+}
+.nav{position:fixed;bottom:2rem;right:2rem;display:flex;gap:.9rem;z-index:1000}
+.btn{
+  width:54px;height:54px;
+  background:var(--pintura);border:none;border-radius:2px;
+  color:#fff;font-size:1.3rem;cursor:pointer;
+  box-shadow:3px 3px 0 var(--pintura-d);
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+}
+.btn:hover:not(:disabled){
+  background:var(--pintura-d);
+  transform:translate(-1px,-1px);
+  box-shadow:4px 4px 0 var(--adobe-d);
+}
+.btn:disabled{opacity:.28;cursor:not-allowed;box-shadow:none}
+
+/* ═══════════════════════════
+   RESPONSIVE
+═══════════════════════════ */
+@media(max-width:1024px){
+  .slide{padding:2.2rem 2.8rem}
+  h2{font-size:1.7rem}
+  .cover-content{padding:2rem 3rem 3rem}
+  .cover h1{font-size:2.8rem}
+  .grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:680px){
+  .slide{padding:1.8rem 1.4rem}
+  h2{font-size:1.4rem}
+  .cover h1{font-size:2rem}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+
+<!-- ══════════════════════════════════════
+  SLIDE 1 · PORTADA
+══════════════════════════════════════ -->
+<div class="slide cover active">
+  <div class="cover-wall"></div>
+
+  <!-- Banda de color llamativo (barda de negocio) -->
+  <div class="cover-banda">
+    <div class="cover-eyebrow">lshi1018 · English for Academic & Professional Life · Topic 8</div>
+  </div>
+
+  <!-- Zacate SVG en la base -->
+  <svg class="cover-grass" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- zacate seco -->
+    <g stroke="#C8A83C" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <line x1="60" y1="90" x2="52" y2="55"/><line x1="60" y1="90" x2="68" y2="48"/>
+      <line x1="60" y1="90" x2="56" y2="40"/><line x1="60" y1="90" x2="70" y2="60"/>
+      <line x1="180" y1="90" x2="172" y2="50"/><line x1="180" y1="90" x2="188" y2="44"/>
+      <line x1="180" y1="90" x2="176" y2="38"/><line x1="340" y1="90" x2="332" y2="52"/>
+      <line x1="340" y1="90" x2="348" y2="46"/><line x1="340" y1="90" x2="336" y2="42"/>
+      <line x1="520" y1="90" x2="514" y2="55"/><line x1="520" y1="90" x2="528" y2="48"/>
+      <line x1="700" y1="90" x2="694" y2="50"/><line x1="700" y1="90" x2="708" y2="42"/>
+      <line x1="700" y1="90" x2="698" y2="38"/><line x1="860" y1="90" x2="854" y2="52"/>
+      <line x1="860" y1="90" x2="866" y2="46"/><line x1="1020" y1="90" x2="1014" y2="50"/>
+      <line x1="1020" y1="90" x2="1026" y2="44"/><line x1="1140" y1="90" x2="1134" y2="54"/>
+      <line x1="1140" y1="90" x2="1146" y2="47"/>
+    </g>
+    <!-- zacate verde -->
+    <g stroke="#5C8A2E" stroke-width="2" fill="none" stroke-linecap="round">
+      <line x1="110" y1="90" x2="104" y2="62"/><line x1="110" y1="90" x2="118" y2="56"/>
+      <line x1="250" y1="90" x2="244" y2="58"/><line x1="250" y1="90" x2="256" y2="52"/>
+      <line x1="420" y1="90" x2="415" y2="60"/><line x1="420" y1="90" x2="427" y2="53"/>
+      <line x1="600" y1="90" x2="595" y2="62"/><line x1="600" y1="90" x2="606" y2="55"/>
+      <line x1="780" y1="90" x2="775" y2="60"/><line x1="780" y1="90" x2="785" y2="53"/>
+      <line x1="950" y1="90" x2="945" y2="62"/><line x1="950" y1="90" x2="956" y2="55"/>
+      <line x1="1100" y1="90" x2="1095" y2="60"/><line x1="1100" y1="90" x2="1106" y2="53"/>
+    </g>
+    <!-- pavimento -->
+    <rect x="0" y="80" width="1200" height="10" fill="#9E9B90"/>
+    <rect x="0" y="82" width="1200" height="2" fill="#D4D0C4"/>
+  </svg>
+
+  <div class="cover-content">
+    <h1>
+      Presentation Skills
+      <span class="accent">Past Continuous &amp; Past Perfect</span>
+    </h1>
+    <div class="cover-rule"></div>
+    <p class="sub">Eye Contact · Humor · Body Language · Visual Aids</p>
+    <p class="sub">Grammar: Past Tense Forms in Context</p>
+    <p class="meta">lshi1018 · bb · topic8.htm</p>
+    <p class="hint">→ Arrow keys or buttons to navigate</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 2 · INTRODUCCIÓN
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip">Introduction</span>
+    <h2>Public Speaking in English</h2>
+  </div>
+  <div class="content">
+    <div class="letrero">😰 Did you know? Public speaking is one of the most common fears.</div>
+    <br>
+    <p>If you feel nervous before an important presentation — especially in a non-native language — you're not alone. The good news is that <strong>effective preparation can greatly reduce your anxiety</strong>.</p>
+    <div class="grid grid-3" style="margin-top:1rem">
+      <div class="card verde">
+        <h4>🌿 Fresh</h4>
+        <p>Don't bore your audience with clichés, bad jokes or recycled content. Bring new ideas and perspectives.</p>
+      </div>
+      <div class="card seco">
+        <h4>🌾 Authentic</h4>
+        <p>Believe in your message. Be able to talk about it without reading from a piece of paper.</p>
+      </div>
+      <div class="card pintura">
+        <h4>🔎 Informed</h4>
+        <p>Research until you are an expert on your topic. Anticipate and answer questions confidently.</p>
+      </div>
+    </div>
+    <div class="box box-pav" style="margin-top:1rem">
+      <strong>📌 In this topic you will:</strong>
+      <p>Research ways to give effective presentations · Learn how to calm your nerves · Become memorable · Master <strong>Past Continuous</strong> and <strong>Past Perfect</strong> tense forms</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 3 · OBJETIVOS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip verde">Learning Goals</span>
+    <h2>What You'll Achieve</h2>
+  </div>
+  <div class="content">
+    <div class="steps">
+      <div class="step">
+        <h4>Apply key presentation skills</h4>
+        <p>Use eye contact, appropriate humor, body language/mirroring, thorough preparation and effective visual aids to deliver compelling presentations in English.</p>
+      </div>
+      <div class="step">
+        <h4>Use Past Continuous correctly</h4>
+        <p>Form and use <em>was/were + verb-ing</em> to describe ongoing past actions, interrupted actions, background information, polite requests and habitual past behavior.</p>
+      </div>
+      <div class="step">
+        <h4>Use Past Perfect correctly</h4>
+        <p>Form and use <em>had + past participle</em> to express actions completed before another past event, reported speech, past thoughts and unreal conditionals.</p>
+      </div>
+      <div class="step">
+        <h4>Distinguish between all three past tenses</h4>
+        <p>Contrast Past Simple, Past Continuous and Past Perfect to choose the correct form based on the timeline of events and the intended meaning.</p>
+      </div>
+      <div class="step">
+        <h4>Deliver a 5-minute oral presentation</h4>
+        <p>Research, prepare and present an informative or persuasive presentation on a topic you feel strongly about, using anecdotes, facts and statistics.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 4 · 8.1 EYE CONTACT & HUMOR
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip">8.1</span>
+    <h2>Presentation Skills: Eye Contact &amp; Humor</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>👁️ Eye Contact</h3>
+        <div class="box box-verde">
+          <strong>Why it matters</strong>
+          <p>If you don't look people in the eye, they are less likely to look at you — and if they aren't looking at you, they probably aren't paying attention. Lack of eye contact is an invitation to check emails and social media.</p>
+        </div>
+        <ul>
+          <li>Makes your audience feel <strong>involved and accountable</strong></li>
+          <li>Signals confidence and credibility</li>
+          <li>Requires rehearsal — less dependence on script = more eye contact</li>
+        </ul>
+      </div>
+      <div>
+        <h3>😄 Humor</h3>
+        <div class="box box-seco">
+          <strong>The art of humor</strong>
+          <p>Humor can instantly make your presentation more <strong>likable</strong> and lower your audience's defenses. However, it is a delicate skill — especially cross-culturally.</p>
+        </div>
+        <ul>
+          <li>Be aware of <strong>political correctness</strong>: age, race, religion, orientation</li>
+          <li>If a joke fails, it can make the audience <strong>uncomfortable</strong></li>
+          <li>A <strong>funny anecdote</strong> is often safer than a joke</li>
+          <li><strong>Self-deprecating humor</strong> is generally safe and relatable</li>
+          <li>When in doubt — <strong>leave it out</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 5 · BODY LANGUAGE & PREPARATION
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip">8.1</span>
+    <h2>Body Language, Mirroring &amp; Preparation</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>🪞 Body Language &amp; Mirroring</h3>
+        <div class="box">
+          <strong>What is mirroring?</strong>
+          <p>Mirroring is the act of "copying" your audience's behavior — laughing, nodding, matching posture and tone. People who trust each other frequently develop <strong>synchronicity</strong> without noticing.</p>
+        </div>
+        <div class="box box-verde">
+          <strong>How to use it</strong>
+          <p>If an audience member nervously asks a question, mirror their somber tone instead of responding enthusiastically. "Sharing" the emotion <strong>builds connection</strong>.</p>
+        </div>
+        <div class="box box-pav">
+          <strong>Key elements</strong>
+          <p>Posture · Facial expression · Personal space · Vocal tone · Pace · Gesture</p>
+        </div>
+      </div>
+      <div>
+        <h3>📋 Preparation</h3>
+        <div class="box box-seco">
+          <strong>Rehearse — don't memorize</strong>
+          <p>Familiarize yourself with your material and order so you can talk about it <strong>naturally</strong> — as if having a conversation. This increases authenticity and credibility.</p>
+        </div>
+        <ul>
+          <li>Anticipate <strong>questions and disagreements</strong> — even research the opposing viewpoint</li>
+          <li>Understanding opposing arguments is a <strong>powerful tool</strong></li>
+          <li>Test and re-test your <strong>technology</strong> — arrive early</li>
+          <li>Never apologize for technical inabilities in front of the audience</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 6 · VISUAL AIDS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip seco">8.1</span>
+    <h2>Visual Aids &amp; Slide Presentations</h2>
+  </div>
+  <div class="content">
+    <div class="box box-pintura">
+      <strong>⚠️ Most misused presentation tool</strong>
+      <p>The most common mistake: filling slides with an unnecessary amount of text and then reading it word-for-word. This is boring, wastes time, and offends your audience — <em>"This presentation could have been an email!"</em></p>
+    </div>
+    <div class="grid grid-2" style="margin-top:1rem">
+      <div>
+        <h3>✅ DO</h3>
+        <ul>
+          <li>Use <strong>brief bulleted lists</strong></li>
+          <li>Be able to <strong>converse independently</strong> about each bullet</li>
+          <li>Use <strong>relevant photos, charts and graphs</strong></li>
+          <li>Use a <strong>standard font</strong> (Times New Roman, Arial)</li>
+          <li>Keep it <strong>informative and clean</strong></li>
+          <li>At least one slide with <strong>data or statistics</strong></li>
+        </ul>
+      </div>
+      <div>
+        <h3>❌ DON'T</h3>
+        <ul>
+          <li>Fill slides with <strong>walls of text</strong></li>
+          <li>Read slides aloud <strong>word-for-word</strong></li>
+          <li>Use <strong>clip art</strong> or cartoon images</li>
+          <li>Overuse <strong>colors, sounds or animated transitions</strong></li>
+          <li>Let the slide be a <strong>script</strong> for what you say</li>
+          <li>Make it <strong>cute instead of informative</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="box box-verde" style="margin-top:.5rem">
+      <strong>💡 The golden rule</strong>
+      <p>If you don't have anything <em>additional</em> to say about a bullet point beyond reading it aloud, you should <strong>delete it</strong>. Your slide show should complement what you say — not be a script of what you say.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 7 · 8.2 PAST CONTINUOUS — FORM
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip verde">8.2 Grammar</span>
+    <h2>Past Continuous — Form &amp; Uses</h2>
+  </div>
+  <div class="content">
+    <div class="grammar-board">
+      <div class="grammar-label">Past Continuous · Formation</div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Subject + was/were + verb-ing</div>
+        <div class="grammar-ex"><span class="hl-g">I was studying</span> · <span class="hl-g">They were working</span></div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Continued action</div>
+        <div class="grammar-ex">Alex <span class="hl-g">was meeting</span> with a client when I <span class="hl">arrived</span>.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Interrupted action</div>
+        <div class="grammar-ex">I <span class="hl-g">was walking</span> to the store when it <span class="hl">began</span> to rain.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Background info</div>
+        <div class="grammar-ex">I <span class="hl-g">was getting ready</span> for bed when I heard a strange noise…</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Habitual past</div>
+        <div class="grammar-ex">They <span class="hl-g">were constantly arriving</span> late, so they got written up.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Previous plans</div>
+        <div class="grammar-ex">I <span class="hl-g">was going</span> to make dinner, but I decided to go out.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Polite requests ★</div>
+        <div class="grammar-ex">I <span class="hl-g">was wondering</span> if you could tell me where the hotel is.</div>
+      </div>
+    </div>
+    <div class="box box-seco">
+      <strong>★ Polite requests trick</strong>
+      <p>Although these use a past tense verb, they express <strong>present-tense motivations</strong>. The Past Continuous makes them sound more <strong>gentle and polite</strong>. Very useful in professional English!</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 8 · 8.3 PAST PERFECT — FORM & USES
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip pintura">8.3 Grammar</span>
+    <h2>Past Perfect — Form &amp; Uses</h2>
+  </div>
+  <div class="content">
+    <div class="grammar-board">
+      <div class="grammar-label">Past Perfect · Formation</div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Subject + had + past participle</div>
+        <div class="grammar-ex"><span class="hl-p">I had studied</span> · <span class="hl-p">She had finished</span></div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Before another past event</div>
+        <div class="grammar-ex">I didn't go because I <span class="hl-p">had already seen</span> the play.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Before another past event</div>
+        <div class="grammar-ex">When I got home, my daughter <span class="hl-p">had already finished</span> her homework.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Reported speech</div>
+        <div class="grammar-ex">Jim said he <span class="hl-p">had already finished</span> the presentation.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Past thoughts</div>
+        <div class="grammar-ex">I thought I <span class="hl-p">had put</span> my laptop in my briefcase.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Unreal conditional</div>
+        <div class="grammar-ex">If I <span class="hl-p">had had</span> more money, I would have stayed at a better hotel.</div>
+      </div>
+      <div class="grammar-row">
+        <div class="grammar-formula">Unreal conditional</div>
+        <div class="grammar-ex">If Mark <span class="hl-p">had studied</span> more, he would have done better on the test.</div>
+      </div>
+    </div>
+    <div class="box box-verde" style="margin-top:.5rem">
+      <strong>⏰ Key idea: sequence in time</strong>
+      <p>Past Perfect marks the <strong>earlier</strong> of two past events. Think of it as "the past of the past." Use it whenever you need to make clear that one thing happened <em>before</em> another past event.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 9 · IRREGULAR PAST PARTICIPLES
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip pav">Reference</span>
+    <h2>Irregular Past Participles</h2>
+  </div>
+  <div class="content">
+    <p>The Past Perfect requires the <strong>past participle</strong>. Many common verbs are irregular. Use this table as a quick reference:</p>
+    <div class="grid grid-2" style="margin-top:.5rem;gap:1rem">
+      <table>
+        <thead><tr><th>Verb</th><th>Past Participle</th></tr></thead>
+        <tbody>
+          <tr><td><strong>become</strong></td><td><code>become</code></td></tr>
+          <tr><td><strong>break</strong></td><td><code>broken</code></td></tr>
+          <tr><td><strong>bring</strong></td><td><code>brought</code></td></tr>
+          <tr><td><strong>catch</strong></td><td><code>caught</code></td></tr>
+          <tr><td><strong>choose</strong></td><td><code>chosen</code></td></tr>
+          <tr><td><strong>come</strong></td><td><code>come</code></td></tr>
+          <tr><td><strong>do</strong></td><td><code>done</code></td></tr>
+          <tr><td><strong>drive</strong></td><td><code>driven</code></td></tr>
+          <tr><td><strong>feel</strong></td><td><code>felt</code></td></tr>
+          <tr><td><strong>freeze</strong></td><td><code>frozen</code></td></tr>
+          <tr><td><strong>get</strong></td><td><code>gotten</code></td></tr>
+          <tr><td><strong>go</strong></td><td><code>been</code></td></tr>
+        </tbody>
+      </table>
+      <table>
+        <thead><tr><th>Verb</th><th>Past Participle</th></tr></thead>
+        <tbody>
+          <tr><td><strong>lend</strong></td><td><code>lent</code></td></tr>
+          <tr><td><strong>make</strong></td><td><code>made</code></td></tr>
+          <tr><td><strong>say</strong></td><td><code>said</code></td></tr>
+          <tr><td><strong>see</strong></td><td><code>seen</code></td></tr>
+          <tr><td><strong>set</strong></td><td><code>set</code></td></tr>
+          <tr><td><strong>sleep</strong></td><td><code>slept</code></td></tr>
+          <tr><td><strong>speak</strong></td><td><code>spoken</code></td></tr>
+          <tr><td><strong>steal</strong></td><td><code>stolen</code></td></tr>
+          <tr><td><strong>take</strong></td><td><code>taken</code></td></tr>
+          <tr><td><strong>throw</strong></td><td><code>thrown</code></td></tr>
+          <tr><td><strong>win</strong></td><td><code>won</code></td></tr>
+          <tr><td><strong>write</strong></td><td><code>written</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 10 · COMPARACIÓN TRES TIEMPOS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip seco">Grammar</span>
+    <h2>Comparing the Three Past Tenses</h2>
+  </div>
+  <div class="content">
+    <p>The use of different past tense forms communicates important information about <em>when</em> events happened relative to each other:</p>
+    <table>
+      <thead><tr><th>Tense</th><th>Form</th><th>Key use</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Past Simple</strong></td>
+          <td><code>verb-ed / irreg.</code></td>
+          <td>Completed action at a specific past time</td>
+          <td><em>Dana <strong>graduated</strong> in 2005.</em></td>
+        </tr>
+        <tr>
+          <td><strong>Past Continuous</strong></td>
+          <td><code>was/were + -ing</code></td>
+          <td>Action in progress when another event happened</td>
+          <td><em>I <strong>was watching</strong> TV when you called.</em></td>
+        </tr>
+        <tr>
+          <td><strong>Past Perfect</strong></td>
+          <td><code>had + past part.</code></td>
+          <td>Earlier of two past events</td>
+          <td><em>The movie <strong>had already started</strong> when we arrived.</em></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="grid grid-3" style="margin-top:.8rem">
+      <div class="card pav">
+        <h4>Past Simple ●</h4>
+        <p>A <strong>finished</strong> action in the past. The blue dot — the action happened and ended.</p>
+        <p style="font-family:'Space Mono',monospace;font-size:.82rem">Kathryn's computer <strong>crashed</strong>.</p>
+      </div>
+      <div class="card verde">
+        <h4>Past Continuous ←●→</h4>
+        <p>An action that <strong>started and continued</strong> in the past, often interrupted.</p>
+        <p style="font-family:'Space Mono',monospace;font-size:.82rem">Kathryn <strong>was finishing</strong> a report when it crashed.</p>
+      </div>
+      <div class="card pintura">
+        <h4>Past Perfect ←← ●</h4>
+        <p>The action happened <strong>before</strong> another past event — the "past of the past."</p>
+        <p style="font-family:'Space Mono',monospace;font-size:.82rem">My kids <strong>had already eaten</strong> when I got home.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 11 · GRAMMAR PRACTICE
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip pintura">Practice</span>
+    <h2>Past Tense Practice</h2>
+  </div>
+  <div class="content">
+    <div class="box box-seco">
+      <strong>📝 Directions</strong>
+      <p>Complete each sentence with the correct past tense form of the verb in parentheses. Consider whether the action is completed, in progress, or occurred before another past event.</p>
+    </div>
+    <table style="margin-top:.8rem">
+      <thead><tr><th>#</th><th>Sentence</th><th>Correct Answer</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td>Dana _______ (graduate) high school in 2005.</td>
+          <td><em>graduated</em> <span class="barda-pill s">Past Simple</span></td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td>I _______ (watch) TV when you called.</td>
+          <td><em>was watching</em> <span class="barda-pill g">Past Continuous</span></td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td>By the time we arrived, the movie _______ (start, already).</td>
+          <td><em>had already started</em> <span class="barda-pill p">Past Perfect</span></td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td>Kathryn _______ (finish) a report when her computer crashed.</td>
+          <td><em>was finishing</em> <span class="barda-pill g">Past Continuous</span></td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td>I _______ (wonder) if you could tell me how to get to the hotel.</td>
+          <td><em>was wondering</em> <span class="barda-pill g">Polite request</span></td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td>I didn't have to cook because my kids _______ (eat, already).</td>
+          <td><em>had already eaten</em> <span class="barda-pill p">Past Perfect</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="box box-verde" style="margin-top:.8rem">
+      <strong>💡 Quick Check</strong>
+      <p>For each sentence, ask yourself: is this a completed action (Simple), an ongoing action interrupted (Continuous), or an action that happened <em>before</em> another past event (Perfect)?</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 12 · EXERCISES 1 & 2
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip verde">Exercises</span>
+    <h2>Exercise 1 &amp; Exercise 2</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>Exercise 1 — Reading &amp; Discussion</h3>
+        <div class="box box-verde">
+          <strong>Read:</strong>
+          <p><em>"10 Ways to Make Your Presentation More Memorable"</em><br><span style="font-family:'Space Mono',monospace;font-size:.8rem">entrepreneur.com/article/244356</span></p>
+        </div>
+        <ul>
+          <li>What advice does the author give for being <strong>relatable</strong>?</li>
+          <li>How does the author feel about the use of <strong>data</strong>?</li>
+          <li>What is an <strong>"a-ha" moment</strong>?</li>
+          <li>What suggestion does the author give for a <strong>powerful conclusion</strong>?</li>
+        </ul>
+        <div class="box box-seco" style="margin-top:.8rem">
+          <strong>Also read:</strong>
+          <p><em>"5 Easy Ways to Become a Better Public Speaker—Fast"</em><br><span style="font-family:'Space Mono',monospace;font-size:.8rem">entrepreneur.com/article/236611</span></p>
+        </div>
+        <ul>
+          <li>What/how should you <strong>memorize</strong>?</li>
+          <li>Benefit of talking to a <strong>few audience members beforehand</strong>?</li>
+          <li>What should you <em>not</em> do with the slides?</li>
+          <li>To ease nerves, instead of focusing on yourself, focus on ___.</li>
+          <li>Why is involving the audience (<strong>being interactive</strong>) beneficial?</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Exercise 2 — Writing &amp; Speaking</h3>
+        <div class="box box-pintura">
+          <strong>Write a one-page anecdote</strong>
+          <p>Demonstrate your ability to use <span class="tag">Past Simple</span><span class="tag s">Past Continuous</span><span class="tag p">Past Perfect</span> in a natural, connected narrative.</p>
+          <p style="margin-top:.6rem">You can find storytelling tips at:<br><span style="font-family:'Space Mono',monospace;font-size:.78rem">learnenglishteens.britishcouncil.org</span></p>
+        </div>
+        <div class="box box-cielo" style="margin-top:.8rem">
+          <strong>Speaking: Read aloud with a partner</strong>
+        </div>
+        <ul>
+          <li>Focus on <strong>vocal variety</strong>: volume, pace, pauses, enthusiasm</li>
+          <li>Give each other <strong>constructive feedback</strong></li>
+          <li>Balance critical and positive comments</li>
+          <li>Phrase criticism as <strong>suggestions, not judgments</strong>:<br>
+            <span class="tag v">✔ "Try taking a deep breath to slow down"</span><br>
+            <span class="tag p" style="margin-top:.3rem">✗ "You spoke so fast I couldn't understand"</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 13 · HOMEWORK
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip pintura">Homework</span>
+    <h2>Oral Presentation + Slideshow</h2>
+  </div>
+  <div class="content">
+    <div class="activity-section">
+      <div class="activity-title">🎤 5-Minute Oral Presentation</div>
+      <div class="grid grid-2">
+        <div class="activity-box">
+          <h4>📋 Requirements</h4>
+          <p>Create a <strong>5-minute oral presentation</strong> on a topic you feel strongly about. Can be persuasive, informative, or both. You may use notes — but <strong>reading from a script is unacceptable</strong>.</p>
+        </div>
+        <div class="activity-box">
+          <h4>💡 Topic examples</h4>
+          <p>Why adopt a dog instead of buying one<br>Is social media distorting our self-image?<br>Tips for an effective social media presence<br>The value of participating in sports</p>
+        </div>
+        <div class="activity-box">
+          <h4>📊 Content requirements</h4>
+          <p>Include <strong>factual and statistical information</strong>. You may open with an anecdote. Show knowledge and <strong>enthusiasm</strong> for your topic.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🖥️ Add a slideshow (Self activity)</h4>
+          <p>Create a <strong>PowerPoint or equivalent</strong> with effective use of text and visual aids. At least one slide must contain <strong>data</strong>. Complement — don't script — what you say.</p>
+        </div>
+      </div>
+      <div class="box box-verde" style="margin-top:1rem">
+        <strong>📏 Evaluation Rubric</strong>
+        <p>Rubric available at: ReadWriteThink.org (2004). <em>Oral Presentation Rubric</em> · readwritethink.org/files/resources/lesson_images/lesson416/OralRubric.pdf<br>Your classmates and teacher will evaluate you using this rubric. Use it for peer feedback as well.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 14 · TEAM ACTIVITY
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip cielo">Team Activity</span>
+    <h2>Team Activities &amp; Audience Engagement</h2>
+  </div>
+  <div class="content">
+    <div class="box box-pav" style="margin-bottom:1rem">
+      <strong>📌 Note for online students</strong>
+      <p>These activities can be adapted for outside the classroom. You can practice with a friend or family member near you.</p>
+    </div>
+    <div class="grid grid-2">
+      <div>
+        <h3>Team Exercise 1 — Peer Feedback</h3>
+        <div class="box box-verde">
+          <strong>Watch:</strong>
+          <p><em>"Speaking Mistakes to Avoid"</em><br><span style="font-family:'Space Mono',monospace;font-size:.78rem">youtube.com/watch?v=DcSbpKIWPHI</span></p>
+          <p>Use the oral presentation rubric to provide constructive feedback for your classmates' presentations.</p>
+        </div>
+        <div class="box box-seco" style="margin-top:.8rem">
+          <strong>Goal of peer scoring</strong>
+          <p>Practice your listening skills and support each other. Balance critical comments and positive comments — phrase criticism as <strong>suggestions</strong>.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Team Exercise 2 — Audience Engagement</h3>
+        <div class="box box-pintura">
+          <strong>Read:</strong>
+          <p><em>"10 Ways to Engage Your Audience During an Important Meeting"</em><br><span style="font-family:'Space Mono',monospace;font-size:.78rem">entrepreneur.com/article/242899</span></p>
+        </div>
+        <ul>
+          <li>When nervous, people frequently speak too <strong>_______</strong></li>
+          <li>What does it mean to be <em>vulnerable</em>?</li>
+          <li>Should you use a lot of "big words"? Explain.</li>
+          <li>Tell your most interesting story/fact: immediately / middle / end?</li>
+          <li>If sharing detailed info, give your audience <strong>_______</strong></li>
+          <li>True/False: Audience dialogue is an interruption to stop.</li>
+          <li>Summarize the author's advice for using jokes in a presentation.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 15 · CIERRE / RESUMEN
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip verde">Summary</span>
+    <h2>Key Takeaways — Topic 8</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-3">
+      <div class="card">
+        <h4>👁️ Eye Contact</h4>
+        <p>Engage your audience. Rehearse so you don't need a script. Eye contact builds <strong>accountability and connection</strong>.</p>
+      </div>
+      <div class="card seco">
+        <h4>😄 Humor</h4>
+        <p>Anecdotes &gt; jokes. Self-deprecation is safe. When in doubt, <strong>leave it out</strong>. Cultural sensitivity is essential.</p>
+      </div>
+      <div class="card verde">
+        <h4>🪞 Body Language</h4>
+        <p>Mirror your audience to build trust. Match their tone and posture. <strong>Synchronicity</strong> builds rapport naturally.</p>
+      </div>
+      <div class="card cielo">
+        <h4>📋 Preparation</h4>
+        <p>Rehearse, anticipate questions, test tech. The more <strong>natural you sound</strong>, the more credible you are.</p>
+      </div>
+      <div class="card pintura">
+        <h4>🖥️ Visual Aids</h4>
+        <p>Brief bullets + ability to converse freely. No scripts on slides. <strong>Informative &gt; cute</strong>. Data adds credibility.</p>
+      </div>
+      <div class="card pav">
+        <h4>📚 Past Tenses</h4>
+        <p>Simple = completed. Continuous = ongoing/interrupted. Perfect = earlier of two past events.</p>
+      </div>
+    </div>
+    <div class="letrero" style="margin-top:1.5rem;font-size:.95rem">
+      🌾 "The more natural you sound, the easier it will be for your audience to pay attention." — Topic 8
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 16 · VOCABULARY & REFERENCES
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="chip pav">References &amp; Vocabulary</span>
+    <h2>Bibliography &amp; Key Terms</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>Bibliography</h3>
+        <div class="box">
+          <strong>[1]</strong> Powell, M. (2014). <em>In Company 3.0. Intermediate Student's Book</em>. Thailand: Macmillan Press.
+        </div>
+        <div class="box box-verde" style="margin-top:.7rem">
+          <strong>Articles used</strong>
+          <p>Wyeth, S. (2014). <em>10 Reasons Why Eye Contact Is Everything in Public Speaking</em>. Inc.</p>
+          <p>White, D. (2014). <em>Funny Business: 5 Tips on Workplace Humor</em>. The Creative Group.</p>
+          <p>Kinsey, C. (2011). <em>The Art and Science of Mirroring</em>. Forbes.</p>
+        </div>
+        <div class="box box-seco" style="margin-top:.7rem">
+          <strong>Rubric</strong>
+          <p>ReadWriteThink.org (2004). <em>Oral Presentation Rubric</em>.<br>readwritethink.org/.../OralRubric.pdf</p>
+        </div>
+      </div>
+      <div>
+        <h3>Key Vocabulary</h3>
+        <div class="glos-item"><strong>Mirroring</strong><p>Copying an audience's body language, tone and behavior to build trust and rapport naturally.</p></div>
+        <div class="glos-item"><strong>Anecdote</strong><p>A short, personal story used to illustrate a point. Safer and often more effective than a joke.</p></div>
+        <div class="glos-item"><strong>Self-deprecating humor</strong><p>Making fun of yourself (gently). Generally safe and relatable in presentations.</p></div>
+        <div class="glos-item"><strong>Past participle</strong><p>The verb form used in Past Perfect (had + pp) and passive voice. Many are irregular (seen, broken, written…).</p></div>
+        <div class="glos-item"><strong>Vocal variety</strong><p>Changes in volume, pace, tone and pitch used by a speaker to maintain audience engagement.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 17 · PORTADA CIERRE
+══════════════════════════════════════ -->
+<div class="slide cover">
+  <div class="cover-wall"></div>
+  <div class="cover-banda">
+    <div class="cover-eyebrow">lshi1018 · English for Academic &amp; Professional Life</div>
+  </div>
+  <svg class="cover-grass" viewBox="0 0 1200 90" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#C8A83C" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <line x1="80" y1="90" x2="72" y2="52"/><line x1="80" y1="90" x2="88" y2="46"/>
+      <line x1="200" y1="90" x2="192" y2="50"/><line x1="200" y1="90" x2="208" y2="44"/>
+      <line x1="400" y1="90" x2="394" y2="52"/><line x1="400" y1="90" x2="407" y2="44"/>
+      <line x1="600" y1="90" x2="594" y2="50"/><line x1="600" y1="90" x2="606" y2="42"/>
+      <line x1="800" y1="90" x2="794" y2="52"/><line x1="800" y1="90" x2="806" y2="46"/>
+      <line x1="1000" y1="90" x2="994" y2="50"/><line x1="1000" y1="90" x2="1006" y2="44"/>
+    </g>
+    <g stroke="#5C8A2E" stroke-width="2" fill="none" stroke-linecap="round">
+      <line x1="140" y1="90" x2="134" y2="62"/><line x1="140" y1="90" x2="147" y2="55"/>
+      <line x1="300" y1="90" x2="295" y2="60"/><line x1="300" y1="90" x2="306" y2="53"/>
+      <line x1="500" y1="90" x2="495" y2="62"/><line x1="500" y1="90" x2="506" y2="55"/>
+      <line x1="700" y1="90" x2="695" y2="60"/><line x1="700" y1="90" x2="706" y2="53"/>
+      <line x1="900" y1="90" x2="895" y2="62"/><line x1="900" y1="90" x2="906" y2="55"/>
+      <line x1="1100" y1="90" x2="1095" y2="60"/><line x1="1100" y1="90" x2="1106" y2="53"/>
+    </g>
+    <rect x="0" y="80" width="1200" height="10" fill="#9E9B90"/>
+    <rect x="0" y="82" width="1200" height="2" fill="#D4D0C4"/>
+  </svg>
+  <div class="cover-content">
+    <h1>
+      Great work!
+      <span class="accent">Now go present with confidence.</span>
+    </h1>
+    <div class="cover-rule"></div>
+    <p class="sub">Topic 8 complete · Presentation Skills &amp; Past Tenses</p>
+    <p class="meta">Universidad Tecmilenio © · All Rights Reserved</p>
+    <p class="hint" style="margin-top:2.5rem">"Effective preparation is the key to effective communication."</p>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">17</span></div>
+<div class="nav">
+  <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+  <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+  if (n < 0) n = 0;
+  if (n >= total) n = total - 1;
+  slides.forEach(s => s.classList.remove('active'));
+  slides[n].classList.add('active');
+  current = n;
+  document.getElementById('current').textContent = n + 1;
+  document.getElementById('prev').disabled = (n === 0);
+  document.getElementById('next').disabled = (n === total - 1);
+  document.getElementById('progressBar').style.width = ((n + 1) / total * 100) + '%';
+}
+
+function nav(dir) { show(current + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') nav(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); nav(1);
+  }
+});
+
+show(0);
+</script>
+</body>
+</html>

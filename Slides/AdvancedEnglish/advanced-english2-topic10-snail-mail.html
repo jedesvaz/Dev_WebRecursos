@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topic 10 — Snail Mail · Advanced English 2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ══ CORPORATE LIGHT PALETTE ══════════════════════════════════════
+   Slate navy · Warm white · Steel blue · Warm gold · Soft sage
+═════════════════════════════════════════════════════════════════ */
+:root {
+  --navy:      #1B2A4A;
+  --navy-md:   #2C3F6B;
+  --navy-lt:   #3D5A9A;
+  --steel:     #4A6FA5;
+  --steel-lt:  #D6E4F7;
+  --steel-xs:  #EEF4FC;
+  --gold:      #C8973A;
+  --gold-lt:   #FDF3E3;
+  --gold-md:   #E8B55A;
+  --sage:      #5A8A6A;
+  --sage-lt:   #E4F0E8;
+  --red:       #C0392B;
+  --red-lt:    #FDEDEB;
+  --paper:     #FAFAF8;
+  --white:     #FFFFFF;
+  --rule:      #E8EDF4;
+  --ink:       #1B2A4A;
+  --ink-md:    #3D4F6B;
+  --ink-lt:    #6B7FA0;
+  --ink-xs:    #A8B5CC;
+  --sh:        0 1px 4px rgba(27,42,74,.08), 0 2px 12px rgba(27,42,74,.06);
+  --sh-md:     0 4px 20px rgba(27,42,74,.10);
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper); color: var(--ink);
+}
+
+/* Subtle dot pattern */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(74,111,165,.08) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Progress bar */
+.pb {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
+  background: linear-gradient(90deg, var(--navy), var(--steel), var(--gold));
+  transition: width .35s ease;
+}
+
+/* ══ SLIDES ══════════════════════════════════════════════════════ */
+.slide {
+  display: none; flex-direction: column;
+  width: 100vw; height: 100vh; overflow-y: auto;
+  position: relative; z-index: 1;
+  animation: rise .34s ease;
+}
+.slide.active { display: flex; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide::-webkit-scrollbar { width: 4px; }
+.slide::-webkit-scrollbar-thumb { background: var(--steel); border-radius: 4px; }
+
+/* ══ COVER ═══════════════════════════════════════════════════════ */
+.cover {
+  background: var(--navy); min-height: 100vh;
+  justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.cover-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 40%, rgba(74,111,165,.30) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 45% at 80% 70%, rgba(200,151,58,.12)  0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 60% 10%, rgba(90,138,106,.10)  0%, transparent 50%);
+}
+/* Envelope decoration */
+.cover-env {
+  position: absolute; right: 8%; top: 50%; transform: translateY(-50%);
+  opacity: .06; font-size: 22vw; pointer-events: none; user-select: none;
+  line-height: 1;
+}
+.cover-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size: 100% 56px;
+}
+.cover-inner {
+  position: relative; z-index: 2;
+  max-width: 860px; width: 100%; padding: 2.5rem;
+}
+.cover-eyebrow {
+  display: flex; align-items: center; gap: .6rem; margin-bottom: 1.4rem; flex-wrap: wrap;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .25rem .85rem; border-radius: 3px; font-size: .7rem;
+  font-weight: 600; letter-spacing: .5px; border: 1px solid;
+}
+.pill-w  { background: rgba(255,255,255,.08); color: rgba(255,255,255,.65); border-color: rgba(255,255,255,.18); }
+.pill-g  { background: rgba(200,151,58,.18);  color: var(--gold-md);         border-color: rgba(200,151,58,.35); }
+.pill-s  { background: rgba(74,111,165,.18);  color: #9ab8e0;                border-color: rgba(74,111,165,.35); }
+.pill-gr { background: rgba(90,138,106,.18);  color: #8dc4a0;                border-color: rgba(90,138,106,.35); }
+
+.cover-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.6rem, 6.5vw, 5rem); line-height: 1.0;
+  color: #fff; margin-bottom: .5rem;
+}
+.cover-title .t-gold   { color: var(--gold-md); }
+.cover-title .t-steel  { color: #9ab8e0; }
+.cover-title .t-italic { font-style: italic; }
+
+.cover-sub {
+  font-size: 1rem; color: rgba(255,255,255,.45); font-weight: 300;
+  margin-bottom: 2.2rem; line-height: 1.7; max-width: 580px;
+}
+
+.topic-chips {
+  display: flex; gap: .55rem; flex-wrap: wrap; margin-bottom: 2rem;
+}
+.tchip {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+  color: rgba(255,255,255,.6); font-size: .78rem; font-weight: 500;
+  padding: .28rem .85rem; border-radius: 3px;
+}
+.tchip .tn {
+  font-family: 'DM Mono', monospace; font-size: .65rem;
+  color: var(--gold-md); margin-right: .15rem;
+}
+
+.cover-foot {
+  font-family: 'DM Mono', monospace; font-size: .62rem;
+  color: rgba(255,255,255,.2); letter-spacing: 1px;
+}
+.cover-foot span { color: rgba(255,255,255,.4); }
+
+/* ══ SLIDE HEADER ════════════════════════════════════════════════ */
+.sh {
+  background: var(--white); border-bottom: 2px solid var(--rule);
+  padding: .8rem 2rem; display: flex; align-items: center;
+  gap: .85rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(27,42,74,.06);
+  position: relative;
+}
+.sh::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--navy);
+}
+.sh-ico {
+  width: 38px; height: 38px; border-radius: 6px; display: flex;
+  align-items: center; justify-content: center; font-size: .95rem; flex-shrink: 0;
+}
+.ico-n  { background: var(--steel-xs); border: 1.5px solid var(--steel-lt); }
+.ico-g  { background: var(--gold-lt);  border: 1.5px solid rgba(200,151,58,.3); }
+.ico-sg { background: var(--sage-lt);  border: 1.5px solid rgba(90,138,106,.3); }
+.ico-r  { background: var(--red-lt);   border: 1.5px solid rgba(192,57,43,.2); }
+
+.sh-meta { flex: 1; }
+.sh-lbl {
+  font-family: 'DM Mono', monospace; font-size: .57rem;
+  color: var(--ink-xs); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: .05rem;
+}
+.sh-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(.95rem, 2.2vw, 1.38rem); color: var(--ink); line-height: 1.15;
+}
+.sh-title .tn  { color: var(--navy); }
+.sh-title .tg  { color: var(--gold); }
+.sh-title .ts  { color: var(--steel); }
+.sh-title .tsg { color: var(--sage); }
+.sh-title .tr  { color: var(--red); }
+
+/* ══ SLIDE BODY ══════════════════════════════════════════════════ */
+.sb {
+  flex: 1; padding: 1.3rem 2rem; background: var(--paper); overflow-y: auto;
+}
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .9rem; }
+.ga { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: .9rem; }
+
+/* CARD */
+.card {
+  background: var(--white); border: 1.5px solid var(--rule);
+  border-radius: 8px; padding: 1rem; box-shadow: var(--sh);
+  transition: box-shadow .2s, transform .15s; position: relative; overflow: hidden;
+}
+.card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.card-n::before  { background: var(--navy); }
+.card-g::before  { background: var(--gold); }
+.card-sg::before { background: var(--sage); }
+.card-s::before  { background: var(--steel); }
+.card-r::before  { background: var(--red); }
+.card-ico   { font-size: 1.3rem; margin-bottom: .45rem; }
+.card-title { font-family: 'DM Serif Display', serif; font-size: .95rem; color: var(--ink); margin-bottom: .28rem; }
+.card-body  { font-size: .82rem; color: var(--ink-md); line-height: 1.62; }
+
+/* BOX */
+.box {
+  border-radius: 8px; padding: .82rem 1rem; margin-bottom: .75rem;
+  font-size: .84rem; line-height: 1.65; border: 1.5px solid;
+}
+.box-n  { background: var(--steel-xs); border-color: var(--steel-lt);         color: var(--ink-md); }
+.box-g  { background: var(--gold-lt);  border-color: rgba(200,151,58,.35);     color: var(--ink-md); }
+.box-sg { background: var(--sage-lt);  border-color: rgba(90,138,106,.35);     color: var(--ink-md); }
+.box-r  { background: var(--red-lt);   border-color: rgba(192,57,43,.25);      color: var(--ink-md); }
+.box-w  { background: var(--white);    border-color: var(--rule);              color: var(--ink-md); }
+.blbl {
+  font-family: 'DM Mono', monospace; font-size: .57rem;
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: .28rem; opacity: .6;
+}
+
+/* SEC */
+.sec {
+  font-family: 'DM Serif Display', serif; font-size: 1rem;
+  color: var(--ink); margin-bottom: .65rem; padding-bottom: .28rem;
+  border-bottom: 1.5px solid var(--rule); display: flex; align-items: center; gap: .4rem;
+}
+
+/* LISTS */
+ul.ul { list-style: none; padding: 0; }
+ul.ul li {
+  padding: .35rem 0 .35rem 1.3rem; position: relative;
+  font-size: .84rem; color: var(--ink-md); line-height: 1.55;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+}
+ul.ul li:last-child { border-bottom: none; }
+ul.ul li::before {
+  content: ''; position: absolute; left: 0; top: .62rem;
+  width: 8px; height: 8px; border-radius: 50%; border: 2px solid;
+}
+ul.ul.ln  li::before { background: var(--steel-xs); border-color: var(--navy); }
+ul.ul.lg  li::before { background: var(--gold-lt);  border-color: var(--gold); }
+ul.ul.lsg li::before { background: var(--sage-lt);  border-color: var(--sage); }
+ul.ul.lr  li::before { background: var(--red-lt);   border-color: var(--red);  }
+strong { color: var(--ink); font-weight: 600; }
+em     { color: var(--steel); font-style: italic; }
+
+/* BADGE */
+.bdg {
+  display: inline-flex; align-items: center; gap: .2rem;
+  padding: .15rem .55rem; border-radius: 3px; font-size: .68rem;
+  font-weight: 600; font-family: 'DM Mono', monospace; border: 1px solid;
+}
+.bdg-n  { background: var(--steel-xs); color: var(--navy);  border-color: var(--steel-lt); }
+.bdg-g  { background: var(--gold-lt);  color: var(--gold);  border-color: rgba(200,151,58,.4); }
+.bdg-sg { background: var(--sage-lt);  color: var(--sage);  border-color: rgba(90,138,106,.35); }
+.bdg-r  { background: var(--red-lt);   color: var(--red);   border-color: rgba(192,57,43,.25); }
+
+/* TABLE */
+.tw { overflow-x: auto; border-radius: 8px; border: 1.5px solid var(--rule); background: var(--white); box-shadow: var(--sh); }
+table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+thead tr { background: var(--navy); }
+thead th { font-family: 'DM Mono', monospace; font-size: .67rem; font-weight: 500; color: rgba(255,255,255,.85); text-align: left; padding: .58rem .85rem; letter-spacing: .5px; text-transform: uppercase; }
+tbody tr { border-bottom: 1px solid var(--rule); transition: background .12s; }
+tbody tr:nth-child(even) { background: var(--steel-xs); }
+tbody tr:hover { background: var(--gold-lt); }
+tbody td { padding: .52rem .85rem; color: var(--ink-md); vertical-align: top; line-height: 1.5; }
+tbody td:first-child { font-weight: 600; color: var(--ink); }
+
+/* LETTER MOCKUP */
+.letter {
+  background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px;
+  padding: 1.4rem 1.6rem; box-shadow: var(--sh-md); font-size: .82rem;
+  line-height: 1.75; color: var(--ink-md); font-family: 'DM Sans', sans-serif;
+  position: relative;
+}
+.letter::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--navy), var(--steel));
+  border-radius: 8px 8px 0 0;
+}
+.letter-part {
+  display: flex; gap: .6rem; align-items: flex-start;
+  padding: .4rem .6rem; border-radius: 5px; margin-bottom: .25rem;
+  font-size: .8rem; transition: background .15s;
+}
+.letter-part:hover { background: var(--steel-xs); }
+.letter-tag {
+  font-family: 'DM Mono', monospace; font-size: .6rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px; padding: .12rem .45rem;
+  border-radius: 3px; flex-shrink: 0; margin-top: .08rem; min-width: 80px; text-align: center;
+}
+.lt-n  { background: var(--navy);  color: #fff; }
+.lt-g  { background: var(--gold);  color: #fff; }
+.lt-sg { background: var(--sage);  color: #fff; }
+.lt-s  { background: var(--steel); color: #fff; }
+.lt-r  { background: var(--red);   color: #fff; }
+.lt-w  { background: var(--rule);  color: var(--ink-lt); }
+.letter-content { font-size: .8rem; color: var(--ink-md); line-height: 1.6; }
+
+/* OBJECTIVE */
+.obj {
+  display: flex; gap: .85rem; align-items: flex-start; padding: .75rem;
+  background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px;
+  margin-bottom: .55rem; box-shadow: var(--sh); transition: border-color .2s;
+}
+.obj:hover { border-color: var(--steel); }
+.obj-n {
+  min-width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-family: 'DM Serif Display', serif; font-weight: 400; font-size: .9rem; color: #fff;
+}
+.obj-t { font-size: .84rem; color: var(--ink-md); line-height: 1.55; padding-top: .1rem; }
+
+/* QUIZ */
+.quiz-box { background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px; padding: .95rem; margin-bottom: .7rem; box-shadow: var(--sh); }
+.quiz-tag { font-family: 'DM Mono', monospace; font-size: .57rem; letter-spacing: 2px; background: var(--navy); color: #fff; padding: .13rem .5rem; border-radius: 3px; display: inline-block; margin-bottom: .42rem; }
+.quiz-q { font-family: 'DM Serif Display', serif; font-size: .95rem; color: var(--ink); margin-bottom: .45rem; }
+.quiz-opts { list-style: none; }
+.quiz-opts li { padding: .38rem .75rem; border: 1.5px solid var(--rule); border-radius: 6px; margin-bottom: .28rem; font-size: .82rem; color: var(--ink-md); cursor: pointer; transition: all .18s; display: flex; gap: .55rem; align-items: flex-start; }
+.quiz-opts li:hover { border-color: var(--steel); background: var(--steel-xs); }
+.quiz-opts li.correct { border-color: var(--sage); background: var(--sage-lt); color: var(--ink); }
+.opt-l { min-width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .65rem; font-weight: 700; flex-shrink: 0; font-family: 'DM Mono', monospace; }
+
+/* PREPOSITIONAL PHRASE CARD */
+.prep {
+  background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px;
+  padding: .75rem .9rem; margin-bottom: .45rem; box-shadow: var(--sh);
+  display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; align-items: center;
+}
+.prep-phrase { font-weight: 700; color: var(--navy); font-size: .88rem; }
+.prep-meaning { font-size: .8rem; color: var(--ink-md); font-style: italic; }
+
+/* ACTIVITY */
+.act { display: flex; gap: .8rem; padding: .72rem; background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px; margin-bottom: .5rem; box-shadow: var(--sh); }
+.act-ico { width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: .88rem; flex-shrink: 0; background: var(--steel-xs); border: 1.5px solid var(--steel-lt); }
+.act-t strong { font-size: .88rem; display: block; margin-bottom: .08rem; color: var(--ink); }
+.act-t p { font-size: .8rem; color: var(--ink-md); line-height: 1.5; }
+
+/* REC */
+.rec { display: flex; gap: .75rem; padding: .68rem .85rem; background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px; margin-bottom: .45rem; box-shadow: var(--sh); transition: border-color .18s; }
+.rec:hover { border-color: var(--steel); }
+.rec-ico { font-size: 1.15rem; flex-shrink: 0; margin-top: .08rem; }
+.rec-title { font-weight: 600; font-size: .88rem; color: var(--ink); margin-bottom: .05rem; }
+.rec-desc  { font-size: .78rem; color: var(--ink-lt); line-height: 1.5; }
+
+/* CLOSING */
+.cover-close {
+  background: var(--navy); min-height: 100vh;
+  justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.close-inner { position: relative; z-index: 2; max-width: 800px; width: 100%; padding: 2.5rem; text-align: center; }
+.sum-row { display: flex; gap: .6rem; margin-bottom: .4rem; font-size: .84rem; text-align: left; }
+.sum-k { min-width: 150px; font-family: 'DM Mono', monospace; font-size: .66rem; color: var(--gold-md); flex-shrink: 0; padding-top: .12rem; letter-spacing: .5px; }
+.sum-v { color: rgba(255,255,255,.72); line-height: 1.5; }
+
+/* ══ NAV ═════════════════════════════════════════════════════════ */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,.97); border-top: 2px solid var(--rule);
+  padding: .5rem 1.5rem; display: flex; align-items: center;
+  justify-content: space-between; z-index: 1000; backdrop-filter: blur(8px);
+}
+.nb {
+  display: flex; align-items: center; gap: .38rem;
+  padding: .38rem .9rem; border-radius: 4px;
+  font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: .78rem;
+  border: 1.5px solid var(--rule); background: var(--white); color: var(--ink-md);
+  cursor: pointer; transition: all .18s;
+}
+.nb:hover:not(:disabled) { border-color: var(--navy); color: var(--navy); background: var(--steel-xs); }
+.nb:disabled { opacity: .28; cursor: not-allowed; }
+.nav-c { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.ctr   { font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--ink-lt); }
+.ctr span { color: var(--navy); font-size: .88rem; font-weight: 700; }
+.dots  { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 320px; }
+.dot   { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); border: none; cursor: pointer; padding: 0; transition: all .18s; }
+.dot.active { background: var(--navy); transform: scale(1.45); }
+.nav-sp { height: 62px; }
+
+@media (max-width: 768px) {
+  .sb { padding: 1rem; } .sh { padding: .6rem 1rem; }
+  .g2,.g3 { grid-template-columns: 1fr; }
+  .prep { grid-template-columns: 1fr; }
+  .dots { max-width: 180px; }
+}
+@media (max-width: 480px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S1 — COVER
+══════════════════════════════════════════════════════════════ -->
+<div class="slide cover active" id="s1">
+  <div class="cover-bg"></div>
+  <div class="cover-lines"></div>
+  <div class="cover-env">✉️</div>
+  <div class="cover-inner">
+    <div class="cover-eyebrow">
+      <span class="pill pill-w">Advanced English 2</span>
+      <span class="pill pill-g">Intermediate Level</span>
+      <span class="pill pill-s">ID13302</span>
+    </div>
+    <h1 class="cover-title">
+      Topic 10<br>
+      <span class="t-italic t-gold">Snail</span>
+      <span class="t-steel"> Mail</span>
+    </h1>
+    <p class="cover-sub">
+      Business letter format · Cultural observations<br>
+      Prepositional phrases in professional writing
+    </p>
+    <div class="topic-chips">
+      <span class="tchip"><span class="tn">10.1</span> Business Letter Format</span>
+      <span class="tchip"><span class="tn">10.2</span> Cultural Observations</span>
+      <span class="tchip"><span class="tn">10.3</span> Prepositional Phrases</span>
+    </div>
+    <p class="cover-foot">
+      Ref.: <span>Powell, M. (2014). In Company 3.0. Intermediate Student's Book. Macmillan Press.</span>
+    </p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S2 — INTRODUCTION / CONTEXT
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-ico ico-n">📬</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 02 · Introduction</div>
+      <div class="sh-title">What is <span class="tn">Snail Mail</span>?</div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2" style="margin-bottom:1rem">
+      <div>
+        <div class="box box-n">
+          <div class="blbl" style="color:var(--navy)">Definition</div>
+          <strong>Snail mail</strong> is an informal term for <strong>physical, postal correspondence</strong> — letters, cards and packages delivered by a postal service. The term highlights how <em>slow</em> it is compared to email.
+        </div>
+        <div class="box box-g">
+          <div class="blbl" style="color:var(--gold)">Why it still matters</div>
+          Despite digital communication, snail mail carries <strong>cultural weight</strong> in the United States. Knowing when and how to use it is part of <strong>professional and social etiquette</strong>.
+        </div>
+      </div>
+      <div>
+        <div class="sec">📋 What we'll cover today</div>
+        <div class="obj">
+          <div class="obj-n" style="background:var(--navy)">1</div>
+          <div class="obj-t"><strong>Business letter format</strong> — structure, components and style conventions.</div>
+        </div>
+        <div class="obj">
+          <div class="obj-n" style="background:var(--gold)">2</div>
+          <div class="obj-t"><strong>Cultural observations</strong> — thank you notes, Christmas cards, invitations and more.</div>
+        </div>
+        <div class="obj">
+          <div class="obj-n" style="background:var(--sage)">3</div>
+          <div class="obj-t"><strong>Prepositional phrases</strong> — 12 key phrases for formal writing and business meetings.</div>
+        </div>
+        <div class="obj">
+          <div class="obj-n" style="background:var(--steel)">4</div>
+          <div class="obj-t"><strong>Productive activity</strong> — write your own formal business letter using the sample as a model.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S3 — OBJECTIVES
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-ico ico-g">🎯</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 03 · Learning Objectives</div>
+      <div class="sh-title">By the end of this class <span class="tg">you will be able to…</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="obj">
+      <div class="obj-n" style="background:var(--navy)">1</div>
+      <div class="obj-t"><strong>Identify and correctly order the required components</strong> of a formal business letter, distinguishing them from email conventions.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--gold)">2</div>
+      <div class="obj-t"><strong>Apply proper salutation etiquette</strong> — using Miss, Mrs., Ms., Mr., Dr. and gender-ambiguous names correctly.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--sage)">3</div>
+      <div class="obj-t"><strong>Recognize cultural expectations</strong> around thank you notes, Christmas cards, invitations and other common snail mail occasions in the United States.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--steel)">4</div>
+      <div class="obj-t"><strong>Use 12 prepositional phrases</strong> (e.g. <em>on behalf of</em>, <em>in accordance with</em>, <em>with regard to</em>) correctly in professional writing.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--red)">5</div>
+      <div class="obj-t"><strong>Write a well-formatted business letter</strong> following block format, single spacing, formal style guidelines and the sample letter structure from section 10.3.</div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S4 — 10.1 BUSINESS LETTER — COMPONENTS
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-ico ico-n">📄</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 04 · Section 10.1</div>
+      <div class="sh-title"><span class="tn">10.1</span> Business Letter — <span class="ts">Required Components</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-n" style="margin-bottom:1rem">
+      <div class="blbl" style="color:var(--navy)">Key distinction</div>
+      There is <strong>no universally agreed format for email</strong>, but business letters follow a <strong>rigid, ordered structure</strong>. Knowing this order is essential in formal professional communication.
+    </div>
+    <div class="letter">
+      <div class="letter-part">
+        <span class="letter-tag lt-n">1 Letterhead</span>
+        <span class="letter-content">Company name, logo and address. <strong>Authenticates</strong> the letter. Use personal address if no letterhead.</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-s">2 Date</span>
+        <span class="letter-content"><em>June 12, 2024</em> — always write the full date.</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-g">3 Recipient</span>
+        <span class="letter-content">Recipient's <strong>full name, title and address</strong>.</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-sg">4 Salutation</span>
+        <span class="letter-content"><em>Dear Ms. Metiva<strong>:</strong></em> — ends in a <strong>colon</strong> in American English (not a comma).</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-w">5 Body</span>
+        <span class="letter-content">Introductory paragraph · Body paragraphs · Conclusion. No indentation. Single spaced. Block format.</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-g">6 Closing</span>
+        <span class="letter-content"><em>With sincerest gratitude,</em> — ends in a <strong>comma</strong>. Only capitalize the first word.</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-n">7 Signature</span>
+        <span class="letter-content">Handwritten signature above your typed full name and title.</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-r">8 Enclosure</span>
+        <span class="letter-content"><em>Enclosure: Major Gifts Policy</em> or <em>Enc: filename</em> — optional. Also <em>Cc: Name</em> for copies.</span>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S5 — 10.1 STYLE TIPS & TITLES
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-ico ico-g">✍️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 05 · Section 10.1</div>
+      <div class="sh-title">Style Tips and <span class="tg">Salutation Titles</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="sec">📝 Style guidelines</div>
+        <ul class="ul ln">
+          <li>Use <strong>standard font, single spaced, block format</strong> — no indentation.</li>
+          <li>Do <strong>not</strong> try to be "flowery" — extra words <strong>dilute</strong> your message.</li>
+          <li><strong>Do not rely on spell-check</strong> — it misses proper nouns, homophones and grammar errors.</li>
+          <li>Avoid <strong>abbreviations and contractions</strong>.</li>
+          <li>Avoid <strong>exclamation points</strong>.</li>
+          <li>Avoid terms that need <strong>quotation marks</strong> — use precise language instead.</li>
+          <li>Use the recipient's <strong>highest known title</strong> — never call Dr. García "Mr. García".</li>
+          <li><strong>Engineer</strong> is not typically used as a title in English. <strong>Doctor</strong> is the main exception.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec">👤 Titles for women</div>
+        <div class="tw" style="margin-bottom:.85rem">
+          <table>
+            <thead><tr><th>Title</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td>Miss</td><td>Unmarried woman</td></tr>
+              <tr><td>Mrs.</td><td>Married woman (short for Misses)</td></tr>
+              <tr><td>Ms.*</td><td>Married or unmarried — does not reveal marital status</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-g">
+          <div class="blbl" style="color:var(--gold)">⚠️ When in doubt</div>
+          If you don't know a woman's marital status, use <strong>Ms.</strong> (pronounced "mizz," rhymes with <em>fizz</em>). If a name is gender-ambiguous (e.g. <em>Casey Peters</em>), write <strong>Dear Casey Peters:</strong> — omit Mr./Ms.
+        </div>
+        <div class="box box-sg" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--sage)">Latin America vs. US</div>
+          <em>Alexis</em> is frequently a woman's name in the US but a man's name in Latin America. Always consider your recipient's cultural context.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S6 — 10.2 THANK YOU NOTES
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-ico ico-sg">🙏</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 06 · Section 10.2</div>
+      <div class="sh-title"><span class="tn">10.2</span> Cultural Observations — <span class="tsg">The Thank You Note</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="box box-sg" style="margin-bottom:.8rem">
+          <div class="blbl" style="color:var(--sage)">Context</div>
+          The thank you note is a topic of <strong>great debate</strong> in the US. Some consider a verbal "thank you" enough; others view the omission of a written note as rude. The expectation is <strong>significantly greater</strong> than in many other countries.
+        </div>
+        <div class="sec">When is a written thank you note expected?</div>
+        <ul class="ul lsg">
+          <li><strong>Weddings</strong> — hand-written notes are considered imperative.</li>
+          <li><strong>Bridal showers, baby showers, housewarming parties</strong> — any event where gifts are expected.</li>
+          <li><strong>Job interviews</strong> — a brief note helps you stand out from other candidates.</li>
+          <li>Even at <strong>children's birthday parties</strong>, there may still be an expectation.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec">💡 Key nuances</div>
+        <div class="card card-sg" style="margin-bottom:.65rem">
+          <div class="card-ico">🎁</div>
+          <div class="card-title">Opening gifts in person</div>
+          <div class="card-body">The expectation is lower if you open the gift in front of the giver — you can thank them directly. But a written note may still be appreciated.</div>
+        </div>
+        <div class="card card-g" style="margin-bottom:.65rem">
+          <div class="card-ico">✅</div>
+          <div class="card-title">Confirmation of receipt</div>
+          <div class="card-body">Thank you notes also serve as <strong>confirmation that a gift was received</strong> — especially useful when gifts are mailed.</div>
+        </div>
+        <div class="card card-n">
+          <div class="card-ico">🌎</div>
+          <div class="card-title">It's not homogenous</div>
+          <div class="card-body">Geographic region, socioeconomic status and cultural background all affect expectations. When unsure, <strong>send the note anyway</strong>.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S7 — 10.2 OTHER SNAIL MAIL OCCASIONS
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-ico ico-sg">📮</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 07 · Section 10.2</div>
+      <div class="sh-title">Other Common <span class="tsg">Snail Mail Occasions</span> in the US</div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="ga">
+      <div class="card card-n">
+        <div class="card-ico">🎄</div>
+        <div class="card-title">Christmas Cards</div>
+        <div class="card-body">Often include a <strong>family photo</strong> and pre-printed message. The sender may add a handwritten note. Proper etiquette: send a card back to those who send you one. No obligation if you don't send cards in general.</div>
+      </div>
+      <div class="card card-s">
+        <div class="card-ico">💌</div>
+        <div class="card-title">Invitations</div>
+        <div class="card-body">A physical invitation feels <strong>more sincere</strong> than an e-vite. Important rule: <strong>do not hand-deliver invitations</strong> in front of people you have not included.</div>
+      </div>
+      <div class="card card-sg">
+        <div class="card-ico">💐</div>
+        <div class="card-title">Flowers with a Card</div>
+        <div class="card-body">In the US, it is customary to <strong>order flowers and have the florist deliver</strong> the note with them — not to deliver them personally.</div>
+      </div>
+      <div class="card card-r">
+        <div class="card-ico">🕊️</div>
+        <div class="card-title">Sympathy Cards</div>
+        <div class="card-body">Sent by <strong>postal mail</strong> with a personalized handwritten message when someone suffers the loss of a loved one. No expectation to respond with more snail mail.</div>
+      </div>
+      <div class="card card-g">
+        <div class="card-ico">📅</div>
+        <div class="card-title">Save-the-Dates</div>
+        <div class="card-body">An extremely common <strong>pre-invitation</strong> for weddings — usually a magnet or postcard sent <strong>several months</strong> before the wedding. A formal invitation follows later.</div>
+      </div>
+      <div class="card card-n">
+        <div class="card-ico">📣</div>
+        <div class="card-title">Family Announcements</div>
+        <div class="card-body">Professionally printed postcards or magnets for <strong>engagements, pregnancies, births and new addresses</strong>. No expectation to reply with snail mail.</div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S8 — 10.3 PREPOSITIONAL PHRASES — INTRODUCTION
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-ico ico-g">🔗</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 08 · Section 10.3</div>
+      <div class="sh-title"><span class="tn">10.3</span> Prepositional Phrases for <span class="tg">Formal Writing</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-g" style="margin-bottom:1rem">
+      <div class="blbl" style="color:var(--gold)">Pattern</div>
+      Most of these phrases follow a <strong>preposition + noun + preposition</strong> pattern. They are common in <strong>formal letters and business meetings</strong>. Learning them improves both your writing and comprehension significantly.
+    </div>
+    <div class="g2">
+      <div>
+        <div class="prep"><span class="prep-phrase">On behalf of</span><span class="prep-meaning">I am speaking for ___</span></div>
+        <div class="prep"><span class="prep-phrase">In accordance with</span><span class="prep-meaning">Complying with the rules of</span></div>
+        <div class="prep"><span class="prep-phrase">In addition to</span><span class="prep-meaning">As an extra</span></div>
+        <div class="prep"><span class="prep-phrase">According to</span><span class="prep-meaning">As stated by a person / policy</span></div>
+        <div class="prep"><span class="prep-phrase">In order to</span><span class="prep-meaning">So that we can</span></div>
+        <div class="prep"><span class="prep-phrase">On account of</span><span class="prep-meaning">Because of</span></div>
+      </div>
+      <div>
+        <div class="prep"><span class="prep-phrase">In the event that</span><span class="prep-meaning">If it is true that (as a provision)</span></div>
+        <div class="prep"><span class="prep-phrase">Effective / with effect from</span><span class="prep-meaning">Starting on (US: <em>effective</em>)</span></div>
+        <div class="prep"><span class="prep-phrase">In view of / in light of</span><span class="prep-meaning">Because of / given this information</span></div>
+        <div class="prep"><span class="prep-phrase">With regard to</span><span class="prep-meaning">With respect to / about</span></div>
+        <div class="prep"><span class="prep-phrase">In touch with</span><span class="prep-meaning">In contact with</span></div>
+        <div class="prep"><span class="prep-phrase">Under pressure to</span><span class="prep-meaning">Experiencing the stress of a deadline</span></div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S9 — PREPOSITIONAL PHRASES PRACTICE
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="sh">
+    <div class="sh-ico ico-g">✏️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 09 · Section 10.3 — Practice</div>
+      <div class="sh-title">Prepositional Phrases — <span class="tg">Fill in the Blank</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-n" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--navy)">Directions</div>
+      Select the prepositional phrase that <strong>best completes</strong> each sentence. Correct answers are marked ✓.
+    </div>
+    <div class="g2">
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">1</div>
+          <div class="quiz-q">___ the entire client care team at Apex Marketing, I'd like to thank you for your loyal business.</div>
+          <ul class="quiz-opts">
+            <li class="correct"><span class="opt-l">a</span> ✓ On behalf of</li>
+            <li><span class="opt-l">b</span> In case of</li>
+            <li><span class="opt-l">c</span> In order to</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">2</div>
+          <div class="quiz-q">___ Eric, all expense reports must be submitted by noon today.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> In order to</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ According to</li>
+            <li><span class="opt-l">c</span> In terms of</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">3</div>
+          <div class="quiz-q">___ June 9th, all visitors must present a valid form of ID.</div>
+          <ul class="quiz-opts">
+            <li class="correct"><span class="opt-l">a</span> ✓ Effective</li>
+            <li><span class="opt-l">b</span> In favor of</li>
+            <li><span class="opt-l">c</span> In accordance with</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">4</div>
+          <div class="quiz-q">___ the employee handbook, all employees are allowed two personal days per year.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Effective</li>
+            <li><span class="opt-l">b</span> In favor of</li>
+            <li class="correct"><span class="opt-l">c</span> ✓ In accordance with</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">5</div>
+          <div class="quiz-q">___ our flight gets cancelled, we'll have to postpone the meeting.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> In order to</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ In the event that</li>
+            <li><span class="opt-l">c</span> In agreement with</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">6</div>
+          <div class="quiz-q">I will be ___ Jeff at the London office about this issue.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> with regard to</li>
+            <li><span class="opt-l">b</span> in addition to</li>
+            <li class="correct"><span class="opt-l">c</span> ✓ in touch with</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">7</div>
+          <div class="quiz-q">___ a cash bonus, the winner will also receive a five-day trip to Disney World!</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> In order to</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ In addition to</li>
+            <li><span class="opt-l">c</span> With regard to</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">8</div>
+          <div class="quiz-q">___ the terrible weather, we have been forced to cancel the company picnic.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> In addition to</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ On account of</li>
+            <li><span class="opt-l">c</span> On behalf of</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">9</div>
+          <div class="quiz-q">___ technical ability, Paola is the best candidate.</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> In addition to</li>
+            <li><span class="opt-l">b</span> On behalf of</li>
+            <li class="correct"><span class="opt-l">c</span> ✓ In terms of</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">10</div>
+          <div class="quiz-q">We are ___ cut costs.</div>
+          <ul class="quiz-opts">
+            <li class="correct"><span class="opt-l">a</span> ✓ under pressure to</li>
+            <li><span class="opt-l">b</span> in touch with</li>
+            <li><span class="opt-l">c</span> with regard to</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S10 — SAMPLE LETTER ANALYSIS
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="sh">
+    <div class="sh-ico ico-n">📋</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 10 · Section 10.3 — Sample Letter</div>
+      <div class="sh-title">Sample Business Letter — <span class="ts">Annotated</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-n" style="margin-bottom:.8rem">
+      <div class="blbl" style="color:var(--navy)">Notice</div>
+      This letter uses <strong>all 12 prepositional phrases</strong> in context. Identify them as you read. It also demonstrates the complete letter format from section 10.1.
+    </div>
+    <div class="letter" style="font-size:.79rem">
+      <div class="letter-part">
+        <span class="letter-tag lt-w">Address</span>
+        <span class="letter-content">1616 Red Fox Circle, Kenosha, Wisconsin 53140</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-s">Date</span>
+        <span class="letter-content">June 12, 2016</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-g">Recipient</span>
+        <span class="letter-content">Angela Metiva · 1289 Evergreen Way · Oak Creek, Wisconsin 53154</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-sg">Salutation</span>
+        <span class="letter-content"><strong>Dear Ms. Metiva:</strong></span>
+      </div>
+      <div class="letter-part" style="align-items:flex-start">
+        <span class="letter-tag lt-w">Body</span>
+        <span class="letter-content">
+          <strong>On behalf of</strong> the entire Individual Giving Department at Midwest Children's Hospital, I would like to thank you for your most generous donation. <strong>In addition to</strong> providing housing for displaced families, your contribution will also help fund in-hospital activities.<br><br>
+          <strong>In accordance with</strong> our charitable donations transparency policy, we must schedule a meeting with Thomas Radewan, our financial oversight officer, <strong>in order to</strong> ensure that you are <strong>in agreement with</strong> the specifics of our spending plan.<br><br>
+          <strong>On account of</strong> the size of your donation, I recommend inviting your accountant <strong>in the event that</strong> you have questions about tax deductions.<br><br>
+          I will be contacting you soon <strong>in order to</strong> schedule this meeting at your earliest convenience.
+        </span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-g">Closing</span>
+        <span class="letter-content"><em>With sincerest gratitude,</em> &nbsp;[signature]&nbsp; <strong>Karla Arzate</strong> · Associate Director · (262) 555-8910</span>
+      </div>
+      <div class="letter-part">
+        <span class="letter-tag lt-r">Enclosure</span>
+        <span class="letter-content">Enclosure: Major Gifts Transparency Policy &nbsp;·&nbsp; Cc: Thomas Radewan</span>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S11 — PRODUCTIVE ACTIVITY
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="sh">
+    <div class="sh-ico ico-r">🖊️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Slide 11 · Productive Activity</div>
+      <div class="sh-title">Write Your Own <span class="tr">Business Letter</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-r" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--red)">🎯 Scenario</div>
+      You are a representative of a non-profit organization or a company of your choice. Write a <strong>formal business letter</strong> to a donor, client or colleague. Choose your own context.
+    </div>
+    <div class="act">
+      <div class="act-ico">1️⃣</div>
+      <div class="act-t">
+        <strong>Structure your letter correctly</strong>
+        <p>Include all required components in order: address, date, recipient, salutation (with colon), introductory paragraph, body, conclusion, closing (with comma), signature, sender ID. Add an Enclosure or Cc line if applicable.</p>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act-ico">2️⃣</div>
+      <div class="act-t">
+        <strong>Use at least 5 prepositional phrases</strong>
+        <p>Incorporate a minimum of 5 of the 12 phrases from section 10.3 naturally in your text. Underline or bold them so they are easy to identify.</p>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act-ico">3️⃣</div>
+      <div class="act-t">
+        <strong>Apply correct salutation etiquette</strong>
+        <p>Choose a realistic recipient. Apply the Miss / Mrs. / Ms. / Mr. / Dr. rules correctly. If the name is gender-ambiguous, handle it appropriately.</p>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act-ico">4️⃣</div>
+      <div class="act-t">
+        <strong>Follow style guidelines</strong>
+        <p>Block format, single spaced, no indentation, no contractions, no exclamation points, no abbreviations. Precise, professional language only.</p>
+      </div>
+    </div>
+    <div class="g2" style="margin-top:.6rem">
+      <div class="box box-n">
+        <div class="blbl" style="color:var(--navy)">Deliverable</div>
+        One complete business letter, typed or handwritten. Minimum 3 paragraphs. Use the sample letter from slide 10 as your model.
+      </div>
+      <div class="box box-sg">
+        <div class="blbl" style="color:var(--sage)">Evaluation criteria</div>
+        Correct structure · 5+ prepositional phrases · Appropriate salutation · Professional style · No format errors
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S12 — BIBLIOGRAPHY & CLOSING
+══════════════════════════════════════════════════════════════ -->
+<div class="slide cover cover-close" id="s12">
+  <div class="cover-bg"></div>
+  <div class="cover-lines"></div>
+  <div class="cover-env">✉️</div>
+  <div class="close-inner">
+    <div class="cover-eyebrow" style="justify-content:center;margin-bottom:1.2rem">
+      <span class="pill pill-g">✅ Topic 10 — Complete</span>
+    </div>
+    <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,5vw,3.2rem);color:#fff;line-height:1.1;margin-bottom:.5rem">
+      Key Takeaways — <span style="color:var(--gold-md);font-style:italic">Snail Mail</span>
+    </h2>
+    <div style="width:48px;height:2px;background:var(--gold-md);margin:.9rem auto 1.4rem;border-radius:2px"></div>
+    <div style="text-align:left;margin-bottom:1.5rem">
+      <div class="sum-row"><div class="sum-k">10.1 Format</div><div class="sum-v">8 ordered components · Block format, single spaced, no indentation · Colon in salutation, comma in closing.</div></div>
+      <div class="sum-row"><div class="sum-k">Titles</div><div class="sum-v">Miss (unmarried) · Mrs. (married) · Ms. (unknown/either) · Use highest known title · Gender-ambiguous → full name.</div></div>
+      <div class="sum-row"><div class="sum-k">10.2 Thank you</div><div class="sum-v">Expected for gifts at weddings, showers, housewarmings · Optional after interviews · When unsure, send it anyway.</div></div>
+      <div class="sum-row"><div class="sum-k">10.2 Occasions</div><div class="sum-v">Christmas cards · Invitations · Sympathy cards · Save-the-dates · Family announcements.</div></div>
+      <div class="sum-row" style="margin-bottom:0"><div class="sum-k">10.3 Phrases</div><div class="sum-v">12 prepositional phrases — on behalf of · in accordance with · in addition to · according to · in order to + 7 more.</div></div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:.9rem 1.2rem;max-width:520px;margin:0 auto">
+      <div style="font-family:'DM Mono',monospace;font-size:.6rem;color:var(--gold-md);letter-spacing:2px;margin-bottom:.4rem">BIBLIOGRAPHY</div>
+      <div style="font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.65;text-align:left">
+        Powell, M. (2014). <em style="color:rgba(255,255,255,.8)">In Company 3.0. Intermediate Student's Book.</em> Thailand: Macmillan Press.
+      </div>
+    </div>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ══ NAV ════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nb" id="pb-btn" onclick="go(-1)" disabled>◀ Previous</button>
+  <div class="nav-c">
+    <div class="ctr">Slide <span id="cn">1</span> / <span id="tn">12</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nb" id="nb-btn" onclick="go(1)">Next ▶</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+document.getElementById('tn').textContent = N;
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+function update() {
+  slides.forEach((s,i) => { s.classList.toggle('active', i===cur); if(i===cur) s.scrollTop=0; });
+  dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+  document.getElementById('cn').textContent = cur+1;
+  document.getElementById('pb-btn').disabled = cur===0;
+  document.getElementById('nb-btn').disabled = cur===N-1;
+  document.getElementById('pb').style.width = ((cur+1)/N*100)+'%';
+}
+function go(d) { const n=cur+d; if(n>=0&&n<N){cur=n;update();} }
+function goTo(i) { cur=i; update(); }
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if(e.key==='ArrowLeft' ||e.key==='ArrowUp')   go(-1);
+});
+update();
+</script>
+</body>
+</html>
