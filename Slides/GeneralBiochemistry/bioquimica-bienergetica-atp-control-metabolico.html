@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bioenergética · ATP · Control Metabólico — Bioquímica General</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ══ PALETA: LABORATORIO DE BIOQUÍMICA ══════════════════════════
+   Blanco de pared de lab · Gris instrumental · Colores reactivos
+   Cian (#00B4D8) · Verde lima (#70E000) · Naranja (#FF6B35)
+   Violeta (#7B2FBE) · Rojo coral (#E63946)
+═══════════════════════════════════════════════════════════════ */
+:root {
+  --paper:    #F7F9FC;
+  --surface:  #FFFFFF;
+  --rule:     #E4EAF2;
+  --grid:     #EEF2F8;
+  --ink:      #0D1B2A;
+  --ink-md:   #2C3E50;
+  --ink-lt:   #5A6E84;
+  --ink-xs:   #9AAABE;
+
+  /* Colores reactivos */
+  --cyan:     #00B4D8;
+  --cyan-lt:  #E0F7FC;
+  --cyan-dk:  #006480;
+  --lime:     #70E000;
+  --lime-lt:  #EDFFD6;
+  --lime-dk:  #3A7500;
+  --orange:   #FF6B35;
+  --orange-lt:#FFF0EB;
+  --orange-dk:#9A3000;
+  --violet:   #7B2FBE;
+  --violet-lt:#F3E8FF;
+  --violet-dk:#4A1180;
+  --coral:    #E63946;
+  --coral-lt: #FFE8EA;
+  --coral-dk: #8B0010;
+  --teal:     #2EC4B6;
+  --teal-lt:  #E0F7F5;
+
+  --sh:    0 1px 3px rgba(13,27,42,.07), 0 2px 10px rgba(13,27,42,.05);
+  --sh-md: 0 4px 18px rgba(13,27,42,.09);
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: 'Outfit', sans-serif;
+  background: var(--paper); color: var(--ink);
+}
+
+/* Grid de laboratorio en fondo */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: .7;
+}
+
+/* Barra de progreso */
+.pb {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
+  background: linear-gradient(90deg, var(--cyan), var(--lime), var(--orange), var(--violet));
+  transition: width .35s ease;
+  box-shadow: 0 0 8px rgba(0,180,216,.3);
+}
+
+/* ══ SLIDES ══════════════════════════════════════════════════════ */
+.slide {
+  display: none; flex-direction: column;
+  width: 100vw; height: 100vh; overflow-y: auto;
+  position: relative; z-index: 1;
+  animation: fadeUp .32s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide::-webkit-scrollbar { width: 4px; }
+.slide::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 4px; }
+
+/* ══ PORTADA ══════════════════════════════════════════════════════ */
+.cover {
+  background: var(--ink); min-height: 100vh;
+  justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.cover-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 50% at 10% 30%, rgba(0,180,216,.20) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 45% at 88% 70%, rgba(112,224,0,.14)  0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 5%,  rgba(255,107,53,.12) 0%, transparent 50%),
+    radial-gradient(ellipse 35% 40% at 70% 85%, rgba(123,47,190,.12) 0%, transparent 50%);
+}
+/* Rejilla de laboratorio oscura */
+.cover-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+/* Moléculas decorativas */
+.mol {
+  position: absolute; pointer-events: none; user-select: none;
+  font-size: 9vw; opacity: .04; line-height: 1;
+}
+.m1 { top: 5%;  right: 3%; }
+.m2 { bottom: 5%; left: 2%; font-size: 7vw; }
+
+.cover-inner {
+  position: relative; z-index: 2;
+  max-width: 900px; width: 100%; padding: 2.5rem;
+}
+.cover-eyebrow {
+  display: flex; gap: .55rem; flex-wrap: wrap; margin-bottom: 1.4rem;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .24rem .85rem; border-radius: 4px; font-size: .7rem;
+  font-weight: 600; letter-spacing: .5px; border: 1px solid;
+  font-family: 'Space Mono', monospace;
+}
+.pill-w  { background: rgba(255,255,255,.07); color: rgba(255,255,255,.65); border-color: rgba(255,255,255,.18); }
+.pill-c  { background: rgba(0,180,216,.15); color: #5CD8F0; border-color: rgba(0,180,216,.35); }
+.pill-l  { background: rgba(112,224,0,.12);  color: #A0F040; border-color: rgba(112,224,0,.30); }
+.pill-o  { background: rgba(255,107,53,.14); color: #FF9975; border-color: rgba(255,107,53,.35); }
+
+.cover-title {
+  font-size: clamp(2.4rem, 6vw, 4.8rem); font-weight: 800; line-height: 1.0;
+  color: #fff; margin-bottom: .6rem;
+}
+.cover-title .tc { color: #5CD8F0; }
+.cover-title .tl { color: #A0F040; }
+.cover-title .to { color: #FF9975; }
+.cover-title .tv { color: #C080FF; }
+
+.cover-sub {
+  font-size: 1rem; color: rgba(255,255,255,.42); font-weight: 300;
+  margin-bottom: 2rem; line-height: 1.7; max-width: 600px;
+}
+.cover-topics {
+  display: flex; flex-direction: column; gap: .3rem; margin-bottom: 2rem;
+}
+.ct-row {
+  display: flex; align-items: center; gap: .6rem;
+  font-size: .85rem; color: rgba(255,255,255,.55); font-weight: 400;
+}
+.ct-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.ct-label { font-weight: 600; color: rgba(255,255,255,.8); }
+
+.cover-foot {
+  font-family: 'Space Mono', monospace; font-size: .6rem;
+  color: rgba(255,255,255,.2); letter-spacing: 1px; line-height: 1.6;
+}
+.cover-foot span { color: rgba(255,255,255,.38); }
+
+/* ══ SLIDE HEADER ════════════════════════════════════════════════ */
+.sh {
+  background: var(--surface); border-bottom: 2px solid var(--rule);
+  padding: .75rem 1.8rem; display: flex; align-items: center;
+  gap: .85rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(13,27,42,.05);
+  position: relative;
+}
+/* Banda de color lateral izquierda por tema */
+.sh::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+}
+.sh-c::before  { background: var(--cyan);   }
+.sh-l::before  { background: var(--lime);   }
+.sh-o::before  { background: var(--orange); }
+.sh-v::before  { background: var(--violet); }
+.sh-r::before  { background: var(--coral);  }
+.sh-t::before  { background: var(--teal);   }
+
+.sh-ico {
+  width: 38px; height: 38px; border-radius: 8px; display: flex;
+  align-items: center; justify-content: center; font-size: .95rem; flex-shrink: 0;
+}
+.ico-c { background: var(--cyan-lt);   border: 1.5px solid rgba(0,180,216,.25);  }
+.ico-l { background: var(--lime-lt);   border: 1.5px solid rgba(112,224,0,.3);   }
+.ico-o { background: var(--orange-lt); border: 1.5px solid rgba(255,107,53,.25); }
+.ico-v { background: var(--violet-lt); border: 1.5px solid rgba(123,47,190,.25); }
+.ico-r { background: var(--coral-lt);  border: 1.5px solid rgba(230,57,70,.2);   }
+.ico-t { background: var(--teal-lt);   border: 1.5px solid rgba(46,196,182,.25); }
+
+.sh-meta { flex: 1; }
+.sh-lbl {
+  font-family: 'Space Mono', monospace; font-size: .57rem;
+  color: var(--ink-xs); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: .05rem;
+}
+.sh-title {
+  font-size: clamp(.95rem, 2.2vw, 1.38rem); font-weight: 700; color: var(--ink); line-height: 1.15;
+}
+.tc  { color: var(--cyan-dk);   }
+.tl  { color: var(--lime-dk);   }
+.to  { color: var(--orange-dk); }
+.tv  { color: var(--violet-dk); }
+.tr  { color: var(--coral-dk);  }
+.tt  { color: #1a7a74;          }
+
+/* Chip de "idea central" */
+.idea-chip {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .2rem .7rem; border-radius: 4px; font-size: .65rem;
+  font-weight: 700; font-family: 'Space Mono', monospace;
+  border: 1px solid; letter-spacing: .5px; flex-shrink: 0;
+}
+.ic-c { background: var(--cyan-lt);   color: var(--cyan-dk);   border-color: rgba(0,180,216,.3);  }
+.ic-l { background: var(--lime-lt);   color: var(--lime-dk);   border-color: rgba(112,224,0,.35); }
+.ic-o { background: var(--orange-lt); color: var(--orange-dk); border-color: rgba(255,107,53,.3); }
+.ic-v { background: var(--violet-lt); color: var(--violet-dk); border-color: rgba(123,47,190,.3); }
+.ic-r { background: var(--coral-lt);  color: var(--coral-dk);  border-color: rgba(230,57,70,.25); }
+.ic-t { background: var(--teal-lt);   color: #1a7a74;          border-color: rgba(46,196,182,.3); }
+
+/* ══ SLIDE BODY ══════════════════════════════════════════════════ */
+.sb {
+  flex: 1; padding: 1.3rem 1.8rem; background: var(--paper); overflow-y: auto;
+}
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .9rem; }
+.ga { display: grid; grid-template-columns: repeat(auto-fit,minmax(195px,1fr)); gap: .9rem; }
+
+/* CARD */
+.card {
+  background: var(--surface); border: 1.5px solid var(--rule); border-radius: 10px;
+  padding: .95rem; box-shadow: var(--sh); transition: box-shadow .2s, transform .15s;
+  position: relative; overflow: hidden;
+}
+.card:hover { box-shadow: var(--sh-md); transform: translateY(-1px); }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.card-c::before { background: var(--cyan);   }
+.card-l::before { background: var(--lime);   }
+.card-o::before { background: var(--orange); }
+.card-v::before { background: var(--violet); }
+.card-r::before { background: var(--coral);  }
+.card-t::before { background: var(--teal);   }
+.card-ico   { font-size: 1.35rem; margin-bottom: .42rem; }
+.card-title { font-weight: 700; font-size: .95rem; color: var(--ink); margin-bottom: .28rem; }
+.card-body  { font-size: .82rem; color: var(--ink-md); line-height: 1.62; }
+
+/* CENTRAL IDEA CARD — destacada */
+.idea-card {
+  background: var(--ink); border-radius: 12px; padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem; position: relative; overflow: hidden; box-shadow: var(--sh-md);
+}
+.idea-card::before {
+  content: ''; position: absolute; inset: 0; border-radius: 12px;
+  background: radial-gradient(ellipse 70% 60% at 0% 50%, rgba(0,180,216,.15) 0%, transparent 60%);
+}
+.idea-label {
+  font-family: 'Space Mono', monospace; font-size: .6rem; letter-spacing: 3px;
+  text-transform: uppercase; margin-bottom: .5rem; position: relative; z-index: 1;
+}
+.idea-text {
+  font-size: clamp(.95rem, 2vw, 1.25rem); font-weight: 600; line-height: 1.5;
+  color: #fff; position: relative; z-index: 1;
+}
+
+/* BOX */
+.box {
+  border-radius: 10px; padding: .82rem 1rem; margin-bottom: .75rem;
+  font-size: .84rem; line-height: 1.65; border: 1.5px solid;
+}
+.box-c { background: var(--cyan-lt);   border-color: rgba(0,180,216,.3);   color: var(--ink-md); }
+.box-l { background: var(--lime-lt);   border-color: rgba(112,224,0,.35);  color: var(--ink-md); }
+.box-o { background: var(--orange-lt); border-color: rgba(255,107,53,.3);  color: var(--ink-md); }
+.box-v { background: var(--violet-lt); border-color: rgba(123,47,190,.3);  color: var(--ink-md); }
+.box-r { background: var(--coral-lt);  border-color: rgba(230,57,70,.25);  color: var(--ink-md); }
+.box-t { background: var(--teal-lt);   border-color: rgba(46,196,182,.3);  color: var(--ink-md); }
+.box-w { background: var(--surface);   border-color: var(--rule);          color: var(--ink-md); }
+.blbl {
+  font-family: 'Space Mono', monospace; font-size: .57rem;
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: .28rem; opacity: .65;
+}
+
+/* SEC */
+.sec {
+  font-weight: 700; font-size: 1rem; color: var(--ink);
+  margin-bottom: .65rem; padding-bottom: .28rem;
+  border-bottom: 1.5px solid var(--rule); display: flex; align-items: center; gap: .4rem;
+}
+
+/* LISTS */
+ul.ul { list-style: none; padding: 0; }
+ul.ul li {
+  padding: .34rem 0 .34rem 1.3rem; position: relative;
+  font-size: .84rem; color: var(--ink-md); line-height: 1.55;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+}
+ul.ul li:last-child { border-bottom: none; }
+ul.ul li::before {
+  content: ''; position: absolute; left: 0; top: .6rem;
+  width: 8px; height: 8px; border-radius: 2px; /* cuadrado = estilo lab */
+}
+ul.ul.lc li::before { background: var(--cyan);   }
+ul.ul.ll li::before { background: var(--lime);   }
+ul.ul.lo li::before { background: var(--orange); }
+ul.ul.lv li::before { background: var(--violet); }
+ul.ul.lr li::before { background: var(--coral);  }
+ul.ul.lt li::before { background: var(--teal);   }
+strong { color: var(--ink); font-weight: 600; }
+em     { color: var(--cyan-dk); font-style: italic; }
+
+/* BADGE */
+.bdg {
+  display: inline-flex; align-items: center; gap: .2rem;
+  padding: .15rem .55rem; border-radius: 4px; font-size: .68rem;
+  font-weight: 700; font-family: 'Space Mono', monospace; border: 1px solid;
+}
+.bdg-c { background: var(--cyan-lt);   color: var(--cyan-dk);   border-color: rgba(0,180,216,.3);  }
+.bdg-l { background: var(--lime-lt);   color: var(--lime-dk);   border-color: rgba(112,224,0,.35); }
+.bdg-o { background: var(--orange-lt); color: var(--orange-dk); border-color: rgba(255,107,53,.3); }
+.bdg-v { background: var(--violet-lt); color: var(--violet-dk); border-color: rgba(123,47,190,.3); }
+.bdg-r { background: var(--coral-lt);  color: var(--coral-dk);  border-color: rgba(230,57,70,.25); }
+.bdg-t { background: var(--teal-lt);   color: #1a7a74;          border-color: rgba(46,196,182,.3); }
+
+/* TABLE */
+.tw { overflow-x: auto; border-radius: 10px; border: 1.5px solid var(--rule); background: var(--surface); box-shadow: var(--sh); }
+table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+thead tr { background: var(--ink); }
+thead th { font-family: 'Space Mono', monospace; font-size: .65rem; font-weight: 700; color: rgba(255,255,255,.85); text-align: left; padding: .55rem .85rem; letter-spacing: .5px; text-transform: uppercase; }
+tbody tr { border-bottom: 1px solid var(--rule); transition: background .12s; }
+tbody tr:nth-child(even) { background: var(--paper); }
+tbody tr:hover { background: var(--cyan-lt); }
+tbody td { padding: .5rem .85rem; color: var(--ink-md); vertical-align: top; line-height: 1.5; }
+tbody td:first-child { font-weight: 600; color: var(--ink); }
+
+/* OBJECTIVE */
+.obj {
+  display: flex; gap: .85rem; align-items: flex-start; padding: .72rem;
+  background: var(--surface); border: 1.5px solid var(--rule); border-radius: 10px;
+  margin-bottom: .55rem; box-shadow: var(--sh); transition: border-color .2s;
+}
+.obj:hover { border-color: var(--cyan); }
+.obj-n {
+  min-width: 30px; height: 30px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-weight: 700; font-size: .85rem; color: #fff;
+}
+.obj-t { font-size: .84rem; color: var(--ink-md); line-height: 1.55; padding-top: .1rem; }
+
+/* STEP */
+.step {
+  display: flex; gap: .8rem; padding: .68rem .85rem;
+  background: var(--surface); border: 1.5px solid var(--rule);
+  border-radius: 10px; margin-bottom: .45rem; box-shadow: var(--sh);
+  align-items: flex-start;
+}
+.step-n {
+  min-width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  font-family: 'Space Mono', monospace; font-weight: 700; font-size: .7rem; color: #fff;
+}
+.step-t strong { font-size: .88rem; display: block; color: var(--ink); margin-bottom: .06rem; }
+.step-t p { font-size: .8rem; color: var(--ink-md); line-height: 1.5; }
+
+/* QUIZ */
+.quiz-box { background: var(--surface); border: 1.5px solid var(--rule); border-radius: 10px; padding: .92rem; margin-bottom: .65rem; box-shadow: var(--sh); }
+.quiz-tag { font-family: 'Space Mono', monospace; font-size: .55rem; letter-spacing: 2px; background: var(--ink); color: #fff; padding: .12rem .48rem; border-radius: 4px; display: inline-block; margin-bottom: .4rem; }
+.quiz-q { font-weight: 700; font-size: .92rem; color: var(--ink); margin-bottom: .42rem; }
+.quiz-opts { list-style: none; }
+.quiz-opts li { padding: .38rem .72rem; border: 1.5px solid var(--rule); border-radius: 6px; margin-bottom: .25rem; font-size: .82rem; color: var(--ink-md); cursor: pointer; transition: all .18s; display: flex; gap: .5rem; align-items: flex-start; }
+.quiz-opts li:hover { border-color: var(--cyan); background: var(--cyan-lt); }
+.quiz-opts li.correct { border-color: var(--lime); background: var(--lime-lt); color: var(--ink); }
+.opt-l { min-width: 20px; height: 20px; border-radius: 4px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .62rem; font-weight: 700; flex-shrink: 0; font-family: 'Space Mono', monospace; }
+
+/* ACT */
+.act { display: flex; gap: .78rem; padding: .7rem; background: var(--surface); border: 1.5px solid var(--rule); border-radius: 10px; margin-bottom: .48rem; box-shadow: var(--sh); }
+.act-ico { width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: .88rem; flex-shrink: 0; background: var(--cyan-lt); border: 1.5px solid rgba(0,180,216,.25); }
+.act-t strong { font-size: .88rem; display: block; margin-bottom: .07rem; color: var(--ink); }
+.act-t p { font-size: .8rem; color: var(--ink-md); line-height: 1.5; }
+
+/* REC */
+.rec { display: flex; gap: .72rem; padding: .65rem .85rem; background: var(--surface); border: 1.5px solid var(--rule); border-radius: 10px; margin-bottom: .42rem; box-shadow: var(--sh); transition: border-color .18s; }
+.rec:hover { border-color: var(--cyan); }
+.rec-ico { font-size: 1.12rem; flex-shrink: 0; margin-top: .07rem; }
+.rec-title { font-weight: 600; font-size: .88rem; color: var(--ink); margin-bottom: .04rem; }
+.rec-desc  { font-size: .78rem; color: var(--ink-lt); line-height: 1.5; }
+
+/* CLOSING */
+.cover-close {
+  background: var(--ink); min-height: 100vh;
+  justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.close-inner { position: relative; z-index: 2; max-width: 820px; width: 100%; padding: 2.5rem; text-align: center; }
+.sum-row { display: flex; gap: .6rem; margin-bottom: .42rem; font-size: .84rem; text-align: left; }
+.sum-k { min-width: 160px; font-family: 'Space Mono', monospace; font-size: .65rem; flex-shrink: 0; padding-top: .1rem; letter-spacing: .5px; }
+.sum-v { color: rgba(255,255,255,.7); line-height: 1.5; }
+
+/* ══ NAV ═════════════════════════════════════════════════════════ */
+.nav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,.97); border-top: 2px solid var(--rule);
+  padding: .5rem 1.5rem; display: flex; align-items: center;
+  justify-content: space-between; z-index: 1000; backdrop-filter: blur(8px);
+}
+.nb {
+  display: flex; align-items: center; gap: .38rem;
+  padding: .36rem .88rem; border-radius: 6px;
+  font-family: 'Outfit', sans-serif; font-weight: 600; font-size: .78rem;
+  border: 1.5px solid var(--rule); background: var(--surface); color: var(--ink-md);
+  cursor: pointer; transition: all .18s;
+}
+.nb:hover:not(:disabled) { border-color: var(--cyan); color: var(--cyan-dk); background: var(--cyan-lt); }
+.nb:disabled { opacity: .25; cursor: not-allowed; }
+.nav-c { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.ctr   { font-family: 'Space Mono', monospace; font-size: .68rem; color: var(--ink-lt); }
+.ctr span { color: var(--cyan-dk); font-size: .88rem; font-weight: 700; }
+.dots  { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; max-width: 340px; }
+.dot   { width: 7px; height: 7px; border-radius: 2px; background: var(--rule); border: none; cursor: pointer; padding: 0; transition: all .18s; }
+.dot.active { background: var(--cyan); transform: scale(1.45); }
+.nav-sp { height: 62px; }
+
+@media (max-width: 768px) {
+  .sb { padding: 1rem; } .sh { padding: .6rem 1rem; }
+  .g2, .g3 { grid-template-columns: 1fr; }
+  .dots { max-width: 200px; }
+}
+@media (max-width: 480px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S1 — PORTADA
+══════════════════════════════════════════════════════════════ -->
+<div class="slide cover active" id="s1">
+  <div class="cover-bg"></div>
+  <div class="cover-grid"></div>
+  <div class="mol m1">⚗️</div>
+  <div class="mol m2">🧬</div>
+  <div class="cover-inner">
+    <div class="cover-eyebrow">
+      <span class="pill pill-w">Bioquímica General</span>
+      <span class="pill pill-c">Nivel Intermedio</span>
+      <span class="pill pill-l">Unidad 4</span>
+    </div>
+    <h1 class="cover-title">
+      <span class="tc">Bioenergética</span><br>
+      <span class="tl">ATP</span> &amp; <span class="to">Control</span><br>
+      <span class="tv">Metabólico</span>
+    </h1>
+    <p class="cover-sub">
+      Energía en los sistemas vivos · La moneda energética celular<br>
+      Mecanismos de regulación enzimática y metabólica
+    </p>
+    <div class="cover-topics">
+      <div class="ct-row"><div class="ct-dot" style="background:var(--cyan)"></div><span class="ct-label">Bioenergética</span> — oxidación de sustratos, cadena de transporte electrónico</div>
+      <div class="ct-row"><div class="ct-dot" style="background:var(--lime)"></div><span class="ct-label">ATP</span> — estructura, hidrólisis, carga energética del adenilato</div>
+      <div class="ct-row"><div class="ct-dot" style="background:var(--orange)"></div><span class="ct-label">Control de concentraciones enzimáticas</span> — inducción y represión</div>
+      <div class="ct-row"><div class="ct-dot" style="background:var(--violet)"></div><span class="ct-label">Control de la actividad enzimática</span> — alostería y modificación covalente</div>
+      <div class="ct-row"><div class="ct-dot" style="background:var(--coral)"></div><span class="ct-label">Compartimentación · Regulación hormonal · Control distributivo</span></div>
+    </div>
+    <p class="cover-foot">
+      Ref.: <span>M. Chairez. Unidad 4: Bioenergética y metabolismo. Bioquímica General, UACJ, s.f.</span>
+    </p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S2 — OBJETIVOS
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="sh sh-c">
+    <div class="sh-ico ico-c">🎯</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 02 · Objetivos</div>
+      <div class="sh-title">Al terminar esta clase <span class="tc">podrás…</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="obj"><div class="obj-n" style="background:var(--cyan)">1</div><div class="obj-t"><strong>Explicar la bioenergética</strong> de los sistemas vivos: cómo se obtiene energía de la oxidación de sustratos orgánicos y por qué la transferencia de electrones se produce en etapas.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--lime)">2</div><div class="obj-t"><strong>Describir la estructura del ATP</strong>, sus enlaces fosfoanhídrido y el concepto de carga energética del adenilato; comparar ATP con GTP y creatina fosfato.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--orange)">3</div><div class="obj-t"><strong>Distinguir los mecanismos de control de concentración enzimática</strong>: inducción enzimática, represión y degradación intracelular de proteínas.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--violet)">4</div><div class="obj-t"><strong>Clasificar los mecanismos de control de la actividad enzimática</strong>: ligandos reversibles, modificación covalente (fosforilación, adenililación, ADP-ribosilación) y cascadas reguladoras.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--coral)">5</div><div class="obj-t"><strong>Explicar compartimentación, regulación hormonal y control distributivo</strong> como mecanismos integrados de homeostasis metabólica.</div></div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S3 — BIOENERGÉTICA: IDEA CENTRAL
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="sh sh-c">
+    <div class="sh-ico ico-c">⚡</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 03 · Bioenergética — Idea Central</div>
+      <div class="sh-title"><span class="tc">Bioenergética</span> — Función central</div>
+    </div>
+    <span class="idea-chip ic-c">💡 IDEA CENTRAL</span>
+  </div>
+  <div class="sb">
+    <div class="idea-card" style="--glow:rgba(0,180,216,.15)">
+      <div class="idea-label" style="color:var(--cyan)">⚡ Principio fundamental</div>
+      <div class="idea-text">
+        En los sistemas vivos, la energía necesaria para las reacciones de biosíntesis proviene principalmente de la <strong style="color:#5CD8F0">oxidación de sustratos orgánicos</strong>. Esta energía se captura de forma gradual y controlada, principalmente como <strong style="color:#A0F040">ATP</strong>, evitando la disipación de calor que produciría una transferencia única de electrones.
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--cyan-dk)">¿Por qué en etapas?</div>
+          La oxidación biológica se produce por una <strong>serie de reacciones de óxido-reducción acopladas</strong>. Los electrones pasan por transportadores intermediarios hasta llegar al O₂. Las pequeñas transferencias de energía <strong>desperdician menos</strong> que una transferencia única.
+        </div>
+        <div class="box box-l" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--lime-dk)">O₂ como aceptor terminal</div>
+          El oxígeno es el <strong>aceptor último de electrones</strong> en organismos aerobios. Su potente tendencia oxidante ha llevado a los seres vivos a aprovecharla para generar energía. Los anaerobios obtienen energía por <strong>fermentaciones</strong>.
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔗 Cadena de transporte electrónico</div>
+        <div class="step"><div class="step-n" style="background:var(--cyan)">1</div><div class="step-t"><strong>Sustrato reducido</strong><p>Donador de electrones (NADH, FADH₂).</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--lime)">2</div><div class="step-t"><strong>Transportadores intermediarios</strong><p>Complejos I–IV de la membrana mitocondrial interna.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--orange)">3</div><div class="step-t"><strong>Captura de energía</strong><p>Síntesis de ATP por fosforilación oxidativa (ATP sintasa).</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--coral)">4</div><div class="step-t"><strong>Aceptor terminal: O₂</strong><p>Se reduce a H₂O cerrando el ciclo.</p></div></div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S4 — BIOENERGÉTICA: GRADO DE OXIDACIÓN Y CR
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="sh sh-c">
+    <div class="sh-ico ico-c">📊</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 04 · Bioenergética — Ideas complementarias</div>
+      <div class="sh-title">Grado de oxidación, <span class="tc">Cociente Respiratorio</span> y NADPH</div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2" style="margin-bottom:1rem">
+      <div>
+        <div class="sec">🔥 Potencial energético por sustrato</div>
+        <div class="box box-o">
+          <div class="blbl" style="color:var(--orange-dk)">Grasas vs. carbohidratos</div>
+          Los carbonos de las <strong>grasas están más reducidos</strong> que los de los carbohidratos — tienen más protones y electrones disponibles para combinar con O₂. Por eso las grasas tienen <strong>mayor contenido calórico</strong>.
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Sustrato</th><th>CR (CO₂/O₂)</th><th>Potencial energético</th></tr></thead>
+            <tbody>
+              <tr><td>Glucosa</td><td>1.0 (más oxidada)</td><td>Menor por mol</td></tr>
+              <tr><td>Lípidos</td><td>&lt; 0.7 (más reducidos)</td><td>Mayor por mol</td></tr>
+              <tr><td>Proteínas</td><td>~0.8</td><td>Intermedio</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-c" style="margin-top:.7rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--cyan-dk)">Regla del CR</div>
+          <strong>Menor CR → más O₂ consumido por C oxidado → mayor potencial energético por mol</strong> de sustrato.
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚗️ Equivalentes reductores y NADPH</div>
+        <div class="card card-v" style="margin-bottom:.7rem">
+          <div class="card-ico">🔋</div>
+          <div class="card-title">Equivalente reductor</div>
+          <div class="card-body">Se define como <strong>1 mol de átomos de H</strong>. Se obtienen más equivalentes de la oxidación de una grasa que de un carbohidrato.</div>
+        </div>
+        <div class="card card-c" style="margin-bottom:.7rem">
+          <div class="card-ico">🧪</div>
+          <div class="card-title">NADPH — fuente de poder reductor</div>
+          <div class="card-body">El <strong>NADPH</strong> (dinucleótido de nicotinamida y adenina fosfato reducido) es la <strong>principal fuente de electrones</strong> para las reacciones de biosíntesis reductora (anabolismo).</div>
+        </div>
+        <div class="card card-l">
+          <div class="card-ico">🌿</div>
+          <div class="card-title">Anaerobios y fermentación</div>
+          <div class="card-body">Los organismos <strong>anaerobios</strong> obtienen su energía mediante <strong>fermentaciones</strong> en ausencia de O₂ como aceptor electrónico.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S5 — ATP: IDEA CENTRAL
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="sh sh-l">
+    <div class="sh-ico ico-l">💎</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 05 · ATP — Idea Central</div>
+      <div class="sh-title"><span class="tl">ATP</span> — La moneda de energía libre</div>
+    </div>
+    <span class="idea-chip ic-l">💡 IDEA CENTRAL</span>
+  </div>
+  <div class="sb">
+    <div class="idea-card">
+      <div class="idea-label" style="color:var(--lime)">💎 Concepto clave</div>
+      <div class="idea-text">
+        El <strong style="color:#A0F040">ATP es la moneda de energía libre</strong> de la célula. La energía liberada por su hidrólisis se acopla a procesos endergónicos para realizar trabajo biológico. Posee dos <strong style="color:#5CD8F0">enlaces fosfoanhídrido</strong>, cada uno con ΔG° = −31 kJ/mol.
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔬 Estructura y enlaces del ATP</div>
+        <div class="box box-l">
+          <div class="blbl" style="color:var(--lime-dk)">Dos enlaces fosfoanhídrido</div>
+          <ul class="ul ll" style="margin-top:.3rem">
+            <li>ATP → ADP + Pᵢ &nbsp;&nbsp;(ΔG° = −31 kJ/mol)</li>
+            <li>ATP → AMP + PPᵢ &nbsp;(ΔG° = −31 kJ/mol)</li>
+            <li>El ATP es <strong>relativamente estable</strong>; su hidrólisis espontánea es lenta.</li>
+            <li>La energía se libera cuando la hidrólisis se <strong>acopla</strong> a una reacción desfavorable.</li>
+          </ul>
+        </div>
+        <div class="box box-c" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--cyan-dk)">¿Por qué ΔG es tan elevado?</div>
+          <ul class="ul lc" style="margin-top:.2rem">
+            <li><strong>Repulsión electrostática</strong> entre cargas negativas del ATP antes de la hidrólisis</li>
+            <li><strong>Estabilización por resonancia</strong> de los productos</li>
+            <li><strong>Tendencia a desprotonarse</strong> de los productos de hidrólisis</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚡ ATP como dador de grupo fosfato</div>
+        <div class="card card-l" style="margin-bottom:.7rem">
+          <div class="card-ico">🔄</div>
+          <div class="card-title">Acoplamiento energético</div>
+          <div class="card-body">La utilización de la energía del ATP <strong>no implica hidrólisis directa</strong>; la ruptura del ATP se <strong>acopla</strong> con reacciones termodinámicamente desfavorables.</div>
+        </div>
+        <div class="card card-o" style="margin-bottom:.7rem">
+          <div class="card-ico">💪</div>
+          <div class="card-title">Creatina fosfato — reserva muscular</div>
+          <div class="card-body">Las altas concentraciones mitocondriales de ATP impulsan la síntesis de <strong>creatina fosfato</strong>. Esta difunde a las miofibrillas y regenera ATP para la contracción muscular. En procariotas: <strong>arginina fosfato</strong>.</div>
+        </div>
+        <div class="card card-v">
+          <div class="card-ico">🔢</div>
+          <div class="card-title">GTP como excepción</div>
+          <div class="card-body">El <strong>GTP</strong> es usado en síntesis proteica. El ATP es el nucleótido más abundante, producido por fosforilación oxidativa, fotosíntesis y glucólisis.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S6 — ATP: CARGA ENERGÉTICA E INTERCONVERSIÓN
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="sh sh-l">
+    <div class="sh-ico ico-l">🔋</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 06 · ATP — Ideas complementarias</div>
+      <div class="sh-title">Carga energética del adenilato y <span class="tl">estados metabólicos</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="sec">⚡ Carga energética del adenilato</div>
+        <div class="box box-l">
+          <div class="blbl" style="color:var(--lime-dk)">Definición</div>
+          Parámetro que mide el estado de energía celular, escala de 0 a 1. Las células bien nutridas mantienen una carga de <strong>≈ 0.9</strong>.
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Estado</th><th>Predomina</th><th>Efecto</th></tr></thead>
+            <tbody>
+              <tr><td>Alta energía (≈0.9)</td><td>ATP</td><td>Inhibe glucólisis y ciclo cítrico</td></tr>
+              <tr><td>Baja energía (&lt;0.5)</td><td>ADP, AMP</td><td>Activa glucólisis y ciclo cítrico</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-c" style="margin-top:.7rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--cyan-dk)">Concentración celular de ATP</div>
+          Ronda los <strong>2–8 mM</strong>. Además del ATP, participan en la conformación de otros nucleósidos trifosfato (CTP, GTP, UTP) mediante la <strong>nucleósido difosfato quinasa</strong> y la <strong>adenilato quinasa (mioquinasa)</strong>.
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔄 Interconversión de nucleótidos</div>
+        <div class="card card-t" style="margin-bottom:.7rem">
+          <div class="card-ico">🔄</div>
+          <div class="card-title">Adenilato quinasa (mioquinasa)</div>
+          <div class="card-body">Cataliza: <strong>2 ADP ⇌ ATP + AMP</strong>. Permite regenerar ATP a partir de ADP acumulado durante alta demanda energética.</div>
+        </div>
+        <div class="card card-v" style="margin-bottom:.7rem">
+          <div class="card-ico">🔗</div>
+          <div class="card-title">Nucleósido difosfato quinasa</div>
+          <div class="card-body">Transfiere el grupo γ-fosfato del ATP a otros NDP: <strong>ATP + GDP → ADP + GTP</strong>, manteniendo el equilibrio entre nucleótidos.</div>
+        </div>
+        <div class="box box-o" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--orange-dk)">pH e iones</div>
+          El <strong>pH y la concentración de Mg²⁺</strong> son parámetros que modifican los ΔG de hidrólisis del ATP, afectando la eficiencia del acoplamiento energético.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S7 — CONTROL DE CONCENTRACIONES ENZIMÁTICAS: IDEA CENTRAL
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="sh sh-o">
+    <div class="sh-ico ico-o">🧫</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 07 · Control Metabólico — Idea Central</div>
+      <div class="sh-title">Control de <span class="to">Concentraciones Enzimáticas</span></div>
+    </div>
+    <span class="idea-chip ic-o">💡 IDEA CENTRAL</span>
+  </div>
+  <div class="sb">
+    <div class="idea-card">
+      <div class="idea-label" style="color:var(--orange)">🧫 Principio</div>
+      <div class="idea-text">
+        La célula regula cuántas moléculas de enzima están disponibles para catalizar una reacción. Las enzimas de rutas centrales pueden estar en <strong style="color:#FF9975">miles de copias</strong> por célula, mientras que las especializadas pueden ser menos de una docena. Esta cantidad se ajusta dinámicamente mediante <strong style="color:#A0F040">inducción</strong> y <strong style="color:#FF9975">represión</strong>.
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">📈 Inducción enzimática</div>
+        <div class="box box-o">
+          <div class="blbl" style="color:var(--orange-dk)">Definición</div>
+          El <strong>aumento del sustrato</strong> en el medio puede generar la síntesis de nuevas enzimas propias — esto se llama <strong>inducción enzimática</strong>. Ejemplo clásico: operón lac en E. coli.
+        </div>
+        <div class="box box-l" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--lime-dk)">Mecanismo</div>
+          No es solo control de expresión génica; también implica la variación de la <strong>velocidad de síntesis</strong> de la enzima en respuesta a señales ambientales.
+        </div>
+      </div>
+      <div>
+        <div class="sec">📉 Represión enzimática</div>
+        <div class="box box-r">
+          <div class="blbl" style="color:var(--coral-dk)">Definición</div>
+          La presencia de un <strong>producto final</strong> en exceso puede inhibir la síntesis de las enzimas que lo producen — esto se llama <strong>represión</strong>. Mecanismo de retroalimentación negativa a nivel génico.
+        </div>
+        <div class="box box-c" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--cyan-dk)">Degradación proteica</div>
+          Además del control transcripcional, la concentración enzimática también se regula por la <strong>degradación intracelular de proteínas</strong> (proteasoma, sistema ubiquitina).
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S8 — CONTROL DE LA ACTIVIDAD ENZIMÁTICA: IDEA CENTRAL
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="sh sh-v">
+    <div class="sh-ico ico-v">🔧</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 08 · Control Metabólico — Idea Central</div>
+      <div class="sh-title">Control de la <span class="tv">Actividad Enzimática</span></div>
+    </div>
+    <span class="idea-chip ic-v">💡 IDEA CENTRAL</span>
+  </div>
+  <div class="sb">
+    <div class="idea-card">
+      <div class="idea-label" style="color:var(--violet)">🔧 Principio</div>
+      <div class="idea-text">
+        La actividad de las enzimas existentes puede modularse sin cambiar su cantidad. Esto ocurre por <strong style="color:#C080FF">ligandos de unión reversible</strong> (alostería, sustratos) o por <strong style="color:#FF9975">modificaciones covalentes</strong> que activan o inhiben la enzima de forma más duradera.
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔵 Ligandos reversibles</div>
+        <div class="card card-v" style="margin-bottom:.6rem">
+          <div class="card-ico">🔵</div>
+          <div class="card-title">Regulación por sustrato</div>
+          <div class="card-body">Si la concentración del sustrato es inferior o superior al <strong>Km</strong>, la velocidad de reacción cambia. La saturación de la enzima regula el flujo metabólico.</div>
+        </div>
+        <div class="card card-c">
+          <div class="card-ico">🔗</div>
+          <div class="card-title">Efectores alostéricos</div>
+          <div class="card-body">Moléculas que se unen a <strong>sitios diferentes al activo</strong> y modifican la conformación de la enzima activándola o inhibiéndola. Pueden ser sustratos, productos o señales externas.</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔴 Modificación covalente</div>
+        <div class="box box-r">
+          <div class="blbl" style="color:var(--coral-dk)">Ejemplos clave</div>
+          <ul class="ul lr" style="margin-top:.2rem">
+            <li><strong>Fosforilación dependiente de ATP</strong> — glucógeno fosforilasa (activa/inactiva según fosforilación)</li>
+            <li><strong>Adenililación</strong> — transferencia de adenilato desde el ATP</li>
+            <li><strong>ADP-ribosilación</strong> — transferencia de ADP-ribosilo desde el NAD</li>
+          </ul>
+        </div>
+        <div class="box box-v" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--violet-dk)">Cascadas reguladoras y quinasas</div>
+          El control covalente se asocia a <strong>cascadas de señalización</strong>: una señal original se amplifica activando sucesivas proteínas. Las <strong>proteínas quinasas</strong> son de gran interés clínico porque mutaciones en ellas pueden propiciar <strong>tumoraciones</strong>.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S9 — COMPARTIMENTACIÓN: IDEA CENTRAL + COMPLEMENTO
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="sh sh-t">
+    <div class="sh-ico ico-t">🏗️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 09 · Control Metabólico</div>
+      <div class="sh-title"><span class="tt">Compartimentación</span></div>
+    </div>
+    <span class="idea-chip ic-t">💡 IDEA CENTRAL</span>
+  </div>
+  <div class="sb">
+    <div class="idea-card">
+      <div class="idea-label" style="color:var(--teal)">🏗️ Principio</div>
+      <div class="idea-text">
+        Los <strong style="color:#5CD8F0">organelos celulares crean una división del trabajo</strong> en el medio intracelular. La <strong style="color:#A0F040">permeabilidad selectiva</strong> de sus membranas regula la velocidad de entrada y salida de sustratos, constituyendo un mecanismo de control metabólico por sí mismo.
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🧩 Funciones reguladoras</div>
+        <ul class="ul lt">
+          <li><strong>Permeabilidad selectiva</strong> de las membranas organelares controla el flujo de metabolitos específicos.</li>
+          <li>Regulación de la <strong>velocidad de entrada/salida</strong> de sustratos como mecanismo de control.</li>
+          <li><strong>Posicionamiento estratégico</strong> de enzimas que actúan secuencialmente en procesos metabólicos (canalizacón metabólica).</li>
+          <li>Las enzimas se unen <strong>específicamente</strong> a membranas u organelos adecuados para su función.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec">🔬 El citosol — más organizado de lo esperado</div>
+        <div class="box box-t">
+          <div class="blbl" style="color:#1a7a74">Complejos enzimáticos en el citosol</div>
+          El citosol no es una sopa homogénea. Contiene <strong>complejos enzimáticos organizados</strong> que se disocian tras cumplir su función y se reorganizan para los procesos requeridos, aumentando la eficiencia metabólica.
+        </div>
+        <div class="ga">
+          <div class="card card-t">
+            <div class="card-ico">🫧</div>
+            <div class="card-title">Ejemplos de compartimentos</div>
+            <div class="card-body">Mitocondria (ciclo cítrico, β-oxidación) · Núcleo (replicación, transcripción) · Retículo ER (síntesis proteica, lípidos) · Citosol (glucólisis).</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S10 — REGULACIÓN HORMONAL: IDEA CENTRAL + COMPLEMENTO
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="sh sh-c">
+    <div class="sh-ico ico-c">🔬</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 10 · Control Metabólico</div>
+      <div class="sh-title"><span class="tc">Regulación Hormonal</span> y transducción de señal</div>
+    </div>
+    <span class="idea-chip ic-c">💡 IDEA CENTRAL</span>
+  </div>
+  <div class="sb">
+    <div class="idea-card">
+      <div class="idea-label" style="color:var(--cyan)">🔬 Principio</div>
+      <div class="idea-text">
+        Las células eucariotas reciben mensajes de otros tejidos y órganos mediante <strong style="color:#5CD8F0">mensajeros extracelulares</strong> (hormonas, factores de crecimiento, neurotransmisores, feromonas). El proceso de transmisión y ejecución de cambios metabólicos se denomina <strong style="color:#A0F040">transducción de señal</strong>.
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🧬 Tipos de respuesta hormonal</div>
+        <div class="card card-v" style="margin-bottom:.7rem">
+          <div class="card-ico">🧬</div>
+          <div class="card-title">Tipo 1 — Hormonas esteroideas</div>
+          <div class="card-body">Se unen a <strong>receptores intracelulares</strong>. Modifican directamente la <strong>expresión génica</strong> al regular promotores en el núcleo. Efecto lento pero duradero.</div>
+        </div>
+        <div class="card card-c">
+          <div class="card-ico">📡</div>
+          <div class="card-title">Tipo 2 — Segundos mensajeros</div>
+          <div class="card-body">La hormona se une a un <strong>receptor extracelular</strong> (membrana), lo que desencadena la síntesis de <strong>segundos mensajeros</strong> (AMPc, IP₃, Ca²⁺) que forman cascadas de señalización.</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">📡 Mensajeros extracelulares</div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--cyan-dk)">Definición de hormona</div>
+          Sustancia sintetizada en células especializadas, transportada por la <strong>circulación sanguínea</strong> hasta células diana remotas, donde interactúa con <strong>receptores específicos</strong> generando cambios metabólicos precisos.
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Mensajero</th><th>Tipo</th><th>Ejemplo</th></tr></thead>
+            <tbody>
+              <tr><td>Hormonas</td><td>Circulación sistémica</td><td>Insulina, cortisol</td></tr>
+              <tr><td>Factores de crecimiento</td><td>Paracrina</td><td>EGF, IGF-1</td></tr>
+              <tr><td>Neurotransmisores</td><td>Sináptica</td><td>Adrenalina, dopamina</td></tr>
+              <tr><td>Feromonas</td><td>Interorganismal</td><td>Señales reproductivas</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S11 — CONTROL DISTRIBUTIVO: IDEA CENTRAL + COMPLEMENTO
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="sh sh-l">
+    <div class="sh-ico ico-l">📐</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 11 · Control Metabólico</div>
+      <div class="sh-title"><span class="tl">Control Distributivo</span> del metabolismo</div>
+    </div>
+    <span class="idea-chip ic-l">💡 IDEA CENTRAL</span>
+  </div>
+  <div class="sb">
+    <div class="idea-card">
+      <div class="idea-label" style="color:var(--lime)">📐 Principio</div>
+      <div class="idea-text">
+        La regulación de una ruta metabólica <strong style="color:#A0F040">no recae en una sola enzima</strong>: se distribuye entre todas las enzimas de la ruta. Cada enzima tiene un <strong style="color:#5CD8F0">coeficiente de control del flujo</strong> entre 0 y 1, y la suma de todos supera 1, reflejando la contribución colectiva al control de la ruta.
+      </div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">📊 Coeficiente de control del flujo</div>
+        <div class="box box-l">
+          <div class="blbl" style="color:var(--lime-dk)">Definición</div>
+          Valor entre <strong>0 y 1</strong> que indica el aumento relativo del flujo metabólico ante un aumento de la actividad de esa enzima. Ninguna enzima tiene coeficiente = 1.
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Coeficiente</th><th>Importancia reguladora</th></tr></thead>
+            <tbody>
+              <tr><td>Cercano a 1</td><td>Enzima con mayor influencia sobre el flujo (enzima comprometida)</td></tr>
+              <tr><td>Cercano a 0</td><td>Enzima con mínima influencia, pero aún contribuye</td></tr>
+              <tr><td>= 0</td><td>No existe — toda enzima contribuye al control</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sec">🏠 Homeostasis y flexibilidad</div>
+        <div class="card card-l" style="margin-bottom:.7rem">
+          <div class="card-ico">⚖️</div>
+          <div class="card-title">Ventaja del control distribuido</div>
+          <div class="card-body">Los sistemas que dependen de <strong>una o dos enzimas reguladoras</strong> carecen de <strong>flexibilidad y sutilidad</strong>. El control distribuido permite mantener la homeostasis ante variaciones nutricionales y energéticas.</div>
+        </div>
+        <div class="card card-c">
+          <div class="card-ico">🔗</div>
+          <div class="card-title">Integración con otros controles</div>
+          <div class="card-body">El control distributivo se integra con los mecanismos de concentración enzimática, actividad enzimática, compartimentación y regulación hormonal para una <strong>regulación sistémica</strong> del metabolismo.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S12 — RESUMEN COMPARATIVO DE LOS 5 MECANISMOS
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s12">
+  <div class="sh sh-v">
+    <div class="sh-ico ico-v">📋</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 12 · Síntesis</div>
+      <div class="sh-title">Los 5 mecanismos de <span class="tv">Control Metabólico</span> — cuadro comparativo</div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="tw" style="margin-bottom:1rem">
+      <table>
+        <thead>
+          <tr><th>Mecanismo</th><th>¿Qué regula?</th><th>Velocidad de respuesta</th><th>Ejemplo</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="bdg bdg-o">Conc. enzimática</span></td>
+            <td>Cantidad de enzima disponible</td>
+            <td>Lenta (horas/días) — síntesis/degradación</td>
+            <td>Inducción del operón lac; represión por producto final</td>
+          </tr>
+          <tr>
+            <td><span class="bdg bdg-v">Act. enzimática</span></td>
+            <td>Eficiencia catalítica de la enzima</td>
+            <td>Rápida (segundos/minutos)</td>
+            <td>Alostería; fosforilación de glucógeno fosforilasa</td>
+          </tr>
+          <tr>
+            <td><span class="bdg bdg-t">Compartimentación</span></td>
+            <td>Acceso de sustratos a enzimas</td>
+            <td>Estructural (permanente)</td>
+            <td>β-oxidación en mitocondria; glucólisis en citosol</td>
+          </tr>
+          <tr>
+            <td><span class="bdg bdg-c">Reg. hormonal</span></td>
+            <td>Metabolismo celular según señales sistémicas</td>
+            <td>Variable (minutos a horas)</td>
+            <td>Insulina → proteína quinasa → cascada de señales</td>
+          </tr>
+          <tr>
+            <td><span class="bdg bdg-l">Control distributivo</span></td>
+            <td>Flujo total de la ruta metabólica</td>
+            <td>Integrado y continuo</td>
+            <td>Coeficiente de control del flujo en glucólisis</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-c">
+      <div class="blbl" style="color:var(--cyan-dk)">Integración</div>
+      Estos cinco mecanismos <strong>actúan simultáneamente y de forma coordinada</strong>. La homeostasis metabólica es el resultado de su integración dinámica en respuesta a las condiciones nutricionales y energéticas de la célula.
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S13 — EJERCICIO PRÁCTICO
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s13">
+  <div class="sh sh-o">
+    <div class="sh-ico ico-o">✏️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 13 · Práctica</div>
+      <div class="sh-title">Ejercicio de <span class="to">comprensión</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P1</div>
+          <div class="quiz-q">¿Por qué la oxidación biológica ocurre en etapas en lugar de una sola transferencia de electrones?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Porque el O₂ no puede aceptar más de un electrón a la vez</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Para capturar la energía en incrementos pequeños y reducir el desperdicio de calor</li>
+            <li><span class="opt-l">c</span> Porque el NADPH no puede oxidarse directamente</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P2</div>
+          <div class="quiz-q">¿Qué diferencia la inducción enzimática de la represión enzimática?</div>
+          <ul class="quiz-opts">
+            <li class="correct"><span class="opt-l">a</span> ✓ La inducción aumenta la síntesis de enzima ante exceso de sustrato; la represión la inhibe ante exceso de producto</li>
+            <li><span class="opt-l">b</span> La inducción ocurre solo en procariotas y la represión solo en eucariotas</li>
+            <li><span class="opt-l">c</span> Son el mismo proceso con distinto nombre</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P3</div>
+          <div class="quiz-q">¿Cuál es la diferencia en la ΔG° entre las dos hidrólisis posibles del ATP?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Una libera −31 kJ/mol y la otra −50 kJ/mol</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Ambas liberan aproximadamente −31 kJ/mol (ATP→ADP+Pᵢ y ATP→AMP+PPᵢ)</li>
+            <li><span class="opt-l">c</span> Solo la rotura del primer enlace es exergónica</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P4</div>
+          <div class="quiz-q">¿Qué significa que el coeficiente de control del flujo de ninguna enzima sea igual a 1?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Que ninguna enzima es importante para la ruta</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Que el control no recae en una sola enzima; toda la ruta contribuye al control distributivo</li>
+            <li><span class="opt-l">c</span> Que las enzimas no pueden regular el flujo metabólico</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P5</div>
+          <div class="quiz-q">¿Cuál es la diferencia entre los dos tipos de respuesta hormonal?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> El tipo 1 usa receptores en membrana y el tipo 2 en núcleo</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Las esteroideas modifican expresión génica (receptor intracelular); el tipo 2 genera segundos mensajeros (receptor en membrana)</li>
+            <li><span class="opt-l">c</span> Ambos tipos activan siempre las mismas proteínas quinasas</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P6</div>
+          <div class="quiz-q">¿En qué se diferencia la modificación covalente de la regulación por ligandos reversibles?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> No hay diferencia funcional entre ambas</li>
+            <li><span class="opt-l">b</span> La covalente es siempre más lenta que la reversible</li>
+            <li class="correct"><span class="opt-l">c</span> ✓ La modificación covalente puede generar cambios irreversibles; los ligandos reversibles permiten modulación rápida sin modificar la estructura primaria</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S14 — ACTIVIDAD EVALUABLE
+══════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s14">
+  <div class="sh sh-r">
+    <div class="sh-ico ico-r">🏆</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 14 · Actividad evaluable</div>
+      <div class="sh-title">Actividad: <span class="tr">Análisis integrado de control metabólico</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-r" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--coral-dk)">🎯 Escenario</div>
+      Un paciente con <strong>diabetes tipo 2</strong> presenta resistencia a la insulina. El páncreas produce insulina normalmente, pero las células diana no responden. Analiza este escenario desde los 5 mecanismos de control metabólico vistos en clase. <strong>Tiempo: 30 min.</strong>
+    </div>
+    <div class="act"><div class="act-ico">1️⃣</div><div class="act-t"><strong>Regulación hormonal</strong><p>¿Cuál tipo de respuesta hormonal está afectada en la resistencia a insulina? ¿Qué vía de segundos mensajeros se ve comprometida? (Pista: receptor tirosina quinasa)</p></div></div>
+    <div class="act"><div class="act-ico">2️⃣</div><div class="act-t"><strong>Control de actividad enzimática</strong><p>Si la cascada de proteínas quinasas aguas abajo de la insulina no se activa, ¿cómo afecta esto a la glucógeno fosforilasa y a la captación de glucosa? Explica usando los conceptos de fosforilación y cascadas reguladoras.</p></div></div>
+    <div class="act"><div class="act-ico">3️⃣</div><div class="act-t"><strong>Carga energética y ATP</strong><p>Si las células no captan glucosa correctamente, ¿cómo cambia la carga energética del adenilato? ¿Qué rutas se activan o inhiben como consecuencia?</p></div></div>
+    <div class="act"><div class="act-ico">4️⃣</div><div class="act-t"><strong>Control distributivo</strong><p>¿Por qué no basta con modificar la actividad de una sola enzima (ej. glucógeno sintasa) para corregir el problema metabólico? Relaciona con el concepto de control distributivo.</p></div></div>
+    <div class="g2" style="margin-top:.55rem">
+      <div class="box box-o"><div class="blbl" style="color:var(--orange-dk)">Entregable</div>Análisis escrito de media cuartilla por mecanismo, con esquema o diagrama de flujo integrador. Citar al menos una fuente adicional.</div>
+      <div class="box box-l"><div class="blbl" style="color:var(--lime-dk)">Criterios</div>Corrección conceptual · Integración de los 5 mecanismos · Uso de terminología adecuada · Claridad del razonamiento clínico-bioquímico</div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+  S15 — BIBLIOGRAFÍA Y CIERRE
+══════════════════════════════════════════════════════════════ -->
+<div class="slide cover cover-close" id="s15">
+  <div class="cover-bg"></div>
+  <div class="cover-grid"></div>
+  <div class="mol m1">🧪</div>
+  <div class="mol m2">⚗️</div>
+  <div class="close-inner">
+    <div class="cover-eyebrow" style="justify-content:center;margin-bottom:1.2rem">
+      <span class="pill pill-l">✅ Clase completada</span>
+    </div>
+    <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:800;color:#fff;line-height:1.05;margin-bottom:.5rem">
+      Ideas clave — <span style="color:#5CD8F0">Bioenergética</span>,<br>
+      <span style="color:#A0F040">ATP</span> &amp; <span style="color:#FF9975">Control Metabólico</span>
+    </h2>
+    <div style="width:56px;height:3px;background:linear-gradient(90deg,var(--cyan),var(--lime),var(--orange));margin:.9rem auto 1.4rem;border-radius:2px"></div>
+    <div style="text-align:left;margin-bottom:1.5rem">
+      <div class="sum-row"><div class="sum-k" style="color:#5CD8F0">Bioenergética</div><div class="sum-v">Oxidación gradual de sustratos → captura de energía como ATP · Cadena de transporte electrónico · CR: grasa &lt; glucosa → mayor potencial energético.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#A0F040">ATP</div><div class="sum-v">Moneda de energía libre · 2 enlaces fosfoanhídrido (ΔG° = −31 kJ/mol c/u) · Carga energética ≈ 0.9 en células bien nutridas · Creatina/arginina fosfato como reservas.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#FF9975">Conc. enzimática</div><div class="sum-v">Inducción (más sustrato → más enzima) · Represión (producto final → menos enzima) · También por degradación proteica.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#C080FF">Act. enzimática</div><div class="sum-v">Ligandos reversibles (alostéricos, sustrato) · Modificación covalente irreversible (fosforilación, adenililación, ADP-ribosilación) · Cascadas de quinasas.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#5DE8DC">Compartimentación</div><div class="sum-v">División del trabajo · Permeabilidad selectiva de membranas · Citosol más organizado de lo esperado (complejos enzimáticos).</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#5CD8F0">Hormonal / Distr.</div><div class="sum-v">Hormonas esteroideas (expresión génica) vs. segundos mensajeros (cascadas) · Control distributivo: toda enzima contribuye; ningún coeficiente = 1.</div></div>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:.9rem 1.2rem;max-width:600px;margin:0 auto">
+      <div style="font-family:'Space Mono',monospace;font-size:.58rem;color:var(--lime);letter-spacing:2px;margin-bottom:.4rem">BIBLIOGRAFÍA</div>
+      <div style="font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.7;text-align:left">
+        M. Chairez. <em style="color:rgba(255,255,255,.82)">Unidad 4: Bioenergética y metabolismo.</em> Diapositivas de clase, Bioquímica General. Universidad Autónoma de Ciudad Juárez, Cd. Juárez, Chihuahua, México, s.f.
+      </div>
+    </div>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ══ NAV ════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nb" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-c">
+    <div class="ctr">Diapositiva <span id="cn">1</span> / <span id="tn">15</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nb" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+document.getElementById('tn').textContent = N;
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+function update() {
+  slides.forEach((s,i) => { s.classList.toggle('active', i===cur); if(i===cur) s.scrollTop=0; });
+  dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+  document.getElementById('cn').textContent = cur+1;
+  document.getElementById('pb-btn').disabled = cur===0;
+  document.getElementById('nb-btn').disabled = cur===N-1;
+  document.getElementById('pb').style.width = ((cur+1)/N*100)+'%';
+}
+function go(d) { const n=cur+d; if(n>=0&&n<N){cur=n;update();} }
+function goTo(i) { cur=i; update(); }
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if(e.key==='ArrowLeft' ||e.key==='ArrowUp')   go(-1);
+});
+update();
+</script>
+</body>
+</html>
