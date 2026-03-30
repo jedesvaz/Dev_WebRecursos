@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tema 9 · Modelos de Comportamiento</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/*
+  ══════════════════════════════════════════════════
+  PALETA · DESIERTO CHIHUAHUENSE
+  Arena pálida · Ocre seco · Salvia verde · Tierra
+  Cielo haze · Yuca crema · Sombra mezquite
+  ══════════════════════════════════════════════════
+*/
+:root {
+  /* Tierra y arena */
+  --arena:       #E8DFC8;
+  --arena-pale:  #F4EFE0;
+  --ocre:        #C8A96E;
+  --ocre-dark:   #A07840;
+  --tierra:      #7A5230;
+  --tierra-dark: #4E3018;
+
+  /* Verdes de salvia y maguey */
+  --salvia:      #7A9E7E;
+  --salvia-dark: #4D7352;
+  --maguey:      #A3B88C;
+  --maguey-pale: #D4E0C8;
+
+  /* Cielo desértico */
+  --cielo:       #B8C9D4;
+  --cielo-dark:  #7A9EAD;
+
+  /* Neutros */
+  --bg:          #F0EAD8;
+  --bg-warm:     #EDE4CE;
+  --text:        #2E200E;
+  --text-mid:    #5A3E22;
+  --text-light:  #8C6840;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* Textura de arena sutil */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 20% 80%, rgba(200,169,110,.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(122,158,126,.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(184,201,212,.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container { width:100vw; height:100vh; position:relative; z-index:1; }
+
+/* ════════════════════════════════
+   SLIDES
+════════════════════════════════ */
+.slide {
+  display: none;
+  width: 100%; height: 100%;
+  padding: 3.2rem 5.8rem;
+  flex-direction: column;
+  position: relative;
+}
+.slide.active { display: flex; }
+
+/* Línea izquierda — rayas de estratos desérticos */
+.slide:not(.cover)::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 10px;
+  background: linear-gradient(180deg,
+    var(--tierra)  0%,
+    var(--tierra)  20%,
+    var(--ocre)    20%,
+    var(--ocre)    40%,
+    var(--salvia)  40%,
+    var(--salvia)  60%,
+    var(--ocre)    60%,
+    var(--ocre)    80%,
+    var(--tierra)  80%,
+    var(--tierra)  100%
+  );
+}
+
+/* ════════════════════════════════
+   PORTADA
+════════════════════════════════ */
+.cover {
+  background: linear-gradient(160deg,
+    var(--tierra-dark) 0%,
+    var(--tierra)      35%,
+    var(--ocre-dark)   70%,
+    #6B4820            100%
+  );
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  padding: 5rem 7rem;
+}
+.cover::before { display:none; }
+
+/* Silueta de dunas y nopales SVG inline */
+.cover-dunes {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 180px;
+  opacity: .18;
+}
+
+/* Patrones de líneas tipo horizonte desértico */
+.cover::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 45%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 14px,
+    rgba(232,223,200,.06) 14px,
+    rgba(232,223,200,.06) 15px
+  );
+  pointer-events: none;
+}
+
+.cover-eyebrow {
+  font-family: 'Source Code Pro', monospace;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--ocre);
+  margin-bottom: 1.8rem;
+  position: relative; z-index:1;
+}
+
+.cover h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 4.8rem;
+  font-weight: 900;
+  color: var(--arena);
+  line-height: 1.0;
+  letter-spacing: -1px;
+  position: relative; z-index:1;
+  margin-bottom: .6rem;
+}
+.cover h1 em {
+  display: block;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 2.2rem;
+  color: var(--ocre);
+  margin-top: .4rem;
+  letter-spacing: 0;
+}
+
+.cover-rule {
+  width: 120px; height: 3px;
+  margin: 2rem 0;
+  background: linear-gradient(90deg, var(--ocre), var(--salvia), transparent);
+  position: relative; z-index:1;
+}
+
+.cover .sub {
+  font-size: 1.1rem;
+  color: rgba(232,223,200,.75);
+  z-index:1; position:relative;
+  font-weight: 300;
+  margin-bottom: .5rem;
+}
+.cover .meta {
+  font-family: 'Source Code Pro', monospace;
+  font-size: .82rem;
+  color: rgba(200,169,110,.7);
+  z-index:1; position:relative;
+  margin-top: 1rem;
+}
+.cover .nav-hint {
+  font-size: .82rem;
+  color: rgba(232,223,200,.35);
+  z-index:1; position:relative;
+  margin-top: 3rem;
+  letter-spacing: 1px;
+}
+
+/* ════════════════════════════════
+   SLIDE HEADER
+════════════════════════════════ */
+.slide-header {
+  flex-shrink: 0;
+  margin-bottom: 1.6rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--arena);
+  display: flex;
+  align-items: flex-end;
+  gap: 1.2rem;
+}
+
+.slide-chip {
+  background: var(--tierra);
+  color: var(--arena-pale);
+  font-family: 'Source Code Pro', monospace;
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: .3rem .9rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.slide-chip.salvia  { background: var(--salvia-dark); }
+.slide-chip.ocre    { background: var(--ocre-dark); color: var(--arena-pale); }
+.slide-chip.cielo   { background: var(--cielo-dark); color: #fff; }
+.slide-chip.maguey  { background: #5A7048; color: var(--arena-pale); }
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--tierra-dark);
+  line-height: 1.1;
+}
+
+/* ════════════════════════════════
+   CONTENIDO
+════════════════════════════════ */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+.content::-webkit-scrollbar { width: 5px; }
+.content::-webkit-scrollbar-track { background: var(--arena); border-radius: 3px; }
+.content::-webkit-scrollbar-thumb { background: var(--ocre-dark); border-radius: 3px; }
+
+p {
+  font-size: 1.04rem;
+  line-height: 1.84;
+  margin-bottom: 1.1rem;
+  color: var(--text-mid);
+}
+h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.38rem;
+  font-weight: 700;
+  color: var(--tierra);
+  margin: 1.5rem 0 .8rem;
+}
+h4 {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--tierra-dark);
+  margin-bottom: .55rem;
+}
+ul { list-style: none; margin: 1rem 0; }
+ul li {
+  font-size: 1.02rem;
+  line-height: 1.78;
+  margin-bottom: .7rem;
+  padding-left: 1.8rem;
+  position: relative;
+  color: var(--text-mid);
+}
+ul li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--ocre-dark);
+  font-size: 1rem;
+}
+
+/* ════════════════════════════════
+   BOXES
+════════════════════════════════ */
+.box {
+  background: #fff;
+  border-left: 5px solid var(--tierra);
+  padding: 1.3rem 1.6rem;
+  margin: 1.1rem 0;
+  border-radius: 0 6px 6px 0;
+  box-shadow: 2px 3px 14px rgba(78,48,24,.07);
+}
+.box strong { color: var(--tierra-dark); display:block; margin-bottom:.5rem; font-size:1.04rem; font-weight:700; }
+.box p { margin-bottom:.3rem; }
+
+.box-salvia  { border-left-color: var(--salvia-dark); background: #f3f8f3; }
+.box-salvia strong { color: var(--salvia-dark); }
+.box-ocre    { border-left-color: var(--ocre-dark);  background: #fdf8ef; }
+.box-ocre strong   { color: var(--ocre-dark); }
+.box-cielo   { border-left-color: var(--cielo-dark); background: #f0f5f8; }
+.box-cielo strong  { color: var(--cielo-dark); }
+.box-maguey  { border-left-color: #5A7048; background: #f2f6ee; }
+.box-maguey strong { color: #4A6038; }
+
+/* Quote de autor */
+.quote {
+  background: var(--arena-pale);
+  border: 2px solid var(--ocre);
+  border-radius: 8px;
+  padding: 1.2rem 1.6rem 1.2rem 3rem;
+  margin: 1.2rem 0;
+  position: relative;
+  font-style: italic;
+  color: var(--tierra);
+}
+.quote::before {
+  content: '"';
+  position: absolute;
+  left: .8rem; top: .2rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  color: var(--ocre);
+  line-height: 1;
+}
+.quote cite {
+  display: block;
+  margin-top: .5rem;
+  font-style: normal;
+  font-size: .88rem;
+  color: var(--ocre-dark);
+  font-family: 'Source Code Pro', monospace;
+}
+
+/* ════════════════════════════════
+   GRIDS Y CARDS
+════════════════════════════════ */
+.grid { display:grid; gap:1.2rem; margin:1.2rem 0; }
+.grid-2 { grid-template-columns: repeat(2,1fr); }
+.grid-3 { grid-template-columns: repeat(3,1fr); }
+.grid-4 { grid-template-columns: repeat(4,1fr); }
+
+.card {
+  background: #fff;
+  padding: 1.3rem 1.4rem;
+  border-radius: 8px;
+  border-top: 4px solid var(--tierra);
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  transition: transform .2s, box-shadow .2s;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 5px 18px rgba(0,0,0,.10); }
+.card h4 { color: var(--tierra-dark); margin-bottom:.65rem; }
+.card p  { font-size:.97rem; color:var(--text-mid); margin-bottom:.3rem; }
+
+.card.salvia { border-top-color: var(--salvia-dark); }
+.card.salvia h4 { color: var(--salvia-dark); }
+.card.ocre   { border-top-color: var(--ocre-dark); }
+.card.ocre h4 { color: var(--ocre-dark); }
+.card.cielo  { border-top-color: var(--cielo-dark); }
+.card.cielo h4 { color: var(--cielo-dark); }
+.card.maguey { border-top-color: #5A7048; }
+.card.maguey h4 { color: #4A6038; }
+
+/* ════════════════════════════════
+   DIAGRAMA DE ESTADO (visual CSS)
+════════════════════════════════ */
+.state-diagram {
+  background: var(--tierra-dark);
+  border-radius: 10px;
+  padding: 2rem;
+  margin: 1.2rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.state-diagram::before {
+  content: 'DIAGRAMA DE ESTADOS';
+  position: absolute;
+  top: 10px; left: 16px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: .6rem;
+  letter-spacing: 3px;
+  color: rgba(200,169,110,.5);
+}
+
+.state-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: nowrap;
+  margin-bottom: 1rem;
+}
+.state-row:last-child { margin-bottom: 0; }
+
+.state-node {
+  background: var(--bg-warm);
+  border: 2.5px solid var(--ocre);
+  border-radius: 28px;
+  padding: .5rem 1.1rem;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--tierra-dark);
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-align: center;
+}
+.state-node.start {
+  width: 18px; height: 18px;
+  background: var(--ocre);
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+}
+.state-node.end {
+  width: 18px; height: 18px;
+  background: transparent;
+  border: 3px solid var(--ocre);
+  border-radius: 50%;
+  padding: 0;
+  position: relative;
+}
+.state-node.end::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: var(--ocre);
+  border-radius: 50%;
+}
+.state-node.active { background: var(--salvia); border-color: var(--salvia-dark); color:#fff; }
+.state-node.error  { background: #c07050; border-color: #904030; color:#fff; }
+
+.arrow {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+.arrow-line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.arrow-shaft {
+  flex:1;
+  height: 2px;
+  background: var(--ocre);
+}
+.arrow-head {
+  width: 0; height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 9px solid var(--ocre);
+}
+.arrow-label {
+  font-size: .68rem;
+  color: var(--ocre);
+  font-family: 'Source Code Pro', monospace;
+  margin-top: 3px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* ════════════════════════════════
+   DIAGRAMA DE SECUENCIA (visual CSS)
+════════════════════════════════ */
+.seq-diagram {
+  background: var(--tierra-dark);
+  border-radius: 10px;
+  padding: 1.8rem 1.6rem;
+  margin: 1.2rem 0;
+  font-family: 'Source Code Pro', monospace;
+  font-size: .82rem;
+}
+.seq-header {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.2rem;
+  justify-content: space-between;
+}
+.seq-actor {
+  background: var(--ocre-dark);
+  color: var(--arena-pale);
+  padding: .4rem .9rem;
+  border-radius: 4px;
+  font-size: .78rem;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+  margin: 0 .3rem;
+}
+.seq-actor.green { background: var(--salvia-dark); }
+.seq-actor.blue  { background: var(--cielo-dark); }
+
+.seq-msg {
+  display: flex;
+  align-items: center;
+  margin-bottom: .7rem;
+  color: var(--arena);
+}
+.seq-line-h {
+  flex: 1;
+  height: 1px;
+  background: var(--ocre);
+  position: relative;
+}
+.seq-line-h.dashed { background: none; border-top: 1px dashed rgba(200,169,110,.5); }
+.seq-line-h::after {
+  content: '▶';
+  position: absolute;
+  right: -4px; top: -7px;
+  color: var(--ocre);
+  font-size: .75rem;
+}
+.seq-line-h.left::after { display:none; }
+.seq-line-h.left::before {
+  content: '◀';
+  position: absolute;
+  left: -4px; top: -7px;
+  color: var(--ocre);
+  font-size: .75rem;
+}
+.seq-label {
+  font-size: .7rem;
+  color: var(--arena-pale);
+  padding: .15rem .5rem;
+  white-space: nowrap;
+}
+.seq-alt {
+  border: 1px dashed rgba(200,169,110,.4);
+  border-radius: 4px;
+  padding: .6rem .8rem;
+  margin: .5rem 0;
+}
+.seq-alt-label {
+  font-size: .65rem;
+  color: var(--ocre);
+  margin-bottom: .4rem;
+  font-weight: 600;
+}
+
+/* ════════════════════════════════
+   STEPS
+════════════════════════════════ */
+.steps { counter-reset: step; margin: 1.2rem 0; }
+.step {
+  counter-increment: step;
+  position: relative;
+  padding: 1.2rem 1.2rem 1.2rem 4.4rem;
+  margin-bottom: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  border-left: 4px solid var(--tierra);
+  box-shadow: 0 1px 8px rgba(0,0,0,.05);
+}
+.step::before {
+  content: counter(step);
+  position: absolute;
+  left: 1rem; top: 50%;
+  transform: translateY(-50%);
+  width: 2.1rem; height: 2.1rem;
+  background: var(--tierra);
+  color: var(--arena-pale);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+.step h4 { color: var(--tierra-dark); font-size: 1.04rem; margin-bottom: .45rem; }
+.step p  { font-size: .97rem; color: var(--text-mid); line-height: 1.72; margin-bottom: 0; }
+
+/* ════════════════════════════════
+   TAG / PILL
+════════════════════════════════ */
+.tag {
+  display: inline-block;
+  background: var(--arena);
+  border: 1.5px solid var(--ocre-dark);
+  color: var(--tierra-dark);
+  border-radius: 20px;
+  padding: .2rem .85rem;
+  font-size: .83rem;
+  font-weight: 700;
+  margin: .2rem .1rem;
+}
+.tag.green { background: var(--maguey-pale); border-color: var(--salvia-dark); color: var(--salvia-dark); }
+.tag.blue  { background: #e4edf2; border-color: var(--cielo-dark); color: var(--cielo-dark); }
+
+/* ════════════════════════════════
+   ACTIVIDAD
+════════════════════════════════ */
+.activity-section {
+  background: linear-gradient(135deg, var(--arena-pale), var(--bg-warm));
+  border: 3px solid var(--tierra);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 1.4rem 0;
+  box-shadow: 0 5px 22px rgba(122,82,48,.15);
+}
+.activity-title {
+  font-family: 'Playfair Display', serif;
+  color: var(--tierra-dark);
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+.activity-box {
+  background: #fff;
+  padding: 1.2rem 1.4rem;
+  border-radius: 8px;
+  margin: .75rem 0;
+  border-left: 4px solid var(--tierra);
+}
+.activity-box h4 { color: var(--tierra-dark); }
+
+/* ════════════════════════════════
+   GLOSARIO
+════════════════════════════════ */
+.glos-item {
+  background: #fff;
+  border-radius: 6px;
+  padding: .95rem 1.3rem;
+  margin-bottom: .75rem;
+  border-left: 4px solid var(--salvia-dark);
+  box-shadow: 0 1px 5px rgba(0,0,0,.05);
+}
+.glos-item strong { color: var(--salvia-dark); font-size: 1rem; }
+.glos-item p { margin: 0; margin-top: .3rem; font-size: .97rem; }
+
+/* ════════════════════════════════
+   CURIOSIDAD / DATO DESTACADO
+════════════════════════════════ */
+.desert-note {
+  background: var(--tierra-dark);
+  color: var(--arena);
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  margin: 1.2rem 0;
+  border-left: 5px solid var(--ocre);
+}
+.desert-note strong { color: var(--ocre); display:block; margin-bottom:.4rem; }
+.desert-note p { color: var(--arena); margin: 0; font-size: .98rem; line-height: 1.75; }
+
+/* ════════════════════════════════
+   TABLA
+════════════════════════════════ */
+table {
+  width: 100%; border-collapse: collapse;
+  margin: 1.2rem 0; background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  border-radius: 8px; overflow: hidden;
+}
+th, td { padding: .82rem 1rem; text-align:left; border-bottom:1px solid var(--arena); font-size:.95rem; }
+th { background: linear-gradient(90deg, var(--tierra-dark), var(--tierra)); color: var(--arena-pale); font-weight:700; font-size:.82rem; text-transform:uppercase; letter-spacing:1px; }
+tr:last-child td { border-bottom: none; }
+tr:hover { background: var(--arena-pale); }
+td strong { color: var(--tierra-dark); }
+
+/* ════════════════════════════════
+   NAVEGACIÓN
+════════════════════════════════ */
+.progress-bar {
+  position: fixed; top:0; left:0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--tierra), var(--ocre), var(--salvia));
+  z-index: 2000;
+  transition: width .3s ease;
+}
+.counter {
+  position: fixed; bottom:2rem; left:2rem;
+  background: #fff;
+  padding: .65rem 1.4rem;
+  border-radius: 2px;
+  border: 2px solid var(--tierra);
+  color: var(--tierra-dark);
+  font-weight: 700;
+  z-index: 1000;
+  box-shadow: 0 3px 12px rgba(122,82,48,.18);
+  font-family: 'Source Code Pro', monospace;
+  font-size: .95rem;
+}
+.nav {
+  position: fixed; bottom:2rem; right:2rem;
+  display: flex; gap: 1rem; z-index:1000;
+}
+.btn {
+  width: 54px; height: 54px;
+  background: var(--tierra);
+  border: none; border-radius: 2px;
+  color: var(--arena-pale);
+  font-size: 1.3rem; cursor: pointer;
+  box-shadow: 0 4px 14px rgba(122,82,48,.35);
+  transition: all .25s;
+  display: flex; align-items:center; justify-content:center;
+}
+.btn:hover:not(:disabled) {
+  background: var(--tierra-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(78,48,24,.45);
+}
+.btn:disabled { opacity: .28; cursor: not-allowed; }
+
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media(max-width:1024px){
+  .slide { padding:2.2rem 2.8rem; }
+  h2 { font-size:1.85rem; }
+  .cover h1 { font-size:3.2rem; }
+  .grid-3,.grid-4 { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:680px){
+  .slide { padding:1.8rem 1.4rem; }
+  h2 { font-size:1.5rem; }
+  .cover { padding:3rem 2rem; }
+  .cover h1 { font-size:2.2rem; }
+  .grid-2,.grid-3,.grid-4 { grid-template-columns:1fr; }
+  .state-row { flex-wrap:wrap; }
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+
+<!-- ══════════════════════════════════════
+  SLIDE 1 · PORTADA
+══════════════════════════════════════ -->
+<div class="slide cover active">
+  <!-- Silueta desierto -->
+  <svg class="cover-dunes" viewBox="0 0 1200 180" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Montañas de fondo -->
+    <path d="M0,180 L0,120 Q100,60 200,100 Q300,130 400,70 Q500,20 600,90 Q700,140 800,80 Q900,30 1000,100 Q1100,140 1200,90 L1200,180 Z" fill="rgba(200,169,110,1)"/>
+    <!-- Primer plano -->
+    <path d="M0,180 L0,155 Q80,130 160,148 Q240,160 320,140 Q400,118 480,145 Q560,165 640,142 Q720,120 800,150 Q880,168 960,148 Q1040,128 1120,155 Q1160,165 1200,155 L1200,180 Z" fill="rgba(122,82,48,1)"/>
+    <!-- Nopal izquierdo -->
+    <ellipse cx="120" cy="145" rx="18" ry="24" fill="rgba(122,158,126,1)" transform="rotate(-10,120,145)"/>
+    <ellipse cx="108" cy="132" rx="12" ry="16" fill="rgba(122,158,126,1)" transform="rotate(-25,108,132)"/>
+    <ellipse cx="135" cy="130" rx="12" ry="16" fill="rgba(77,115,82,1)" transform="rotate(20,135,130)"/>
+    <rect x="118" y="148" width="4" height="20" fill="rgba(78,48,24,1)"/>
+    <!-- Nopal derecho -->
+    <ellipse cx="1050" cy="140" rx="16" ry="22" fill="rgba(122,158,126,1)" transform="rotate(8,1050,140)"/>
+    <ellipse cx="1038" cy="128" rx="11" ry="15" fill="rgba(77,115,82,1)" transform="rotate(-20,1038,128)"/>
+    <ellipse cx="1064" cy="127" rx="11" ry="15" fill="rgba(122,158,126,1)" transform="rotate(22,1064,127)"/>
+    <rect x="1048" y="143" width="4" height="20" fill="rgba(78,48,24,1)"/>
+    <!-- Yuca central -->
+    <rect x="596" y="125" width="8" height="35" fill="rgba(160,120,64,1)"/>
+    <path d="M600,125 L580,95 M600,125 L620,90 M600,125 L590,80 M600,125 L610,85 M600,125 L572,105 M600,125 L628,102" stroke="rgba(163,184,140,1)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <div class="cover-eyebrow">TI13312 · Ingeniería de Requerimientos de Software</div>
+  <h1>
+    Modelos de Comportamiento
+    <em>Diagramas de Estado y Secuencia</em>
+  </h1>
+  <div class="cover-rule"></div>
+  <p class="sub">Tema 9 · Universidad Tecmilenio</p>
+  <p class="sub" style="margin-top:.3rem">Identificación de eventos · Representaciones de estado · Interacciones del sistema</p>
+  <p class="meta">ti13312 · cel · tema9-1.htm</p>
+  <p class="nav-hint">→ Navega con las flechas del teclado o los botones</p>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 2 · CONTEXTO
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip">Contexto</span>
+    <h2>¿Qué modela el comportamiento de un sistema?</h2>
+  </div>
+  <div class="content">
+    <p>Imagina que vas a preparar las galletas de tu abuela. Tienes la receta (ingredientes), pero también necesitas conocer la <strong>secuencia de pasos</strong> y los <strong>cambios que ocurren</strong> en cada etapa: mezclar, hornear, enfriar. Si omites un paso o lo haces fuera de orden, el resultado no será el esperado.</p>
+    <div class="grid grid-2">
+      <div class="card">
+        <h4>🍪 Analogía de la receta</h4>
+        <p>En el desarrollo de sistemas sucede algo similar. Existe información que requiere el sistema (ingredientes) para alcanzar un objetivo y establecer la secuencia de cambios de estado que asegurarán un resultado esperado.</p>
+      </div>
+      <div class="card salvia">
+        <h4>💡 Preguntas detonantes</h4>
+        <p>¿Cómo modelamos la secuencia de eventos en un sistema?</p>
+        <p>¿Cómo determinamos los cambios de estado que experimenta?</p>
+        <p>¿Cómo representamos las interacciones entre usuarios y el sistema?</p>
+      </div>
+    </div>
+    <div class="desert-note">
+      <strong>🌵 En este tema aprenderás a usar dos herramientas poderosas:</strong>
+      <p>Los <strong>diagramas de estado</strong> modelan los posibles estados de un sistema y cómo transita entre ellos. Los <strong>diagramas de secuencia</strong> muestran la interacción cronológica entre actores y objetos del sistema dentro de un caso de uso específico.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 3 · OBJETIVOS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip salvia">Objetivos</span>
+    <h2>Objetivos de Aprendizaje</h2>
+  </div>
+  <div class="content">
+    <div class="box box-ocre" style="margin-bottom:1.4rem">
+      <strong>🎯 Al concluir el Tema 9 podrás:</strong>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Identificar eventos y su secuencia en un sistema</h4>
+        <p>Reconocer qué constituye un evento (estímulo externo o interno) y determinar el orden en que se presentan dentro de la operación del sistema.</p>
+      </div>
+      <div class="step">
+        <h4>Construir diagramas de estado</h4>
+        <p>Representar los estados de un sistema con rectángulos de esquinas redondeadas, transiciones con flechas, estado inicial (● relleno) y estados finales (◉ semirelleno), incluyendo jerarquías y concurrencia.</p>
+      </div>
+      <div class="step">
+        <h4>Interpretar y elaborar diagramas de secuencia</h4>
+        <p>Modelar la interacción cronológica entre actores, objetos e interfaces del sistema para un caso de uso específico, incluyendo flujos alternativos (ALT).</p>
+      </div>
+      <div class="step">
+        <h4>Complementar la documentación de requerimientos</h4>
+        <p>Usar los diagramas de comportamiento como herramienta complementaria al DFD para ofrecer una visión dinámica del sistema desde perspectivas distintas.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 4 · 9.1 IDENTIFICACIÓN DE EVENTOS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip">9.1</span>
+    <h2>Identificación de Eventos</h2>
+  </div>
+  <div class="content">
+    <div class="quote">
+      "El modelo de comportamiento indica la forma en la que responderá el software a eventos o estímulos externos."
+      <cite>— Pressman, R. (2010). Ingeniería de Software. Un enfoque práctico (7ª ed.)</cite>
+    </div>
+    <div class="box box-salvia">
+      <strong>📌 ¿Qué es el modelado de comportamiento?</strong>
+      <p>Permite describir un sistema de forma <strong>dinámica</strong> a través de eventos que ocurren en tiempos específicos de operación. A diferencia del DFD, no incluye flujo de información, pero sí puede agregar información sobre el procesamiento en cada estado.</p>
+    </div>
+    <h3>¿Qué es un evento?</h3>
+    <p>Cuando un sistema y un actor intercambian información, aparece un <strong>evento</strong>. La mayoría de los eventos se originan en una actividad del usuario:</p>
+    <div class="grid grid-4">
+      <div class="card salvia"><h4>🖱️ Clic</h4><p>El usuario hace clic en un botón o elemento de la interfaz.</p></div>
+      <div class="card salvia"><h4>📋 Selección</h4><p>Elegir un elemento de una lista (combo box, menú desplegable).</p></div>
+      <div class="card salvia"><h4>↩️ Cambio de campo</h4><p>El usuario cambia el foco a otro campo del formulario.</p></div>
+      <div class="card salvia"><h4>⌨️ Tecleo</h4><p>Introducir datos; el sistema puede reaccionar a cada pulsación.</p></div>
+    </div>
+    <div class="box box-ocre" style="margin-top:.5rem">
+      <strong>🔁 Modelos de comportamiento apropiados (Sommerville, 2011)</strong>
+      <p>Asumen que los sistemas tienen un <strong>número finito de estados</strong> y de eventos (estímulos) que pueden causar una transición de un estado a otro.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 5 · 9.2 PARTES DEL DIAGRAMA DE ESTADO
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip">9.2</span>
+    <h2>Representaciones de Estado: Partes del Diagrama</h2>
+  </div>
+  <div class="content">
+    <p>Para construir un diagrama de estado es necesario conocer sus elementos fundamentales. Los estados definen el comportamiento del sistema en un momento dado, mientras que las transiciones expresan cómo cambia.</p>
+    <div class="grid grid-2" style="margin-top:.8rem">
+      <div>
+        <div class="box">
+          <strong>🔲 Estado</strong>
+          <p>Define un <strong>comportamiento del sistema en un determinado momento</strong>, en espera de que un evento ocurra para llevar a cabo una transición. Se representa con un <strong>rectángulo de esquinas redondeadas</strong>.</p>
+          <p>Los estados pueden expresarse como mandatos: <span class="tag">abrir</span><span class="tag">depositar</span><span class="tag">retirar</span><span class="tag">cerrar</span></p>
+        </div>
+        <div class="box box-salvia" style="margin-top:1rem">
+          <strong>→ Transición</strong>
+          <p>Describe el <strong>cambio de un estado al siguiente</strong>. Depende del cumplimiento de condiciones. Se representa con una flecha etiquetada con el evento que la dispara.</p>
+          <p><em>Ejemplo:</em> Si la cuenta estaba <span class="tag">cerrada</span> y ocurre el evento "abrir", el estado cambia a <span class="tag green">abierta</span>.</p>
+        </div>
+      </div>
+      <div>
+        <div class="box box-ocre">
+          <strong>⚫ Estado Inicial</strong>
+          <p>Representado con un <strong>círculo relleno (●)</strong>. Todo diagrama de estado debe tener uno y solo un estado inicial.</p>
+        </div>
+        <div class="box box-cielo" style="margin-top:1rem">
+          <strong>◉ Estado(s) Final(es)</strong>
+          <p>Representado con un <strong>círculo semirelleno (◉)</strong>. Un diagrama puede tener uno o varios estados finales.</p>
+        </div>
+        <div class="box box-maguey" style="margin-top:1rem">
+          <strong>🔄 Transición Reflexiva</strong>
+          <p>Una transición en la que el estado de inicio y el estado final son el <strong>mismo</strong>. El sistema regresa a sí mismo tras procesar el evento.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 6 · EJEMPLO CAJERO AUTOMÁTICO
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip ocre">Ejemplo</span>
+    <h2>Cajero Automático — Diagrama de Estado</h2>
+  </div>
+  <div class="content">
+    <p>El siguiente texto describe los eventos del sistema de control de un cajero automático. Los <strong>eventos clave</strong> están identificados en el análisis:</p>
+    <div class="box box-ocre">
+      <strong>📖 Descripción del sistema</strong>
+      <p>El cliente <strong>introduce su tarjeta</strong> e <strong>indica el PIN</strong>. El sistema <strong>compara el PIN</strong>. Si es incorrecto, <strong>solicita reingresar</strong>; si se repite 3 veces, <strong>retiene la tarjeta</strong>. Si el PIN es correcto, el cliente puede <strong>seleccionar una acción</strong> (retiro, tiempo aire, consulta de saldo).</p>
+    </div>
+    <p>Los eventos identificados son: introducir tarjeta, introducir PIN, comparación del PIN, retener la tarjeta por intentos fallidos, seleccionar acción.</p>
+    <!-- Diagrama de estado visual CSS -->
+    <div class="state-diagram">
+      <div class="state-row">
+        <div class="state-node start" title="Inicio"></div>
+        <div class="arrow">
+          <div class="arrow-line"><div class="arrow-shaft"></div><div class="arrow-head"></div></div>
+          <div class="arrow-label">insertar tarjeta</div>
+        </div>
+        <div class="state-node">Esperando PIN</div>
+        <div class="arrow">
+          <div class="arrow-line"><div class="arrow-shaft"></div><div class="arrow-head"></div></div>
+          <div class="arrow-label">ingresar PIN</div>
+        </div>
+        <div class="state-node">Validando PIN</div>
+      </div>
+      <div class="state-row" style="margin-top:.5rem;justify-content:flex-end;gap:1.2rem">
+        <div class="state-node error">Tarjeta Retenida</div>
+        <div class="arrow" style="min-width:60px">
+          <div class="arrow-line"><div class="arrow-shaft"></div><div class="arrow-head"></div></div>
+          <div class="arrow-label">3 intentos fallidos</div>
+        </div>
+        <div class="state-node">PIN Incorrecto</div>
+        <div class="arrow" style="min-width:60px">
+          <div class="arrow-line"><div class="arrow-shaft"></div><div class="arrow-head"></div></div>
+          <div class="arrow-label">PIN correcto</div>
+        </div>
+        <div class="state-node active">Menú de Opciones</div>
+      </div>
+      <div class="state-row" style="margin-top:.5rem;justify-content:flex-end">
+        <div class="arrow" style="min-width:40px">
+          <div class="arrow-line"><div class="arrow-shaft"></div><div class="arrow-head"></div></div>
+          <div class="arrow-label">seleccionar acción</div>
+        </div>
+        <div class="state-node">Procesando</div>
+        <div class="arrow" style="min-width:40px">
+          <div class="arrow-line"><div class="arrow-shaft"></div><div class="arrow-head"></div></div>
+          <div class="arrow-label">operación exitosa</div>
+        </div>
+        <div class="state-node end" title="Fin"></div>
+      </div>
+    </div>
+    <p style="font-size:.83rem;color:var(--text-light);font-style:italic">Adaptado de Pressman, R. (2010). Figura 7.6. Sólo para fines educativos.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 7 · JERARQUÍA Y CONCURRENCIA
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip">9.2</span>
+    <h2>Jerarquía de Estados y Concurrencia</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-2">
+      <div>
+        <h3>🏗️ Jerarquía de estados</h3>
+        <div class="box">
+          <strong>Definición</strong>
+          <p>En la <strong>jerarquía de estados</strong> solo es posible llegar a ciertos estados si antes se han pasado por <strong>subestados</strong> previos.</p>
+        </div>
+        <div class="box box-ocre">
+          <strong>Ejemplo: Autorización multinivel</strong>
+          <p>Para llegar al estado <span class="tag">E</span> (documento liberado), es necesario haber pasado por:</p>
+          <p><span class="tag">A</span> → <span class="tag">B</span> → <span class="tag">C</span> → <span class="tag">D</span> → <span class="tag">E</span></p>
+          <p style="font-size:.9rem;margin-top:.5rem">Ejemplo real: la liberación de una compra corporativa requiere aprobación del solicitante, jefe de área, dirección y finanzas.</p>
+        </div>
+      </div>
+      <div>
+        <h3>⚡ Concurrencia</h3>
+        <div class="box box-salvia">
+          <strong>Definición</strong>
+          <p>La <strong>concurrencia</strong> permite expresar que un evento puede provocar <strong>cambios de estado en paralelo</strong>: varios procesos que ocurren al mismo tiempo como consecuencia de un solo estímulo.</p>
+        </div>
+        <div class="box box-maguey">
+          <strong>Ejemplo: Compra en línea</strong>
+          <p>Al confirmar un pago, el sistema simultáneamente:</p>
+          <ul style="margin:.5rem 0">
+            <li>Genera el número de orden</li>
+            <li>Reduce el inventario</li>
+            <li>Envía confirmación por email</li>
+            <li>Notifica al almacén</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="desert-note" style="margin-top:1rem">
+      <strong>🌵 ¿Por qué importa esta complejidad?</strong>
+      <p>Los sistemas reales rara vez tienen flujos lineales. Entender la jerarquía y la concurrencia permite modelar con mayor fidelidad el comportamiento esperado del sistema antes de comenzar a programarlo.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 8 · 9.3 DIAGRAMAS DE SECUENCIA – CONCEPTOS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip salvia">9.3</span>
+    <h2>Diagramas de Secuencia</h2>
+  </div>
+  <div class="content">
+    <div class="box box-salvia">
+      <strong>📌 ¿Para qué sirven?</strong>
+      <p>Los diagramas de secuencia son una herramienta útil para aclarar la <strong>interacción entre el usuario y el sistema en un caso de uso particular</strong>. Son especialmente útiles cuando intervienen varios objetos o sistemas.</p>
+    </div>
+    <h3>Componentes del diagrama</h3>
+    <div class="grid grid-3">
+      <div class="card salvia">
+        <h4>👤 Actores y Objetos</h4>
+        <p>Se listan en la parte <strong>superior</strong> del diagrama, de izquierda a derecha. Cada uno tiene una <strong>línea de vida punteada</strong> que desciende verticalmente.</p>
+      </div>
+      <div class="card salvia">
+        <h4>→ Mensajes (flechas)</h4>
+        <p>Las interacciones son flechas horizontales con una <strong>etiqueta</strong> que indica la llamada, sus parámetros (entre paréntesis) y el valor de respuesta (flecha punteada de regreso).</p>
+      </div>
+      <div class="card salvia">
+        <h4>📦 Rectángulos de activación</h4>
+        <p>Sobre la línea de vida, un rectángulo indica el período durante el cual el objeto está <strong>activo</strong> (creación, operación y eliminación).</p>
+      </div>
+    </div>
+    <div class="grid grid-2" style="margin-top:1rem">
+      <div class="box box-ocre">
+        <strong>🔀 Flujo ALT</strong>
+        <p>Sommerville incluye un flujo alternativo con un <strong>recuadro etiquetado "ALT"</strong> para modelar decisiones condicionales dentro del diagrama.</p>
+      </div>
+      <div class="box box-cielo">
+        <strong>📐 Dirección de lectura</strong>
+        <p>Un diagrama de secuencia se lee de <strong>izquierda a derecha</strong> (actores) y de <strong>arriba hacia abajo</strong> (tiempo). El primer mensaje siempre está en la parte superior.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 9 · EJEMPLO HISTORIAL MÉDICO (DS1)
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip ocre">Ejemplo DS1</span>
+    <h2>Diagrama de Secuencia — Historial Médico</h2>
+  </div>
+  <div class="content">
+    <p>Sommerville (2011) ofrece un diagrama que aclara los momentos en los que interactúa un asistente médico con el sistema de historial de pacientes (MHC-PMS):</p>
+    <!-- Diagrama de secuencia visual -->
+    <div class="seq-diagram">
+      <div class="seq-header">
+        <div class="seq-actor">👩‍⚕️ Recepcionista</div>
+        <div class="seq-actor green">🖥️ Interfaz de Usuario</div>
+        <div class="seq-actor blue">🗄️ MHC-PMS (BD)</div>
+        <div class="seq-actor green">🔐 Autenticación</div>
+      </div>
+      <div class="seq-msg">
+        <div class="seq-label">1. solicitarRegistro(PID)</div>
+        <div class="seq-line-h"></div>
+      </div>
+      <div class="seq-msg">
+        <div class="seq-label" style="color:var(--salvia)">  2. buscarReporte(PID, UID)</div>
+        <div class="seq-line-h"></div>
+      </div>
+      <div class="seq-msg">
+        <div class="seq-label" style="color:var(--cielo)">    3. verificarCredenciales(UID)</div>
+        <div class="seq-line-h"></div>
+      </div>
+      <div class="seq-alt">
+        <div class="seq-alt-label">ALT: Si autorización positiva</div>
+        <div class="seq-msg">
+          <div class="seq-label" style="color:var(--ocre)">4a. retornarInfo( ) → datos del paciente</div>
+          <div class="seq-line-h dashed left"></div>
+        </div>
+        <div class="seq-alt-label" style="margin-top:.5rem">ELSE: Si autorización negativa</div>
+        <div class="seq-msg">
+          <div class="seq-label" style="color:#c07050">4b. generarError("Acceso denegado")</div>
+          <div class="seq-line-h dashed left"></div>
+        </div>
+      </div>
+      <div class="seq-msg">
+        <div class="seq-label" style="color:var(--arena)">5. mostrarRegistro( )</div>
+        <div class="seq-line-h dashed left"></div>
+      </div>
+    </div>
+    <p style="font-size:.83rem;color:var(--text-light);font-style:italic">Adaptado de Sommerville, I. (2011). Figura 5.6. Sólo para fines educativos.</p>
+    <div class="box box-salvia" style="margin-top:.8rem">
+      <strong>💡 Clave de interpretación</strong>
+      <p>Observa que la instancia P del objeto PacientInfo se crea e invoca a la base de datos incluiyendo el UID del usuario para verificar si tiene permisos para consultar esa información antes de devolver los datos.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 10 · EJEMPLO ACTUALIZAR REGISTRO (DS2)
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip ocre">Ejemplo DS2</span>
+    <h2>Diagrama de Secuencia — Actualizar Registro</h2>
+  </div>
+  <div class="content">
+    <p>Este segundo diagrama incluye un actor adicional: el <strong>Sistema de Registro de Pacientes (PRS)</strong>, y explica las interacciones cuando la recepcionista desea <strong>actualizar</strong> un registro médico:</p>
+    <div class="box box-ocre">
+      <strong>📋 Flujo principal — paso a paso</strong>
+    </div>
+    <div class="steps" style="margin-top:.8rem">
+      <div class="step">
+        <h4>Solicitud de acceso</h4>
+        <p>La recepcionista solicita acceso al sistema de registros de pacientes (PRS).</p>
+      </div>
+      <div class="step">
+        <h4>Concesión de acceso</h4>
+        <p>El PRS otorga acceso. A partir de aquí existen dos alternativas (flujo ALT).</p>
+      </div>
+      <div class="step">
+        <h4>ALT 1 — Actualizar información</h4>
+        <p>Se envía la actualización de datos. Si el usuario tiene permisos, el sistema de registros actualiza la base de datos y confirma el evento a la recepcionista.</p>
+      </div>
+      <div class="step">
+        <h4>ALT 2 — Crear resumen</h4>
+        <p>Se crea un resumen que actualiza la información del paciente utilizando una interfaz de usuario llamada <em>Resumen</em>.</p>
+      </div>
+      <div class="step">
+        <h4>Cierre de sesión</h4>
+        <p>La interacción termina cuando la recepcionista sale del sistema invocando el método <span class="tag blue">logout()</span>.</p>
+      </div>
+    </div>
+    <p style="font-size:.83rem;color:var(--text-light);font-style:italic">Adaptado de Sommerville, I. (2011). Figura 5.7. Sólo para fines educativos.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 11 · DIAGRAMA DE ESTADO VS SECUENCIA
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip maguey">Comparación</span>
+    <h2>Diagrama de Estado vs. Diagrama de Secuencia</h2>
+  </div>
+  <div class="content">
+    <table>
+      <thead>
+        <tr><th>Aspecto</th><th>Diagrama de Estado</th><th>Diagrama de Secuencia</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>¿Qué modela?</strong></td><td>Los posibles estados del sistema y sus transiciones</td><td>La interacción cronológica entre actores y objetos</td></tr>
+        <tr><td><strong>Enfoque</strong></td><td>Comportamiento interno del sistema a lo largo del tiempo</td><td>Mensajes intercambiados en un caso de uso específico</td></tr>
+        <tr><td><strong>Elementos clave</strong></td><td>Estado, transición, evento, estado inicial/final</td><td>Actor, objeto, línea de vida, mensaje, activación, ALT</td></tr>
+        <tr><td><strong>Flujo de datos</strong></td><td>No incluye flujo de información</td><td>Muestra parámetros y valores de retorno</td></tr>
+        <tr><td><strong>Mejor para...</strong></td><td>Sistemas reactivos: cajeros, semáforos, flujos de aprobación</td><td>Casos de uso con múltiples actores/objetos interactuando</td></tr>
+        <tr><td><strong>Fuente</strong></td><td>Sommerville, Pressman, Pohl & Rupp</td><td>Sommerville (2011)</td></tr>
+      </tbody>
+    </table>
+    <div class="desert-note" style="margin-top:1rem">
+      <strong>📷 Analogía del edificio</strong>
+      <p>El modelado de comportamiento no sustituye otras herramientas como el DFD, sino que <strong>complementa</strong> la documentación. Es como tomar varias fotos de un edificio desde diferentes ángulos. El edificio es el mismo, pero cada foto ofrece información desde perspectivas distintas.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 12 · EJERCICIO PRÁCTICO
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip ocre">Ejercicio Práctico</span>
+    <h2>Ejercicio: Sistema de Biblioteca Digital</h2>
+  </div>
+  <div class="content">
+    <div class="activity-section">
+      <div class="activity-title">📚 Modelando una Biblioteca Digital</div>
+      <div class="box box-ocre">
+        <strong>Escenario</strong>
+        <p>Un estudiante ingresa al portal de la biblioteca digital. Se autentica con usuario y contraseña. El sistema verifica sus credenciales y le muestra el catálogo. El estudiante busca un libro, lo selecciona y solicita un préstamo digital. El sistema verifica si el libro está disponible; si lo está, registra el préstamo por 14 días y envía un correo de confirmación. Si no está disponible, lo añade a la lista de espera.</p>
+      </div>
+      <div class="grid grid-2">
+        <div class="activity-box">
+          <h4>🎯 Tarea 1: Identificar eventos</h4>
+          <p>Lee el escenario e identifica todos los eventos. ¿Cuáles los inicia el usuario? ¿Cuáles los dispara el sistema automáticamente?</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 2: Diagrama de estado</h4>
+          <p>Dibuja el diagrama de estado del proceso de préstamo. Incluye estado inicial, estados intermedios (autenticando, buscando, verificando disponibilidad, en préstamo, en lista de espera) y estado final.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 3: Diagrama de secuencia</h4>
+          <p>Elabora el diagrama de secuencia del caso de uso "Solicitar préstamo de libro". Incluye al Estudiante, la Interfaz Web, el Sistema de Biblioteca y la Base de Datos. Agrega el flujo ALT para libro no disponible.</p>
+        </div>
+        <div class="activity-box">
+          <h4>🎯 Tarea 4: Validación cruzada</h4>
+          <p>Compara ambos diagramas. ¿Los eventos del diagrama de secuencia corresponden a las transiciones del diagrama de estado? ¿Hay estados o mensajes que falten en alguno de los dos?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 13 · ACTIVIDAD EVALUABLE
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip salvia">Actividad Evaluable</span>
+    <h2>Entregable: Modelado de Comportamiento del Proyecto</h2>
+  </div>
+  <div class="content">
+    <div class="box box-ocre">
+      <strong>📌 Instrucciones Generales</strong>
+      <p>Aplica los conceptos del Tema 9 al sistema de información de tu equipo. Usa los casos de uso definidos previamente como punto de partida para identificar eventos, estados e interacciones.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <h4>Selección del caso de uso</h4>
+        <p>Elige un caso de uso de mediana complejidad (con al menos 2–3 actores o decisiones importantes). Describe el escenario principal y los flujos alternativos.</p>
+      </div>
+      <div class="step">
+        <h4>Identificación de eventos</h4>
+        <p>Subraya todos los eventos del caso de uso seleccionado. Clasifícalos como eventos de usuario (clic, selección, escritura) o eventos del sistema (validación, notificación, actualización).</p>
+      </div>
+      <div class="step">
+        <h4>Diagrama de estado completo</h4>
+        <p>Construye el diagrama de estado del proceso. Incluye estado inicial ●, todos los estados intermedios con rectángulos de esquinas redondeadas, transiciones etiquetadas y al menos un estado final ◉. Si aplica, modela jerarquía de estados o concurrencia.</p>
+      </div>
+      <div class="step">
+        <h4>Diagrama de secuencia completo</h4>
+        <p>Elabora el diagrama de secuencia del mismo caso de uso. Incluye todos los actores, objetos del sistema y la base de datos. Representa mensajes con parámetros, respuestas con flechas punteadas y flujos ALT para las decisiones identificadas.</p>
+      </div>
+    </div>
+    <div class="box box-salvia" style="margin-top:.8rem">
+      <strong>📅 Criterios de Evaluación</strong>
+      <p>Diagrama de estado correcto y completo (30%) · Diagrama de secuencia correcto y completo (35%) · Identificación precisa de eventos (20%) · Coherencia entre ambos diagramas (15%)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 14 · CIERRE / RESUMEN
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip salvia">Cierre</span>
+    <h2>Puntos Clave del Tema 9</h2>
+  </div>
+  <div class="content">
+    <div class="grid grid-3">
+      <div class="card">
+        <h4>🌊 Modelado dinámico</h4>
+        <p>A diferencia del DFD (estático), los modelos de comportamiento capturan cómo evoluciona el sistema a través del tiempo y en respuesta a eventos.</p>
+      </div>
+      <div class="card salvia">
+        <h4>⚫ Diagrama de Estado</h4>
+        <p>Modela estados, transiciones y eventos. Incluye estado inicial ● y finales ◉. Soporta jerarquía de subestados y concurrencia.</p>
+      </div>
+      <div class="card ocre">
+        <h4>→ Diagrama de Secuencia</h4>
+        <p>Muestra la interacción cronológica entre actores y objetos para un caso de uso. Lee de izquierda a derecha y de arriba hacia abajo.</p>
+      </div>
+      <div class="card maguey">
+        <h4>🔄 Son complementarios</h4>
+        <p>El diagrama de estado muestra el QUÉ (qué estados existen). El de secuencia muestra el CÓMO (cómo interactúan los componentes para lograrlo).</p>
+      </div>
+      <div class="card cielo">
+        <h4>📷 Múltiples perspectivas</h4>
+        <p>Ninguna herramienta es suficiente sola. DFD + Diagrama de clases + Diagrama de estado + Diagrama de secuencia = visión completa del sistema.</p>
+      </div>
+      <div class="card">
+        <h4>💬 Comunicación con el cliente</h4>
+        <p>Estos diagramas facilitan validar con el cliente que el sistema comprende correctamente los flujos del negocio antes de iniciar el desarrollo.</p>
+      </div>
+    </div>
+    <div class="desert-note" style="margin-top:1.2rem">
+      <strong>🌵 Analogía final del desierto</strong>
+      <p>Un diagrama de estado es como un mapa de rutas del desierto chihuahuense: muestra los oasis (estados), los caminos (transiciones) y las señales (eventos). Un diagrama de secuencia es el diario de viaje: registra exactamente quién hizo qué, cuándo y en qué orden para llegar de un punto a otro.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 15 · CHECKPOINT + GLOSARIO
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip salvia">Checkpoint</span>
+    <h2>Verificación de Competencias y Glosario</h2>
+  </div>
+  <div class="content">
+    <div class="box box-salvia" style="margin-bottom:1.2rem">
+      <strong>✅ Asegúrate de poder:</strong>
+      <ul style="margin-top:.5rem">
+        <li>Reconocer los elementos del diagrama de estado y del diagrama de secuencia para interpretarlos en un proyecto de desarrollo de sistemas</li>
+        <li>Realizar un diagrama general de estado y de secuencia que ofrezca un mejor contexto del sistema en actividades de ingeniería de requerimientos</li>
+      </ul>
+    </div>
+    <h3>Glosario del Tema 9</h3>
+    <div class="glos-item">
+      <strong>Evento</strong>
+      <p>Intercambio de información entre un sistema y un actor que desencadena una respuesta o un cambio de estado. La mayoría son iniciados por actividades del usuario.</p>
+    </div>
+    <div class="glos-item">
+      <strong>Estado</strong>
+      <p>Define el comportamiento de un sistema en un determinado momento, en espera de que un evento ocurra para llevar a cabo una transición definida.</p>
+    </div>
+    <div class="glos-item">
+      <strong>Transición</strong>
+      <p>Cambio de un estado al siguiente, condicionado al cumplimiento de ciertas condiciones o la ocurrencia de un evento.</p>
+    </div>
+    <div class="glos-item">
+      <strong>Subestado</strong>
+      <p>Estado previo a otro. Común en sistemas con procesos de autorización por niveles (e.g., un documento se libera tras pasar por varias autorizaciones).</p>
+    </div>
+    <div class="glos-item">
+      <strong>PIN</strong>
+      <p>Personal Identification Number: número de identificación otorgado a clientes para usar su tarjeta en un cajero automático.</p>
+    </div>
+    <div class="glos-item">
+      <strong>logout()</strong>
+      <p>Método que se genera cuando el usuario sale de un sistema a través de los mecanismos de salida proporcionados por el sistema.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 16 · REFERENCIAS
+══════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-header">
+    <span class="slide-chip">Referencias</span>
+    <h2>Bibliografía y Recursos</h2>
+  </div>
+  <div class="content">
+    <h3>Bibliografía Obligatoria</h3>
+    <div class="box">
+      <strong>[1]</strong> Sommerville, I. (2011). <em>Ingeniería de Software</em> (9ª ed.). México: Pearson.<br>
+      <span style="font-size:.87rem;color:var(--text-light)">→ Figuras 5.6 y 5.7 — Diagramas de secuencia de MHC-PMS</span>
+    </div>
+    <div class="box">
+      <strong>[2]</strong> Pressman, R. (2010). <em>Ingeniería de Software. Un enfoque práctico</em> (7ª ed.). México: McGraw Hill.<br>
+      <span style="font-size:.87rem;color:var(--text-light)">→ Figura 7.6 — Diagrama de estado del cajero automático</span>
+    </div>
+    <div class="box">
+      <strong>[3]</strong> Pohl, K. y Rupp, C. (2011). <em>Requirements Engineering Fundamentals</em>. EE. UU: Rocky Nook.
+    </div>
+    <div class="box">
+      <strong>[4]</strong> Kendall, E. y Kendall, J. (2011). <em>Systems Analysis and Design</em> (8ª ed.). New Jersey: Prentice Hall.
+    </div>
+    <h3 style="margin-top:1.3rem">Lecturas Recomendadas</h3>
+    <div class="grid grid-2">
+      <div class="box box-salvia">
+        <strong>Diagramas de Estado UML</strong>
+        <p>Beckert, B. (s.f.). <em>UML State Machines</em>.<br>formal.iti.kit.edu/~beckert/teaching/Spezifikation-SS04/10StateCharts.pdf</p>
+      </div>
+      <div class="box box-salvia">
+        <strong>Diagramas de Secuencia UML</strong>
+        <p>Gutiérrez, D. (2011). <em>UML Diagramas de Secuencia</em>.<br>codecompiling.net/files/slides/UML_clase_06_UML_secuencia.pdf</p>
+      </div>
+      <div class="box box-maguey">
+        <strong>UML State Machine — Ágil</strong>
+        <p>Ambler, S. (s.f.). <em>UML 2 State Machine Diagrams: An Agile Introduction</em>.<br>agilemodeling.com/artifacts/stateMachineDiagram.htm</p>
+      </div>
+      <div class="box box-maguey">
+        <strong>Comportamiento organizacional</strong>
+        <p>Psicología y Empresa. (s.f.). <em>¿Qué es el comportamiento organizacional?</em><br>psicologiayempresa.com</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  SLIDE 17 · PORTADA DE CIERRE
+══════════════════════════════════════ -->
+<div class="slide cover">
+  <svg class="cover-dunes" viewBox="0 0 1200 180" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,180 L0,120 Q100,60 200,100 Q300,130 400,70 Q500,20 600,90 Q700,140 800,80 Q900,30 1000,100 Q1100,140 1200,90 L1200,180 Z" fill="rgba(200,169,110,1)"/>
+    <path d="M0,180 L0,155 Q80,130 160,148 Q240,160 320,140 Q400,118 480,145 Q560,165 640,142 Q720,120 800,150 Q880,168 960,148 Q1040,128 1120,155 Q1160,165 1200,155 L1200,180 Z" fill="rgba(122,82,48,1)"/>
+    <ellipse cx="180" cy="142" rx="18" ry="24" fill="rgba(122,158,126,1)" transform="rotate(-10,180,142)"/>
+    <ellipse cx="168" cy="129" rx="12" ry="16" fill="rgba(122,158,126,1)" transform="rotate(-25,168,129)"/>
+    <ellipse cx="195" cy="127" rx="12" ry="16" fill="rgba(77,115,82,1)" transform="rotate(20,195,127)"/>
+    <rect x="178" y="145" width="4" height="20" fill="rgba(78,48,24,1)"/>
+    <ellipse cx="980" cy="140" rx="16" ry="22" fill="rgba(122,158,126,1)" transform="rotate(8,980,140)"/>
+    <ellipse cx="968" cy="128" rx="11" ry="15" fill="rgba(77,115,82,1)" transform="rotate(-20,968,128)"/>
+    <ellipse cx="994" cy="127" rx="11" ry="15" fill="rgba(122,158,126,1)" transform="rotate(22,994,127)"/>
+    <rect x="978" y="143" width="4" height="20" fill="rgba(78,48,24,1)"/>
+    <rect x="596" y="125" width="8" height="35" fill="rgba(160,120,64,1)"/>
+    <path d="M600,125 L580,95 M600,125 L620,90 M600,125 L590,80 M600,125 L610,85 M600,125 L572,105 M600,125 L628,102" stroke="rgba(163,184,140,1)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </svg>
+  <div class="cover-eyebrow">TI13312 · Ingeniería de Requerimientos de Software</div>
+  <h1>
+    ¡Excelente trabajo!
+    <em>Ya modelas el comportamiento de sistemas</em>
+  </h1>
+  <div class="cover-rule"></div>
+  <p class="sub">Tema 9 completado · Diagramas de Estado y Secuencia</p>
+  <p class="meta">Universidad Tecmilenio © · Todos los Derechos Reservados</p>
+  <p class="nav-hint" style="margin-top:2.8rem">"Un sistema bien modelado es un sistema que ya casi está construido."</p>
+</div>
+
+</div><!-- /container -->
+
+<div class="counter"><span id="current">1</span> / <span id="total">17</span></div>
+<div class="nav">
+  <button class="btn" id="prev" onclick="nav(-1)">◀</button>
+  <button class="btn" id="next" onclick="nav(1)">▶</button>
+</div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+document.getElementById('total').textContent = total;
+
+function show(n) {
+  if (n < 0) n = 0;
+  if (n >= total) n = total - 1;
+  slides.forEach(s => s.classList.remove('active'));
+  slides[n].classList.add('active');
+  current = n;
+  document.getElementById('current').textContent = n + 1;
+  document.getElementById('prev').disabled = (n === 0);
+  document.getElementById('next').disabled = (n === total - 1);
+  document.getElementById('progressBar').style.width = ((n + 1) / total * 100) + '%';
+}
+
+function nav(dir) { show(current + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') nav(-1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault();
+    nav(1);
+  }
+});
+
+show(0);
+</script>
+</body>
+</html>

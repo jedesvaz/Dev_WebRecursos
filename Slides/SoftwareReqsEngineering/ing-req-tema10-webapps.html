@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tema 10 — Modelado de Requerimientos para WebApps</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── PALETA: PAPELERÍA DE OFICINA ────────────────────
+   Blancos de papel, azul bolígrafo, negro tinta,
+   amarillo resaltador, rojo corrector, verde fluorescente
+──────────────────────────────────────────────────── */
+:root {
+  --paper:      #ffffff;
+  --paper-grid: #f0f4f8;
+  --paper-rule: #e2e8f0;
+  --ink:        #0f172a;
+  --ink-mid:    #334155;
+  --ink-lt:     #64748b;
+  --blue-pen:   #1d4ed8;
+  --blue-light: #3b82f6;
+  --blue-pale:  #eff6ff;
+  --blue-mid:   #dbeafe;
+  --yellow-hl:  #fde047;
+  --yellow-bg:  #fefce8;
+  --red-marker: #ef4444;
+  --red-bg:     #fef2f2;
+  --green-fl:   #22c55e;
+  --green-bg:   #f0fdf4;
+  --orange-mk:  #f97316;
+  --orange-bg:  #fff7ed;
+  --black:      #020617;
+  --sh:         0 1px 6px rgba(15,23,42,0.08);
+  --sh-md:      0 4px 20px rgba(15,23,42,0.10);
+  --sh-lg:      0 8px 40px rgba(15,23,42,0.14);
+}
+
+html, body { height: 100%; background: var(--paper-grid); font-family: 'IBM Plex Sans', sans-serif; color: var(--ink); overflow: hidden; }
+
+/* ── BACKGROUND GRID (cuadrícula de cuaderno) ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--paper-rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--paper-rule) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.6;
+}
+
+/* ── PROGRESS ── */
+.pb { position: fixed; top: 0; left: 0; height: 3px; background: var(--blue-pen); transition: width .35s ease; z-index: 9999; box-shadow: 0 0 8px rgba(29,78,216,.4); }
+
+/* ── SLIDES ── */
+.slide { display: none; flex-direction: column; width: 100vw; height: 100vh; overflow-y: auto; position: relative; z-index: 1; animation: fd .35s ease; }
+.slide.active { display: flex; }
+@keyframes fd { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.slide::-webkit-scrollbar { width: 4px; }
+.slide::-webkit-scrollbar-track { background: var(--paper-rule); }
+.slide::-webkit-scrollbar-thumb { background: var(--blue-light); border-radius: 4px; }
+
+/* ══════════════════════════════
+   PORTADA
+══════════════════════════════ */
+.cover {
+  background: var(--ink);
+  min-height: 100vh; justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+/* Líneas de cuaderno en dark */
+.cover::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+/* Margen izquierdo rojo de cuaderno */
+.cover-margin {
+  position: absolute; top: 0; bottom: 0; left: 72px; width: 2px;
+  background: rgba(239,68,68,0.4); z-index: 1;
+}
+/* Puntos de espiral */
+.spiral {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 56px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: space-around; padding: 24px 0; z-index: 2;
+}
+.spiral-dot {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.12);
+}
+.cover-content { position: relative; z-index: 2; max-width: 860px; width: 100%; padding: 2.5rem 2.5rem 2.5rem 5rem; }
+
+/* Sticker tabs en portada */
+.sticker {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .28rem .8rem; border-radius: 3px; font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500;
+  margin-bottom: .5rem;
+}
+.stk-blue  { background: var(--blue-pen); color: #fff; }
+.stk-yel   { background: var(--yellow-hl); color: var(--ink); }
+.stk-red   { background: var(--red-marker); color: #fff; }
+
+.cover-code {
+  font-family: 'IBM Plex Mono', monospace; font-size: .75rem; color: rgba(255,255,255,.35);
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 1.2rem;
+}
+.cover-title {
+  font-family: 'Syne', sans-serif; font-weight: 800;
+  font-size: clamp(2.2rem, 5.5vw, 4rem); line-height: 1.05;
+  color: #fff; margin-bottom: .8rem;
+}
+.cover-title .accent { color: var(--blue-light); }
+.cover-title .hl {
+  background: var(--yellow-hl); color: var(--ink);
+  padding: 0 .15em; display: inline; line-height: 1.15;
+}
+.cover-sub { font-size: 1.05rem; font-weight: 300; color: rgba(255,255,255,.55); margin-bottom: 2.2rem; line-height: 1.65; }
+.cover-divider { width: 48px; height: 3px; background: var(--blue-pen); margin-bottom: 2rem; }
+.cover-pills { display: flex; gap: .55rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.cpill { padding: .28rem .9rem; border-radius: 2px; font-size: .75rem; font-weight: 500; border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.7); background: rgba(255,255,255,.06); }
+.cover-foot { font-family: 'IBM Plex Mono', monospace; font-size: .65rem; color: rgba(255,255,255,.2); letter-spacing: 1px; }
+.cover-foot span { color: rgba(255,255,255,.45); }
+
+/* ══════════════════════════════
+   SLIDE HEADER
+══════════════════════════════ */
+.sh {
+  background: var(--paper); border-bottom: 2px solid var(--paper-rule);
+  padding: .8rem 2rem; display: flex; align-items: center; gap: .9rem;
+  flex-shrink: 0; position: relative;
+}
+/* Línea azul bolígrafo en header */
+.sh::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px;
+  background: var(--blue-pen);
+}
+/* Margen de cuaderno en slide */
+.sh::after {
+  content: ''; position: absolute; left: 56px; top: 0; bottom: 0; width: 1px;
+  background: rgba(239,68,68,.25);
+}
+.sh-ico {
+  width: 38px; height: 38px; border-radius: 6px; display: flex;
+  align-items: center; justify-content: center; font-size: .95rem;
+  flex-shrink: 0; margin-left: 1.5rem;
+}
+.ico-b { background: var(--blue-pale); border: 1.5px solid var(--blue-mid); }
+.ico-y { background: var(--yellow-bg); border: 1.5px solid rgba(253,224,71,.5); }
+.ico-r { background: var(--red-bg); border: 1.5px solid rgba(239,68,68,.2); }
+.ico-g { background: var(--green-bg); border: 1.5px solid rgba(34,197,94,.25); }
+.ico-o { background: var(--orange-bg); border: 1.5px solid rgba(249,115,22,.25); }
+
+.sh-meta { flex: 1; }
+.sh-lbl { font-family: 'IBM Plex Mono', monospace; font-size: .58rem; color: var(--ink-lt); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: .1rem; }
+.sh-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: clamp(.95rem, 2.2vw, 1.35rem); color: var(--ink); }
+.sh-title .ab { color: var(--blue-pen); }
+.sh-title .ay { background: var(--yellow-hl); color: var(--ink); padding: 0 .12em; }
+.sh-title .ar { color: var(--red-marker); }
+
+/* ══════════════════════════════
+   SLIDE BODY
+══════════════════════════════ */
+.sb {
+  flex: 1; padding: 1.4rem 2rem; background: transparent; overflow-y: auto;
+}
+
+/* GRIDS */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .9rem; }
+.ga { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: .9rem; }
+
+/* PAPER CARD */
+.card {
+  background: var(--paper); border: 1.5px solid var(--paper-rule);
+  border-radius: 4px; padding: 1rem; box-shadow: var(--sh); transition: box-shadow .2s;
+  position: relative; overflow: hidden;
+}
+.card:hover { box-shadow: var(--sh-md); }
+/* Tira de color en borde superior */
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.card-b::before { background: var(--blue-pen); }
+.card-y::before { background: var(--yellow-hl); }
+.card-r::before { background: var(--red-marker); }
+.card-g::before { background: var(--green-fl); }
+.card-o::before { background: var(--orange-mk); }
+.card-k::before { background: var(--ink); }
+.card-ico { font-size: 1.3rem; margin-bottom: .5rem; }
+.card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: .9rem; color: var(--ink); margin-bottom: .3rem; }
+.card-body { font-size: .82rem; color: var(--ink-mid); line-height: 1.6; }
+
+/* BOXES */
+.box {
+  border-radius: 4px; padding: .85rem 1rem;
+  margin-bottom: .8rem; font-size: .85rem; line-height: 1.65;
+  border: 1.5px solid; position: relative;
+}
+.box-b { background: var(--blue-pale); border-color: var(--blue-mid); color: var(--ink-mid); }
+.box-y { background: var(--yellow-bg); border-color: rgba(253,224,71,.6); color: var(--ink-mid); }
+.box-r { background: var(--red-bg); border-color: rgba(239,68,68,.2); color: var(--ink-mid); }
+.box-g { background: var(--green-bg); border-color: rgba(34,197,94,.25); color: var(--ink-mid); }
+.box-o { background: var(--orange-bg); border-color: rgba(249,115,22,.25); color: var(--ink-mid); }
+.box-k { background: var(--paper); border-color: var(--paper-rule); color: var(--ink-mid); }
+.blbl { font-family: 'IBM Plex Mono', monospace; font-size: .58rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: .3rem; opacity: .65; }
+
+/* SECTION TITLE */
+.sec {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: .95rem;
+  color: var(--ink); margin-bottom: .7rem; padding-bottom: .3rem;
+  border-bottom: 2px solid var(--blue-pen); display: flex; align-items: center; gap: .45rem;
+}
+
+/* LISTAS */
+ul.ul { list-style: none; padding: 0; }
+ul.ul li {
+  padding: .38rem 0 .38rem 1.3rem; position: relative; font-size: .84rem;
+  color: var(--ink-mid); line-height: 1.55; border-bottom: 1px dashed var(--paper-rule);
+}
+ul.ul li:last-child { border-bottom: none; }
+ul.ul li::before {
+  content: '→'; position: absolute; left: 0; top: .42rem;
+  color: var(--blue-pen); font-weight: 700; font-size: .75rem;
+}
+ul.ul.red li::before  { content: '—'; color: var(--red-marker); }
+ul.ul.grn li::before  { content: '✓'; color: var(--green-fl); font-size: .7rem; }
+ul.ul.num { counter-reset: li; }
+ul.ul.num li::before {
+  content: counter(li, decimal-leading-zero); counter-increment: li;
+  font-family: 'IBM Plex Mono', monospace; font-size: .65rem; font-weight: 500;
+  color: var(--blue-pen); top: .45rem;
+}
+strong { color: var(--ink); font-weight: 600; }
+em { color: var(--blue-pen); font-style: italic; }
+
+/* BADGE */
+.bdg { display: inline-flex; align-items: center; gap: .2rem; padding: .15rem .55rem; border-radius: 2px; font-size: .68rem; font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+.bdg-b { background: var(--blue-pale); color: var(--blue-pen); border: 1px solid var(--blue-mid); }
+.bdg-y { background: var(--yellow-bg); color: #854d0e; border: 1px solid rgba(253,224,71,.5); }
+.bdg-r { background: var(--red-bg); color: var(--red-marker); border: 1px solid rgba(239,68,68,.2); }
+.bdg-g { background: var(--green-bg); color: #15803d; border: 1px solid rgba(34,197,94,.25); }
+.bdg-k { background: var(--ink); color: #fff; }
+
+/* TABLA */
+.tw { overflow-x: auto; border-radius: 4px; border: 1.5px solid var(--paper-rule); box-shadow: var(--sh); background: var(--paper); }
+table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+thead tr { background: var(--ink); }
+thead th { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; font-weight: 500; color: #fff; text-align: left; padding: .6rem .9rem; letter-spacing: .5px; }
+tbody tr { border-bottom: 1px solid var(--paper-rule); transition: background .15s; }
+tbody tr:nth-child(even) { background: var(--paper-grid); }
+tbody tr:hover { background: var(--blue-pale); }
+tbody td { padding: .55rem .9rem; color: var(--ink-mid); vertical-align: top; line-height: 1.5; }
+tbody td:first-child { font-weight: 600; color: var(--ink); }
+
+/* OBJECTIVES */
+.obj {
+  display: flex; gap: .85rem; align-items: flex-start;
+  padding: .75rem; background: var(--paper); border: 1.5px solid var(--paper-rule);
+  border-radius: 4px; margin-bottom: .6rem; box-shadow: var(--sh); transition: border-color .2s;
+}
+.obj:hover { border-color: var(--blue-light); }
+.obj-n {
+  min-width: 32px; height: 32px; border-radius: 3px;
+  background: var(--blue-pen); color: #fff;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.obj-t { font-size: .85rem; color: var(--ink-mid); line-height: 1.55; padding-top: .15rem; }
+
+/* QUOTE */
+.quote {
+  background: var(--paper); border-left: 4px solid var(--blue-pen);
+  border-radius: 0 4px 4px 0; padding: 1rem 1.2rem; margin: .8rem 0;
+  box-shadow: var(--sh); position: relative;
+}
+.quote::before {
+  content: '"'; position: absolute; top: -8px; left: 10px;
+  font-family: 'Syne', sans-serif; font-size: 4rem; color: rgba(29,78,216,.1); line-height: 1;
+}
+.quote-text { font-style: italic; font-size: .88rem; color: var(--ink-mid); line-height: 1.65; position: relative; z-index: 1; }
+.quote-src { font-family: 'IBM Plex Mono', monospace; font-size: .65rem; color: var(--ink-lt); margin-top: .4rem; letter-spacing: .5px; }
+
+/* POST-IT (nota adhesiva) */
+.postit {
+  background: var(--yellow-hl); border-radius: 1px 1px 12px 2px;
+  padding: .75rem 1rem; font-size: .82rem; color: var(--ink);
+  line-height: 1.55; box-shadow: 2px 3px 10px rgba(0,0,0,.12);
+  transform: rotate(-0.8deg); transition: transform .2s;
+}
+.postit:hover { transform: rotate(0deg) scale(1.01); }
+.postit strong { color: var(--ink); }
+
+/* HIGHLIGHTER */
+.hl-b { background: rgba(59,130,246,.18); padding: 0 .1em; }
+.hl-y { background: rgba(253,224,71,.5); padding: 0 .1em; }
+.hl-r { background: rgba(239,68,68,.12); padding: 0 .1em; }
+
+/* STEP PROCESS */
+.step {
+  display: flex; gap: .8rem; padding: .7rem .9rem;
+  background: var(--paper); border: 1.5px solid var(--paper-rule);
+  border-radius: 4px; margin-bottom: .5rem; box-shadow: var(--sh); align-items: flex-start;
+}
+.step-n {
+  min-width: 28px; height: 28px; border-radius: 50%;
+  background: var(--blue-pen); color: #fff;
+  font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .75rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step-t strong { font-size: .88rem; display: block; color: var(--ink); margin-bottom: .1rem; }
+.step-t p { font-size: .8rem; color: var(--ink-mid); line-height: 1.5; }
+
+/* QUIZ */
+.quiz-box { background: var(--paper); border: 1.5px solid var(--paper-rule); border-radius: 4px; padding: 1rem; margin-bottom: .8rem; box-shadow: var(--sh); }
+.quiz-tag { font-family: 'IBM Plex Mono', monospace; font-size: .6rem; letter-spacing: 2px; background: var(--blue-pen); color: #fff; padding: .15rem .5rem; border-radius: 2px; display: inline-block; margin-bottom: .5rem; }
+.quiz-q { font-family: 'IBM Plex Sans', sans-serif; font-weight: 600; font-size: .9rem; color: var(--ink); margin-bottom: .5rem; }
+.quiz-opts { list-style: none; }
+.quiz-opts li { padding: .42rem .8rem; border: 1.5px solid var(--paper-rule); border-radius: 3px; margin-bottom: .3rem; font-size: .82rem; color: var(--ink-mid); cursor: pointer; transition: all .2s; display: flex; gap: .6rem; align-items: flex-start; }
+.quiz-opts li:hover { border-color: var(--blue-pen); background: var(--blue-pale); }
+.quiz-opts li.correct { border-color: var(--green-fl); background: var(--green-bg); color: var(--ink); }
+.opt-l { min-width: 20px; height: 20px; border-radius: 50%; background: var(--paper-rule); display: flex; align-items: center; justify-content: center; font-size: .65rem; font-weight: 700; flex-shrink: 0; color: var(--ink-lt); font-family: 'IBM Plex Mono', monospace; }
+
+/* GLOSARIO */
+.glos-item { padding: .65rem .9rem; border-bottom: 1px dashed var(--paper-rule); font-size: .84rem; }
+.glos-item:last-child { border-bottom: none; }
+.glos-term { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--blue-pen); font-size: .88rem; margin-bottom: .18rem; }
+.glos-def { color: var(--ink-mid); line-height: 1.55; }
+
+/* REC */
+.rec { display: flex; gap: .8rem; padding: .7rem .9rem; background: var(--paper); border: 1.5px solid var(--paper-rule); border-radius: 4px; margin-bottom: .5rem; box-shadow: var(--sh); transition: border-color .2s; }
+.rec:hover { border-color: var(--blue-pen); }
+.rec-ico { font-size: 1.2rem; flex-shrink: 0; margin-top: .1rem; }
+.rec-title { font-weight: 600; font-size: .88rem; color: var(--ink); margin-bottom: .1rem; }
+.rec-desc { font-size: .78rem; color: var(--ink-lt); line-height: 1.5; }
+.rec-url { font-family: 'IBM Plex Mono', monospace; font-size: .65rem; color: var(--blue-pen); display: block; margin-top: .1rem; word-break: break-all; }
+
+/* ACTIVITY */
+.act { display: flex; gap: .8rem; padding: .75rem; background: var(--paper); border: 1.5px solid var(--paper-rule); border-radius: 4px; margin-bottom: .55rem; box-shadow: var(--sh); }
+.act-ico { width: 30px; height: 30px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: .9rem; flex-shrink: 0; background: var(--blue-pale); border: 1.5px solid var(--blue-mid); }
+.act-t strong { font-size: .88rem; display: block; margin-bottom: .1rem; color: var(--ink); }
+.act-t p { font-size: .8rem; color: var(--ink-mid); line-height: 1.5; }
+
+/* CLOSING SLIDE */
+.cover-close {
+  background: var(--blue-pen); min-height: 100vh;
+  justify-content: center; align-items: center; position: relative; overflow: hidden;
+}
+.cover-close::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.cover-close .spiral-dot { border-color: rgba(255,255,255,.18); background: rgba(255,255,255,.06); }
+.close-c { position: relative; z-index: 2; max-width: 820px; width: 100%; padding: 2.5rem 2.5rem 2.5rem 5rem; }
+.sum-row { display: flex; gap: .6rem; margin-bottom: .45rem; font-size: .84rem; }
+.sum-k { min-width: 140px; font-family: 'IBM Plex Mono', monospace; font-size: .68rem; color: rgba(255,255,255,.6); flex-shrink: 0; padding-top: .1rem; letter-spacing: .5px; }
+.sum-v { color: rgba(255,255,255,.85); line-height: 1.5; }
+
+/* ── NAV ── */
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,.97); border-top: 2px solid var(--paper-rule); padding: .5rem 1.5rem; display: flex; align-items: center; justify-content: space-between; z-index: 1000; backdrop-filter: blur(8px); }
+.nb { display: flex; align-items: center; gap: .4rem; padding: .4rem .9rem; border-radius: 3px; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .77rem; border: 1.5px solid var(--paper-rule); background: var(--paper); color: var(--ink-lt); cursor: pointer; transition: all .2s; }
+.nb:hover:not(:disabled) { border-color: var(--blue-pen); color: var(--blue-pen); background: var(--blue-pale); }
+.nb:disabled { opacity: .3; cursor: not-allowed; }
+.nav-c { display: flex; flex-direction: column; align-items: center; gap: .22rem; }
+.ctr { font-family: 'IBM Plex Mono', monospace; font-size: .72rem; color: var(--ink-lt); }
+.ctr span { color: var(--blue-pen); font-size: .9rem; font-weight: 700; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 300px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--paper-rule); transition: all .2s; cursor: pointer; border: none; padding: 0; }
+.dot.active { background: var(--blue-pen); transform: scale(1.4); }
+.nav-sp { height: 62px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) { .sb { padding: 1rem; } .sh { padding: .65rem 1rem; } .g2,.g3 { grid-template-columns: 1fr; } .nav { padding: .4rem .8rem; } .nb { padding: .36rem .65rem; font-size: .7rem; } .dots { max-width: 180px; } }
+@media (max-width: 480px) { .dots { display: none; } .cover-title { font-size: 1.9rem; } }
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- ═══════════════════════════════════════
+  S1 — PORTADA
+═══════════════════════════════════════ -->
+<div class="slide cover active" id="s1">
+  <div class="cover-margin"></div>
+  <div class="spiral" id="sp1"></div>
+  <div class="cover-content">
+    <div style="display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.2rem">
+      <span class="sticker stk-blue">TI13312</span>
+      <span class="sticker stk-yel">Tema 10</span>
+      <span class="sticker stk-red">Nivel Intermedio</span>
+    </div>
+    <div class="cover-code">Ingeniería de requerimientos de software · Universidad TecMilenio</div>
+    <h1 class="cover-title">
+      Modelado de<br>
+      requerimientos para<br>
+      <span class="hl">WebApps</span>
+    </h1>
+    <p class="cover-sub">Contenido, interacción, funcionalidad, navegación y configuración<br>de aplicaciones web según Pressman (2010)</p>
+    <div class="cover-divider"></div>
+    <div class="cover-pills">
+      <span class="cpill">10.1 Contenido de la Web</span>
+      <span class="cpill">10.2 Interacción y Funcionalidad</span>
+      <span class="cpill">10.3 Navegación y Configuración</span>
+    </div>
+    <p class="cover-foot">Ref.: Pressman, R. (2010). <span>Ingeniería de Software. Un enfoque práctico</span> (7ª ed.). McGraw Hill.</p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S2 — CONTEXTO / INTRODUCCIÓN
+═══════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-ico ico-b">🌐</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 02 · Contexto</div>
+      <div class="sh-title">¿Por qué importan las <span class="ab">WebApps</span>?</div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2" style="margin-bottom:1rem">
+      <div>
+        <div class="box box-b" style="margin-bottom:.9rem">
+          <div class="blbl" style="color:var(--blue-pen)">Escenario cotidiano</div>
+          Un día normal: abres el banco en línea, revisas calificaciones en la app escolar, publicas en redes sociales, consultas el clima. <strong>Sin darte cuenta, estás usando aplicaciones web</strong> todo el tiempo.
+        </div>
+        <div class="box box-y">
+          <div class="blbl" style="color:#854d0e">Internet como plataforma de negocios</div>
+          La Internet <strong>replantea la forma de hacer negocios</strong>. Cualquier empresa, grande o pequeña, debe incluir Internet en su plan estratégico como herramienta de comunicación con clientes.
+        </div>
+        <div class="box box-g" style="margin-bottom:0">
+          <div class="blbl" style="color:#15803d">Migración a la web</div>
+          Los negocios están migrando sus sistemas de información a <em>webapps</em> por su <strong>versatilidad en diseño, funcionalidad, acceso e independencia del hardware</strong>.
+        </div>
+      </div>
+      <div>
+        <div class="sec">Preguntas detonadoras 🔑</div>
+        <div class="postit" style="margin-bottom:.85rem">
+          ❓ ¿Cómo modelar los requerimientos de las aplicaciones web?
+        </div>
+        <div class="postit" style="transform:rotate(0.5deg)">
+          ❓ ¿En qué se debe enfocar el ingeniero de requerimientos para documentar las características que se buscan?
+        </div>
+        <div class="box box-k" style="margin-top:.9rem">
+          <div class="blbl">Definición</div>
+          Una <em>webapp</em> abarca desde una <strong>simple página web</strong> hasta aplicaciones que integran bases de datos, servicios de software, almacenamiento y ambientes de cómputo complejos.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S3 — OBJETIVOS
+═══════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-ico ico-y">🎯</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 03 · Objetivos</div>
+      <div class="sh-title">Al terminar este tema <span class="ay">podrás…</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="obj">
+      <div class="obj-n">1</div>
+      <div class="obj-t"><strong>Identificar los atributos fundamentales de las WebApps</strong> según Pressman (2010): uso intensivo de redes, concurrencia, disponibilidad, seguridad y los demás que las distinguen del software tradicional.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--red-marker)">2</div>
+      <div class="obj-t"><strong>Construir modelos de contenido</strong> utilizando árboles jerárquicos de objetos e información para describir correctamente lo que una WebApp mostrará al usuario.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--green-fl)">3</div>
+      <div class="obj-t"><strong>Modelar la interacción y la funcionalidad</strong> de una WebApp mediante casos de uso, diagramas de secuencia, diagramas de estado y prototipos de interfaz de usuario.</div>
+    </div>
+    <div class="obj">
+      <div class="obj-n" style="background:var(--orange-mk)">4</div>
+      <div class="obj-t"><strong>Documentar requerimientos de navegación y configuración</strong>, respondiendo las preguntas guía de Pressman para priorizar funciones, definir breadcrumbs y describir las características técnicas del entorno cliente-servidor.</div>
+    </div>
+    <div class="box box-b" style="margin-top:.6rem">
+      <div class="blbl" style="color:var(--blue-pen)">Checkpoint</div>
+      Reconocer los componentes indispensables que toda <em>webapp</em> debe tener · Modelar las partes de una <em>webapp</em> para comunicar mejor los requerimientos al equipo de desarrollo.
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S4 — ATRIBUTOS DE LAS WEBAPPS (10.1)
+═══════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-ico ico-b">📋</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 04 · Sección 10.1</div>
+      <div class="sh-title">Atributos de las <span class="ab">WebApps</span> — Pressman (2010)</div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-b" style="margin-bottom:1rem">
+      Una <em>webapp</em> puede ser diseñada no solo por profesionales de TI, sino también por diseñadores gráficos, mercadotecnia, finanzas y RH. <strong>Cada área puede solicitar requerimientos específicos</strong> aprovechando las ventajas de la web.
+    </div>
+    <div class="ga">
+      <div class="card card-b">
+        <div class="card-ico">🌍</div>
+        <div class="card-title">Uso intensivo de redes</div>
+        <div class="card-body">Cobertura mundial mediante Internet. Una app desde un pequeño pueblo puede ser accedida por cualquier persona conectada.</div>
+      </div>
+      <div class="card card-r">
+        <div class="card-ico">👥</div>
+        <div class="card-title">Concurrencia</div>
+        <div class="card-body">Permite el acceso simultáneo de una gran cantidad de usuarios. Ejemplo: venta de boletos de concierto agotados en minutos.</div>
+      </div>
+      <div class="card card-y">
+        <div class="card-ico">📈</div>
+        <div class="card-title">Carga impredecible</div>
+        <div class="card-body">Los usuarios acceden motivados por distintos aspectos y en diferentes momentos, sin previo aviso.</div>
+      </div>
+      <div class="card card-g">
+        <div class="card-ico">⚡</div>
+        <div class="card-title">Rendimiento</div>
+        <div class="card-body">Los usuarios tienen poca tolerancia a respuestas lentas. Requiere plataforma robusta de hardware.</div>
+      </div>
+      <div class="card card-o">
+        <div class="card-ico">🕐</div>
+        <div class="card-title">Disponibilidad 24/7</div>
+        <div class="card-body">Una tienda electrónica recibe pedidos 365 días del año, independiente de husos horarios y horarios de tienda física.</div>
+      </div>
+      <div class="card card-b">
+        <div class="card-ico">🎨</div>
+        <div class="card-title">Orientadas a los datos</div>
+        <div class="card-body">Muestran información en múltiples medios: texto, imágenes, audio y video, facilitando la administración del contenido.</div>
+      </div>
+      <div class="card card-r">
+        <div class="card-ico">💅</div>
+        <div class="card-title">Contenido sensible y estética</div>
+        <div class="card-body">La apariencia dice mucho sobre la calidad del software. Puede motivar o desalentar a los usuarios.</div>
+      </div>
+      <div class="card card-g">
+        <div class="card-ico">🔄</div>
+        <div class="card-title">Evolución continua</div>
+        <div class="card-body">El contenido se actualiza constantemente. Imagina YouTube actualizando su contenido solo una vez al mes.</div>
+      </div>
+      <div class="card card-y">
+        <div class="card-ico">🚀</div>
+        <div class="card-title">Inmediatez</div>
+        <div class="card-body">Nuevas versiones llegan al usuario en tiempo muy corto, generando ventaja competitiva en ventanas de mercado.</div>
+      </div>
+      <div class="card card-k">
+        <div class="card-ico">🔒</div>
+        <div class="card-title">Seguridad</div>
+        <div class="card-body">El acceso abierto trae riesgos considerables. Se deben implantar medidas para proteger la información sensible.</div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S5 — MODELO DE CONTENIDO
+═══════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-ico ico-b">📄</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 05 · Sección 10.1</div>
+      <div class="sh-title">Modelo de <span class="ab">Contenido</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="quote" style="margin-bottom:1rem">
+          <div class="quote-text">"El modelo del contenido identifica el espectro completo de contenido que dará la webapp. El contenido incluye datos de texto, gráficos e imágenes, video y sonido."</div>
+          <div class="quote-src">— Pressman, R. (2010). Ingeniería de Software. Un enfoque práctico (7ª ed.). McGraw Hill.</div>
+        </div>
+        <div class="box box-b">
+          <div class="blbl" style="color:var(--blue-pen)">Objetos de contenido</div>
+          Al usar texto, video, banner o imagen se habla de un <strong>objeto de contenido</strong>. Este puede recuperarse desde:
+          <ul class="ul" style="margin-top:.4rem">
+            <li>Un <strong>archivo en un servidor</strong></li>
+            <li>Una <strong>base de datos</strong></li>
+            <li>La <strong>propia webapp</strong> (embebido)</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="sec">¿Cómo se usa en IR?</div>
+        <div class="box box-y" style="margin-bottom:.75rem">
+          <div class="blbl" style="color:#854d0e">Inclusión en casos de uso</div>
+          Los objetos de contenido pueden incluirse como parte de la <strong>descripción de los casos de uso</strong>. El IR debe describir el escenario que aclare qué función desempeñará en la webapp.
+        </div>
+        <div class="box box-g">
+          <div class="blbl" style="color:#15803d">Ejemplo: tienda virtual</div>
+          Requerimiento: usar un <strong>carrito de compras</strong> que registre los productos seleccionados. El objeto "carrito de compras" es parte del modelo de contenido con cierto comportamiento esperado.
+        </div>
+        <div class="sec" style="margin-top:.8rem">Árbol jerárquico de contenido</div>
+        <div class="box box-k">
+          <div class="blbl">Estructura</div>
+          Para el requerimiento: <em>"Podré obtener información descriptiva y de precios de cada <strong>componente</strong> del producto."</em>
+          <br><br>
+          Se construye un árbol jerárquico:<br>
+          <span class="bdg bdg-k" style="margin:.2rem .1rem">Componente</span> →
+          <span class="bdg bdg-b" style="margin:.2rem .1rem">Descripción</span>
+          <span class="bdg bdg-b" style="margin:.2rem .1rem">Precio</span>
+          <span class="bdg bdg-b" style="margin:.2rem .1rem">Imagen</span>
+          <br><br>
+          <small style="color:var(--ink-lt);font-size:.75rem">Recuadros sombreados = objetos | Recuadros blancos = información. Base para diseñar el contenido de la webapp.</small>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S6 — MODELO DE INTERACCIÓN (10.2)
+═══════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-ico ico-r">🖱️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 06 · Sección 10.2</div>
+      <div class="sh-title">Modelo de <span class="ar">Interacción</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="box box-b" style="margin-bottom:.8rem">
+          <div class="blbl" style="color:var(--blue-pen)">¿Qué modela?</div>
+          La interacción describe <strong>cómo el usuario operará la aplicación</strong>. Explica los pasos que deberá realizar para llegar a un resultado.
+        </div>
+        <div class="sec">Herramientas para modelar la interacción</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Herramienta</th><th>Propósito</th></tr></thead>
+            <tbody>
+              <tr><td>Casos de uso</td><td>Describir escenarios de interacción actor-sistema</td></tr>
+              <tr><td>Diagramas de secuencia</td><td>Mostrar el orden cronológico de los mensajes</td></tr>
+              <tr><td>Diagramas de estado</td><td>Representar los estados posibles de un objeto</td></tr>
+              <tr><td>Prototipos de UI</td><td>Representación física de la interfaz de usuario</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Preguntas clave para modelar interacción</div>
+        <ul class="ul num">
+          <li>¿Es posible utilizar <strong>íconos</strong> que representen claramente la acción?</li>
+          <li>¿El usuario puede <strong>deshacer la acción</strong> en caso de cambiar de opinión?</li>
+          <li>¿En qué lugar de la webapp aparecerá el <strong>menú de opciones</strong>?</li>
+          <li>¿Qué <strong>ayuda</strong> es posible ofrecer al usuario en caso de alguna duda?</li>
+        </ul>
+        <div class="box box-y" style="margin-top:.8rem">
+          <div class="blbl" style="color:#854d0e">Recomendación de Pressman</div>
+          Crear un prototipo de interfaz de usuario <strong>desde el análisis</strong> (no solo en diseño): entre más pronto se revise la representación física de la UI, más probable es lograr los resultados esperados.
+        </div>
+        <div class="postit" style="margin-top:.6rem">
+          ⚠️ Si el modelo describe <strong>demasiados pasos</strong> (elegir producto → datos de envío → pago → factura), el usuario puede perderse y abandonar la compra.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S7 — MODELO FUNCIONAL (10.2)
+═══════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-ico ico-g">⚙️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 07 · Sección 10.2</div>
+      <div class="sh-title">Modelo <span style="color:var(--green-fl)">Funcional</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="box box-b" style="margin-bottom:.8rem">
+          <div class="blbl" style="color:var(--blue-pen)">Propósito</div>
+          Demostrar que los <strong>requerimientos funcionales del sistema son tomados en cuenta</strong> y no falta ninguno, dando tranquilidad al usuario sobre lo que incluye el sistema.
+        </div>
+        <div class="quote">
+          <div class="quote-text">"Funcionalidad observable: es el resultado <strong>visible</strong> del software."</div>
+          <div class="quote-src">— Pressman (2010)</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Dos tipos de funcionalidad</div>
+        <div class="card card-g" style="margin-bottom:.7rem">
+          <div class="card-ico">👁️</div>
+          <div class="card-title">Funciones visibles (observables)</div>
+          <div class="card-body">Son el resultado directo que el usuario percibe. Ejemplo: el gráfico generado a partir de un reporte de datos.</div>
+        </div>
+        <div class="card card-r">
+          <div class="card-ico">🔧</div>
+          <div class="card-title">Funciones no visibles</div>
+          <div class="card-body">Operaciones necesarias para producir las funciones visibles. En IR se describe el <strong>"qué"</strong>, no el "cómo".</div>
+        </div>
+      </div>
+    </div>
+    <div class="box box-y" style="margin-top:.8rem">
+      <div class="blbl" style="color:#854d0e">⚠️ Regla de oro en IR</div>
+      Al describir la <strong>funcionalidad no visible</strong>, el ingeniero de requerimientos debe <span class="hl-y">evitar describir demasiado el "cómo"</span> y centrarse en el <span class="hl-b">"qué"</span> se espera que haga el sistema.
+    </div>
+    <div class="box box-k" style="margin-top:.0rem">
+      <div class="blbl">Ejemplo completo</div>
+      <strong>Visible:</strong> Gráfico de reporte generado desde un archivo de datos.<br>
+      <strong>No visible:</strong> Lectura del archivo → parseo de datos → cálculo estadístico → renderizado del gráfico.<br>
+      <small style="color:var(--ink-lt)">El IR documenta la funcionalidad visible + describe qué debe hacer el sistema internamente, sin especificar algoritmos.</small>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S8 — MODELO DE NAVEGACIÓN (10.3)
+═══════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-ico ico-b">🗺️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 08 · Sección 10.3</div>
+      <div class="sh-title">Modelo de <span class="ab">Navegación</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-b" style="margin-bottom:1rem">
+      La navegación debe ser modelada expresando <strong>las características que espera ver el usuario</strong>. Algunas funciones son críticas y requieren acceso directo; otras pueden ubicarse en lugares secundarios porque son poco frecuentes.
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">Preguntas guía (Pressman, 2010)</div>
+        <ul class="ul num">
+          <li>¿En qué elementos hacer énfasis para forzar cierta <strong>navegación</strong>?</li>
+          <li>¿Qué <strong>prioridad</strong> se le da a las funciones y a su presentación?</li>
+          <li>¿Existirá algún mecanismo de ubicación como <em>breadcrumbs</em> o <strong>mapas del sitio</strong>?</li>
+          <li>¿Sería necesario mantener un <strong>log o registro</strong> de la navegación de los usuarios?</li>
+          <li>¿La webapp permite que el usuario configure su <strong>navegación favorita</strong>?</li>
+          <li>¿La webapp permitirá <strong>vínculos externos</strong> que saquen al usuario de la aplicación?</li>
+          <li>¿Cuánto tiempo sin actividad para dar de <strong>baja la sesión</strong>?</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec">Conceptos clave</div>
+        <div class="card card-b" style="margin-bottom:.7rem">
+          <div class="card-ico">🍞</div>
+          <div class="card-title">Breadcrumbs (ruta de navegación)</div>
+          <div class="card-body">Modelo de navegación jerárquico que permite al usuario ubicarse. Ejemplo: <span style="font-family:'IBM Plex Mono',monospace;font-size:.78rem">Carreras &gt; Ingeniería &gt; Desarrollo de software</span></div>
+        </div>
+        <div class="card card-y" style="margin-bottom:.7rem">
+          <div class="card-ico">🗺️</div>
+          <div class="card-title">Mapa del sitio</div>
+          <div class="card-body">Vista estructural jerárquica de todas las secciones de la webapp, útil para que el usuario se oriente y no se pierda.</div>
+        </div>
+        <div class="box box-r" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--red-marker)">Impacto en diseño</div>
+          Estas preguntas ofrecen información que el <strong>diseñador debe tomar en cuenta</strong> para proponer una navegación adecuada a las necesidades del cliente.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S9 — MODELO DE CONFIGURACIÓN (10.3)
+═══════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div class="sh">
+    <div class="sh-ico ico-o">🖥️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 09 · Sección 10.3</div>
+      <div class="sh-title">Modelos de <span style="color:var(--orange-mk)">Configuración</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="box box-o" style="margin-bottom:.8rem">
+          <div class="blbl" style="color:#9a3412">Definición</div>
+          Los modelos de configuración describen los <strong>atributos técnicos tanto del lado del cliente como del servidor</strong>. Son especialmente útiles cuando se va a sustituir un sistema existente y se contempla reutilizar el hardware actual.
+        </div>
+        <div class="box box-y">
+          <div class="blbl" style="color:#854d0e">Ejemplo</div>
+          Los requerimientos técnicos de una webapp para usuarios de <strong>Mac OSX</strong> serán relativamente diferentes a los de una <strong>PC con Windows</strong> en cuanto al tipo de navegador y protocolo de comunicación.
+        </div>
+      </div>
+      <div>
+        <div class="sec">¿Qué se describe en un modelo de configuración?</div>
+        <ul class="ul grn">
+          <li>Sistema operativo y características del <strong>hardware del servidor</strong> actual</li>
+          <li>Características de <strong>interoperabilidad</strong> con otras webapps, sistemas comerciales o APIs existentes</li>
+          <li>Tipos de <strong>redes y protocolos</strong> de comunicación utilizados</li>
+          <li>Características del <strong>navegador</strong> (versión, compatibilidad)</li>
+          <li>Capacidades de las <strong>terminales del cliente</strong></li>
+          <li>Necesidades de uso de <strong>dispositivos móviles</strong> (tabletas, smartphones)</li>
+        </ul>
+        <div class="box box-b" style="margin-top:.8rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--blue-pen)">Resultado</div>
+          Esta información moldea un <strong>diseño específico</strong> que considera las características de configuración actuales del entorno donde operará la webapp.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S10 — RESUMEN COMPARATIVO DE MODELOS
+═══════════════════════════════════════ -->
+<div class="slide" id="s10">
+  <div class="sh">
+    <div class="sh-ico ico-b">📊</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 10 · Síntesis</div>
+      <div class="sh-title">Los 5 modelos de requerimientos para <span class="ab">WebApps</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="tw" style="margin-bottom:1rem">
+      <table>
+        <thead>
+          <tr>
+            <th>Modelo</th>
+            <th>Responde a…</th>
+            <th>Artefactos / técnicas</th>
+            <th>Foco del IR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="bdg bdg-b">Contenido</span></td>
+            <td>¿Qué información mostrará la webapp?</td>
+            <td>Árbol jerárquico de objetos e información</td>
+            <td>Texto, imágenes, audio, video, datos de BD</td>
+          </tr>
+          <tr>
+            <td><span class="bdg bdg-r">Interacción</span></td>
+            <td>¿Cómo operará el usuario la aplicación?</td>
+            <td>Casos de uso, diagramas de secuencia/estado, prototipos de UI</td>
+            <td>Pasos del usuario para obtener un resultado</td>
+          </tr>
+          <tr>
+            <td><span class="bdg bdg-g">Funcional</span></td>
+            <td>¿Qué debe hacer el sistema?</td>
+            <td>Lista de funciones observables + operaciones internas</td>
+            <td>El "qué", no el "cómo"</td>
+          </tr>
+          <tr>
+            <td><span class="bdg bdg-y">Navegación</span></td>
+            <td>¿Cómo se moverá el usuario por la app?</td>
+            <td>Breadcrumbs, mapa del sitio, jerarquía de menús</td>
+            <td>Prioridad, orientación, sesión, vínculos</td>
+          </tr>
+          <tr>
+            <td><span class="bdg bdg-k">Configuración</span></td>
+            <td>¿En qué entorno técnico operará?</td>
+            <td>Fichas de hardware, SO, navegadores, redes, APIs</td>
+            <td>Cliente: dispositivos/navegadores · Servidor: SO/redes/APIs</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-b">
+      <div class="blbl" style="color:var(--blue-pen)">Conclusión clave</div>
+      El ingeniero de requerimientos debe enfocarse principalmente en modelar el <strong>contenido, la funcionalidad, la interacción, la configuración y la navegación</strong> porque esencialmente es lo que define el resultado de una aplicación web. — <em>Pressman (2010)</em>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S11 — EJERCICIO PRÁCTICO (QUIZ)
+═══════════════════════════════════════ -->
+<div class="slide" id="s11">
+  <div class="sh">
+    <div class="sh-ico ico-y">✏️</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 11 · Ejercicio práctico</div>
+      <div class="sh-title">¿Cuánto <span class="ay">aprendiste</span>? — Preguntas de comprensión</div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P1</div>
+          <div class="quiz-q">¿Cuál de los siguientes es un atributo de las WebApps según Pressman?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Instalación local obligatoria</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Disponibilidad 24/7 y evolución continua</li>
+            <li><span class="opt-l">c</span> Independencia total de Internet</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P2</div>
+          <div class="quiz-q">El modelo de contenido identifica…</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Los pasos que sigue el usuario para navegar</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ El espectro completo de contenido (texto, imágenes, video, audio) que dará la webapp</li>
+            <li><span class="opt-l">c</span> Las características técnicas del servidor</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P3</div>
+          <div class="quiz-q">¿En qué debe centrarse el IR al describir la funcionalidad no visible?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> El algoritmo de implementación</li>
+            <li><span class="opt-l">b</span> El lenguaje de programación a usar</li>
+            <li class="correct"><span class="opt-l">c</span> ✓ El "qué" hace el sistema, no el "cómo"</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P4</div>
+          <div class="quiz-q">Los breadcrumbs en una webapp sirven para…</div>
+          <ul class="quiz-opts">
+            <li class="correct"><span class="opt-l">a</span> ✓ Ayudar al usuario a ubicarse dentro de la jerarquía de navegación</li>
+            <li><span class="opt-l">b</span> Registrar las credenciales del usuario</li>
+            <li><span class="opt-l">c</span> Almacenar objetos de contenido en BD</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P5</div>
+          <div class="quiz-q">¿Cuándo es más útil un modelo de configuración?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Cuando se desarrolla la primera webapp de la empresa</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Cuando se sustituye un sistema existente y se contempla reutilizar hardware actual</li>
+            <li><span class="opt-l">c</span> Solo cuando se usarán dispositivos móviles</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P6</div>
+          <div class="quiz-q">La "concurrencia" como atributo de una webapp significa…</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Que la app funciona sin conexión a internet</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Que permite el acceso simultáneo de una gran cantidad de usuarios</li>
+            <li><span class="opt-l">c</span> Que actualiza el contenido automáticamente</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S12 — ACTIVIDAD EVALUABLE
+═══════════════════════════════════════ -->
+<div class="slide" id="s12">
+  <div class="sh">
+    <div class="sh-ico ico-r">🏆</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 12 · Actividad evaluable</div>
+      <div class="sh-title">Actividad: <span class="ar">Modelado de requerimientos para una WebApp real</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="box box-o" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:#9a3412">🎯 Escenario</div>
+      Una tienda de ropa local quiere lanzar su primera tienda en línea. Como ingeniero de requerimientos, debes generar la documentación base antes de pasar al equipo de desarrollo. <strong>Tiempo estimado: 45 min.</strong>
+    </div>
+    <div class="act">
+      <div class="act-ico" style="background:var(--blue-pale);border-color:var(--blue-mid)">1️⃣</div>
+      <div class="act-t">
+        <strong>Modelo de contenido</strong>
+        <p>Define los objetos de contenido principales de la webapp: catálogo de productos, ficha del producto (nombre, precio, talla, imagen, descripción), carrito de compras. Construye el árbol jerárquico con al menos 3 niveles.</p>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act-ico" style="background:var(--red-bg);border-color:rgba(239,68,68,.2)">2️⃣</div>
+      <div class="act-t">
+        <strong>Modelo de interacción</strong>
+        <p>Escribe el caso de uso "Comprar producto". Describe el flujo principal (actor: cliente) desde que ingresa al catálogo hasta que recibe la confirmación de pago. Identifica flujos alternos (producto sin stock, pago rechazado).</p>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act-ico" style="background:var(--green-bg);border-color:rgba(34,197,94,.25)">3️⃣</div>
+      <div class="act-t">
+        <strong>Modelo funcional (observable)</strong>
+        <p>Lista al menos 6 funciones observables del sistema (ej: buscar productos, filtrar por talla, agregar al carrito). Para 2 de ellas, describe brevemente la funcionalidad no visible sin especificar el "cómo".</p>
+      </div>
+    </div>
+    <div class="act">
+      <div class="act-ico" style="background:var(--yellow-bg);border-color:rgba(253,224,71,.5)">4️⃣</div>
+      <div class="act-t">
+        <strong>Modelo de navegación y configuración</strong>
+        <p>Responde al menos 4 de las 7 preguntas guía de Pressman para navegación. Especifica el modelo de configuración: tipo de servidor, navegadores soportados, dispositivos (desktop/móvil) e interoperabilidad con pasarela de pago.</p>
+      </div>
+    </div>
+    <div class="g2" style="margin-top:.6rem">
+      <div class="box box-b">
+        <div class="blbl" style="color:var(--blue-pen)">Entregable</div>
+        Documento PDF con los 4 modelos. Mínimo 2 páginas. Incluir árbol jerárquico y caso de uso en formato de tabla o diagrama.
+      </div>
+      <div class="box box-g">
+        <div class="blbl" style="color:#15803d">Criterios de evaluación</div>
+        Corrección técnica de los modelos · Uso apropiado de la terminología de Pressman · Coherencia entre los 4 modelos · Claridad de la documentación
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S13 — GLOSARIO Y BIBLIOGRAFÍA
+═══════════════════════════════════════ -->
+<div class="slide" id="s13">
+  <div class="sh">
+    <div class="sh-ico ico-b">📚</div>
+    <div class="sh-meta">
+      <div class="sh-lbl">Diapositiva 13 · Glosario y Bibliografía</div>
+      <div class="sh-title">Términos clave y <span class="ab">fuentes</span></div>
+    </div>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="sec">Glosario</div>
+        <div class="card card-k" style="padding:.3rem">
+          <div class="glos-item">
+            <div class="glos-term">API (Application Program Interface)</div>
+            <div class="glos-def">Grupo de rutinas, protocolos y herramientas que facilitan la integración de funciones de diferentes componentes de un software.</div>
+          </div>
+          <div class="glos-item">
+            <div class="glos-term">Breadcrumbs (ruta de navegación)</div>
+            <div class="glos-def">Modelo de navegación web que permite al usuario ubicarse en un menú jerárquico. Aparece como hipervínculos separados por "&gt;": <span style="font-family:'IBM Plex Mono',monospace;font-size:.75rem">Carreras &gt; Ingeniería &gt; Dev</span></div>
+          </div>
+          <div class="glos-item">
+            <div class="glos-term">Protocolo</div>
+            <div class="glos-def">Serie de reglas que permiten la intercomunicación entre equipos o plataformas de diferente arquitectura.</div>
+          </div>
+          <div class="glos-item">
+            <div class="glos-term">WebApp</div>
+            <div class="glos-def">Grupo de sistemas y aplicaciones que utilizan Internet como plataforma para ofrecer algún servicio. Va desde una simple página web hasta complejas plataformas con BD, APIs y almacenamiento en la nube.</div>
+          </div>
+          <div class="glos-item">
+            <div class="glos-term">Knowledge worker</div>
+            <div class="glos-def">Empleado cuyas contribuciones son creativas, no físicas. Sus herramientas suelen ser webapps especializadas.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">Bibliografía</div>
+        <div class="rec">
+          <div class="rec-ico">📗</div>
+          <div>
+            <div class="rec-title" style="color:var(--blue-pen)">Lectura obligatoria — Sección 7.5</div>
+            <div class="rec-desc">Pressman, R. (2010). <em>Ingeniería de Software. Un enfoque práctico</em> (7ª ed.). México: McGraw Hill.</div>
+          </div>
+        </div>
+        <div class="rec">
+          <div class="rec-ico">🌐</div>
+          <div>
+            <div class="rec-title">Web Applications Basics</div>
+            <div class="rec-desc">Conallen, J. (2002). Conceptos aplicados a las webapps.</div>
+            <span class="rec-url">pearsonhighered.com/samplechapter/0201730383.pdf</span>
+          </div>
+        </div>
+        <div class="rec">
+          <div class="rec-ico">🔒</div>
+          <div>
+            <div class="rec-title">Security Requirements Analysis of Web Applications using UML</div>
+            <div class="rec-desc">Chehida, S. y Rahmouni, M. (2012). Requerimientos de seguridad en webapps.</div>
+            <span class="rec-url">ceur-ws.org/Vol-867/Paper24.pdf</span>
+          </div>
+        </div>
+        <div class="rec">
+          <div class="rec-ico">📱</div>
+          <div>
+            <div class="rec-title">Native Apps vs. Mobile Web Apps</div>
+            <div class="rec-desc">Jobe, W. (2013). Comparación entre aplicaciones nativas y web móviles. iJIM, 7(4), 27-32.</div>
+          </div>
+        </div>
+        <div class="rec">
+          <div class="rec-ico">📊</div>
+          <div>
+            <div class="rec-title">Evaluating Quality and Functional Size of Operative WebApps</div>
+            <div class="rec-desc">Abrahão, S., Olsina, L. y Pastor, O. (2002). Metodología para evaluar calidad y tamaño funcional.</div>
+            <span class="rec-url">users.dsic.upv.es/~west/iwwost02/papers/abrahao.pdf</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  S14 — CIERRE
+═══════════════════════════════════════ -->
+<div class="slide cover cover-close" id="s14">
+  <div class="cover-margin" style="background:rgba(255,255,255,.2)"></div>
+  <div class="spiral" id="sp2"></div>
+  <div class="close-c">
+    <div style="display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.2rem">
+      <span class="sticker stk-yel">✅ Tema 10 completado</span>
+    </div>
+    <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(1.8rem,4.5vw,3rem);color:#fff;margin-bottom:.5rem;line-height:1.1">
+      Ideas clave del<br><span style="background:var(--yellow-hl);color:var(--ink);padding:0 .12em">Modelado de WebApps</span>
+    </h2>
+    <div style="width:48px;height:3px;background:var(--yellow-hl);margin:1rem 0 1.5rem"></div>
+    <div style="margin-bottom:1.4rem">
+      <div class="sum-row"><div class="sum-k">WebApp</div><div class="sum-v">Sistema web con atributos únicos: concurrencia, disponibilidad, carga impredecible, seguridad, evolución continua.</div></div>
+      <div class="sum-row"><div class="sum-k">Contenido</div><div class="sum-v">Se modela con un árbol jerárquico de objetos (texto, imagen, video, audio). Base para diseñar la webapp.</div></div>
+      <div class="sum-row"><div class="sum-k">Interacción</div><div class="sum-v">Se modela con casos de uso, diagramas y prototipos de UI. Cuanto antes se revise, mejor el resultado.</div></div>
+      <div class="sum-row"><div class="sum-k">Funcionalidad</div><div class="sum-v">Describir el "qué", no el "cómo". Incluir funciones observables y no visibles.</div></div>
+      <div class="sum-row"><div class="sum-k">Navegación</div><div class="sum-v">Priorizar funciones, breadcrumbs, sesión, vínculos externos. Responder las 7 preguntas de Pressman.</div></div>
+      <div class="sum-row"><div class="sum-k">Configuración</div><div class="sum-v">Describir entorno técnico: SO, hardware, navegadores, redes, protocolos, APIs, dispositivos móviles.</div></div>
+    </div>
+    <div style="display:flex;gap:.55rem;flex-wrap:wrap;margin-bottom:1.4rem">
+      <span class="cpill">10.1 Contenido</span>
+      <span class="cpill">10.2 Interacción y funcionalidad</span>
+      <span class="cpill">10.3 Navegación y configuración</span>
+    </div>
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:.65rem;color:rgba(255,255,255,.3);letter-spacing:.5px">
+      TI13312 Ingeniería de requerimientos de software · Universidad TecMilenio 💻
+    </p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+  NAVEGACIÓN
+═══════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nb" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-c">
+    <div class="ctr">Diapositiva <span id="cn">1</span> / <span id="tn">14</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nb" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+// Espirales decorativas
+['sp1','sp2'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  for (let i = 0; i < 20; i++) {
+    const d = document.createElement('div');
+    d.className = 'spiral-dot';
+    el.appendChild(d);
+  }
+});
+
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+document.getElementById('tn').textContent = N;
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+function update() {
+  slides.forEach((s, i) => { s.classList.toggle('active', i === cur); s.scrollTop = 0; });
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+  document.getElementById('cn').textContent = cur + 1;
+  document.getElementById('pb-btn').disabled = cur === 0;
+  document.getElementById('nb-btn').disabled = cur === N - 1;
+  document.getElementById('pb').style.width = ((cur + 1) / N * 100) + '%';
+}
+function go(d) { const n = cur + d; if (n >= 0 && n < N) { cur = n; update(); } }
+function goTo(i) { cur = i; update(); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+});
+update();
+</script>
+</body>
+</html>
