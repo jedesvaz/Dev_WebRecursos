@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pandas · NumPy · Matplotlib · Seaborn · Bioestadística</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ══ ZEN DATA SCIENCE ════════════════════════════════════════════
+   Fondo casi blanco · Negro profundo · Lima eléctrico
+   Azul frío · Coral suave · Violeta
+   Tipografía monoespaciada para código · Outfit para prosa
+══════════════════════════════════════════════════════════════ */
+:root {
+  --bg:        #F8F9FA;
+  --bg-dark:   #0F1117;
+  --bg-card:   #FFFFFF;
+  --bg-dim:    #F0F2F6;
+  --border:    #E2E6ED;
+  --border-dk: #CDD3DC;
+
+  --lime:      #00CC66;
+  --lime-lt:   rgba(0,204,102,.10);
+  --lime-dk:   #007A3D;
+  --blue:      #3B82F6;
+  --blue-lt:   rgba(59,130,246,.10);
+  --blue-dk:   #1D4ED8;
+  --coral:     #F97316;
+  --coral-lt:  rgba(249,115,22,.10);
+  --coral-dk:  #9A3412;
+  --violet:    #8B5CF6;
+  --vio-lt:    rgba(139,92,246,.10);
+  --vio-dk:    #4C1D95;
+  --cyan:      #06B6D4;
+  --cyan-lt:   rgba(6,182,212,.10);
+  --cyan-dk:   #0E7490;
+  --ink:       #0F1117;
+  --ink-md:    #374151;
+  --ink-lt:    #6B7280;
+  --ink-xs:    #9CA3AF;
+  --code-bg:   #0F1117;
+  --code-str:  #00CC66;
+  --code-kw:   #C084FC;
+  --code-fn:   #60A5FA;
+  --code-cm:   #6B7280;
+  --code-nr:   #F97316;
+  --code-op:   #F472B6;
+
+  --sh:  0 1px 3px rgba(15,17,23,.06), 0 2px 10px rgba(15,17,23,.04);
+  --shm: 0 4px 20px rgba(15,17,23,.09);
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg); color: var(--ink);
+}
+
+/* Dot matrix sutil */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(15,17,23,.055) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.pb {
+  position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 9999;
+  background: linear-gradient(90deg, var(--lime), var(--blue), var(--violet), var(--coral));
+  transition: width .4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ══ SLIDES ══════════════════════════════════════════════════════ */
+.slide {
+  display: none; flex-direction: column;
+  width: 100vw; height: 100vh; overflow-y: auto;
+  position: relative; z-index: 1;
+  animation: rise .3s cubic-bezier(.4,0,.2,1);
+}
+.slide.active { display: flex; }
+@keyframes rise { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+.slide::-webkit-scrollbar { width: 4px; }
+.slide::-webkit-scrollbar-thumb { background: var(--border-dk); border-radius: 2px; }
+
+/* ══ COVER ═══════════════════════════════════════════════════════ */
+.cover {
+  background: var(--bg-dark); min-height: 100vh;
+  justify-content: center; align-items: center;
+  position: relative; overflow: hidden;
+}
+.cv-grid {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.cv-glow {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 10% 50%, rgba(0,204,102,.18) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 45% at 92% 55%, rgba(59,130,246,.14) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 5%,  rgba(139,92,246,.12) 0%, transparent 50%);
+}
+/* Líneas de código decorativas de fondo */
+.cv-lines {
+  position: absolute; right: 5%; top: 15%; bottom: 15%;
+  display: flex; flex-direction: column; gap: .45rem; opacity: .1;
+  font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--lime);
+  pointer-events: none; overflow: hidden;
+}
+
+.cv-inner {
+  position: relative; z-index: 2; max-width: 900px; width: 100%; padding: 2.5rem;
+}
+.cv-badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: rgba(0,204,102,.12); border: 1px solid rgba(0,204,102,.3);
+  color: var(--lime); font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem; font-weight: 500; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: .22rem .78rem; border-radius: 100px;
+  margin-bottom: 1.5rem;
+}
+.cv-badge::before { content: '●'; font-size: .5rem; animation: blink 2s step-end infinite; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.2;} }
+
+.cv-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.6rem, 6.2vw, 5.2rem); font-weight: 700; line-height: .95;
+  color: #fff; margin-bottom: .7rem; letter-spacing: -.025em;
+}
+.cv-title .cl { color: var(--lime);   }
+.cv-title .cb { color: #93C5FD;       }
+.cv-title .cv { color: #C4B5FD;       }
+.cv-title .cc { color: #F97316;       }
+
+.cv-sub {
+  font-size: 1rem; color: rgba(255,255,255,.42); font-weight: 300;
+  margin-bottom: 2.2rem; line-height: 1.7; max-width: 540px;
+}
+
+.cv-libs {
+  display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2.2rem;
+}
+.lib-pill {
+  display: inline-flex; align-items: center; gap: .38rem;
+  padding: .32rem .88rem; border-radius: 6px; font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem; font-weight: 500; border: 1px solid;
+}
+.lp-g { background: rgba(0,204,102,.12);   color: #6EE7B7; border-color: rgba(0,204,102,.3); }
+.lp-b { background: rgba(59,130,246,.12);  color: #93C5FD; border-color: rgba(59,130,246,.3); }
+.lp-c { background: rgba(249,115,22,.12);  color: #FDBA74; border-color: rgba(249,115,22,.3); }
+.lp-v { background: rgba(139,92,246,.12);  color: #C4B5FD; border-color: rgba(139,92,246,.3); }
+
+.cv-dataset {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px; padding: .82rem 1.1rem; max-width: 460px;
+}
+.cv-ds-lbl {
+  font-family: 'JetBrains Mono', monospace; font-size: .58rem; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: .3rem;
+}
+.cv-ds-val {
+  font-family: 'JetBrains Mono', monospace; font-size: .8rem; color: rgba(255,255,255,.72);
+}
+.cv-foot { margin-top: 1.8rem; font-family: 'JetBrains Mono', monospace; font-size: .6rem; color: rgba(255,255,255,.22); }
+
+/* ══ HEADER ══════════════════════════════════════════════════════ */
+.sh {
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  padding: .78rem 2rem; display: flex; align-items: center;
+  gap: .88rem; flex-shrink: 0; box-shadow: var(--sh); position: relative;
+}
+.sh::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px;
+}
+.sh-l::after { background: var(--lime);   }
+.sh-b::after { background: var(--blue);   }
+.sh-c::after { background: var(--coral);  }
+.sh-v::after { background: var(--violet); }
+.sh-cy::after{ background: var(--cyan);   }
+
+/* Step badge */
+.sh-step {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .78rem;
+  flex-shrink: 0; color: #fff;
+}
+.sp-l  { background: var(--lime);   }
+.sp-b  { background: var(--blue);   }
+.sp-c  { background: var(--coral);  }
+.sp-v  { background: var(--violet); }
+.sp-cy { background: var(--cyan);   }
+
+.sh-meta { flex: 1; }
+.sh-lbl {
+  font-family: 'JetBrains Mono', monospace; font-size: .56rem;
+  color: var(--ink-xs); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: .03rem;
+}
+.sh-title {
+  font-family: 'Outfit', sans-serif; font-size: clamp(.92rem, 2vw, 1.28rem);
+  font-weight: 600; color: var(--ink); line-height: 1.2;
+}
+.sh-title .tl { color: var(--lime-dk);   }
+.sh-title .tb { color: var(--blue-dk);   }
+.sh-title .tc { color: var(--coral-dk);  }
+.sh-title .tv { color: var(--vio-dk);    }
+.sh-title .ty { color: var(--cyan-dk);   }
+
+/* ══ BODY ════════════════════════════════════════════════════════ */
+.sb { flex: 1; padding: 1.3rem 2rem; background: var(--bg); overflow-y: auto; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .9rem; }
+.ga { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: .9rem; }
+
+/* CODE BLOCK — terminal oscura */
+.code {
+  background: var(--code-bg); border-radius: 8px; padding: .95rem 1.1rem;
+  font-family: 'JetBrains Mono', monospace; font-size: clamp(.76rem,1.5vw,.88rem);
+  line-height: 1.75; margin-bottom: .75rem; box-shadow: var(--shm);
+  position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.code::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.code-l::before  { background: var(--lime);   }
+.code-b::before  { background: var(--blue);   }
+.code-c::before  { background: var(--coral);  }
+.code-v::before  { background: var(--violet); }
+.code-cy::before { background: var(--cyan);   }
+.code-lbl {
+  font-size: .58rem; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,.3); margin-bottom: .55rem; display: block;
+}
+.kw  { color: var(--code-kw); }  /* keywords: import, as, for, if */
+.fn  { color: var(--code-fn); }  /* function names */
+.st  { color: var(--code-str);}  /* strings */
+.cm  { color: var(--code-cm); font-style: italic; }  /* comments */
+.nr  { color: var(--code-nr); }  /* numbers */
+.op  { color: var(--code-op); }  /* operators = . , */
+.vr  { color: #F8FAFC;        }  /* variables */
+.hl  { background: rgba(0,204,102,.08); display: block; margin: 0 -1.1rem; padding: 0 1.1rem; border-left: 2px solid var(--lime); }
+
+/* OUTPUT block */
+.output {
+  background: #1A1F2E; border: 1px solid rgba(255,255,255,.07);
+  border-radius: 6px; padding: .7rem 1rem; font-family: 'JetBrains Mono', monospace;
+  font-size: .76rem; color: rgba(255,255,255,.65); line-height: 1.65; margin-bottom: .75rem;
+}
+.out-lbl { font-size: .55rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.2); margin-bottom: .35rem; display: block; }
+.out-g { color: var(--lime); } .out-b { color: #93C5FD; } .out-o { color: #FDBA74; }
+
+/* CARD */
+.card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+  padding: .92rem; box-shadow: var(--sh); transition: box-shadow .18s, transform .15s;
+  position: relative; overflow: hidden;
+}
+.card:hover { box-shadow: var(--shm); transform: translateY(-1px); }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.card-l::before  { background: var(--lime);   }
+.card-b::before  { background: var(--blue);   }
+.card-c::before  { background: var(--coral);  }
+.card-v::before  { background: var(--violet); }
+.card-cy::before { background: var(--cyan);   }
+.card-ico   { font-size: 1.3rem; margin-bottom: .4rem; }
+.card-title { font-size: .95rem; font-weight: 600; color: var(--ink); margin-bottom: .25rem; }
+.card-body  { font-size: .82rem; color: var(--ink-md); line-height: 1.62; }
+
+/* BOX */
+.box {
+  border-radius: 8px; padding: .82rem 1rem; margin-bottom: .72rem;
+  font-size: .84rem; line-height: 1.65; border: 1px solid;
+}
+.box-l  { background: var(--lime-lt);  border-color: rgba(0,204,102,.25);  color: var(--ink-md); }
+.box-b  { background: var(--blue-lt);  border-color: rgba(59,130,246,.25); color: var(--ink-md); }
+.box-c  { background: var(--coral-lt); border-color: rgba(249,115,22,.25); color: var(--ink-md); }
+.box-v  { background: var(--vio-lt);   border-color: rgba(139,92,246,.25); color: var(--ink-md); }
+.box-cy { background: var(--cyan-lt);  border-color: rgba(6,182,212,.25);  color: var(--ink-md); }
+.box-w  { background: var(--bg-card);  border-color: var(--border);        color: var(--ink-md); }
+.blbl   { font-family: 'JetBrains Mono', monospace; font-size: .57rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: .28rem; opacity: .6; }
+
+/* SEC */
+.sec {
+  font-weight: 600; font-size: 1rem; color: var(--ink); margin-bottom: .65rem;
+  padding-bottom: .28rem; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: .4rem;
+}
+
+/* UL */
+ul.ul { list-style: none; padding: 0; }
+ul.ul li { padding: .34rem 0 .34rem 1.25rem; position: relative; font-size: .84rem; color: var(--ink-md); line-height: 1.55; border-bottom: 1px solid rgba(15,17,23,.04); }
+ul.ul li:last-child { border-bottom: none; }
+ul.ul li::before { content: ''; position: absolute; left: 0; top: .62rem; width: 8px; height: 8px; border-radius: 2px; }
+ul.ul.ll li::before  { background: var(--lime);   }
+ul.ul.lb li::before  { background: var(--blue);   }
+ul.ul.lc li::before  { background: var(--coral);  }
+ul.ul.lv li::before  { background: var(--violet); }
+ul.ul.lcy li::before { background: var(--cyan);   }
+strong { color: var(--ink); font-weight: 600; }
+em { color: var(--lime-dk); font-style: italic; }
+
+/* BADGE */
+.bdg { display: inline-flex; align-items: center; gap: .2rem; padding: .12rem .48rem; border-radius: 4px; font-size: .68rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; border: 1px solid; }
+.bdg-l  { background: var(--lime-lt);  color: var(--lime-dk);  border-color: rgba(0,204,102,.3);  }
+.bdg-b  { background: var(--blue-lt);  color: var(--blue-dk);  border-color: rgba(59,130,246,.3); }
+.bdg-c  { background: var(--coral-lt); color: var(--coral-dk); border-color: rgba(249,115,22,.3); }
+.bdg-v  { background: var(--vio-lt);   color: var(--vio-dk);   border-color: rgba(139,92,246,.3); }
+.bdg-cy { background: var(--cyan-lt);  color: var(--cyan-dk);  border-color: rgba(6,182,212,.3);  }
+
+/* TABLE */
+.tw { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); box-shadow: var(--sh); }
+table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+thead tr { background: var(--bg-dark); }
+thead th { font-family: 'JetBrains Mono', monospace; font-size: .65rem; font-weight: 500; color: rgba(255,255,255,.8); text-align: left; padding: .55rem .85rem; letter-spacing: .5px; text-transform: uppercase; }
+tbody tr { border-bottom: 1px solid var(--border); transition: background .12s; }
+tbody tr:hover { background: var(--lime-lt); }
+tbody td { padding: .5rem .85rem; color: var(--ink-md); vertical-align: top; line-height: 1.5; font-family: 'JetBrains Mono', monospace; font-size: .78rem; }
+
+/* OBJ */
+.obj { display: flex; gap: .85rem; align-items: flex-start; padding: .72rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; margin-bottom: .52rem; box-shadow: var(--sh); transition: border-color .2s; }
+.obj:hover { border-color: var(--lime); }
+.obj-n { min-width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .9rem; color: #fff; }
+.obj-t { font-size: .84rem; color: var(--ink-md); line-height: 1.55; padding-top: .08rem; }
+
+/* QUIZ */
+.quiz-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: .92rem; margin-bottom: .65rem; box-shadow: var(--sh); }
+.quiz-tag { font-family: 'JetBrains Mono', monospace; font-size: .55rem; letter-spacing: 2px; background: var(--bg-dark); color: rgba(255,255,255,.8); padding: .12rem .48rem; border-radius: 4px; display: inline-block; margin-bottom: .4rem; }
+.quiz-q { font-size: .92rem; font-weight: 600; color: var(--ink); margin-bottom: .42rem; }
+.quiz-opts { list-style: none; }
+.quiz-opts li { padding: .38rem .72rem; border: 1px solid var(--border); border-radius: 6px; margin-bottom: .25rem; font-size: .82rem; color: var(--ink-md); cursor: pointer; transition: all .18s; display: flex; gap: .5rem; align-items: flex-start; }
+.quiz-opts li:hover { border-color: var(--lime); background: var(--lime-lt); }
+.quiz-opts li.correct { border-color: var(--lime); background: var(--lime-lt); color: var(--ink); }
+.opt-l { min-width: 20px; height: 20px; border-radius: 4px; background: var(--bg-dark); color: rgba(255,255,255,.8); display: flex; align-items: center; justify-content: center; font-size: .62rem; font-weight: 700; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; }
+
+/* CLOSING */
+.cv-close { background: var(--bg-dark); min-height: 100vh; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+.close-inner { position: relative; z-index: 2; max-width: 820px; width: 100%; padding: 2.5rem; text-align: center; }
+.sum-row { display: flex; gap: .6rem; margin-bottom: .42rem; font-size: .84rem; text-align: left; }
+.sum-k { min-width: 130px; font-family: 'JetBrains Mono', monospace; font-size: .63rem; flex-shrink: 0; padding-top: .1rem; letter-spacing: .5px; }
+.sum-v { color: rgba(255,255,255,.65); line-height: 1.5; }
+
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(248,249,250,.97); border-top: 1px solid var(--border); padding: .5rem 1.5rem; display: flex; align-items: center; justify-content: space-between; z-index: 1000; backdrop-filter: blur(8px); }
+.nb { display: flex; align-items: center; gap: .38rem; padding: .36rem .88rem; border-radius: 6px; font-family: 'Outfit', sans-serif; font-weight: 500; font-size: .78rem; border: 1px solid var(--border); background: var(--bg-card); color: var(--ink-md); cursor: pointer; transition: all .18s; }
+.nb:hover:not(:disabled) { border-color: var(--lime); color: var(--lime-dk); background: var(--lime-lt); }
+.nb:disabled { opacity: .25; cursor: not-allowed; }
+.nav-c { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.ctr { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--ink-lt); }
+.ctr span { color: var(--lime-dk); font-size: .88rem; font-weight: 700; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 340px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-dk); border: none; cursor: pointer; padding: 0; transition: all .18s; }
+.dot.active { background: var(--lime); transform: scale(1.5); box-shadow: 0 0 6px rgba(0,204,102,.5); }
+.nav-sp { height: 62px; }
+
+@media(max-width:768px){.sb{padding:1rem;}.sh{padding:.65rem 1rem;}.g2,.g3{grid-template-columns:1fr;}.dots{max-width:200px;} .code{font-size:.72rem;}}
+@media(max-width:480px){.dots{display:none;}}
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- S1 PORTADA -->
+<div class="slide cover active" id="s1">
+  <div class="cv-grid"></div><div class="cv-glow"></div>
+  <div class="cv-lines">
+    <span>import pandas as pd</span><span>import numpy as np</span>
+    <span>import matplotlib.pyplot as plt</span><span>import seaborn as sns</span>
+    <span>df = pd.read_csv("data.csv")</span><span>df.head()</span>
+    <span>df.shape</span><span>df.dtypes</span><span>df.describe()</span>
+    <span>df.isnull().sum()</span><span>sns.heatmap(corr)</span>
+    <span>sns.pairplot(num_df)</span><span>df.select_dtypes('number')</span>
+    <span>df.groupby("col").mean()</span>
+  </div>
+  <div class="cv-inner">
+    <div class="cv-badge">Bioestadística Aplicada · Python · Sesión de Datos</div>
+    <h1 class="cv-title">
+      <span class="cl">Pandas</span> ·
+      <span class="cb">NumPy</span><br>
+      <span class="cv">Matplotlib</span> ·
+      <span class="cc">Seaborn</span>
+    </h1>
+    <p class="cv-sub">Introducción práctica al ecosistema de análisis de datos en Python — desde cargar un dataset hasta visualizaciones avanzadas como heatmaps y pair plots.</p>
+    <div class="cv-libs">
+      <span class="lib-pill lp-g">🐼 pandas</span>
+      <span class="lib-pill lp-b">🔢 numpy</span>
+      <span class="lib-pill lp-c">📊 matplotlib</span>
+      <span class="lib-pill lp-v">🎨 seaborn</span>
+    </div>
+    <div class="cv-dataset">
+      <div class="cv-ds-lbl">Dataset de la sesión</div>
+      <div class="cv-ds-val">yamaerenay/mbtitypes-full · Kaggle<br>countries.csv · types.csv</div>
+    </div>
+    <p class="cv-foot">Dataset: MBTI Types Full · Kaggle (yamaerenay)</p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- S2 OBJETIVOS -->
+<div class="slide" id="s2">
+  <div class="sh sh-l"><div class="sh-step sp-l">00</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 02 · Objetivos</div><div class="sh-title">Al terminar esta sesión <span class="tl">podrás…</span></div></div></div>
+  <div class="sb">
+    <div class="obj"><div class="obj-n" style="background:var(--lime)">1</div><div class="obj-t"><strong>Explicar qué es un dataset</strong> y cómo una tabla estructurada permite almacenar, organizar y analizar información estadística de forma sistemática.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--blue)">2</div><div class="obj-t"><strong>Identificar la estructura de un DataFrame</strong>: dimensiones, columnas, tipos de datos, valores faltantes y duplicados usando pandas.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--coral)">3</div><div class="obj-t"><strong>Calcular estadísticos descriptivos</strong> (media, mediana, desviación estándar, cuartiles, rango intercuartílico) sobre columnas numéricas.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--violet)">4</div><div class="obj-t"><strong>Detectar y entender los valores atípicos (outliers)</strong> utilizando la regla IQR y visualizarlos con boxplots e histogramas.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--cyan)">5</div><div class="obj-t"><strong>Crear visualizaciones avanzadas</strong> con matplotlib y seaborn: gráficas de barras, histogramas, heatmaps de correlación y pair plots.</div></div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S3 ¿QUÉ ES UN DATASET? -->
+<div class="slide" id="s3">
+  <div class="sh sh-l"><div class="sh-step sp-l">💾</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 03 · Concepto base</div><div class="sh-title">¿Qué es un <span class="tl">dataset</span>? — La materia prima del análisis</div></div></div>
+  <div class="sb">
+    <div class="box box-l" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--lime-dk)">💡 Definición</div>
+      Un <strong>dataset</strong> (conjunto de datos) es una colección estructurada de información organizada en <strong>filas</strong> (observaciones / registros) y <strong>columnas</strong> (variables / características). Permite almacenar, compartir y procesar grandes volúmenes de información de forma reproducible.
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">📐 Anatomía de un dataset</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Country</th><th>INTJ</th><th>INTP</th><th>INFJ</th></tr></thead>
+            <tbody>
+              <tr><td>Mexico</td><td>0.042</td><td>0.038</td><td>0.051</td></tr>
+              <tr><td>USA</td><td>0.039</td><td>0.045</td><td>0.049</td></tr>
+              <tr><td>Japan</td><td>0.028</td><td>0.031</td><td>0.047</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-b" style="margin-top:.7rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--blue-dk)">Vocabulario esencial</div>
+          <span class="bdg bdg-l">fila = observación</span>&nbsp;<span class="bdg bdg-b">columna = variable</span><br>
+          <span class="bdg bdg-c">celda = valor</span>&nbsp;<span class="bdg bdg-v">NaN = valor faltante</span>
+        </div>
+      </div>
+      <div>
+        <div class="sec">🌐 Nuestro dataset de la sesión</div>
+        <div class="card card-l" style="margin-bottom:.65rem">
+          <div class="card-ico">🧠</div>
+          <div class="card-title">MBTI Types Full · Kaggle</div>
+          <div class="card-body"><strong>countries.csv</strong>: Distribución de los 16 tipos de personalidad MBTI por país del mundo.<br><br><strong>types.csv</strong>: Información descriptiva de cada tipo de personalidad.</div>
+        </div>
+        <div class="box box-c" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--coral-dk)">¿Por qué usar datasets?</div>
+          <ul class="ul lc" style="margin-top:.2rem">
+            <li>Reproducibilidad — cualquiera puede verificar tus resultados</li>
+            <li>Escala — analiza miles de filas en segundos con código</li>
+            <li>Trazabilidad — historial de transformaciones documentado</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S4 STEP 1: IMPORTACIONES Y CONFIGURACIÓN -->
+<div class="slide" id="s4">
+  <div class="sh sh-l"><div class="sh-step sp-l">01</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 04 · Step 1</div><div class="sh-title"><span class="tl">Importar librerías</span> y configurar el entorno</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-l">
+          <span class="code-lbl">python · importaciones</span>
+<span class="kw">import</span> <span class="vr">pandas</span> <span class="kw">as</span> <span class="vr">pd</span>
+<span class="kw">import</span> <span class="vr">numpy</span> <span class="kw">as</span> <span class="vr">np</span>
+<span class="kw">import</span> <span class="vr">matplotlib.pyplot</span> <span class="kw">as</span> <span class="vr">plt</span>
+<span class="kw">import</span> <span class="vr">seaborn</span> <span class="kw">as</span> <span class="vr">sns</span>
+
+<span class="cm"># Verificar versiones instaladas</span>
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"pandas:     {pd.__version__}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"numpy:      {np.__version__}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"matplotlib: {plt.matplotlib.__version__}"</span>)
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"seaborn:    {sns.__version__}"</span>)
+
+<span class="cm"># Configuración de visualización</span>
+<span class="vr">sns</span>.<span class="fn">set_theme</span>(style<span class="op">=</span><span class="st">"whitegrid"</span>)
+<span class="vr">plt</span>.<span class="vr">rcParams</span>[<span class="st">"figure.dpi"</span>] <span class="op">=</span> <span class="nr">120</span>
+        </div>
+        <div class="output">
+          <span class="out-lbl">output</span>
+<span class="out-g">pandas:     2.2.3</span>
+<span class="out-g">numpy:      1.26.4</span>
+<span class="out-b">matplotlib: 3.9.0</span>
+<span class="out-o">seaborn:    0.13.2</span>
+        </div>
+      </div>
+      <div>
+        <div class="sec">📦 ¿Qué hace cada librería?</div>
+        <div class="card card-l" style="margin-bottom:.6rem">
+          <div class="card-ico">🐼</div>
+          <div class="card-title">pandas — estructuras de datos</div>
+          <div class="card-body">Trabaja con datos tabulares: DataFrame y Series. Lee CSV, Excel, SQL. Filtra, agrupa, transforma. Es el "Excel programable" de Python.</div>
+        </div>
+        <div class="card card-b" style="margin-bottom:.6rem">
+          <div class="card-ico">🔢</div>
+          <div class="card-title">numpy — computación numérica</div>
+          <div class="card-body">Arrays multidimensionales de alta performance. Base de todo el ecosistema científico de Python. Operaciones vectorizadas sin bucles.</div>
+        </div>
+        <div class="card card-c" style="margin-bottom:.6rem">
+          <div class="card-ico">📊</div>
+          <div class="card-title">matplotlib — gráficas base</div>
+          <div class="card-body">Motor de visualización fundamental. Control total sobre cada elemento del gráfico. Interfaz estilo MATLAB.</div>
+        </div>
+        <div class="card card-v">
+          <div class="card-ico">🎨</div>
+          <div class="card-title">seaborn — visualización estadística</div>
+          <div class="card-body">Construido sobre matplotlib. Gráficas estadísticas con una sola línea. Integración directa con DataFrames de pandas.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S5 STEP 2: EXPLORACIÓN INICIAL DEL DATAFRAME -->
+<div class="slide" id="s5">
+  <div class="sh sh-l"><div class="sh-step sp-l">02</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 05 · Step 2</div><div class="sh-title"><span class="tl">Exploración inicial</span> — dimensiones, tipos y primeras filas</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-l">
+          <span class="code-lbl">python · exploración del dataframe</span>
+<span class="cm"># Dimensiones del dataset</span>
+<span class="fn">print</span>(<span class="fn">f</span><span class="st">"Filas: {df.shape[0]} | Columnas: {df.shape[1]}"</span>)
+
+<span class="cm"># Tipos de datos por columna</span>
+<span class="fn">print</span>(<span class="vr">df</span>.<span class="vr">dtypes</span>)
+
+<span class="cm"># Primeras 5 filas del DataFrame</span>
+<span class="vr">df</span>.<span class="fn">head</span>()
+
+<span class="cm"># Resumen completo de info</span>
+<span class="vr">df</span>.<span class="fn">info</span>()
+
+<span class="cm"># Nombres de las columnas</span>
+<span class="vr">df</span>.<span class="vr">columns</span>
+        </div>
+        <div class="output">
+          <span class="out-lbl">output ejemplo</span>
+<span class="out-g">Filas: 74  |  Columnas: 17</span>
+Country    object
+INTJ       float64
+INTP       float64
+...
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔍 Funciones y atributos clave</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Expresión</th><th>¿Qué hace?</th></tr></thead>
+            <tbody>
+              <tr><td>df.shape</td><td>(n_filas, n_cols) — dimensiones</td></tr>
+              <tr><td>df.dtypes</td><td>Tipo de dato por columna</td></tr>
+              <tr><td>df.head(n)</td><td>Primeras n filas (defecto: 5)</td></tr>
+              <tr><td>df.tail(n)</td><td>Últimas n filas</td></tr>
+              <tr><td>df.info()</td><td>Resumen: tipos + no-nulos</td></tr>
+              <tr><td>df.columns</td><td>Lista de nombres de columnas</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-l" style="margin-top:.6rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--lime-dk)">Tipos de datos comunes en pandas</div>
+          <span class="bdg bdg-b">int64</span> enteros &nbsp;
+          <span class="bdg bdg-c">float64</span> decimales &nbsp;
+          <span class="bdg bdg-v">object</span> texto/strings &nbsp;
+          <span class="bdg bdg-l">bool</span> verdadero/falso
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S6 STEP 3: CALIDAD DE DATOS -->
+<div class="slide" id="s6">
+  <div class="sh sh-b"><div class="sh-step sp-b">03</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 06 · Step 3–4</div><div class="sh-title"><span class="tb">Calidad de datos</span> — NaN, duplicados y valores únicos</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-b">
+          <span class="code-lbl">python · detección de problemas</span>
+<span class="cm"># ¿Hay valores faltantes (NaN)?</span>
+<span class="vr">areThereNaN</span> <span class="op">=</span> <span class="vr">df</span>.<span class="fn">isnull</span>().<span class="vr">values</span>.<span class="fn">any</span>()
+
+<span class="cm"># ¿Hay países duplicados?</span>
+<span class="vr">hayDuplicados</span> <span class="op">=</span> <span class="vr">df</span>[<span class="st">"Country"</span>].<span class="fn">duplicated</span>().<span class="fn">any</span>()
+
+<span class="cm"># Contar frecuencia de cada país</span>
+<span class="vr">conteo</span> <span class="op">=</span> <span class="vr">df</span>[<span class="st">"Country"</span>].<span class="fn">value_counts</span>()
+
+<span class="cm"># Mostrar solo los que aparecen más de 1 vez</span>
+<span class="vr">conteo</span>[<span class="vr">conteo</span> <span class="op">></span> <span class="nr">1</span>]
+
+<span class="fn">print</span>(<span class="st">"¿Hay NaN?"</span>, <span class="vr">areThereNaN</span>)
+<span class="fn">print</span>(<span class="st">"¿Hay duplicados?"</span>, <span class="vr">hayDuplicados</span>)
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚠️ ¿Por qué importa la calidad de datos?</div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--coral-dk)">NaN — Not a Number</div>
+          Celdas sin valor. Los estadísticos (media, std) los ignoran por defecto, pero pueden sesgar resultados si abundan. Opciones: eliminar filas (dropna), rellenar (fillna) o interpolar.
+        </div>
+        <div class="box box-b">
+          <div class="blbl" style="color:var(--blue-dk)">Duplicados</div>
+          Filas idénticas inflan el análisis y sesgan las distribuciones. Se detectan con <code style="font-family:'JetBrains Mono',monospace;font-size:.82rem">.duplicated()</code> y se eliminan con <code style="font-family:'JetBrains Mono',monospace;font-size:.82rem">.drop_duplicates()</code>.
+        </div>
+        <div class="box box-v" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--vio-dk)">value_counts()</div>
+          Devuelve la frecuencia de cada valor único. Fundamental para variables categóricas como el nombre de un país o tipo de personalidad. <span class="bdg bdg-v">muy usado en exploración</span>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S7 STEP 4: ESTADÍSTICOS DESCRIPTIVOS -->
+<div class="slide" id="s7">
+  <div class="sh sh-b"><div class="sh-step sp-b">04</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 07 · Step 5</div><div class="sh-title"><span class="tb">Estadísticos descriptivos</span> — resumir numéricamente los datos</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-b">
+          <span class="code-lbl">python · tabla de estadísticos</span>
+<span class="cm"># Seleccionar solo columnas numéricas</span>
+<span class="vr">num</span> <span class="op">=</span> <span class="vr">df</span>.<span class="fn">select_dtypes</span>(include<span class="op">=</span><span class="st">'number'</span>)
+
+<span class="vr">descriptivos</span> <span class="op">=</span> {
+    <span class="st">"Media"</span>:         <span class="vr">num</span>.<span class="fn">mean</span>(),
+    <span class="st">"Mediana"</span>:       <span class="vr">num</span>.<span class="fn">median</span>(),
+    <span class="st">"Moda"</span>:          <span class="vr">num</span>.<span class="fn">mode</span>().<span class="fn">iloc</span>[<span class="nr">0</span>],
+    <span class="st">"Desv. Estándar"</span>: <span class="vr">num</span>.<span class="fn">std</span>(),
+    <span class="st">"Varianza"</span>:      <span class="vr">num</span>.<span class="fn">var</span>(),
+    <span class="st">"Máximo"</span>:        <span class="vr">num</span>.<span class="fn">max</span>(),
+    <span class="st">"Mínimo"</span>:        <span class="vr">num</span>.<span class="fn">min</span>(),
+    <span class="st">"Rango"</span>:         <span class="vr">num</span>.<span class="fn">max</span>() <span class="op">-</span> <span class="vr">num</span>.<span class="fn">min</span>(),
+    <span class="st">"Q1 (25%)"</span>:      <span class="vr">num</span>.<span class="fn">quantile</span>(<span class="nr">0.25</span>),
+    <span class="st">"Q3 (75%)"</span>:      <span class="vr">num</span>.<span class="fn">quantile</span>(<span class="nr">0.75</span>),
+    <span class="st">"IQR"</span>:           <span class="vr">num</span>.<span class="fn">quantile</span>(<span class="nr">0.75</span>) <span class="op">-</span> <span class="vr">num</span>.<span class="fn">quantile</span>(<span class="nr">0.25</span>),
+}
+
+<span class="vr">pd</span>.<span class="fn">DataFrame</span>(<span class="vr">descriptivos</span>)
+        </div>
+      </div>
+      <div>
+        <div class="sec">📊 ¿Qué mide cada estadístico?</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Estadístico</th><th>Método pandas</th><th>Mide</th></tr></thead>
+            <tbody>
+              <tr><td>Media (x̄)</td><td>.mean()</td><td>Promedio aritmético</td></tr>
+              <tr><td>Mediana</td><td>.median()</td><td>Valor central</td></tr>
+              <tr><td>Moda</td><td>.mode().iloc[0]</td><td>Valor más frecuente</td></tr>
+              <tr><td>Desv. estándar (s)</td><td>.std()</td><td>Dispersión</td></tr>
+              <tr><td>Q1 / Q3</td><td>.quantile(0.25/0.75)</td><td>Cuartiles 25% y 75%</td></tr>
+              <tr><td>IQR</td><td>Q3 − Q1</td><td>Rango intercuartílico</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-l" style="margin-top:.6rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--lime-dk)">select_dtypes(include='number')</div>
+          Filtra automáticamente solo las columnas de tipo int64 y float64. Esencial para aplicar operaciones matemáticas sin errores por columnas de texto.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S8 STEP 5: OUTLIERS CON IQR -->
+<div class="slide" id="s8">
+  <div class="sh sh-c"><div class="sh-step sp-c">05</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 08 · Step 7</div><div class="sh-title"><span class="tc">Valores atípicos (outliers)</span> — regla del IQR</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-c">
+          <span class="code-lbl">python · detección de outliers con IQR</span>
+<span class="vr">Q1</span> <span class="op">=</span> <span class="vr">num</span>.<span class="fn">quantile</span>(<span class="nr">0.25</span>)
+<span class="vr">Q3</span> <span class="op">=</span> <span class="vr">num</span>.<span class="fn">quantile</span>(<span class="nr">0.75</span>)
+<span class="vr">IQR</span> <span class="op">=</span> <span class="vr">Q3</span> <span class="op">-</span> <span class="vr">Q1</span>
+
+<span class="cm"># Límites de detección</span>
+<span class="vr">limInf</span> <span class="op">=</span> <span class="vr">Q1</span> <span class="op">-</span> <span class="nr">1.5</span> <span class="op">*</span> <span class="vr">IQR</span>
+<span class="vr">limSup</span> <span class="op">=</span> <span class="vr">Q3</span> <span class="op">+</span> <span class="nr">1.5</span> <span class="op">*</span> <span class="vr">IQR</span>
+
+<span class="cm"># Contar cuántos valores caen fuera</span>
+<span class="vr">bajoLimInf</span> <span class="op">=</span> (<span class="vr">num</span> <span class="op">&lt;</span> <span class="vr">limInf</span>).<span class="fn">sum</span>()
+<span class="vr">sobreLimSup</span> <span class="op">=</span> (<span class="vr">num</span> <span class="op">></span> <span class="vr">limSup</span>).<span class="fn">sum</span>()
+
+<span class="vr">pd</span>.<span class="fn">DataFrame</span>({
+    <span class="st">"Límite inferior"</span>: <span class="vr">limInf</span>,
+    <span class="st">"Límite superior"</span>: <span class="vr">limSup</span>,
+    <span class="st">"Bajo el límite"</span>:  <span class="vr">bajoLimInf</span>,
+    <span class="st">"Sobre el límite"</span>: <span class="vr">sobreLimSup</span>,
+})
+        </div>
+      </div>
+      <div>
+        <div class="sec">📐 La regla del IQR explicada</div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--coral-dk)">¿Qué es un outlier?</div>
+          Un valor que cae muy lejos del rango "normal" de los datos. La regla del IQR es robusta: define outliers como valores que están más de <strong>1.5 × IQR</strong> por encima de Q3 o por debajo de Q1.
+        </div>
+        <div class="box box-b">
+          <div class="blbl" style="color:var(--blue-dk)">Fórmulas</div>
+          <code style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--coral)">Límite inferior = Q1 − 1.5 × IQR</code><br>
+          <code style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:var(--coral)">Límite superior = Q3 + 1.5 × IQR</code><br><br>
+          Valores fuera de estos límites son candidatos a outliers.
+        </div>
+        <div class="box box-v" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--vio-dk)">¿Eliminar o conservar?</div>
+          Depende del contexto. Un outlier puede ser un error de captura (eliminar) o un dato genuinamente extremo pero real (conservar). El análisis estadístico debe justificar la decisión.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S9 STEP 6: BOXPLOT E HISTOGRAMA -->
+<div class="slide" id="s9">
+  <div class="sh sh-c"><div class="sh-step sp-c">06</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 09 · Step 8</div><div class="sh-title"><span class="tc">Boxplot e histograma</span> — visualizar distribuciones</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-c">
+          <span class="code-lbl">python · boxplot con seaborn</span>
+<span class="vr">num_df</span> <span class="op">=</span> <span class="vr">df</span>.<span class="fn">select_dtypes</span>(include<span class="op">=</span><span class="st">'number'</span>)
+
+<span class="vr">plt</span>.<span class="fn">figure</span>()
+<span class="vr">sns</span>.<span class="fn">boxplot</span>(data<span class="op">=</span><span class="vr">num_df</span>)
+<span class="vr">plt</span>.<span class="fn">xticks</span>(rotation<span class="op">=</span><span class="nr">45</span>)
+<span class="vr">plt</span>.<span class="fn">show</span>()
+        </div>
+        <div class="code code-c">
+          <span class="code-lbl">python · histograma con kde por columna</span>
+<span class="vr">cols</span> <span class="op">=</span> <span class="vr">num_df</span>.<span class="vr">columns</span>
+<span class="vr">colors</span> <span class="op">=</span> <span class="vr">sns</span>.<span class="fn">color_palette</span>(<span class="st">"husl"</span>, <span class="fn">len</span>(<span class="vr">cols</span>))
+
+<span class="kw">for</span> <span class="vr">i</span>, <span class="vr">col</span> <span class="kw">in</span> <span class="fn">enumerate</span>(<span class="vr">cols</span>):
+    <span class="vr">sns</span>.<span class="fn">histplot</span>(<span class="vr">num_df</span>[<span class="vr">col</span>], kde<span class="op">=</span><span class="vr">True</span>,
+                ax<span class="op">=</span><span class="vr">axes</span>[<span class="vr">i</span>], color<span class="op">=</span><span class="vr">colors</span>[<span class="vr">i</span>])
+    <span class="vr">axes</span>[<span class="vr">i</span>].<span class="fn">set_title</span>(<span class="vr">col</span>)
+<span class="vr">plt</span>.<span class="fn">tight_layout</span>()
+        </div>
+      </div>
+      <div>
+        <div class="sec">📊 ¿Qué nos dicen estas gráficas?</div>
+        <div class="card card-c" style="margin-bottom:.65rem">
+          <div class="card-ico">📦</div>
+          <div class="card-title">Boxplot (diagrama de caja)</div>
+          <div class="card-body">Muestra Q1, mediana (Q2), Q3, bigotes (1.5×IQR) y outliers como puntos. De un vistazo: dispersión, simetría y valores extremos por variable.</div>
+        </div>
+        <div class="card card-v" style="margin-bottom:.65rem">
+          <div class="card-ico">📈</div>
+          <div class="card-title">Histograma + KDE</div>
+          <div class="card-body">El histograma muestra la frecuencia de valores en rangos (bins). La curva KDE (Kernel Density Estimate) es una estimación continua de la distribución de probabilidad.</div>
+        </div>
+        <div class="box box-b" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--blue-dk)">plt vs sns</div>
+          <span class="bdg bdg-c">matplotlib</span> da control total pero requiere más código.<br>
+          <span class="bdg bdg-v">seaborn</span> genera gráficas estadísticas elegantes con una línea. Ambas son complementarias — seaborn construye sobre matplotlib.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S10 STEP 7: GRÁFICAS DE BARRAS POR PAÍS -->
+<div class="slide" id="s10">
+  <div class="sh sh-v"><div class="sh-step sp-v">07</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 10 · Step 9</div><div class="sh-title"><span class="tv">Gráficas de barras</span> — comparar filas específicas</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-v">
+          <span class="code-lbl">python · perfil de un país</span>
+<span class="cm"># Filtrar la fila de México</span>
+<span class="vr">row_num</span> <span class="op">=</span> <span class="vr">num_df</span>.<span class="fn">loc</span>[<span class="vr">df</span>[<span class="st">"Country"</span>] <span class="op">==</span> <span class="st">"Mexico"</span>].<span class="fn">iloc</span>[<span class="nr">0</span>]
+
+<span class="vr">row_num</span>.<span class="fn">plot</span>(kind<span class="op">=</span><span class="st">"bar"</span>)
+<span class="vr">plt</span>.<span class="fn">title</span>(<span class="st">"Distribución de Personalidad — México"</span>)
+<span class="vr">plt</span>.<span class="fn">xticks</span>(rotation<span class="op">=</span><span class="nr">45</span>)
+<span class="vr">plt</span>.<span class="fn">show</span>()
+        </div>
+        <div class="code code-v">
+          <span class="code-lbl">python · comparar múltiples países</span>
+<span class="vr">paises</span> <span class="op">=</span> [<span class="st">"Mexico"</span>, <span class="st">"United States"</span>,
+           <span class="st">"Japan"</span>, <span class="st">"Colombia"</span>]
+
+<span class="vr">subset</span> <span class="op">=</span> <span class="vr">df</span>[<span class="vr">df</span>[<span class="st">"Country"</span>].<span class="fn">isin</span>(<span class="vr">paises</span>)]
+<span class="vr">num_df</span>.<span class="vr">index</span> <span class="op">=</span> <span class="vr">subset</span>[<span class="st">"Country"</span>]
+
+<span class="cm"># Mismo ylim para comparar entre países</span>
+<span class="vr">axes</span>[<span class="vr">i</span>].<span class="fn">set_ylim</span>(<span class="nr">0</span>, <span class="nr">0.15</span>)  <span class="cm"># ← IMPORTANTE</span>
+        </div>
+      </div>
+      <div>
+        <div class="sec">💡 Conceptos importantes de filtrado</div>
+        <div class="box box-v">
+          <div class="blbl" style="color:var(--vio-dk)">.loc[ ] y .iloc[ ]</div>
+          <code style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:#C4B5FD">.loc[condición]</code> — filtra por <strong>etiqueta/condición</strong> booleana<br>
+          <code style="font-family:'JetBrains Mono',monospace;font-size:.82rem;color:#C4B5FD">.iloc[0]</code> — selecciona por <strong>posición entera</strong> (índice 0 = primera fila)
+        </div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--coral-dk)">.isin(lista)</div>
+          Filtra filas donde la columna contiene alguno de los valores de la lista. Equivalente a escribir múltiples condiciones OR.
+        </div>
+        <div class="box box-b" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--blue-dk)">set_ylim() — eje Y fijo</div>
+          Al comparar múltiples gráficas, fijar el mismo límite del eje Y garantiza una comparación visual justa. Sin esto, cada gráfica ajusta su propia escala y la comparación es engañosa.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S11 STEP 8: HEATMAP DE CORRELACIÓN -->
+<div class="slide" id="s11">
+  <div class="sh sh-v"><div class="sh-step sp-v">08</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 11 · Step 10</div><div class="sh-title"><span class="tv">Heatmap de correlación</span> — relaciones entre variables</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-v">
+          <span class="code-lbl">python · heatmap de correlación</span>
+<span class="vr">num_df</span> <span class="op">=</span> <span class="vr">df</span>.<span class="fn">select_dtypes</span>(include<span class="op">=</span><span class="st">'number'</span>)
+
+<span class="cm"># Calcular matriz de correlación</span>
+<span class="hl"><span class="vr">corr</span> <span class="op">=</span> <span class="vr">num_df</span>.<span class="fn">corr</span>()</span>
+
+<span class="vr">plt</span>.<span class="fn">figure</span>(figsize<span class="op">=</span>(<span class="nr">10</span>, <span class="nr">8</span>))
+
+<span class="hl"><span class="vr">sns</span>.<span class="fn">heatmap</span>(
+    <span class="vr">corr</span>,
+    cmap<span class="op">=</span><span class="st">"coolwarm"</span>,
+    center<span class="op">=</span><span class="nr">0</span>
+)</span>
+
+<span class="vr">plt</span>.<span class="fn">title</span>(<span class="st">"Correlación entre Tipos de Personalidad"</span>)
+<span class="vr">plt</span>.<span class="fn">show</span>()
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔥 Entendiendo el heatmap</div>
+        <div class="box box-v">
+          <div class="blbl" style="color:var(--vio-dk)">¿Qué es la correlación?</div>
+          Mide la relación lineal entre dos variables. Va de <strong>−1</strong> (inversa perfecta) a <strong>+1</strong> (directa perfecta). <strong>0</strong> = sin relación lineal.
+        </div>
+        <div class="tw" style="margin-bottom:.7rem">
+          <table>
+            <thead><tr><th>Color</th><th>Correlación</th><th>Significado</th></tr></thead>
+            <tbody>
+              <tr><td>🔴 Rojo intenso</td><td>r ≈ +1</td><td>Relación positiva fuerte</td></tr>
+              <tr><td>⬜ Blanco/neutro</td><td>r ≈ 0</td><td>Sin relación lineal</td></tr>
+              <tr><td>🔵 Azul intenso</td><td>r ≈ −1</td><td>Relación negativa fuerte</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-b" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--blue-dk)">Parámetros clave de sns.heatmap</div>
+          <span class="bdg bdg-v">cmap="coolwarm"</span> paleta azul-blanco-rojo<br>
+          <span class="bdg bdg-b">center=0</span> centra la escala en 0<br>
+          <span class="bdg bdg-c">annot=True</span> muestra valores numéricos en cada celda
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S12 STEP 9: PAIR PLOT -->
+<div class="slide" id="s12">
+  <div class="sh sh-cy"><div class="sh-step sp-cy">09</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 12 · Step 11</div><div class="sh-title"><span class="ty">Pair Plot</span> — la visualización más densa y poderosa</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="code code-cy">
+          <span class="code-lbl">python · pair plot</span>
+<span class="cm"># Una sola línea — crea una matriz completa</span>
+<span class="cm"># de gráficas de dispersión y distribuciones</span>
+<span class="hl"><span class="vr">sns</span>.<span class="fn">pairplot</span>(<span class="vr">num_df</span>)</span>
+
+<span class="vr">plt</span>.<span class="fn">show</span>()
+
+<span class="cm"># Variante con color por grupo</span>
+<span class="vr">sns</span>.<span class="fn">pairplot</span>(
+    <span class="vr">df</span>,
+    hue<span class="op">=</span><span class="st">"Country"</span>,
+    diag_kind<span class="op">=</span><span class="st">"kde"</span>,
+    plot_kws<span class="op">=</span>{<span class="st">"alpha"</span>: <span class="nr">0.4</span>}
+)
+        </div>
+        <div class="box box-cy">
+          <div class="blbl" style="color:var(--cyan-dk)">⚠️ Nota de rendimiento</div>
+          Con muchas columnas (> 10), el pair plot puede tardar varios minutos en generarse. Considera usar un subconjunto de columnas con <code style="font-family:'JetBrains Mono',monospace;font-size:.82rem">pairplot(data[["col1","col2","col3"]])</code>.
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔭 ¿Qué muestra el pair plot?</div>
+        <div class="card card-cy" style="margin-bottom:.65rem">
+          <div class="card-ico">🔲</div>
+          <div class="card-title">Matriz n×n de gráficas</div>
+          <div class="card-body">Para cada par de variables: un scatter plot que muestra su relación. En la diagonal: la distribución de esa variable (histograma o KDE). Con n columnas → n² gráficas.</div>
+        </div>
+        <div class="card card-v" style="margin-bottom:.65rem">
+          <div class="card-ico">🔍</div>
+          <div class="card-title">¿Qué buscar?</div>
+          <div class="card-body">Patrones lineales → correlación. Grupos separados → estructura de clúster. Forma de abanico → varianza no constante (heterocedasticidad). Puntos aislados → outliers multivariados.</div>
+        </div>
+        <div class="box box-l" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--lime-dk)">Exploratorio, no confirmatorio</div>
+          El pair plot es una herramienta de <strong>exploración inicial</strong>. Las relaciones que identifica visualmente deben confirmarse con pruebas estadísticas formales (correlación de Pearson, regresión, etc.).
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S13 QUIZ -->
+<div class="slide" id="s13">
+  <div class="sh sh-l"><div class="sh-step sp-l">?</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 13 · Comprensión</div><div class="sh-title">Preguntas de <span class="tl">comprensión conceptual</span></div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P1</div>
+          <div class="quiz-q">¿Cuál es la diferencia conceptual entre <code style="font-family:'JetBrains Mono',monospace">.loc[]</code> y <code style="font-family:'JetBrains Mono',monospace">.iloc[]</code>?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> .loc[] es más rápido que .iloc[] para datasets grandes</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ .loc[] filtra por etiqueta o condición booleana; .iloc[] filtra por posición entera</li>
+            <li><span class="opt-l">c</span> Son idénticos — solo cambia la sintaxis</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P2</div>
+          <div class="quiz-q">Si un heatmap muestra color azul intenso entre dos variables, ¿qué indica?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Correlación positiva fuerte (r ≈ +1)</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Correlación negativa fuerte (r ≈ −1): cuando una sube, la otra baja</li>
+            <li><span class="opt-l">c</span> Que los datos son categóricos y no tienen correlación</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P3</div>
+          <div class="quiz-q">¿Por qué se usa <code style="font-family:'JetBrains Mono',monospace">set_ylim(0, 0.15)</code> al comparar múltiples países en gráficas separadas?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Para ahorrar memoria — las gráficas pesan menos</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Para garantizar una escala idéntica en todas las gráficas y que la comparación visual sea justa y no engañosa</li>
+            <li><span class="opt-l">c</span> Porque seaborn no ajusta automáticamente el eje Y</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P4</div>
+          <div class="quiz-q">¿Qué muestra la diagonal del pair plot?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> La correlación numérica entre esa variable y todas las demás</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ La distribución de esa variable con ella misma — un histograma o curva KDE</li>
+            <li><span class="opt-l">c</span> Una línea de regresión de la variable consigo misma</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P5</div>
+          <div class="quiz-q">¿Cuál es la fórmula correcta del límite superior de la regla IQR para detección de outliers?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Q3 + 2 × IQR</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Q3 + 1.5 × IQR, donde IQR = Q3 − Q1</li>
+            <li><span class="opt-l">c</span> Mediana + 2 × Desviación estándar</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P6</div>
+          <div class="quiz-q">¿Qué hace <code style="font-family:'JetBrains Mono',monospace">df.select_dtypes(include='number')</code>?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Devuelve una columna con todos los números del DataFrame</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Filtra y devuelve solo las columnas de tipo numérico (int64, float64) del DataFrame</li>
+            <li><span class="opt-l">c</span> Convierte todas las columnas al tipo numérico automáticamente</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S14 CIERRE -->
+<div class="slide cover cv-close" id="s14">
+  <div class="cv-grid"></div><div class="cv-glow"></div>
+  <div class="cv-lines">
+    <span>df.corr()</span><span>sns.heatmap(corr, cmap="coolwarm")</span>
+    <span>sns.pairplot(num_df)</span><span>df.isnull().any()</span>
+    <span>df.select_dtypes('number').describe()</span>
+    <span>Q1, Q3 = df.quantile([0.25, 0.75])</span>
+  </div>
+  <div class="close-inner">
+    <div class="cv-badge" style="justify-content:center;margin-bottom:1.2rem">✅ Sesión completada</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:700;color:#fff;line-height:.95;margin-bottom:.5rem;letter-spacing:-.025em">
+      Flujo de trabajo <span style="color:#6EE7B7">completo</span>
+    </h2>
+    <div style="width:56px;height:2px;background:linear-gradient(90deg,var(--lime),var(--blue),var(--violet));margin:.9rem auto 1.4rem;border-radius:1px"></div>
+    <div style="text-align:left;margin-bottom:1.5rem">
+      <div class="sum-row"><div class="sum-k" style="color:#6EE7B7">Step 1</div><div class="sum-v">import pandas, numpy, matplotlib, seaborn — verificar versiones y configurar tema.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#93C5FD">Step 2</div><div class="sum-v">df.shape · df.dtypes · df.head() · df.info() · df.columns — conocer la estructura.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#93C5FD">Step 3</div><div class="sum-v">df.isnull() · df.duplicated() · df.value_counts() — auditar la calidad de los datos.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#FDBA74">Step 4</div><div class="sum-v">mean · median · mode · std · var · quantile · IQR — describir numéricamente.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#FDBA74">Step 5</div><div class="sum-v">Regla IQR: límite inferior = Q1−1.5×IQR · límite superior = Q3+1.5×IQR → outliers.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#C4B5FD">Step 6</div><div class="sum-v">sns.boxplot() · sns.histplot(kde=True) · .plot(kind="bar") — visualizar distribuciones.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#67E8F9">Step 7</div><div class="sum-v">df.corr() + sns.heatmap() — matrix de correlación con escala de color coolwarm.</div></div>
+      <div class="sum-row" style="margin-bottom:0"><div class="sum-k" style="color:#67E8F9">Step 8</div><div class="sum-v">sns.pairplot() — visualización exploratoria completa de todas las relaciones entre variables.</div></div>
+    </div>
+    <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.9rem 1.2rem;max-width:520px;margin:0 auto">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--lime);letter-spacing:2px;margin-bottom:.4rem">DATASET</div>
+      <div style="font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.65;text-align:left">
+        yamaerenay. <em style="color:rgba(255,255,255,.75)">MBTI Types Full.</em> Kaggle, 2024.<br>
+        Distribución de tipos de personalidad MBTI por país del mundo.<br>
+        <span style="color:rgba(255,255,255,.3)">kaggle.com/datasets/yamaerenay/mbtitypes-full</span>
+      </div>
+    </div>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nb" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-c">
+    <div class="ctr">Diapositiva <span id="cn">1</span> / <span id="tn">14</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nb" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+const slides=document.querySelectorAll('.slide'),N=slides.length;let cur=0;
+document.getElementById('tn').textContent=N;
+const dotsEl=document.getElementById('dots');
+for(let i=0;i<N;i++){const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);}
+function update(){slides.forEach((s,i)=>{s.classList.toggle('active',i===cur);if(i===cur)s.scrollTop=0;});dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));document.getElementById('cn').textContent=cur+1;document.getElementById('pb-btn').disabled=cur===0;document.getElementById('nb-btn').disabled=cur===N-1;document.getElementById('pb').style.width=((cur+1)/N*100)+'%';}
+function go(d){const n=cur+d;if(n>=0&&n<N){cur=n;update();}}
+function goTo(i){cur=i;update();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+update();
+</script>
+</body>
+</html>

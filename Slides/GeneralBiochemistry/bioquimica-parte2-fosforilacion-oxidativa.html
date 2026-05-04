@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fosforilación Oxidativa · Bioquímica General — Parte 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --char:    #18181B; --char-md: #27272A; --char-lt: #3F3F46;
+  --smoke:   #F4F4F5; --smoke-md:#E4E4E7; --white:   #FAFAFA; --rule:#D4D4D8;
+  --teal:    #0D9488; --teal-lt: #CCFBF1; --teal-dk: #134E4A;
+  --indigo:  #4F46E5; --indi-lt: #E0E7FF; --indi-dk: #1E1B4B;
+  --rose:    #E11D48; --rose-lt: #FFE4E6; --rose-dk: #881337;
+  --orange:  #EA580C; --oran-lt: #FFEDD5; --oran-dk: #7C2D12;
+  --lime:    #65A30D; --lime-lt: #ECFCCB; --lime-dk: #365314;
+  --sky:     #0284C7; --sky-lt:  #E0F2FE; --sky-dk:  #0C4A6E;
+  --amber:   #D97706; --amb-lt:  #FEF3C7; --amb-dk:  #78350F;
+  --ink:#18181B; --ink-md:#3F3F46; --ink-lt:#71717A; --ink-xs:#A1A1AA;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 2px 10px rgba(0,0,0,.05);
+  --shm:0 4px 18px rgba(0,0,0,.10);
+}
+
+html,body{height:100%;overflow:hidden;font-family:'Outfit',sans-serif;background:var(--smoke);color:var(--ink);}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(var(--smoke-md) 1px,transparent 1px),linear-gradient(90deg,var(--smoke-md) 1px,transparent 1px);background-size:32px 32px;opacity:.5;}
+.pb{position:fixed;top:0;left:0;height:3px;z-index:9999;background:linear-gradient(90deg,var(--teal),var(--indigo),var(--rose),var(--orange));transition:width .35s ease;}
+.slide{display:none;flex-direction:column;width:100vw;height:100vh;overflow-y:auto;position:relative;z-index:1;animation:up .32s ease;}
+.slide.active{display:flex;}
+@keyframes up{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.slide::-webkit-scrollbar{width:4px;}
+.slide::-webkit-scrollbar-thumb{background:var(--teal);border-radius:4px;}
+
+/* COVER */
+.cover{background:var(--char);min-height:100vh;justify-content:center;align-items:center;position:relative;overflow:hidden;}
+.cv-bg{position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 12% 35%,rgba(13,148,136,.20) 0%,transparent 55%),radial-gradient(ellipse 45% 40% at 88% 65%,rgba(79,70,229,.16) 0%,transparent 55%),radial-gradient(ellipse 38% 38% at 55% 5%,rgba(225,29,72,.13) 0%,transparent 50%),radial-gradient(ellipse 32% 35% at 78% 88%,rgba(234,88,12,.12) 0%,transparent 50%);}
+.cv-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px);background-size:22px 22px;}
+.cv-inner{position:relative;z-index:2;max-width:900px;width:100%;padding:2.5rem;}
+.tag{display:inline-flex;align-items:center;gap:.3rem;padding:.22rem .8rem;border-radius:3px;font-size:.68rem;font-weight:600;letter-spacing:.8px;border:1px solid;font-family:'Space Mono',monospace;text-transform:uppercase;}
+.tag-w{background:rgba(255,255,255,.07);color:rgba(255,255,255,.6);border-color:rgba(255,255,255,.18);}
+.tag-t{background:rgba(13,148,136,.18);color:#5EEAD4;border-color:rgba(13,148,136,.4);}
+.tag-i{background:rgba(79,70,229,.16);color:#A5B4FC;border-color:rgba(79,70,229,.38);}
+.cv-eyebrow{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.4rem;}
+.cv-title{font-size:clamp(2.3rem,5.5vw,4.5rem);font-weight:800;line-height:1.0;color:#fff;margin-bottom:.55rem;}
+.cv-title .ct{color:#5EEAD4;} .cv-title .ci{color:#A5B4FC;} .cv-title .cr{color:#FDA4AF;}
+.cv-sub{font-size:.98rem;color:rgba(255,255,255,.42);font-weight:300;margin-bottom:2rem;line-height:1.7;max-width:580px;}
+.cv-topics{display:flex;flex-direction:column;gap:.3rem;margin-bottom:2rem;}
+.ct-row{display:flex;align-items:center;gap:.6rem;font-size:.85rem;}
+.ct-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ct-lbl{font-weight:600;color:rgba(255,255,255,.75);}
+.ct-desc{color:rgba(255,255,255,.35);font-size:.8rem;}
+.cv-foot{font-family:'Space Mono',monospace;font-size:.58rem;color:rgba(255,255,255,.2);letter-spacing:1px;}
+.cv-foot span{color:rgba(255,255,255,.38);}
+
+/* HEADER */
+.sh{background:var(--white);border-bottom:2px solid var(--rule);padding:.75rem 1.8rem;display:flex;align-items:center;gap:.85rem;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.05);position:relative;}
+.sh::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;}
+.sh-t::before{background:var(--teal);}  .sh-i::before{background:var(--indigo);}
+.sh-r::before{background:var(--rose);}  .sh-o::before{background:var(--orange);}
+.sh-l::before{background:var(--lime);}  .sh-s::before{background:var(--sky);}
+.sh-a::before{background:var(--amber);}
+.sh-ico{width:38px;height:38px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.ico-t{background:var(--teal-lt);border:1.5px solid rgba(13,148,136,.3);}
+.ico-i{background:var(--indi-lt);border:1.5px solid rgba(79,70,229,.25);}
+.ico-r{background:var(--rose-lt);border:1.5px solid rgba(225,29,72,.22);}
+.ico-o{background:var(--oran-lt);border:1.5px solid rgba(234,88,12,.3);}
+.ico-l{background:var(--lime-lt);border:1.5px solid rgba(101,163,13,.3);}
+.ico-s{background:var(--sky-lt);border:1.5px solid rgba(2,132,199,.25);}
+.ico-a{background:var(--amb-lt);border:1.5px solid rgba(217,119,6,.3);}
+.sh-meta{flex:1;}
+.sh-lbl{font-family:'Space Mono',monospace;font-size:.56rem;color:var(--ink-xs);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:.05rem;}
+.sh-title{font-size:clamp(.95rem,2.2vw,1.38rem);font-weight:700;color:var(--ink);line-height:1.15;}
+.tt{color:var(--teal-dk);} .ti{color:var(--indi-dk);} .tr2{color:var(--rose-dk);}
+.to{color:var(--oran-dk);} .tl{color:var(--lime-dk);} .ts{color:var(--sky-dk);}
+.ta{color:var(--amb-dk);}
+
+/* BODY */
+.sb{flex:1;padding:1.3rem 1.8rem;background:var(--smoke);overflow-y:auto;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;}
+.ga{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem;}
+
+.idea{background:var(--char);border-radius:10px;padding:1.1rem 1.3rem;margin-bottom:1rem;position:relative;overflow:hidden;box-shadow:var(--shm);}
+.idea::before{content:'';position:absolute;inset:0;border-radius:10px;background:radial-gradient(ellipse 65% 55% at 0% 50%,rgba(13,148,136,.12) 0%,transparent 60%);}
+.idea-lbl{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:.45rem;position:relative;z-index:1;}
+.idea-txt{font-size:clamp(.92rem,1.9vw,1.18rem);font-weight:600;line-height:1.5;color:rgba(255,255,255,.9);position:relative;z-index:1;}
+
+.card{background:var(--white);border:1.5px solid var(--rule);border-radius:8px;padding:.92rem;box-shadow:var(--sh);transition:box-shadow .18s,transform .15s;position:relative;overflow:hidden;}
+.card:hover{box-shadow:var(--shm);transform:translateY(-1px);}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.card-t::before{background:var(--teal);} .card-i::before{background:var(--indigo);}
+.card-r::before{background:var(--rose);} .card-o::before{background:var(--orange);}
+.card-l::before{background:var(--lime);} .card-s::before{background:var(--sky);}
+.card-a::before{background:var(--amber);}
+.card-ico{font-size:1.3rem;margin-bottom:.4rem;} .card-title{font-weight:700;font-size:.95rem;color:var(--ink);margin-bottom:.25rem;} .card-body{font-size:.82rem;color:var(--ink-md);line-height:1.62;}
+
+.box{border-radius:8px;padding:.8rem .95rem;margin-bottom:.72rem;font-size:.84rem;line-height:1.65;border:1.5px solid;}
+.box-t{background:var(--teal-lt);border-color:rgba(13,148,136,.35);color:var(--ink-md);}
+.box-i{background:var(--indi-lt);border-color:rgba(79,70,229,.28);color:var(--ink-md);}
+.box-r{background:var(--rose-lt);border-color:rgba(225,29,72,.25);color:var(--ink-md);}
+.box-o{background:var(--oran-lt);border-color:rgba(234,88,12,.3);color:var(--ink-md);}
+.box-l{background:var(--lime-lt);border-color:rgba(101,163,13,.35);color:var(--ink-md);}
+.box-s{background:var(--sky-lt);border-color:rgba(2,132,199,.28);color:var(--ink-md);}
+.box-a{background:var(--amb-lt);border-color:rgba(217,119,6,.35);color:var(--ink-md);}
+.box-w{background:var(--white);border-color:var(--rule);color:var(--ink-md);}
+.blbl{font-family:'Space Mono',monospace;font-size:.57rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.28rem;opacity:.65;}
+
+.sec{font-weight:700;font-size:1rem;color:var(--ink);margin-bottom:.65rem;padding-bottom:.28rem;border-bottom:1.5px solid var(--rule);display:flex;align-items:center;gap:.4rem;}
+
+ul.ul{list-style:none;padding:0;}
+ul.ul li{padding:.32rem 0 .32rem 1.25rem;position:relative;font-size:.84rem;color:var(--ink-md);line-height:1.55;border-bottom:1px solid rgba(0,0,0,.04);}
+ul.ul li:last-child{border-bottom:none;}
+ul.ul li::before{content:'';position:absolute;left:0;top:.58rem;width:8px;height:8px;border-radius:2px;}
+ul.ul.lt li::before{background:var(--teal);}  ul.ul.li2 li::before{background:var(--indigo);}
+ul.ul.lr li::before{background:var(--rose);}  ul.ul.lo li::before{background:var(--orange);}
+ul.ul.ll li::before{background:var(--lime);}  ul.ul.ls li::before{background:var(--sky);}
+ul.ul.la li::before{background:var(--amber);}
+strong{color:var(--ink);font-weight:600;} em{color:var(--teal-dk);font-style:italic;}
+
+.bdg{display:inline-flex;align-items:center;gap:.2rem;padding:.14rem .52rem;border-radius:3px;font-size:.68rem;font-weight:700;font-family:'Space Mono',monospace;border:1px solid;}
+.bdg-t{background:var(--teal-lt);color:var(--teal-dk);border-color:rgba(13,148,136,.4);}
+.bdg-i{background:var(--indi-lt);color:var(--indi-dk);border-color:rgba(79,70,229,.4);}
+.bdg-r{background:var(--rose-lt);color:var(--rose-dk);border-color:rgba(225,29,72,.3);}
+.bdg-o{background:var(--oran-lt);color:var(--oran-dk);border-color:rgba(234,88,12,.4);}
+.bdg-l{background:var(--lime-lt);color:var(--lime-dk);border-color:rgba(101,163,13,.4);}
+
+.tw{overflow-x:auto;border-radius:8px;border:1.5px solid var(--rule);background:var(--white);box-shadow:var(--sh);}
+table{width:100%;border-collapse:collapse;font-size:.82rem;}
+thead tr{background:var(--char);}
+thead th{font-family:'Space Mono',monospace;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.85);text-align:left;padding:.55rem .85rem;letter-spacing:.5px;text-transform:uppercase;}
+tbody tr{border-bottom:1px solid var(--rule);transition:background .12s;}
+tbody tr:nth-child(even){background:var(--smoke);}
+tbody tr:hover{background:var(--teal-lt);}
+tbody td{padding:.5rem .85rem;color:var(--ink-md);vertical-align:top;line-height:1.5;}
+tbody td:first-child{font-weight:600;color:var(--ink);font-family:'Space Mono',monospace;font-size:.78rem;}
+
+.step{display:flex;gap:.8rem;padding:.68rem .85rem;background:var(--white);border:1.5px solid var(--rule);border-radius:8px;margin-bottom:.45rem;box-shadow:var(--sh);align-items:flex-start;}
+.step-n{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Mono',monospace;font-weight:700;font-size:.72rem;color:#fff;}
+.step-t strong{font-size:.88rem;display:block;color:var(--ink);margin-bottom:.06rem;}
+.step-t p{font-size:.8rem;color:var(--ink-md);line-height:1.5;}
+
+.obj{display:flex;gap:.85rem;align-items:flex-start;padding:.72rem;background:var(--white);border:1.5px solid var(--rule);border-radius:8px;margin-bottom:.52rem;box-shadow:var(--sh);transition:border-color .18s;}
+.obj:hover{border-color:var(--teal);}
+.obj-n{min-width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;font-size:.9rem;color:#fff;}
+.obj-t{font-size:.84rem;color:var(--ink-md);line-height:1.55;padding-top:.08rem;}
+
+.quiz-box{background:var(--white);border:1.5px solid var(--rule);border-radius:8px;padding:.92rem;margin-bottom:.65rem;box-shadow:var(--sh);}
+.quiz-tag{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:2px;background:var(--char);color:#fff;padding:.12rem .48rem;border-radius:3px;display:inline-block;margin-bottom:.4rem;}
+.quiz-q{font-weight:700;font-size:.92rem;color:var(--ink);margin-bottom:.42rem;}
+.quiz-opts{list-style:none;}
+.quiz-opts li{padding:.38rem .72rem;border:1.5px solid var(--rule);border-radius:6px;margin-bottom:.25rem;font-size:.82rem;color:var(--ink-md);cursor:pointer;transition:all .18s;display:flex;gap:.5rem;align-items:flex-start;}
+.quiz-opts li:hover{border-color:var(--teal);background:var(--teal-lt);}
+.quiz-opts li.correct{border-color:var(--lime);background:var(--lime-lt);color:var(--ink);}
+.opt-l{min-width:20px;height:20px;border-radius:4px;background:var(--char);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;flex-shrink:0;font-family:'Space Mono',monospace;}
+
+.act{display:flex;gap:.78rem;padding:.7rem;background:var(--white);border:1.5px solid var(--rule);border-radius:8px;margin-bottom:.48rem;box-shadow:var(--sh);}
+.act-ico{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.88rem;flex-shrink:0;background:var(--teal-lt);border:1.5px solid rgba(13,148,136,.3);}
+.act-t strong{font-size:.88rem;display:block;margin-bottom:.07rem;color:var(--ink);}
+.act-t p{font-size:.8rem;color:var(--ink-md);line-height:1.5;}
+
+.cv-close{background:var(--char);min-height:100vh;justify-content:center;align-items:center;position:relative;overflow:hidden;}
+.close-inner{position:relative;z-index:2;max-width:820px;width:100%;padding:2.5rem;text-align:center;}
+.sum-row{display:flex;gap:.6rem;margin-bottom:.42rem;font-size:.84rem;text-align:left;}
+.sum-k{min-width:160px;font-family:'Space Mono',monospace;font-size:.64rem;flex-shrink:0;padding-top:.1rem;letter-spacing:.5px;}
+.sum-v{color:rgba(255,255,255,.68);line-height:1.5;}
+
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(250,250,250,.97);border-top:2px solid var(--rule);padding:.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between;z-index:1000;backdrop-filter:blur(8px);}
+.nb{display:flex;align-items:center;gap:.38rem;padding:.36rem .88rem;border-radius:5px;font-family:'Outfit',sans-serif;font-weight:600;font-size:.78rem;border:1.5px solid var(--rule);background:var(--white);color:var(--ink-md);cursor:pointer;transition:all .18s;}
+.nb:hover:not(:disabled){border-color:var(--teal);color:var(--teal-dk);background:var(--teal-lt);}
+.nb:disabled{opacity:.25;cursor:not-allowed;}
+.nav-c{display:flex;flex-direction:column;align-items:center;gap:.2rem;}
+.ctr{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--ink-lt);}
+.ctr span{color:var(--teal-dk);font-size:.88rem;font-weight:700;}
+.dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:340px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--rule);border:none;cursor:pointer;padding:0;transition:all .18s;}
+.dot.active{background:var(--teal);transform:scale(1.45);}
+.nav-sp{height:62px;}
+
+@media(max-width:768px){.sb{padding:1rem;}.sh{padding:.6rem 1rem;}.g2,.g3{grid-template-columns:1fr;}.dots{max-width:200px;}}
+@media(max-width:480px){.dots{display:none;}}
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- S1 PORTADA -->
+<div class="slide cover active" id="s1">
+  <div class="cv-bg"></div><div class="cv-dots"></div>
+  <div class="cv-inner">
+    <div class="cv-eyebrow">
+      <span class="tag tag-w">Bioquímica General · Nivel Intermedio</span>
+      <span class="tag tag-t">Unidad 4</span>
+      <span class="tag tag-i">Parte 2 de 2</span>
+    </div>
+    <h1 class="cv-title">
+      <span class="ct">Fosforilación</span><br>
+      <span class="ci">Oxidativa</span>
+    </h1>
+    <p class="cv-sub">Relación P/O · Mecanismo quimiosmótico · ATP sintasa F₀F₁ · Control respiratorio · Transporte de sustratos y metabolitos</p>
+    <div class="cv-topics">
+      <div class="ct-row"><div class="ct-dot" style="background:var(--teal)"></div><span class="ct-lbl">Relación P/O y eficiencia</span><span class="ct-desc">— cuantificación de ATP por par electrónico</span></div>
+      <div class="ct-row"><div class="ct-dot" style="background:var(--indigo)"></div><span class="ct-lbl">Mecanismo quimiosmótico</span><span class="ct-desc">— gradiente protónico y fuerza protón motriz</span></div>
+      <div class="ct-row"><div class="ct-dot" style="background:var(--rose)"></div><span class="ct-lbl">ATP sintasa F₀F₁</span><span class="ct-desc">— máquina rotatoria molecular</span></div>
+      <div class="ct-row"><div class="ct-dot" style="background:var(--orange)"></div><span class="ct-lbl">Control respiratorio</span><span class="ct-desc">— regulación por ADP, desacopladores</span></div>
+      <div class="ct-row"><div class="ct-dot" style="background:var(--lime)"></div><span class="ct-lbl">Transporte de sustratos y metabolitos</span><span class="ct-desc">— translocasas, ATP/ADP, piruvato, Ca²⁺</span></div>
+    </div>
+    <p class="cv-foot">Ref.: <span>M. Chairez. Unidad 4: Bioenergética y metabolismo. Bioquímica General, UACJ, s.f.</span></p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- S2 OBJETIVOS -->
+<div class="slide" id="s2">
+  <div class="sh sh-t"><div class="sh-ico ico-t">🎯</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 02 · Objetivos</div><div class="sh-title">Al terminar esta clase <span class="tt">podrás…</span></div></div></div>
+  <div class="sb">
+    <div class="obj"><div class="obj-n" style="background:var(--teal)">1</div><div class="obj-t"><strong>Calcular e interpretar la relación P/O</strong> y estimar la eficiencia energética de la fosforilación oxidativa bajo condiciones estándar e intracelulares.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--indigo)">2</div><div class="obj-t"><strong>Explicar el modelo quimiosmótico</strong> de Mitchell: cómo el gradiente de protones (fuerza protón motriz) generado por los complejos I, III y IV impulsa la síntesis de ATP.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--rose)">3</div><div class="obj-t"><strong>Describir la estructura y el mecanismo rotatorio de la ATP sintasa F₀F₁</strong>: las tres conformaciones del sitio de unión (L, T, O) y cómo la rotación de la subunidad γ impulsa la síntesis de ATP.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--orange)">4</div><div class="obj-t"><strong>Explicar el control respiratorio</strong> y distinguir los efectos de los desacopladores (DNP, FCCP), la oligomicina y los ionóforos sobre el transporte electrónico y la síntesis de ATP.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--lime)">5</div><div class="obj-t"><strong>Identificar los principales sistemas de transporte de la membrana interna</strong>: translocasa de adenina nucleótido, fosfato translocasa, transportadores de sustratos del ciclo cítrico y Ca²⁺.</div></div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S3 RELACION P/O Y EFICIENCIA -->
+<div class="slide" id="s3">
+  <div class="sh sh-t"><div class="sh-ico ico-t">📊</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 03 · Relación P/O</div><div class="sh-title">Relación <span class="tt">P/O</span> y eficiencia de la fosforilación oxidativa</div></div></div>
+  <div class="sb">
+    <div class="idea">
+      <div class="idea-lbl" style="color:var(--teal)">📐 Idea central</div>
+      <div class="idea-txt">La <strong style="color:#5EEAD4">relación P/O</strong> es el número de moléculas de ATP sintetizadas por par de electrones transportados. Mide la eficiencia del acoplamiento entre transporte electrónico y fosforilación. <strong style="color:#A5B4FC">≈3 para NADH · ≈2 para FADH₂/succinato</strong>.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">⚡ Energética global</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Sustrato</th><th>P/O</th><th>ATP sintetizados</th><th>Energía capturada</th></tr></thead>
+            <tbody>
+              <tr><td>NADH → O₂</td><td>≈ 3</td><td>3 ATP</td><td>≈42% (93/220 kJ)</td></tr>
+              <tr><td>FADH₂/succinato → O₂</td><td>≈ 2</td><td>2 ATP</td><td>Menor eficiencia</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-t" style="margin-top:.7rem">
+          <div class="blbl" style="color:var(--teal-dk)">Cálculo de eficiencia</div>
+          Oxidación de 1 mol NADH libera <strong>−220 kJ/mol</strong>. Síntesis de 3 ATP requiere 3 × 31 = <strong>93 kJ</strong>. Eficiencia estándar ≈ <strong>42%</strong>. En condiciones intracelulares, ΔG del ATP es mayor, elevando la eficiencia real.
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔬 Determinación experimental</div>
+        <ul class="ul lt">
+          <li>Se mide la <strong>incorporación de fosfato al ATP</strong> (síntesis de ATP)</li>
+          <li>Se determina la <strong>captación de O₂</strong> con electrodo de O₂ de registro</li>
+          <li>La relación P/O da valores no enteros → el acoplamiento es <strong>indirecto</strong></li>
+          <li>Los complejos <strong>I, III y IV</strong> impulsan síntesis de ATP; el II, no</li>
+        </ul>
+        <div class="box box-i" style="margin-top:.6rem">
+          <div class="blbl" style="color:var(--indi-dk)">Reacciones acopladas clave</div>
+          Las tres reacciones con energía libre superior a la necesaria para ATP:
+          <ul class="ul li2" style="margin-top:.3rem">
+            <li>Oxidación de FMNH₂ por CoQ (Complejo I)</li>
+            <li>Oxidación del Cit b por Cit c₁ (Complejo III)</li>
+            <li>Reacción de la citocromo oxidasa (Complejo IV)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S4 ATP SINTASA F0F1 -->
+<div class="slide" id="s4">
+  <div class="sh sh-r"><div class="sh-ico ico-r">⚙️</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 04 · ATP Sintasa</div><div class="sh-title">ATP Sintasa <span class="tr2">F₀F₁</span> — La máquina rotatoria molecular</div></div></div>
+  <div class="sb">
+    <div class="idea">
+      <div class="idea-lbl" style="color:var(--rose)">⚙️ Idea central</div>
+      <div class="idea-txt">La ATP sintasa es una <strong style="color:#FDA4AF">máquina rotatoria molecular</strong>. El paso de protones a través de F₀ genera la rotación de la subunidad γ, que impulsa cambios conformacionales en F₁ para sintetizar ATP. <strong style="color:#5EEAD4">El paso dependiente de energía no es la síntesis sino la liberación del ATP.</strong></div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔩 Estructura del complejo F₀F₁</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Componente</th><th>Subunidades</th><th>Función</th></tr></thead>
+            <tbody>
+              <tr><td>F₁ (nudo)</td><td>α₃β₃γδε</td><td>Sitio catalítico de síntesis de ATP</td></tr>
+              <tr><td>F₀ (base)</td><td>a, b, c</td><td>Canal protónico transmembrana; lugar de unión de oligomicina</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-r" style="margin-top:.7rem">
+          <div class="blbl" style="color:var(--rose-dk)">Tres conformaciones de los dímeros αβ</div>
+          <span class="bdg bdg-t">L (laxa)</span> Baja afinidad por nucleótidos &nbsp;
+          <span class="bdg bdg-i">T (compacta)</span> ATP unido firmemente &nbsp;
+          <span class="bdg bdg-o">O (abierta)</span> Libera el ATP sintetizado
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔄 Mecanismo rotatorio (2 pasos por 120°)</div>
+        <div class="step"><div class="step-n" style="background:var(--rose)">1</div><div class="step-t"><strong>Rotación de 120° de γ</strong><p>Propulsada por flujo de H⁺ a través de F₀. Abre el sitio T → libera ATP. Un sitio abierto une ADP + Pᵢ.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--rose)">2</div><div class="step-t"><strong>Rotación adicional de 120°</strong><p>ADP + Pᵢ unidos pasan a sitio T → conversión espontánea a ATP. Sitio O (del que salió ATP) une nuevos ADP + Pᵢ.</p></div></div>
+        <div class="box box-t" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--teal-dk)">Comprobación experimental</div>
+          Se inmovilizaron las subunidades β y se unió un <strong>filamento de actina fluorescente</strong> a la subunidad γ. La adición de ATP estimuló la <strong>rotación observable</strong> en contra de las agujas del reloj (dirección de hidrólisis). La síntesis in vivo ocurre en dirección contraria.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S5 MECANISMO QUIMIOSMÓTICO -->
+<div class="slide" id="s5">
+  <div class="sh sh-i"><div class="sh-ico ico-i">🌊</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 05 · Mecanismo Quimiosmótico</div><div class="sh-title">Modelo quimiosmótico y <span class="ti">fuerza protón motriz</span></div></div></div>
+  <div class="sb">
+    <div class="idea">
+      <div class="idea-lbl" style="color:var(--indigo)">🌊 Idea central — Mitchell</div>
+      <div class="idea-txt">La energía del transporte electrónico impulsa el <strong style="color:#A5B4FC">bombeo de protones</strong> desde la matriz al espacio intermembrana. El gradiente electroquímico resultante (<strong style="color:#5EEAD4">fuerza protón motriz, fpm</strong>) impulsa la síntesis de ATP cuando los protones regresan a través de F₀.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">⚡ El gradiente electroquímico</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Parámetro</th><th>Valor</th><th>Efecto</th></tr></thead>
+            <tbody>
+              <tr><td>Diferencia de pH</td><td>1.4 unidades</td><td>pH exterior &lt; pH interior (más ácido afuera)</td></tr>
+              <tr><td>Potencial eléctrico</td><td>0.14 V</td><td>Interior más negativo (−) que exterior</td></tr>
+              <tr><td>fpm total</td><td>≈ 0.224 V</td><td>≈ 21 kJ/mol por par de e⁻ → impulsa síntesis de ATP</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-i" style="margin-top:.7rem">
+          <div class="blbl" style="color:var(--indi-dk)">Fórmula de la fpm</div>
+          fpm = ΔΨ − (2.303 RT/F) · ΔpH<br>
+          Los dos gradientes actúan de forma <strong>sinérgica</strong>: el eléctrico y el químico impulsan juntos el regreso de H⁺ a través de F₀.
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔬 Evidencias del modelo quimiosmótico</div>
+        <ul class="ul li2">
+          <li>Se midieron <strong>cambios de pH y potencial eléctrico</strong> a través de membranas mitocondriales</li>
+          <li>La rotura de la membrana <strong>permite transporte electrónico pero no síntesis de ATP</strong></li>
+          <li>Los transportadores de H⁺ están <strong>asimétricos</strong>: captan H⁺ de la matriz y los liberan al espacio intermembrana</li>
+          <li>Verificado con reactivos que <strong>no atraviesan la membrana</strong> (marcan solo un lado)</li>
+          <li>La <strong>citocromo oxidasa (IV)</strong> se une al Cit c solo en el lado citosólico</li>
+        </ul>
+        <div class="box box-r" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--rose-dk)">Otros usos de la fpm</div>
+          Los gradientes protónicos electroquímicos también impulsan <strong>transporte activo de sustratos</strong> y otras funciones distintas a la fosforilación oxidativa.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S6 DESACOPLADORES E INHIBIDORES -->
+<div class="slide" id="s6">
+  <div class="sh sh-o"><div class="sh-ico ico-o">⚠️</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 06 · Desacopladores</div><div class="sh-title">Desacopladores, inhibidores e <span class="to">ionóforos</span></div></div></div>
+  <div class="sb">
+    <div class="box box-o" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--oran-dk)">Concepto clave</div>
+      Los desacopladores disipan el gradiente protónico sin sintetizar ATP, permitiendo que el transporte electrónico continúe a máxima velocidad pero <strong>sin producir ATP</strong>. Toda la energía se libera como calor.
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">💊 Compuestos y mecanismos</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Compuesto</th><th>Mecanismo</th><th>Efecto neto</th></tr></thead>
+            <tbody>
+              <tr><td>DNP / FCCP</td><td>Transportan H⁺ a través de la membrana interna (desacopladores)</td><td>Disipan gradiente protónico; O₂ se consume sin ATP</td></tr>
+              <tr><td>Oligomicina</td><td>Se une a proteína de F₀; inhibe directamente la ATP sintasa</td><td>Inhibe síntesis de ATP e indirectamente frena transporte electrónico</td></tr>
+              <tr><td>Valinomicina</td><td>Ionóforo para K⁺ (no H⁺)</td><td>Disipa potencial eléctrico de la membrana</td></tr>
+              <tr><td>Nigericina</td><td>Ionóforo que intercambia K⁺/H⁺</td><td>Disipa gradiente de pH</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sec">🌡️ Desacoplamiento natural — Termogénesis</div>
+        <div class="card card-o" style="margin-bottom:.7rem">
+          <div class="card-ico">🐻</div>
+          <div class="card-title">Tejido adiposo pardo — hibernación</div>
+          <div class="card-body">En condiciones de frío, la <strong>proteína desacoplante (UCP-1/termogenina)</strong> en mitocondrias del tejido adiposo pardo permite que los protones regresen a la matriz sin pasar por F₀. La oxidación de grasas genera <strong>calor en vez de ATP</strong>.</div>
+        </div>
+        <div class="box box-l" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--lime-dk)">Importancia clínica</div>
+          El DNP fue usado como agente adelgazante en los años 30. Causó muertes por hipertermia (temperatura corporal letal). Ilustra el peligro de disociar respiración de fosforilación.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S7 CONTROL RESPIRATORIO -->
+<div class="slide" id="s7">
+  <div class="sh sh-l"><div class="sh-ico ico-l">🎛️</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 07 · Control Respiratorio</div><div class="sh-title"><span class="tl">Control respiratorio</span> — Regulación por ADP</div></div></div>
+  <div class="sb">
+    <div class="idea">
+      <div class="idea-lbl" style="color:var(--lime)">🎛️ Idea central</div>
+      <div class="idea-txt">La fosforilación oxidativa se controla <strong style="color:#BEF264">no por mecanismos alostéricos</strong>, sino por la <strong style="color:#5EEAD4">disponibilidad de sustratos</strong>: ADP, Pᵢ, O₂ y metabolitos oxidables (NADH/FADH₂). El ADP es el regulador principal: su acumulación activa la respiración.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">⚖️ Acoplamiento respiración ↔ síntesis de ATP</div>
+        <div class="box box-l">
+          <div class="blbl" style="color:var(--lime-dk)">Alta demanda energética</div>
+          ATP → ADP+Pᵢ (consumo rápido) → <strong>↑ ADP</strong> → estimula transporte electrónico → <strong>↑ síntesis de ATP</strong>
+        </div>
+        <div class="box box-s">
+          <div class="blbl" style="color:var(--sky-dk)">Baja demanda (reposo)</div>
+          ADP se agota → <strong>↓ tasa de transporte electrónico</strong> → la respiración se ralentiza hasta que se consuma más ATP
+        </div>
+        <div class="box box-t" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--teal-dk)">Concentraciones celulares típicas</div>
+          [ATP]/[ADP] ≈ <strong>4–10</strong> en células bien nutridas. La relación carga energética (≈0.9) refleja el estado metabólico favorable.
+        </div>
+      </div>
+      <div>
+        <div class="sec">🔬 Demostración experimental</div>
+        <div class="step"><div class="step-n" style="background:var(--lime)">1</div><div class="step-t"><strong>Mitocondrias aisladas sin ADP</strong><p>Captación de O₂ lenta (solo sustratos endógenos).</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--lime)">2</div><div class="step-t"><strong>Adición de sustrato oxidable</strong><p>Pequeño aumento de O₂. Sin ADP, el flujo sigue limitado.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--teal)">3</div><div class="step-t"><strong>Adición de ADP</strong><p>Captación de O₂ aumenta drásticamente hasta que todo el ADP se convierte en ATP.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--indigo)">4</div><div class="step-t"><strong>ADP agotado → vuelta a nivel basal</strong><p>La estimulación es estequiométrica: 2× ADP → 2× captación de O₂.</p></div></div>
+        <div class="box box-r" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--rose-dk)">Control de acoplamiento</div>
+          Acoplamiento máximo = 10 (relación O₂ con/sin ADP). Mitocondrias rotas → desacopladas → O₂ elevado incluso sin ADP.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S8 TRANSPORTE DE SUSTRATOS -->
+<div class="slide" id="s8">
+  <div class="sh sh-s"><div class="sh-ico ico-s">🚪</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 08 · Transporte de Sustratos</div><div class="sh-title">Transporte de metabolitos a través de la <span class="ts">membrana interna</span></div></div></div>
+  <div class="sb">
+    <div class="box box-s" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--sky-dk)">Permeabilidad selectiva</div>
+      La membrana externa es libremente permeable a muchas sustancias. La <strong>membrana interna es muy selectiva</strong> — solo deja pasar lo que el transportador específico permite. Esto es esencial para mantener los gradientes electroquímicos.
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔄 Transporte de ATP/ADP y Pᵢ</div>
+        <div class="card card-t" style="margin-bottom:.7rem">
+          <div class="card-ico">🔁</div>
+          <div class="card-title">Translocasa de adenina nucleótido</div>
+          <div class="card-body">Antiporte: intercambia <strong>ATP saliente ↔ ADP entrante</strong>. Impulsada por el gradiente protónico. Asegura que el ATP producido salga a donde se necesita y el ADP vuelva para ser fosforilado.</div>
+        </div>
+        <div class="card card-i">
+          <div class="card-ico">⚡</div>
+          <div class="card-title">Fosfato translocasa</div>
+          <div class="card-body">Modo <strong>antiporte</strong>: H₂PO₄⁻ entra junto con salida de OH⁻. Modo <strong>simporte</strong>: H₂PO₄⁻ entra con 2H⁺. Ambos mantienen neutralidad eléctrica.</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">🧪 Otros transportadores clave</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Sistema</th><th>Transporta</th><th>Uso</th></tr></thead>
+            <tbody>
+              <tr><td>Piruvato</td><td>Piruvato/OH⁻</td><td>Catabolismo de carbohidratos</td></tr>
+              <tr><td>Dicarboxilato</td><td>Succinato, fumarato, malato/Pᵢ</td><td>Ciclo cítrico ↔ citosol</td></tr>
+              <tr><td>Tricarboxilato</td><td>Citrato/isocitrato + ácido dicarboxílico</td><td>Biosíntesis de lípidos (exporta citrato)</td></tr>
+              <tr><td>Ca²⁺</td><td>Ca²⁺ entra por potencial eléctrico; sale por H⁺/Na⁺</td><td>Regulación de procesos citosólicos</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-l" style="margin-top:.6rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--lime-dk)">Rendimiento global</div>
+          La oxidación completa de <strong>1 mol de glucosa</strong> genera ≈ <strong>38 moles de ATP</strong> (glucólisis + ciclo cítrico + fosforilación oxidativa).
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S9 EJERCICIO PRÁCTICO -->
+<div class="slide" id="s9">
+  <div class="sh sh-t"><div class="sh-ico ico-t">✏️</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 09 · Práctica</div><div class="sh-title">Ejercicio de <span class="tt">comprensión</span> — Parte 2</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P1</div>
+          <div class="quiz-q">¿Por qué el paso dependiente de energía en la ATP sintasa no es la síntesis del ATP sino su liberación?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Porque la síntesis requiere la hidrólisis del GTP</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Porque el ATP se forma espontáneamente por condensación de ADP+Pᵢ en el sitio T; la energía de la rotación de γ se usa para abrir el sitio T y liberar el ATP</li>
+            <li><span class="opt-l">c</span> Porque la reacción de condensación de ADP es endergónica</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P2</div>
+          <div class="quiz-q">Si se añade DNP (desacoplador) a mitocondrias activas, ¿qué se espera observar?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Disminución del consumo de O₂ y aumento de la síntesis de ATP</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Aumento del consumo de O₂ sin síntesis de ATP, con disipación de energía como calor</li>
+            <li><span class="opt-l">c</span> Bloqueo completo del transporte electrónico por inhibición del Complejo IV</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P3</div>
+          <div class="quiz-q">¿Por qué la oligomicina inhibe indirectamente el transporte electrónico si actúa directamente sobre la ATP sintasa?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Porque bloquea el canal de protones en el Complejo III</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Porque al inhibir F₀F₁, el gradiente protónico se vuelve demasiado elevado para que los complejos I, III y IV sigan bombeando H⁺</li>
+            <li><span class="opt-l">c</span> Porque la oligomicina altera la estructura de la CoQ</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P4</div>
+          <div class="quiz-q">¿Qué le ocurre a la tasa de respiración cuando el ADP se agota en una célula en reposo?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Aumenta para compensar la falta de ADP</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Disminuye, porque sin ADP no hay sustrato para la fosforilación y el transporte electrónico se frena (control respiratorio)</li>
+            <li><span class="opt-l">c</span> Permanece constante porque el O₂ sigue disponible</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P5</div>
+          <div class="quiz-q">¿Cuál es la función de la translocasa de adenina nucleótido y qué gradiente la impulsa?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Simporte de ATP + H⁺; impulsado por el gradiente de pH</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Antiporte ATP saliente ↔ ADP entrante; impulsado por el gradiente protónico generado por la ATP sintasa</li>
+            <li><span class="opt-l">c</span> Transporte de piruvato hacia la matriz; impulsado por el potencial eléctrico</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S10 ACTIVIDAD EVALUABLE -->
+<div class="slide" id="s10">
+  <div class="sh sh-r"><div class="sh-ico ico-r">🏆</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 10 · Actividad evaluable</div><div class="sh-title">Actividad integradora: <span class="tr2">análisis de caso</span></div></div></div>
+  <div class="sb">
+    <div class="box box-r" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--rose-dk)">🎯 Escenario</div>
+      Un investigador trata mitocondrias aisladas con una combinación de <strong>oligomicina + valinomicina</strong>. Diseña un experimento para medir consumo de O₂ y síntesis de ATP antes y después del tratamiento. Analiza los resultados esperados. <strong>Tiempo: 25 min.</strong>
+    </div>
+    <div class="act"><div class="act-ico">1️⃣</div><div class="act-t"><strong>Predice el efecto de la oligomicina sola</strong><p>¿Qué ocurre con el consumo de O₂ y la síntesis de ATP? ¿Por qué? Explica en términos del gradiente protónico y el control respiratorio.</p></div></div>
+    <div class="act"><div class="act-ico">2️⃣</div><div class="act-t"><strong>Predice el efecto de la valinomicina sola</strong><p>¿Cómo afecta al potencial eléctrico y al gradiente de pH por separado? ¿Podría parcialmente disociar el transporte electrónico de la síntesis de ATP?</p></div></div>
+    <div class="act"><div class="act-ico">3️⃣</div><div class="act-t"><strong>Predice el efecto combinado</strong><p>¿Qué ocurre cuando ambos compuestos se usan juntos? Relaciona con el concepto de disipación total de la fpm y su efecto sobre la síntesis de ATP y el transporte electrónico.</p></div></div>
+    <div class="act"><div class="act-ico">4️⃣</div><div class="act-t"><strong>Compara con el DNP</strong><p>¿En qué se diferencia el mecanismo de la combinación oligomicina+valinomicina respecto al DNP? ¿El resultado sobre el ATP es el mismo o distinto?</p></div></div>
+    <div class="g2" style="margin-top:.55rem">
+      <div class="box box-t"><div class="blbl" style="color:var(--teal-dk)">Entregable</div>Análisis escrito con predicciones justificadas para cada condición. Incluir un esquema simplificado de la membrana interna mostrando los efectos.</div>
+      <div class="box box-l"><div class="blbl" style="color:var(--lime-dk)">Criterios</div>Corrección conceptual · Uso de terminología adecuada (fpm, gradiente protónico, desacoplamiento) · Comparación correcta entre mecanismos</div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S11 CIERRE PARTE 2 -->
+<div class="slide cover cv-close" id="s11">
+  <div class="cv-bg"></div><div class="cv-dots"></div>
+  <div class="close-inner">
+    <div class="cv-eyebrow" style="justify-content:center;margin-bottom:1.2rem">
+      <span class="tag tag-t">✅ Parte 2 completada</span>
+      <span class="tag tag-i">✅ Tema completo</span>
+    </div>
+    <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:800;color:#fff;line-height:1.05;margin-bottom:.5rem">
+      Ideas clave — <span style="color:#5EEAD4">Fosforilación</span> <span style="color:#A5B4FC">Oxidativa</span>
+    </h2>
+    <div style="width:56px;height:3px;background:linear-gradient(90deg,var(--teal),var(--indigo),var(--rose));margin:.9rem auto 1.4rem;border-radius:2px"></div>
+    <div style="text-align:left;margin-bottom:1.5rem">
+      <div class="sum-row"><div class="sum-k" style="color:#5EEAD4">Relación P/O</div><div class="sum-v">≈3 para NADH · ≈2 para FADH₂. Eficiencia ≈42% en condiciones estándar. Complejos I, III, IV impulsan síntesis; Complejo II, no.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#A5B4FC">Quimiosmótico</div><div class="sum-v">Bombeo de H⁺ al espacio intermembrana → fpm (ΔpH + ΔΨ ≈ 0.224V). H⁺ regresan por F₀ → impulsan F₁ → ATP.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#FDA4AF">ATP sintasa F₀F₁</div><div class="sum-v">Máquina rotatoria. Rotación de γ (120° por H⁺) → cambios L→T→O en dímeros αβ. El paso de energía = liberar ATP del sitio T.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#FDBA74">Control resp.</div><div class="sum-v">Controlado por disponibilidad de ADP. Sin ADP → respiración lenta. Desacopladores (DNP) disipan gradiente → O₂ sin ATP.</div></div>
+      <div class="sum-row" style="margin-bottom:0"><div class="sum-k" style="color:#BEF264">Transportadores</div><div class="sum-v">Translocasa ATP/ADP (antiporte) · Fosfato translocasa · Piruvato · Dicarboxilato · Tricarboxilato · Ca²⁺. Glucosa completa → ≈38 ATP.</div></div>
+    </div>
+    <p style="font-family:'Space Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.2);letter-spacing:.5px">Bioquímica General · Fosforilación Oxidativa · Parte 2 de 2 · UACJ</p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nb" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-c">
+    <div class="ctr">Slide <span id="cn">1</span> / <span id="tn">11</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nb" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+const slides=document.querySelectorAll('.slide'),N=slides.length;let cur=0;
+document.getElementById('tn').textContent=N;
+const dotsEl=document.getElementById('dots');
+for(let i=0;i<N;i++){const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);}
+function update(){slides.forEach((s,i)=>{s.classList.toggle('active',i===cur);if(i===cur)s.scrollTop=0;});dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));document.getElementById('cn').textContent=cur+1;document.getElementById('pb-btn').disabled=cur===0;document.getElementById('nb-btn').disabled=cur===N-1;document.getElementById('pb').style.width=((cur+1)/N*100)+'%';}
+function go(d){const n=cur+d;if(n>=0&&n<N){cur=n;update();}}
+function goTo(i){cur=i;update();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+update();
+</script>
+</body>
+</html>

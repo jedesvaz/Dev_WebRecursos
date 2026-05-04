@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transporte Electrónico · Bioquímica General — Parte 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ══ MOLECULAR KITCHEN — PARTE 1: TRANSPORTE ELECTRÓNICO ═══════
+   Paleta: Carbón · Ámbar oxidoreductivo · Verde electrón
+   Azul citocromo · Cobre Fe-S · Blanco humo
+══════════════════════════════════════════════════════════════ */
+:root {
+  --char:      #18181B;
+  --char-md:   #27272A;
+  --char-lt:   #3F3F46;
+  --smoke:     #F4F4F5;
+  --smoke-md:  #E4E4E7;
+  --white:     #FAFAFA;
+  --rule:      #D4D4D8;
+
+  --amber:     #D97706;
+  --amber-lt:  #FEF3C7;
+  --amber-dk:  #78350F;
+  --electron:  #059669;
+  --elec-lt:   #D1FAE5;
+  --elec-dk:   #064E3B;
+  --cyto:      #2563EB;
+  --cyto-lt:   #DBEAFE;
+  --cyto-dk:   #1E3A8A;
+  --copper:    #B45309;
+  --cop-lt:    #FDE68A;
+  --cop-dk:    #78350F;
+  --red:       #DC2626;
+  --red-lt:    #FEE2E2;
+  --red-dk:    #7F1D1D;
+  --violet:    #7C3AED;
+  --vio-lt:    #EDE9FE;
+  --vio-dk:    #3B0764;
+
+  --ink:    #18181B;
+  --ink-md: #3F3F46;
+  --ink-lt: #71717A;
+  --ink-xs: #A1A1AA;
+  --sh:  0 1px 3px rgba(0,0,0,.08), 0 2px 10px rgba(0,0,0,.05);
+  --shm: 0 4px 18px rgba(0,0,0,.10);
+}
+
+html, body {
+  height: 100%; overflow: hidden;
+  font-family: 'Outfit', sans-serif;
+  background: var(--smoke); color: var(--ink);
+}
+
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(var(--smoke-md) 1px, transparent 1px),
+    linear-gradient(90deg, var(--smoke-md) 1px, transparent 1px);
+  background-size: 32px 32px; opacity: .5;
+}
+
+.pb {
+  position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
+  background: linear-gradient(90deg, var(--amber), var(--electron), var(--cyto), var(--copper));
+  transition: width .35s ease;
+}
+
+/* ══ SLIDES ══════════════════════════════════════════════════════ */
+.slide { display: none; flex-direction: column; width: 100vw; height: 100vh; overflow-y: auto; position: relative; z-index: 1; animation: up .32s ease; }
+.slide.active { display: flex; }
+@keyframes up { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.slide::-webkit-scrollbar { width: 4px; }
+.slide::-webkit-scrollbar-thumb { background: var(--amber); border-radius: 4px; }
+
+/* ══ COVER ═══════════════════════════════════════════════════════ */
+.cover { background: var(--char); min-height: 100vh; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+.cv-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 12% 35%, rgba(217,119,6,.20) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 40% at 88% 65%, rgba(5,150,105,.16) 0%, transparent 55%),
+    radial-gradient(ellipse 38% 38% at 55% 5%,  rgba(37,99,235,.13) 0%, transparent 50%),
+    radial-gradient(ellipse 32% 35% at 78% 88%, rgba(180,83,9,.12)  0%, transparent 50%);
+}
+.cv-dots { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 22px 22px; }
+.cv-inner { position: relative; z-index: 2; max-width: 900px; width: 100%; padding: 2.5rem; }
+.tag {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .22rem .8rem; border-radius: 3px; font-size: .68rem;
+  font-weight: 600; letter-spacing: .8px; border: 1px solid;
+  font-family: 'Space Mono', monospace; text-transform: uppercase;
+}
+.tag-w { background: rgba(255,255,255,.07); color: rgba(255,255,255,.6); border-color: rgba(255,255,255,.18); }
+.tag-a { background: rgba(217,119,6,.18); color: #FCD34D; border-color: rgba(217,119,6,.4); }
+.tag-e { background: rgba(5,150,105,.16); color: #6EE7B7; border-color: rgba(5,150,105,.38); }
+.cv-eyebrow { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.4rem; }
+.cv-title { font-size: clamp(2.5rem,6vw,4.8rem); font-weight: 800; line-height: 1.0; color: #fff; margin-bottom: .55rem; }
+.cv-title .ca { color: #FCD34D; }
+.cv-title .ce { color: #6EE7B7; }
+.cv-title .cc { color: #93C5FD; }
+.cv-sub { font-size: .98rem; color: rgba(255,255,255,.42); font-weight: 300; margin-bottom: 2rem; line-height: 1.7; max-width: 560px; }
+.cv-topics { display: flex; flex-direction: column; gap: .3rem; margin-bottom: 2rem; }
+.ct { display: flex; align-items: center; gap: .6rem; font-size: .85rem; }
+.ct-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.ct-lbl { font-weight: 600; color: rgba(255,255,255,.75); }
+.ct-desc { color: rgba(255,255,255,.35); font-size: .8rem; }
+.cv-foot { font-family: 'Space Mono', monospace; font-size: .58rem; color: rgba(255,255,255,.2); letter-spacing: 1px; }
+.cv-foot span { color: rgba(255,255,255,.38); }
+
+/* ══ HEADER ══════════════════════════════════════════════════════ */
+.sh { background: var(--white); border-bottom: 2px solid var(--rule); padding: .75rem 1.8rem; display: flex; align-items: center; gap: .85rem; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,.05); position: relative; }
+.sh::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; }
+.sh-a::before { background: var(--amber);    }
+.sh-e::before { background: var(--electron); }
+.sh-c::before { background: var(--cyto);     }
+.sh-k::before { background: var(--copper);   }
+.sh-r::before { background: var(--red);      }
+.sh-v::before { background: var(--violet);   }
+.sh-ico { width: 38px; height: 38px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: .95rem; flex-shrink: 0; }
+.ico-a { background: var(--amber-lt);  border: 1.5px solid rgba(217,119,6,.3);  }
+.ico-e { background: var(--elec-lt);   border: 1.5px solid rgba(5,150,105,.3);  }
+.ico-c { background: var(--cyto-lt);   border: 1.5px solid rgba(37,99,235,.25); }
+.ico-k { background: var(--cop-lt);    border: 1.5px solid rgba(180,83,9,.3);   }
+.ico-r { background: var(--red-lt);    border: 1.5px solid rgba(220,38,38,.22); }
+.ico-v { background: var(--vio-lt);    border: 1.5px solid rgba(124,58,237,.25);}
+.sh-meta { flex: 1; }
+.sh-lbl { font-family: 'Space Mono', monospace; font-size: .56rem; color: var(--ink-xs); letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: .05rem; }
+.sh-title { font-size: clamp(.95rem,2.2vw,1.38rem); font-weight: 700; color: var(--ink); line-height: 1.15; }
+.ta { color: var(--amber-dk);  } .te { color: var(--elec-dk);  }
+.tc { color: var(--cyto-dk);   } .tk { color: var(--cop-dk);   }
+.tr { color: var(--red-dk);    } .tv { color: var(--vio-dk);   }
+
+/* ══ BODY ════════════════════════════════════════════════════════ */
+.sb { flex: 1; padding: 1.3rem 1.8rem; background: var(--smoke); overflow-y: auto; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .9rem; }
+.ga { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: .9rem; }
+
+/* IDEA CARD */
+.idea { background: var(--char); border-radius: 10px; padding: 1.1rem 1.3rem; margin-bottom: 1rem; position: relative; overflow: hidden; box-shadow: var(--shm); }
+.idea::before { content: ''; position: absolute; inset: 0; border-radius: 10px; background: radial-gradient(ellipse 65% 55% at 0% 50%, rgba(217,119,6,.12) 0%, transparent 60%); }
+.idea-lbl { font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: .45rem; position: relative; z-index: 1; }
+.idea-txt { font-size: clamp(.92rem,1.9vw,1.18rem); font-weight: 600; line-height: 1.5; color: rgba(255,255,255,.9); position: relative; z-index: 1; }
+
+/* CARD */
+.card { background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px; padding: .92rem; box-shadow: var(--sh); transition: box-shadow .18s, transform .15s; position: relative; overflow: hidden; }
+.card:hover { box-shadow: var(--shm); transform: translateY(-1px); }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.card-a::before { background: var(--amber);    }
+.card-e::before { background: var(--electron); }
+.card-c::before { background: var(--cyto);     }
+.card-k::before { background: var(--copper);   }
+.card-r::before { background: var(--red);      }
+.card-v::before { background: var(--violet);   }
+.card-ico   { font-size: 1.3rem; margin-bottom: .4rem; }
+.card-title { font-weight: 700; font-size: .95rem; color: var(--ink); margin-bottom: .25rem; }
+.card-body  { font-size: .82rem; color: var(--ink-md); line-height: 1.62; }
+
+/* BOX */
+.box { border-radius: 8px; padding: .8rem .95rem; margin-bottom: .72rem; font-size: .84rem; line-height: 1.65; border: 1.5px solid; }
+.box-a { background: var(--amber-lt); border-color: rgba(217,119,6,.35);  color: var(--ink-md); }
+.box-e { background: var(--elec-lt);  border-color: rgba(5,150,105,.35);  color: var(--ink-md); }
+.box-c { background: var(--cyto-lt);  border-color: rgba(37,99,235,.28);  color: var(--ink-md); }
+.box-k { background: var(--cop-lt);   border-color: rgba(180,83,9,.35);   color: var(--ink-md); }
+.box-r { background: var(--red-lt);   border-color: rgba(220,38,38,.25);  color: var(--ink-md); }
+.box-v { background: var(--vio-lt);   border-color: rgba(124,58,237,.28); color: var(--ink-md); }
+.box-w { background: var(--white);    border-color: var(--rule);          color: var(--ink-md); }
+.blbl { font-family: 'Space Mono', monospace; font-size: .57rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: .28rem; opacity: .65; }
+
+/* SEC */
+.sec { font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: .65rem; padding-bottom: .28rem; border-bottom: 1.5px solid var(--rule); display: flex; align-items: center; gap: .4rem; }
+
+/* UL */
+ul.ul { list-style: none; padding: 0; }
+ul.ul li { padding: .32rem 0 .32rem 1.25rem; position: relative; font-size: .84rem; color: var(--ink-md); line-height: 1.55; border-bottom: 1px solid rgba(0,0,0,.04); }
+ul.ul li:last-child { border-bottom: none; }
+ul.ul li::before { content: ''; position: absolute; left: 0; top: .58rem; width: 8px; height: 8px; border-radius: 2px; }
+ul.ul.la li::before { background: var(--amber);    }
+ul.ul.le li::before { background: var(--electron); }
+ul.ul.lc li::before { background: var(--cyto);     }
+ul.ul.lk li::before { background: var(--copper);   }
+ul.ul.lr li::before { background: var(--red);       }
+strong { color: var(--ink); font-weight: 600; }
+em { color: var(--cyto-dk); font-style: italic; }
+
+/* BADGE */
+.bdg { display: inline-flex; align-items: center; gap: .2rem; padding: .14rem .52rem; border-radius: 3px; font-size: .68rem; font-weight: 700; font-family: 'Space Mono', monospace; border: 1px solid; }
+.bdg-a { background: var(--amber-lt); color: var(--amber-dk); border-color: rgba(217,119,6,.4); }
+.bdg-e { background: var(--elec-lt);  color: var(--elec-dk);  border-color: rgba(5,150,105,.4); }
+.bdg-c { background: var(--cyto-lt);  color: var(--cyto-dk);  border-color: rgba(37,99,235,.35); }
+.bdg-k { background: var(--cop-lt);   color: var(--cop-dk);   border-color: rgba(180,83,9,.4); }
+.bdg-r { background: var(--red-lt);   color: var(--red-dk);   border-color: rgba(220,38,38,.3); }
+
+/* TABLE */
+.tw { overflow-x: auto; border-radius: 8px; border: 1.5px solid var(--rule); background: var(--white); box-shadow: var(--sh); }
+table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+thead tr { background: var(--char); }
+thead th { font-family: 'Space Mono', monospace; font-size: .65rem; font-weight: 700; color: rgba(255,255,255,.85); text-align: left; padding: .55rem .85rem; letter-spacing: .5px; text-transform: uppercase; }
+tbody tr { border-bottom: 1px solid var(--rule); transition: background .12s; }
+tbody tr:nth-child(even) { background: var(--smoke); }
+tbody tr:hover { background: var(--amber-lt); }
+tbody td { padding: .5rem .85rem; color: var(--ink-md); vertical-align: top; line-height: 1.5; }
+tbody td:first-child { font-weight: 600; color: var(--ink); font-family: 'Space Mono', monospace; font-size: .78rem; }
+
+/* STEP */
+.step { display: flex; gap: .8rem; padding: .68rem .85rem; background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px; margin-bottom: .45rem; box-shadow: var(--sh); align-items: flex-start; }
+.step-n { min-width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: 'Space Mono', monospace; font-weight: 700; font-size: .72rem; color: #fff; }
+.step-t strong { font-size: .88rem; display: block; color: var(--ink); margin-bottom: .06rem; }
+.step-t p { font-size: .8rem; color: var(--ink-md); line-height: 1.5; }
+
+/* OBJ */
+.obj { display: flex; gap: .85rem; align-items: flex-start; padding: .72rem; background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px; margin-bottom: .52rem; box-shadow: var(--sh); transition: border-color .18s; }
+.obj:hover { border-color: var(--amber); }
+.obj-n { min-width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; font-size: .9rem; color: #fff; }
+.obj-t { font-size: .84rem; color: var(--ink-md); line-height: 1.55; padding-top: .08rem; }
+
+/* QUIZ */
+.quiz-box { background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px; padding: .92rem; margin-bottom: .65rem; box-shadow: var(--sh); }
+.quiz-tag { font-family: 'Space Mono', monospace; font-size: .55rem; letter-spacing: 2px; background: var(--char); color: #fff; padding: .12rem .48rem; border-radius: 3px; display: inline-block; margin-bottom: .4rem; }
+.quiz-q { font-weight: 700; font-size: .92rem; color: var(--ink); margin-bottom: .42rem; }
+.quiz-opts { list-style: none; }
+.quiz-opts li { padding: .38rem .72rem; border: 1.5px solid var(--rule); border-radius: 6px; margin-bottom: .25rem; font-size: .82rem; color: var(--ink-md); cursor: pointer; transition: all .18s; display: flex; gap: .5rem; align-items: flex-start; }
+.quiz-opts li:hover { border-color: var(--amber); background: var(--amber-lt); }
+.quiz-opts li.correct { border-color: var(--electron); background: var(--elec-lt); color: var(--ink); }
+.opt-l { min-width: 20px; height: 20px; border-radius: 4px; background: var(--char); color: #fff; display: flex; align-items: center; justify-content: center; font-size: .62rem; font-weight: 700; flex-shrink: 0; font-family: 'Space Mono', monospace; }
+
+/* ACT */
+.act { display: flex; gap: .78rem; padding: .7rem; background: var(--white); border: 1.5px solid var(--rule); border-radius: 8px; margin-bottom: .48rem; box-shadow: var(--sh); }
+.act-ico { width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: .88rem; flex-shrink: 0; background: var(--amber-lt); border: 1.5px solid rgba(217,119,6,.3); }
+.act-t strong { font-size: .88rem; display: block; margin-bottom: .07rem; color: var(--ink); }
+.act-t p { font-size: .8rem; color: var(--ink-md); line-height: 1.5; }
+
+/* CLOSING */
+.cv-close { background: var(--char); min-height: 100vh; justify-content: center; align-items: center; position: relative; overflow: hidden; }
+.close-inner { position: relative; z-index: 2; max-width: 820px; width: 100%; padding: 2.5rem; text-align: center; }
+.sum-row { display: flex; gap: .6rem; margin-bottom: .42rem; font-size: .84rem; text-align: left; }
+.sum-k { min-width: 150px; font-family: 'Space Mono', monospace; font-size: .64rem; flex-shrink: 0; padding-top: .1rem; letter-spacing: .5px; }
+.sum-v { color: rgba(255,255,255,.68); line-height: 1.5; }
+
+/* NAV */
+.nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(250,250,250,.97); border-top: 2px solid var(--rule); padding: .5rem 1.5rem; display: flex; align-items: center; justify-content: space-between; z-index: 1000; backdrop-filter: blur(8px); }
+.nb { display: flex; align-items: center; gap: .38rem; padding: .36rem .88rem; border-radius: 5px; font-family: 'Outfit', sans-serif; font-weight: 600; font-size: .78rem; border: 1.5px solid var(--rule); background: var(--white); color: var(--ink-md); cursor: pointer; transition: all .18s; }
+.nb:hover:not(:disabled) { border-color: var(--amber); color: var(--amber-dk); background: var(--amber-lt); }
+.nb:disabled { opacity: .25; cursor: not-allowed; }
+.nav-c { display: flex; flex-direction: column; align-items: center; gap: .2rem; }
+.ctr { font-family: 'Space Mono', monospace; font-size: .68rem; color: var(--ink-lt); }
+.ctr span { color: var(--amber-dk); font-size: .88rem; font-weight: 700; }
+.dots { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; max-width: 340px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); border: none; cursor: pointer; padding: 0; transition: all .18s; }
+.dot.active { background: var(--amber); transform: scale(1.45); }
+.nav-sp { height: 62px; }
+
+@media (max-width:768px) { .sb{padding:1rem;} .sh{padding:.6rem 1rem;} .g2,.g3{grid-template-columns:1fr;} .dots{max-width:200px;} }
+@media (max-width:480px) { .dots{display:none;} }
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- S1 PORTADA -->
+<div class="slide cover active" id="s1">
+  <div class="cv-bg"></div><div class="cv-dots"></div>
+  <div class="cv-inner">
+    <div class="cv-eyebrow">
+      <span class="tag tag-w">Bioquímica General · Nivel Intermedio</span>
+      <span class="tag tag-a">Unidad 4</span>
+      <span class="tag tag-e">Parte 1 de 2</span>
+    </div>
+    <h1 class="cv-title">
+      <span class="ca">Transporte</span><br>
+      <span class="ce">Electrónico</span>
+    </h1>
+    <p class="cv-sub">Cadena respiratoria · Potencial de reducción · Complejos I–IV · CoQ · Citocromos · Lanzaderas de equivalentes reductores</p>
+    <div class="cv-topics">
+      <div class="ct"><div class="ct-dot" style="background:var(--amber)"></div><span class="ct-lbl">Potencial de reducción (E'₀)</span><span class="ct-desc">— reacciones redox, ecuación de Nernst</span></div>
+      <div class="ct"><div class="ct-dot" style="background:var(--electron)"></div><span class="ct-lbl">Complejo I — NADH deshidrogenasa</span><span class="ct-desc">— FMN, centros Fe-S, CoQ</span></div>
+      <div class="ct"><div class="ct-dot" style="background:var(--copper)"></div><span class="ct-lbl">Complejo II — Succinato deshidrogenasa</span><span class="ct-desc">— FAD, punto de recogida CoQ</span></div>
+      <div class="ct"><div class="ct-dot" style="background:var(--cyto)"></div><span class="ct-lbl">Complejos III y IV — Citocromos</span><span class="ct-desc">— ciclo Q, citocromo oxidasa, H₂O</span></div>
+      <div class="ct"><div class="ct-dot" style="background:var(--violet)"></div><span class="ct-lbl">Lanzaderas de equivalentes reductores</span><span class="ct-desc">— glicerol-3-fosfato · malato/aspartato</span></div>
+    </div>
+    <p class="cv-foot">Ref.: <span>M. Chairez. Unidad 4: Bioenergética y metabolismo. Bioquímica General, UACJ, s.f.</span></p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- S2 OBJETIVOS -->
+<div class="slide" id="s2">
+  <div class="sh sh-a"><div class="sh-ico ico-a">🎯</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 02 · Objetivos</div><div class="sh-title">Al terminar esta clase <span class="ta">podrás…</span></div></div></div>
+  <div class="sb">
+    <div class="obj"><div class="obj-n" style="background:var(--amber)">1</div><div class="obj-t"><strong>Explicar el concepto de potencial de reducción estándar (E'₀)</strong> y calcular cambios de energía libre (ΔG°') a partir de diferencias de potencial entre parejas redox.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--electron)">2</div><div class="obj-t"><strong>Describir la estructura y función del Complejo I (NADH deshidrogenasa)</strong>: subunidades, cofactores FMN y Fe-S, y transferencia de electrones hacia la CoQ.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--copper)">3</div><div class="obj-t"><strong>Identificar la CoQ como punto de recogida electrónica</strong> y explicar cómo los Complejos I y II (y otras flavoproteínas) convergen en ella.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--cyto)">4</div><div class="obj-t"><strong>Explicar el ciclo Q (Complejo III) y la función del Complejo IV</strong> (citocromo oxidasa) en la reducción del O₂ a H₂O.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--violet)">5</div><div class="obj-t"><strong>Comparar las lanzaderas de glicerol-3-fosfato y malato/aspartato</strong> para la transferencia de equivalentes reductores del citosol a la matriz mitocondrial.</div></div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S3 CONTEXTO — MEMBRANA INTERNA Y CADENA -->
+<div class="slide" id="s3">
+  <div class="sh sh-a"><div class="sh-ico ico-a">🔬</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 03 · Contexto</div><div class="sh-title">La membrana interna mitocondrial y la <span class="ta">cadena respiratoria</span></div></div></div>
+  <div class="sb">
+    <div class="idea">
+      <div class="idea-lbl" style="color:var(--amber)">⚡ Idea central</div>
+      <div class="idea-txt">La membrana interna mitocondrial (muy plegada en <strong style="color:#FCD34D">crestas</strong>) aloja los cinco complejos multiproteicos de la cadena respiratoria. La energía de la reoxidación del NADH impulsa la síntesis endergónica de ATP — eso es la <strong style="color:#6EE7B7">fosforilación oxidativa</strong>.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🏗️ Estructura de la membrana interna</div>
+        <ul class="ul la">
+          <li>Muy plegada formando <strong>crestas</strong> que aumentan el área superficial</li>
+          <li>La densidad de crestas se correlaciona con la <strong>actividad respiratoria</strong> de la célula</li>
+          <li>Las enzimas respiratorias están <strong>embebidas</strong> en la membrana interna</li>
+          <li>Cinco complejos multiproteicos + transportadores móviles (CoQ, Cit c)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec">🔄 Flujo de electrones — visión global</div>
+        <div class="step"><div class="step-n" style="background:var(--amber)">1</div><div class="step-t"><strong>NADH / FADH₂</strong><p>Donadores de electrones generados en glucólisis, ciclo cítrico y β-oxidación.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--electron)">2</div><div class="step-t"><strong>Complejos I → CoQ → III → Cit c → IV</strong><p>Serie de oxidaciones-reducciones acopladas en potencial creciente.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--cyto)">3</div><div class="step-t"><strong>O₂ → H₂O</strong><p>Aceptor terminal de electrones. Reducción catalizada por el Complejo IV.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--violet)">4</div><div class="step-t"><strong>Energía → ATP</strong><p>Las reacciones exergónicas impulsan la síntesis de ATP via Complejo V (Parte 2).</p></div></div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S4 POTENCIAL DE REDUCCIÓN -->
+<div class="slide" id="s4">
+  <div class="sh sh-a"><div class="sh-ico ico-a">⚗️</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 04 · Potencial de Reducción</div><div class="sh-title">Potencial de reducción estándar <span class="ta">E'₀</span> y ΔG°'</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="idea" style="margin-bottom:.8rem">
+          <div class="idea-lbl" style="color:var(--amber)">📐 Definición</div>
+          <div class="idea-txt" style="font-size:.9rem">E'₀ mide la <strong style="color:#FCD34D">tendencia de una pareja redox</strong> a ganar o perder electrones. Mayor E'₀ → mayor tendencia oxidante. En biología se usa pH 7.</div>
+        </div>
+        <div class="sec">⚖️ Reacción redox general</div>
+        <div class="box box-a">
+          <div class="blbl" style="color:var(--amber-dk)">Componentes</div>
+          <ul class="ul la" style="margin-top:.2rem">
+            <li><strong>Donador electrónico</strong> = reductor (se oxida)</li>
+            <li><strong>Aceptor electrónico</strong> = oxidante (se reduce)</li>
+            <li>Los electrones fluyen de potencial <strong>bajo → alto</strong></li>
+            <li>El oxidante más potente <strong>atrae electrones</strong> de la otra semicélula</li>
+          </ul>
+        </div>
+        <div class="box box-e" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--elec-dk)">Relación con ΔG°'</div>
+          ΔG°' = −n · F · ΔE'₀<br>
+          Donde <strong>n</strong> = e⁻ transferidos · <strong>F</strong> = constante de Faraday · <strong>ΔE'₀</strong> = diferencia de potenciales
+        </div>
+      </div>
+      <div>
+        <div class="sec">📊 Valores clave en la cadena respiratoria</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Pareja redox</th><th>E'₀ (V)</th><th>Rol</th></tr></thead>
+            <tbody>
+              <tr><td>NAD⁺/NADH</td><td>−0.32</td><td>Donador principal</td></tr>
+              <tr><td>FMN/FMNH₂</td><td>−0.22</td><td>Complejo I</td></tr>
+              <tr><td>CoQ/CoQH₂</td><td>+0.04</td><td>Transportador móvil</td></tr>
+              <tr><td>Cit c (Fe³⁺/Fe²⁺)</td><td>+0.23</td><td>Complejo III→IV</td></tr>
+              <tr><td>O₂/H₂O</td><td>+0.82</td><td>Aceptor terminal</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box box-c" style="margin-top:.7rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--cyto-dk)">Ecuación de Nernst</div>
+          Para condiciones no estándar: E = E'₀ − (RT/nF) · ln([reducido]/[oxidado]). La curva resultante tiene forma similar a Henderson-Hasselbalch; el punto medio es E'₀.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S5 COMPLEJO I -->
+<div class="slide" id="s5">
+  <div class="sh sh-e"><div class="sh-ico ico-e">🔋</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 05 · Complejo I</div><div class="sh-title">Complejo I — <span class="te">NADH Deshidrogenasa</span></div></div></div>
+  <div class="sb">
+    <div class="idea">
+      <div class="idea-lbl" style="color:var(--electron)">⚡ Función central</div>
+      <div class="idea-txt">El Complejo I oxida el NADH y transfiere sus electrones a la CoQ. Es el punto de entrada de la mayoría de los equivalentes reductores en la cadena respiratoria. <strong style="color:#6EE7B7">Reacción:</strong> NADH + H⁺ + CoQ → NAD⁺ + CoQH₂</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔩 Estructura</div>
+        <ul class="ul le">
+          <li><strong>~25 cadenas polipeptídicas</strong> distintas (gran complejo multiproteico)</li>
+          <li>Contiene <strong>FMN (mononucleótido de flavina)</strong> como grupo prostético firmemente unido</li>
+          <li>Contiene <strong>centros Fe-S</strong> (hierro no hemo complejado con azufre en cuatro formas)</li>
+          <li>El Fe de los centros Fe-S alterna entre estados <strong>ferroso (Fe²⁺) y férrico (Fe³⁺)</strong></li>
+        </ul>
+        <div class="box box-a" style="margin-top:.7rem">
+          <div class="blbl" style="color:var(--amber-dk)">También llamado</div>
+          <strong>NADH-CoQ reductasa</strong>. Puede aceptar electrones del NADPH, aunque con baja eficacia. La vía preferida para el NADPH es la transhidrogenasa (NADPH + NAD⁺ → NADP⁺ + NADH).
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚡ Flujo de electrones en el Complejo I</div>
+        <div class="step"><div class="step-n" style="background:var(--electron)">1</div><div class="step-t"><strong>NADH → FMN</strong><p>El NADH transfiere 2 e⁻ al FMN del complejo, generando FMNH₂.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--electron)">2</div><div class="step-t"><strong>FMNH₂ → Centros Fe-S</strong><p>Los electrones pasan a través de una serie de centros Fe-S (transferencia de 1 e⁻ cada uno).</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--amber)">3</div><div class="step-t"><strong>Centros Fe-S → CoQ</strong><p>Los electrones reducen la CoQ (ubiquinona) a CoQH₂ (ubiquinol).</p></div></div>
+        <div class="box box-r" style="margin-top:.4rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--red-dk)">Inhibidores específicos</div>
+          <strong>Rotenona</strong> y <strong>Amital</strong> bloquean el flujo de electrones desde el NADH hacia la CoQ en este complejo.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S6 COENZIMA Q Y COMPLEJO II -->
+<div class="slide" id="s6">
+  <div class="sh sh-k"><div class="sh-ico ico-k">⚙️</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 06 · CoQ y Complejo II</div><div class="sh-title">Coenzima Q y <span class="tk">Complejo II</span> — Punto de recogida</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="sec">🔵 Coenzima Q (Ubiquinona)</div>
+        <div class="box box-k">
+          <div class="blbl" style="color:var(--cop-dk)">Estructura y propiedades</div>
+          Benzoquinona ligada a <strong>unidades de isopreno</strong>. Su cola isoprenoide la hace <strong>apolar</strong>, permitiendo difusión rápida en la membrana interna. De ahí su nombre: <em>ubiquinona</em> (ubicua en células vivas).
+        </div>
+        <div class="box box-a">
+          <div class="blbl" style="color:var(--amber-dk)">Punto de recogida</div>
+          Concentra electrones desde <strong>múltiples deshidrogenasas flavoproteicas</strong>:
+          <ul class="ul la" style="margin-top:.3rem">
+            <li>Complejo I (NADH)</li>
+            <li>Complejo II (succinato/FADH₂)</li>
+            <li>Oxidación de ácidos grasos (FADH₂)</li>
+          </ul>
+        </div>
+        <div class="box box-c" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--cyto-dk)">Interfase 2e⁻ → 1e⁻</div>
+          La CoQ se reduce/oxida <strong>un electrón a la vez</strong> mediante un intermediario semiquinona, proporcionando la interfase entre transportadores de 2 e⁻ y citocromos de 1 e⁻.
+        </div>
+      </div>
+      <div>
+        <div class="sec">🧪 Complejo II — Succinato Deshidrogenasa</div>
+        <div class="card card-k" style="margin-bottom:.7rem">
+          <div class="card-ico">⚗️</div>
+          <div class="card-title">Única enzima del ciclo cítrico en membrana</div>
+          <div class="card-body">Usa <strong>FAD</strong> como cofactor. Al estar en la membrana interna, transfiere electrones directamente desde su FADH₂ unido hacia la CoQ a través de centros Fe-S.</div>
+        </div>
+        <div class="card card-r" style="margin-bottom:.7rem">
+          <div class="card-ico">❌</div>
+          <div class="card-title">No impulsa síntesis de ATP</div>
+          <div class="card-body">El Complejo II (<strong>succinato-CoQ reductasa</strong>) no posee lugar de acoplamiento para la síntesis de ATP. La energía del FADH₂ es menor que la del NADH.</div>
+        </div>
+        <div class="box box-r" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--red-dk)">Descubrimiento histórico</div>
+          El tratamiento de mitocondrias con disolvente orgánico eliminaba la actividad respiratoria. Al reintroducir el extracto lipófilo (CoQ), la actividad se restablecía.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S7 CITOCROMOS Y COMPLEJO III -->
+<div class="slide" id="s7">
+  <div class="sh sh-c"><div class="sh-ico ico-c">🔴</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 07 · Citocromos y Complejo III</div><div class="sh-title">Citocromos y <span class="tc">Complejo III</span> — Ciclo Q</div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="sec">🔬 Los citocromos</div>
+        <div class="box box-c">
+          <div class="blbl" style="color:var(--cyto-dk)">Definición</div>
+          Hemoproteínas rojas o pardas. Transportan <strong>1 electrón</strong> por ciclo (Fe²⁺ ↔ Fe³⁺). Clasificados por sus máximos de absorción: tipos <strong>b, c, a</strong>.
+        </div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Citocromo</th><th>Ubicación/grupo hemo</th><th>Característica</th></tr></thead>
+            <tbody>
+              <tr><td>b, c₁</td><td>Complejo III · hemo protoporfirina IX</td><td>b: hemo libre; c₁: hemo covalente</td></tr>
+              <tr><td>c</td><td>Proteína soluble periférica · hemo covalente</td><td>Muy conservado evolutivamente (~50% seq. lev→hum)</td></tr>
+              <tr><td>a, a₃</td><td>Complejo IV · hemo A modificado</td><td>Asociados con Cu; forman centro binuclear</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="sec">♻️ El Ciclo Q (Complejo III)</div>
+        <div class="box box-a" style="margin-bottom:.7rem">
+          <div class="blbl" style="color:var(--amber-dk)">Función</div>
+          Oxida CoQH₂ y transfiere electrones al citocromo c. También bombea protones al espacio intermembrana, contribuyendo al gradiente electroquímico.
+        </div>
+        <div class="step"><div class="step-n" style="background:var(--cyto)">1</div><div class="step-t"><strong>CoQH₂ dona 1 e⁻ al centro Fe-S → Cit c₁ → Cit c</strong><p>Genera semiquinona CoQ·⁻.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--cyto)">2</div><div class="step-t"><strong>Semiquinona dona e⁻ al Cit b</strong><p>Electrón pasa bL → bH, reduce CoQ oxidada a semiquinona.</p></div></div>
+        <div class="step"><div class="step-n" style="background:var(--amber)">3</div><div class="step-t"><strong>Resultado neto</strong><p>2 CoQH₂ oxidadas, 1 CoQ reducida, 2 Cit c reducidos. Protones liberados al espacio intermembrana.</p></div></div>
+        <div class="box box-r" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--red-dk)">Inhibidor</div>
+          <strong>Antimicina A</strong> bloquea el flujo desde Cit b al Cit c₁.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S8 COMPLEJO IV — CITOCROMO OXIDASA -->
+<div class="slide" id="s8">
+  <div class="sh sh-c"><div class="sh-ico ico-c">💧</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 08 · Complejo IV</div><div class="sh-title">Complejo IV — <span class="tc">Citocromo Oxidasa</span></div></div></div>
+  <div class="sb">
+    <div class="idea">
+      <div class="idea-lbl" style="color:var(--cyto)">💧 Función central</div>
+      <div class="idea-txt">El Complejo IV cataliza el <strong style="color:#93C5FD">paso final</strong> de la cadena respiratoria: la reducción del O₂ a H₂O. Transfiere 4 e⁻ al O₂, aceptando electrones del citocromo c oxidado.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔩 Estructura</div>
+        <ul class="ul lc">
+          <li>Hasta <strong>13 cadenas polipeptídicas</strong> en eucariotas</li>
+          <li>3 subunidades codificadas por el <strong>genoma mitocondrial</strong></li>
+          <li>Contiene <strong>hemo A</strong> (modificado) y <strong>Cu</strong> asociado a cada hemo</li>
+          <li>Cu y Fe experimentan ciclos de oxidación: Fe²⁺↔Fe³⁺ y Cu⁺↔Cu²⁺</li>
+        </ul>
+        <div class="box box-c" style="margin-top:.7rem">
+          <div class="blbl" style="color:var(--cyto-dk)">Mecanismo (rayos X)</div>
+          La oxidación inicial del Cit c la realiza el <strong>primer Cu</strong>, transfiere el e⁻ al hemo siguiente y a Cu, y el Fe del a₃ forma un <strong>centro binuclear</strong> para la reducción del O₂ a H₂O.
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚡ Bombeo de protones</div>
+        <div class="box box-a">
+          <div class="blbl" style="color:var(--amber-dk)">Mecanismo</div>
+          Un residuo de aspartato acompaña la oxidación. La eyección de H⁺ al espacio intermembrana requiere la <strong>rotación de un grupo –COOH protonado</strong> y su desprotonación. La reducción del O₂ genera una rotación en el aspartato, protonando la tirosina.
+        </div>
+        <div class="box box-r" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--red-dk)">Inhibidores</div>
+          <strong>Cianuro (CN⁻)</strong> · <strong>Azida (N₃⁻)</strong> · <strong>Monóxido de carbono (CO)</strong> — todos bloquean la citocromo oxidasa impidiendo la reducción del O₂.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S9 INHIBIDORES — MAPA DE LA CADENA -->
+<div class="slide" id="s9">
+  <div class="sh sh-r"><div class="sh-ico ico-r">🚫</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 09 · Inhibidores y orden de la cadena</div><div class="sh-title">Inhibidores respiratorios y <span class="tr">verificación del orden</span></div></div></div>
+  <div class="sb">
+    <div class="idea">
+      <div class="idea-lbl" style="color:var(--red)">🧪 Metodología</div>
+      <div class="idea-txt">El orden de los transportadores se verificó con <strong style="color:#FCA5A5">espectrofotometría diferencial</strong>, <strong style="color:#FCA5A5">inhibidores específicos</strong> y <strong style="color:#FCA5A5">aceptores artificiales de electrones</strong>. Cada inhibidor crea un <em>"punto de entrecruzamiento"</em>: transportadores previos → reducidos; posteriores → oxidados.</div>
+    </div>
+    <div class="tw" style="margin-bottom:1rem">
+      <table>
+        <thead><tr><th>Inhibidor</th><th>Sitio de acción</th><th>Efecto</th></tr></thead>
+        <tbody>
+          <tr><td>Rotenona / Amital</td><td>Complejo I (NADH → CoQ)</td><td>Bloquea flujo desde NADH; transportadores anteriores se reducen</td></tr>
+          <tr><td>Antimicina A</td><td>Complejo III (Cit b → Cit c₁)</td><td>Transportadores antes del punto → reducidos; después → oxidados</td></tr>
+          <tr><td>Cianuro / Azida / CO</td><td>Complejo IV (citocromo oxidasa)</td><td>Bloquea reducción del O₂; toda la cadena queda reducida</td></tr>
+          <tr><td>Oligomicina</td><td>Complejo V (F₀ de ATP sintasa)</td><td>Inhibe ATP sintasa → indirectamente inhibe el transporte electrónico</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box box-a">
+      <div class="blbl" style="color:var(--amber-dk)">Resumen del orden de la cadena</div>
+      <strong>NADH → Complejo I → CoQ ← Complejo II (FADH₂) → Complejo III → Cit c → Complejo IV → O₂ → H₂O</strong><br>
+      <br>Los complejos I, III y IV son capaces de impulsar síntesis de ATP. El Complejo II no tiene lugar de acoplamiento.
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S10 LANZADERAS -->
+<div class="slide" id="s10">
+  <div class="sh sh-v"><div class="sh-ico ico-v">🚌</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 10 · Lanzaderas</div><div class="sh-title">Lanzaderas de <span class="tv">equivalentes reductores</span></div></div></div>
+  <div class="sb">
+    <div class="box box-v" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--vio-dk)">Problema</div>
+      El NADH generado en el citosol (glucólisis) <strong>no puede atravesar la membrana interna mitocondrial</strong>. Se necesitan sistemas de lanzadera para transferir los equivalentes reductores sin mover físicamente la coenzima.
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🧠 Lanzadera glicerol-3-fosfato</div>
+        <div class="card card-v" style="margin-bottom:.7rem">
+          <div class="card-ico">🧬</div>
+          <div class="card-title">Activa en cerebro (más primitiva)</div>
+          <div class="card-body">
+            <ul class="ul" style="padding:0">
+              <li>NADH en citosol reduce <strong>DHAP → glicerol-3-fosfato</strong></li>
+              <li>Glicerol-3-fosfato entra a la mitocondria</li>
+              <li>Se reoxida por <strong>glicerol-3-P deshidrogenasa</strong> (cara externa, FAD)</li>
+              <li>Genera <strong>FADH₂</strong> → electrones a CoQ</li>
+            </ul>
+          </div>
+        </div>
+        <div class="box box-r" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--red-dk)">⚠️ Pérdida de eficiencia</div>
+          NADH citosólico entra como FADH₂ mitocondrial → <strong>menos ATP</strong> producido (≈2 ATP en vez de ≈3).
+        </div>
+      </div>
+      <div>
+        <div class="sec">❤️ Lanzadera malato/aspartato</div>
+        <div class="card card-a" style="margin-bottom:.7rem">
+          <div class="card-ico">🏥</div>
+          <div class="card-title">Activa en hígado y corazón (más eficiente)</div>
+          <div class="card-body">
+            <ul class="ul la" style="padding:0">
+              <li>MDH citosólica reduce <strong>OAA → malato</strong> (usando NADH)</li>
+              <li>Malato entra a la matriz; MDH mitocondrial lo reoxida → <strong>NADH mitocondrial</strong></li>
+              <li>OAA no puede salir → se transamina a <strong>aspartato</strong> y sale</li>
+              <li>Requiere transporte de α-cetoglutarato y glutamato</li>
+            </ul>
+          </div>
+        </div>
+        <div class="box box-e" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--elec-dk)">✅ Mayor rendimiento</div>
+          NADH citosólico genera <strong>NADH mitocondrial</strong> → misma cantidad de ATP que el NADH generado en la matriz (~3 ATP).
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S11 EJERCICIO PRÁCTICO -->
+<div class="slide" id="s11">
+  <div class="sh sh-a"><div class="sh-ico ico-a">✏️</div><div class="sh-meta"><div class="sh-lbl">Diapositiva 11 · Práctica</div><div class="sh-title">Ejercicio de <span class="ta">comprensión</span></div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P1</div>
+          <div class="quiz-q">¿Por qué un valor de E'₀ más alto en una pareja redox indica mayor capacidad oxidante?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Porque el donador electrónico cede más fácilmente sus electrones</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Porque mayor E'₀ indica mayor tendencia del aceptor a ganar electrones, es decir, mayor poder oxidante</li>
+            <li><span class="opt-l">c</span> Porque la constante de Faraday es directamente proporcional al E'₀</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P2</div>
+          <div class="quiz-q">¿Por qué el Complejo II no impulsa la síntesis de ATP mientras que el Complejo I sí lo hace?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Porque el Complejo II no transfiere electrones a la CoQ</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Porque el Complejo II no tiene lugar de acoplamiento; la energía del FADH₂ es insuficiente para impulsar la síntesis de ATP</li>
+            <li><span class="opt-l">c</span> Porque el Complejo II opera solo en condiciones anaerobias</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P3</div>
+          <div class="quiz-q">¿Cuál es la función específica de la CoQ como "interfase" en la cadena respiratoria?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Transferir directamente electrones del NADH al O₂</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Proporcionar la transición entre transportadores de 2 e⁻ y citocromos de 1 e⁻, mediante el intermediario semiquinona</li>
+            <li><span class="opt-l">c</span> Bombear protones directamente al espacio intermembrana</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P4</div>
+          <div class="quiz-q">Si se añade antimicina A a mitocondrias, ¿qué estado redox esperarías en el citocromo c?</div>
+          <ul class="quiz-opts">
+            <li class="correct"><span class="opt-l">a</span> ✓ Oxidado, porque el bloqueo en Cit b→c₁ impide que lleguen electrones al Cit c</li>
+            <li><span class="opt-l">b</span> Reducido, porque se acumulan electrones aguas abajo del bloqueo</li>
+            <li><span class="opt-l">c</span> No cambia, porque el Cit c es independiente del Complejo III</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P5</div>
+          <div class="quiz-q">¿Por qué la lanzadera malato/aspartato es más eficiente que la de glicerol-3-fosfato?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Porque no requiere transportadores en la membrana interna</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Porque transfiere equivalentes reductores como NADH mitocondrial (no como FADH₂), generando más ATP por ciclo</li>
+            <li><span class="opt-l">c</span> Porque opera en cerebro, que tiene mayor demanda energética</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S12 CIERRE PARTE 1 -->
+<div class="slide cover cv-close" id="s12">
+  <div class="cv-bg"></div><div class="cv-dots"></div>
+  <div class="close-inner">
+    <div class="cv-eyebrow" style="justify-content:center;margin-bottom:1.2rem">
+      <span class="tag tag-a">✅ Parte 1 completada</span>
+      <span class="tag tag-e">→ Continúa con la Parte 2</span>
+    </div>
+    <h2 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:800;color:#fff;line-height:1.05;margin-bottom:.5rem">
+      Ideas clave — <span style="color:#FCD34D">Transporte</span> <span style="color:#6EE7B7">Electrónico</span>
+    </h2>
+    <div style="width:56px;height:3px;background:linear-gradient(90deg,var(--amber),var(--electron),var(--cyto));margin:.9rem auto 1.4rem;border-radius:2px"></div>
+    <div style="text-align:left;margin-bottom:1.5rem">
+      <div class="sum-row"><div class="sum-k" style="color:#FCD34D">E'₀ y ΔG°'</div><div class="sum-v">Electrones fluyen de E'₀ bajo → alto. ΔG°' = −nFΔE'₀. NADH (−0.32V) → O₂ (+0.82V) = reacción muy exergónica.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#6EE7B7">Complejo I</div><div class="sum-v">NADH deshidrogenasa. FMN + centros Fe-S → CoQ. Inhibido por rotenona/amital. Impulsa síntesis de ATP.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#FCD34D">CoQ + Complejo II</div><div class="sum-v">CoQ es el punto de recogida: acepta e⁻ de Complejos I, II y β-oxidación. Complejo II (FADH₂) no impulsa ATP.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#93C5FD">Complejos III y IV</div><div class="sum-v">Ciclo Q: CoQH₂ → Cit c (Complejo III). Cit c → O₂ → H₂O (Complejo IV). Inhibidores: antimicina A, cianuro, CO.</div></div>
+      <div class="sum-row" style="margin-bottom:0"><div class="sum-k" style="color:#C4B5FD">Lanzaderas</div><div class="sum-v">Glicerol-3-P (cerebro, genera FADH₂ → menos ATP) · Malato/aspartato (hígado/corazón, genera NADH → más ATP).</div></div>
+    </div>
+    <p style="font-family:'Space Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.2);letter-spacing:.5px">Bioquímica General · Transporte Electrónico · Parte 1 de 2 · UACJ</p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nb" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-c">
+    <div class="ctr">Slide <span id="cn">1</span> / <span id="tn">12</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nb" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+const slides=document.querySelectorAll('.slide'),N=slides.length;let cur=0;
+document.getElementById('tn').textContent=N;
+const dotsEl=document.getElementById('dots');
+for(let i=0;i<N;i++){const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);}
+function update(){slides.forEach((s,i)=>{s.classList.toggle('active',i===cur);if(i===cur)s.scrollTop=0;});dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));document.getElementById('cn').textContent=cur+1;document.getElementById('pb-btn').disabled=cur===0;document.getElementById('nb-btn').disabled=cur===N-1;document.getElementById('pb').style.width=((cur+1)/N*100)+'%';}
+function go(d){const n=cur+d;if(n>=0&&n<N){cur=n;update();}}
+function goTo(i){cur=i;update();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+update();
+</script>
+</body>
+</html>

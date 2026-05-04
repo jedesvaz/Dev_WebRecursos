@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problemas de Dos Muestras · Bioestadística Aplicada</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red:       #C8102E;
+  --red-lt:    rgba(200,16,46,.11);
+  --red-dk:    #8B0020;
+  --steel:     #1B3A5C;
+  --steel-md:  #245280;
+  --steel-lt:  rgba(27,58,92,.12);
+  --titanium:  #4A5568;
+  --tita-lt:   #F0F2F5;
+  --tita-md:   #D8DCE3;
+  --orange:    #E85D04;
+  --oran-lt:   rgba(232,93,4,.11);
+  --oran-dk:   #923A00;
+  --gold:      #B8950A;
+  --gold-lt:   rgba(184,149,10,.11);
+  --gold-dk:   #6E5800;
+  --teal:      #0A7075;
+  --teal-lt:   rgba(10,112,117,.11);
+  --teal-dk:   #064E52;
+  --surface:   #FFFFFF;
+  --canvas:    #F5F7FA;
+  --border:    #D0D7E2;
+  --ink:       #1B2333;
+  --ink-md:    #3D4F6B;
+  --ink-lt:    #6B7A96;
+  --ink-xs:    #A0AECC;
+  --sh:  0 1px 4px rgba(27,35,51,.08), 0 2px 12px rgba(27,35,51,.05);
+  --shm: 0 4px 20px rgba(27,35,51,.11);
+}
+
+html, body { height:100%; overflow:hidden; font-family:'Noto Sans SC',sans-serif; background:var(--canvas); color:var(--ink); }
+body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background-image:linear-gradient(rgba(27,58,92,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(27,58,92,.03) 1px,transparent 1px); background-size:40px 40px; }
+.pb { position:fixed; top:0; left:0; right:0; height:4px; z-index:9999; background:linear-gradient(90deg,var(--red),var(--steel),var(--teal),var(--gold)); transition:width .4s cubic-bezier(.4,0,.2,1); }
+
+.slide { display:none; flex-direction:column; width:100vw; height:100vh; overflow-y:auto; position:relative; z-index:1; animation:gate .34s ease; }
+.slide.active { display:flex; }
+@keyframes gate { from{opacity:0;transform:translateX(18px);}to{opacity:1;transform:translateX(0);} }
+.slide::-webkit-scrollbar { width:4px; }
+.slide::-webkit-scrollbar-thumb { background:var(--steel-md); border-radius:2px; }
+
+/* COVER */
+.cover { background:var(--steel); min-height:100vh; justify-content:center; align-items:center; position:relative; overflow:hidden; }
+.cv-mesh { position:absolute; inset:0; background: radial-gradient(ellipse 65% 55% at 0% 40%,rgba(200,16,46,.28) 0%,transparent 55%), radial-gradient(ellipse 50% 45% at 100% 70%,rgba(10,112,117,.22) 0%,transparent 55%), radial-gradient(ellipse 45% 40% at 55% 5%,rgba(184,149,10,.15) 0%,transparent 50%); }
+.cv-ribs { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+.cv-ribs::before { content:''; position:absolute; top:-60%; right:-10%; bottom:-60%; width:2px; background:rgba(255,255,255,.04); transform:rotate(-20deg); box-shadow:60px 0 rgba(255,255,255,.035),120px 0 rgba(255,255,255,.025),180px 0 rgba(255,255,255,.02),240px 0 rgba(255,255,255,.015); }
+.cv-wayfind { position:absolute; left:0; bottom:0; right:0; height:4px; background:repeating-linear-gradient(90deg,var(--red) 0px,var(--red) 24px,var(--gold) 24px,var(--gold) 48px,var(--red) 48px,var(--red) 72px,transparent 72px,transparent 96px); opacity:.8; }
+.cv-inner { position:relative; z-index:2; max-width:900px; width:100%; padding:2.5rem; }
+.cv-gate { display:inline-flex; align-items:center; gap:.5rem; font-family:'IBM Plex Mono',monospace; font-size:.68rem; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:1.4rem; }
+.cv-gate::before { content:'✈'; font-size:.75rem; animation:taxi 3s ease-in-out infinite; }
+@keyframes taxi { 0%,100%{transform:translateX(0);} 50%{transform:translateX(6px);} }
+.cv-title { font-family:'Fraunces',serif; font-size:clamp(2.4rem,5.8vw,4.8rem); font-weight:700; line-height:.97; color:#fff; margin-bottom:.7rem; letter-spacing:-.02em; }
+.cv-title .cr{color:#FF8FA0;} .cv-title .ct{color:#7ECFD3;} .cv-title .cg{color:#E0C560;} .cv-title .co{color:#FFB070;}
+.cv-sub { font-size:.98rem; color:rgba(255,255,255,.45); font-weight:300; margin-bottom:2rem; line-height:1.7; max-width:560px; }
+.cv-board { display:flex; flex-direction:column; gap:.28rem; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.1); border-radius:4px; padding:.85rem 1.1rem; margin-bottom:2rem; max-width:580px; }
+.cv-row { display:flex; align-items:center; gap:.8rem; font-family:'IBM Plex Mono',monospace; font-size:.75rem; border-bottom:1px solid rgba(255,255,255,.06); padding-bottom:.24rem; }
+.cv-row:last-child { border-bottom:none; padding-bottom:0; }
+.cv-flight { color:var(--gold); font-weight:600; min-width:52px; }
+.cv-dest { color:rgba(255,255,255,.72); flex:1; }
+.cv-status { font-size:.65rem; padding:.1rem .45rem; border-radius:2px; }
+.s-on{background:rgba(200,16,46,.3);color:#FF8FA0;} .s-ok{background:rgba(10,112,117,.3);color:#7ECFD3;} .s-bd{background:rgba(184,149,10,.3);color:#E0C560;}
+.cv-foot { font-family:'IBM Plex Mono',monospace; font-size:.6rem; color:rgba(255,255,255,.22); letter-spacing:1px; }
+.cv-foot span { color:rgba(255,255,255,.42); }
+
+/* HEADER */
+.sh { background:var(--surface); border-bottom:2px solid var(--border); padding:.78rem 2rem; display:flex; align-items:center; gap:.88rem; flex-shrink:0; box-shadow:0 2px 8px rgba(27,35,51,.06); position:relative; }
+.sh::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; border-radius:0 2px 2px 0; }
+.sh-r::before{background:var(--red);} .sh-s::before{background:var(--steel);} .sh-t::before{background:var(--teal);} .sh-o::before{background:var(--orange);} .sh-g::before{background:var(--gold);}
+.sh-code { font-family:'IBM Plex Mono',monospace; font-size:1.1rem; font-weight:600; flex-shrink:0; letter-spacing:-.02em; }
+.sh-code.cr{color:var(--red);} .sh-code.cs{color:var(--steel);} .sh-code.ct{color:var(--teal);} .sh-code.co{color:var(--orange);} .sh-code.cg{color:var(--gold);}
+.sh-meta { flex:1; }
+.sh-lbl { font-family:'IBM Plex Mono',monospace; font-size:.57rem; color:var(--ink-xs); letter-spacing:2.5px; text-transform:uppercase; margin-bottom:.04rem; }
+.sh-title { font-family:'Fraunces',serif; font-size:clamp(.92rem,2vw,1.3rem); font-weight:600; color:var(--ink); line-height:1.15; }
+.sh-title .tr{color:var(--red-dk);} .sh-title .ts{color:var(--steel);} .sh-title .tt{color:var(--teal-dk);} .sh-title .to{color:var(--oran-dk);} .sh-title .tg{color:var(--gold-dk);}
+
+/* BODY */
+.sb { flex:1; padding:1.3rem 2rem; background:var(--canvas); overflow-y:auto; }
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem; }
+.ga { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:.9rem; }
+
+.concept { background:var(--steel); border-radius:6px; padding:1.1rem 1.3rem; margin-bottom:1rem; position:relative; overflow:hidden; box-shadow:var(--shm); }
+.concept::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 0% 50%,rgba(200,16,46,.15) 0%,transparent 60%); }
+.concept::after { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:linear-gradient(180deg,var(--red),var(--gold)); }
+.concept-lbl { font-family:'IBM Plex Mono',monospace; font-size:.58rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:.45rem; position:relative; z-index:1; color:var(--gold); }
+.concept-txt { font-family:'Fraunces',serif; font-size:clamp(.9rem,1.85vw,1.12rem); font-weight:400; font-style:italic; line-height:1.55; color:rgba(255,255,255,.92); position:relative; z-index:1; }
+
+.formula { background:#0D1B2A; border:1px solid rgba(27,58,92,.5); border-radius:4px; padding:.85rem 1.1rem; margin-bottom:.75rem; box-shadow:inset 0 1px 4px rgba(0,0,0,.25),var(--sh); font-family:'IBM Plex Mono',monospace; }
+.formula-lbl { font-size:.58rem; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:.38rem; opacity:.8; }
+.formula-eq { font-size:clamp(.85rem,1.75vw,1.05rem); color:#7ECFD3; line-height:1.9; font-weight:500; }
+.formula-note { font-size:.75rem; color:rgba(255,255,255,.4); margin-top:.28rem; line-height:1.5; }
+
+.card { background:var(--surface); border:1.5px solid var(--border); border-radius:6px; padding:.92rem; box-shadow:var(--sh); transition:box-shadow .18s,transform .15s; position:relative; overflow:hidden; }
+.card:hover { box-shadow:var(--shm); transform:translateY(-1px); }
+.card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.card-r::before{background:var(--red);} .card-s::before{background:var(--steel);} .card-t::before{background:var(--teal);} .card-o::before{background:var(--orange);} .card-g::before{background:var(--gold);}
+.card-ico{font-size:1.3rem;margin-bottom:.4rem;} .card-title{font-family:'Fraunces',serif;font-size:.95rem;font-weight:600;color:var(--ink);margin-bottom:.25rem;} .card-body{font-size:.82rem;color:var(--ink-md);line-height:1.62;}
+
+.box { border-radius:6px; padding:.82rem 1rem; margin-bottom:.72rem; font-size:.84rem; line-height:1.65; border:1.5px solid; }
+.box-r{background:var(--red-lt);border-color:rgba(200,16,46,.28);color:var(--ink-md);}
+.box-s{background:var(--steel-lt);border-color:rgba(27,58,92,.28);color:var(--ink-md);}
+.box-t{background:var(--teal-lt);border-color:rgba(10,112,117,.28);color:var(--ink-md);}
+.box-o{background:var(--oran-lt);border-color:rgba(232,93,4,.25);color:var(--ink-md);}
+.box-g{background:var(--gold-lt);border-color:rgba(184,149,10,.28);color:var(--ink-md);}
+.box-w{background:var(--surface);border-color:var(--border);color:var(--ink-md);}
+.blbl{font-family:'IBM Plex Mono',monospace;font-size:.57rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:.28rem;opacity:.6;}
+
+.sec { font-family:'Fraunces',serif; font-weight:600; font-size:1rem; color:var(--ink); margin-bottom:.65rem; padding-bottom:.28rem; border-bottom:1.5px solid var(--border); display:flex; align-items:center; gap:.4rem; }
+
+ul.ul { list-style:none; padding:0; }
+ul.ul li { padding:.34rem 0 .34rem 1.25rem; position:relative; font-size:.84rem; color:var(--ink-md); line-height:1.55; border-bottom:1px solid rgba(27,35,51,.05); }
+ul.ul li:last-child { border-bottom:none; }
+ul.ul li::before { content:'▸'; position:absolute; left:0; top:.38rem; font-size:.65rem; line-height:1; }
+ul.ul.lr li::before{color:var(--red);} ul.ul.ls li::before{color:var(--steel);} ul.ul.lt li::before{color:var(--teal);} ul.ul.lo li::before{color:var(--orange);} ul.ul.lg li::before{color:var(--gold);}
+strong{color:var(--ink);font-weight:600;} em{color:var(--teal-dk);font-style:italic;}
+
+.bdg{display:inline-flex;align-items:center;gap:.2rem;padding:.14rem .52rem;border-radius:3px;font-size:.68rem;font-weight:600;font-family:'IBM Plex Mono',monospace;border:1px solid;}
+.bdg-r{background:var(--red-lt);color:var(--red-dk);border-color:rgba(200,16,46,.35);}
+.bdg-s{background:var(--steel-lt);color:var(--steel);border-color:rgba(27,58,92,.35);}
+.bdg-t{background:var(--teal-lt);color:var(--teal-dk);border-color:rgba(10,112,117,.35);}
+.bdg-o{background:var(--oran-lt);color:var(--oran-dk);border-color:rgba(232,93,4,.35);}
+.bdg-g{background:var(--gold-lt);color:var(--gold-dk);border-color:rgba(184,149,10,.38);}
+
+.tw{overflow-x:auto;border-radius:6px;border:1.5px solid var(--border);background:var(--surface);box-shadow:var(--sh);}
+table{width:100%;border-collapse:collapse;font-size:.82rem;}
+thead tr{background:var(--steel);}
+thead th{font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:500;color:rgba(255,255,255,.85);text-align:left;padding:.55rem .85rem;letter-spacing:.5px;text-transform:uppercase;}
+tbody tr{border-bottom:1px solid var(--tita-md);transition:background .12s;}
+tbody tr:nth-child(even){background:var(--tita-lt);}
+tbody tr:hover{background:var(--gold-lt);}
+tbody td{padding:.5rem .85rem;color:var(--ink-md);vertical-align:top;line-height:1.5;}
+tbody td:first-child{font-family:'IBM Plex Mono',monospace;font-weight:500;color:var(--ink);font-size:.8rem;}
+
+.obj{display:flex;gap:.85rem;align-items:flex-start;padding:.72rem;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;margin-bottom:.52rem;box-shadow:var(--sh);transition:border-color .2s;}
+.obj:hover{border-color:var(--steel-md);}
+.obj-n{min-width:30px;height:30px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:.9rem;color:#fff;}
+.obj-t{font-size:.84rem;color:var(--ink-md);line-height:1.55;padding-top:.08rem;}
+
+.comp{background:var(--surface);border:1.5px solid var(--border);border-radius:6px;overflow:hidden;box-shadow:var(--shm);}
+.comp-head{display:grid;background:var(--steel);}
+.comp-head-cell{padding:.55rem .85rem;font-family:'IBM Plex Mono',monospace;font-size:.65rem;font-weight:500;color:rgba(255,255,255,.85);letter-spacing:.5px;text-transform:uppercase;border-right:1px solid rgba(255,255,255,.08);}
+.comp-head-cell:last-child{border-right:none;}
+.comp-row{display:grid;border-bottom:1px solid var(--border);transition:background .12s;}
+.comp-row:last-child{border-bottom:none;}
+.comp-row:hover{background:var(--gold-lt);}
+.comp-cell{padding:.52rem .85rem;font-size:.82rem;color:var(--ink-md);border-right:1px solid var(--border);vertical-align:top;line-height:1.5;}
+.comp-cell:first-child{font-family:'IBM Plex Mono',monospace;font-weight:500;color:var(--ink);font-size:.78rem;}
+.comp-cell:last-child{border-right:none;}
+
+.quiz-box{background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:.92rem;margin-bottom:.65rem;box-shadow:var(--sh);}
+.quiz-tag{font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:2px;background:var(--steel);color:rgba(255,255,255,.85);padding:.12rem .48rem;border-radius:3px;display:inline-block;margin-bottom:.4rem;}
+.quiz-q{font-family:'Fraunces',serif;font-size:.92rem;color:var(--ink);margin-bottom:.42rem;}
+.quiz-opts{list-style:none;}
+.quiz-opts li{padding:.38rem .72rem;border:1.5px solid var(--border);border-radius:4px;margin-bottom:.25rem;font-size:.82rem;color:var(--ink-md);cursor:pointer;transition:all .18s;display:flex;gap:.5rem;align-items:flex-start;}
+.quiz-opts li:hover{border-color:var(--steel-md);background:var(--steel-lt);}
+.quiz-opts li.correct{border-color:var(--teal);background:var(--teal-lt);color:var(--ink);}
+.opt-l{min-width:20px;height:20px;border-radius:3px;background:var(--steel);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;flex-shrink:0;font-family:'IBM Plex Mono',monospace;}
+
+.cv-close{background:var(--steel);min-height:100vh;justify-content:center;align-items:center;position:relative;overflow:hidden;}
+.close-inner{position:relative;z-index:2;max-width:820px;width:100%;padding:2.5rem;text-align:center;}
+.sum-row{display:flex;gap:.6rem;margin-bottom:.42rem;font-size:.84rem;text-align:left;}
+.sum-k{min-width:145px;font-family:'IBM Plex Mono',monospace;font-size:.63rem;flex-shrink:0;padding-top:.1rem;letter-spacing:.5px;}
+.sum-v{color:rgba(255,255,255,.68);line-height:1.5;}
+
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);border-top:2px solid var(--border);padding:.5rem 1.5rem;display:flex;align-items:center;justify-content:space-between;z-index:1000;backdrop-filter:blur(8px);}
+.nb{display:flex;align-items:center;gap:.38rem;padding:.36rem .88rem;border-radius:4px;font-family:'Noto Sans SC',sans-serif;font-weight:500;font-size:.78rem;border:1.5px solid var(--border);background:var(--surface);color:var(--ink-md);cursor:pointer;transition:all .18s;}
+.nb:hover:not(:disabled){border-color:var(--steel);color:var(--steel);background:var(--steel-lt);}
+.nb:disabled{opacity:.25;cursor:not-allowed;}
+.nav-c{display:flex;flex-direction:column;align-items:center;gap:.2rem;}
+.ctr{font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--ink-lt);}
+.ctr span{color:var(--steel);font-size:.88rem;font-weight:700;}
+.dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:340px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--tita-md);border:none;cursor:pointer;padding:0;transition:all .18s;}
+.dot.active{background:var(--red);transform:scale(1.45);}
+.nav-sp{height:62px;}
+
+@media(max-width:768px){.sb{padding:1rem;}.sh{padding:.65rem 1rem;}.g2,.g3{grid-template-columns:1fr;}.dots{max-width:200px;}}
+@media(max-width:480px){.dots{display:none;}}
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- S1 PORTADA -->
+<div class="slide cover active" id="s1">
+  <div class="cv-mesh"></div><div class="cv-ribs"></div><div class="cv-wayfind"></div>
+  <div class="cv-inner">
+    <div class="cv-gate">BSTAT · PROBLEMAS DE DOS MUESTRAS · PUERTA 9</div>
+    <h1 class="cv-title">
+      Comparación de<br>
+      <span class="ct">Dos</span> <span class="cr">Poblaciones</span>
+    </h1>
+    <p class="cv-sub">Marco conceptual para hacer inferencias sobre diferencias de medias y proporciones en muestras independientes, pareadas y grandes.</p>
+    <div class="cv-board">
+      <div class="cv-row"><span class="cv-flight">9.1</span><span class="cv-dest">Medias — Muestras grandes independientes</span><span class="cv-status s-on">Z · n≥30</span></div>
+      <div class="cv-row"><span class="cv-flight">9.2</span><span class="cv-dest">Medias — Muestras pequeñas independientes</span><span class="cv-status s-ok">t · n&lt;30</span></div>
+      <div class="cv-row"><span class="cv-flight">9.3</span><span class="cv-dest">Medias — Muestras pareadas</span><span class="cv-status s-ok">t · d̄</span></div>
+      <div class="cv-row"><span class="cv-flight">9.4</span><span class="cv-dest">Dos proporciones poblacionales</span><span class="cv-status s-on">Z · p̂</span></div>
+      <div class="cv-row"><span class="cv-flight">9.5</span><span class="cv-dest">Consideraciones de tamaño de muestra</span><span class="cv-status s-bd">n = ?</span></div>
+    </div>
+    <p class="cv-foot">Ref.: <span>Shafer & Zhang (2012). Introductory Statistics. Saylor Academy. Cap. 9.</span></p>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- S2 OBJETIVOS -->
+<div class="slide" id="s2">
+  <div class="sh sh-s"><span class="sh-code cs">00</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 02 · Objetivos</div><div class="sh-title">Al terminar esta sesión comprenderás…</div></div></div>
+  <div class="sb">
+    <div class="obj"><div class="obj-n" style="background:var(--red)">1</div><div class="obj-t">El <strong>marco conceptual</strong> para comparar dos poblaciones: por qué trabajamos con diferencias de parámetros, qué significa que las muestras sean "independientes" y cuándo aplica cada método.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--steel)">2</div><div class="obj-t">Cómo <strong>elegir entre Z y t</strong> según el tamaño de muestra y las condiciones que requiere cada uno: normalidad, varianzas iguales e independencia.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--teal)">3</div><div class="obj-t">Por qué el <strong>muestreo pareado es un diseño poderoso</strong>: cómo calcular diferencias elimina la variabilidad de fondo y te permite enfocarte en el factor de interés.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--orange)">4</div><div class="obj-t">Cómo la lógica de comparar <strong>dos proporciones poblacionales</strong> es paralela a la de las medias, y cuál es el supuesto crítico de muestras independientes.</div></div>
+    <div class="obj"><div class="obj-n" style="background:var(--gold)">5</div><div class="obj-t">Cómo pensar en el <strong>tamaño de muestra antes de recolectar datos</strong>: por qué planear con anticipación ahorra tiempo, dinero y lleva a conclusiones más sólidas.</div></div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S3 PANORAMA GENERAL -->
+<div class="slide" id="s3">
+  <div class="sh sh-s"><span class="sh-code cs">✦</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 03 · Marco general</div><div class="sh-title">El <span class="ts">panorama general</span> — ¿por qué comparar dos poblaciones?</div></div></div>
+  <div class="sb">
+    <div class="concept">
+      <div class="concept-lbl">Idea central</div>
+      <div class="concept-txt">Rara vez nos interesa una sola población de forma aislada. Las preguntas reales son comparativas: ¿El Medicamento A funciona mejor que el B? ¿La Empresa 1 es más confiable que la 2? ¿El proceso nuevo supera al anterior? Todo el capítulo 9 trata sobre hacer <strong style="color:#E0C560">inferencias estadísticamente válidas sobre diferencias</strong>.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔑 La idea central en las cinco secciones</div>
+        <ul class="ul ls">
+          <li>Nunca conocemos los parámetros reales μ₁, μ₂, p₁, p₂</li>
+          <li>Los estimamos con muestras y luego <strong>trabajamos con la diferencia</strong></li>
+          <li>El estimador puntual siempre es la diferencia de estadísticos: x̄₁ − x̄₂ o p̂₁ − p̂₂</li>
+          <li>Construimos un IC o probamos H₀: parámetro₁ − parámetro₂ = D₀</li>
+          <li>D₀ = 0 en la mayoría de los problemas reales ("no hay diferencia")</li>
+        </ul>
+      </div>
+      <div>
+        <div class="sec">🗺️ Mapa de decisión — ¿cuál método usar?</div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Situación</th><th>Estadístico</th><th>Condición clave</th></tr></thead>
+            <tbody>
+              <tr><td>Medias, grandes independientes</td><td>Z</td><td>n₁ ≥ 30 Y n₂ ≥ 30</td></tr>
+              <tr><td>Medias, pequeñas independientes</td><td>t (gl = n₁+n₂−2)</td><td>Pobs. normales, σ₁ = σ₂</td></tr>
+              <tr><td>Medias, pareadas</td><td>t (gl = n−1)</td><td>Diferencias normales</td></tr>
+              <tr><td>Proporciones, grandes</td><td>Z</td><td>Ambas muestras grandes</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S4 MUESTRAS GRANDES INDEPENDIENTES -->
+<div class="slide" id="s4">
+  <div class="sh sh-r"><span class="sh-code cr">9.1</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 04 · Muestras Grandes Independientes</div><div class="sh-title">Comparar medias — <span class="tr">muestras grandes e independientes</span> (Z)</div></div></div>
+  <div class="sb">
+    <div class="concept">
+      <div class="concept-lbl">Concepto clave — independencia</div>
+      <div class="concept-txt">Dos muestras son <strong style="color:#E0C560">independientes</strong> si cada una se extrae sin ninguna referencia a la otra. La muestra de la Población 1 no nos dice nada sobre quién queda en la muestra de la Población 2. Esto es lo que hace válido el estadístico Z.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">📐 Lógica del intervalo de confianza</div>
+        <div class="formula">
+          <div class="formula-lbl">IC para μ₁ − μ₂ (grandes, independientes)</div>
+          <div class="formula-eq">(x̄₁ − x̄₂) ± z<sub>α/2</sub> · √(s₁²/n₁ + s₂²/n₂)</div>
+          <div class="formula-note">La parte ± es el margen de error. El error estándar combina la variabilidad de ambas muestras. Si σ₁ y σ₂ son conocidas, usarlas en lugar de s₁ y s₂.</div>
+        </div>
+        <div class="formula">
+          <div class="formula-lbl">Estadístico de prueba estandarizado</div>
+          <div class="formula-eq">Z = [(x̄₁ − x̄₂) − D₀] / √(s₁²/n₁ + s₂²/n₂)</div>
+          <div class="formula-note">Sigue N(0,1). Misma lógica de valor crítico / valor-p que la prueba Z de una población.</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">💡 Cómo interpretar los resultados</div>
+        <div class="box box-r">
+          <div class="blbl" style="color:var(--red-dk)">El IC indica un rango de diferencias plausibles</div>
+          Si el IC contiene <strong>solo valores positivos</strong> → evidencia de que μ₁ > μ₂<br>
+          Si contiene <strong>solo valores negativos</strong> → evidencia de que μ₁ &lt; μ₂<br>
+          Si <strong>cruza el cero</strong> → no hay evidencia suficiente de diferencia
+        </div>
+        <div class="box box-s">
+          <div class="blbl" style="color:var(--steel)">Formas de H₀</div>
+          H₀: μ₁ − μ₂ = D₀ (usualmente 0)<br>
+          Hₐ izquierda: μ₁ − μ₂ &lt; D₀ · Hₐ derecha: μ₁ − μ₂ &gt; D₀ · Hₐ dos colas: μ₁ − μ₂ ≠ D₀
+        </div>
+        <div class="box box-g" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--gold-dk)">Idea clave</div>
+          El método es idéntico al de una población — solo reemplaza la media muestral por la <strong>diferencia de medias muestrales</strong>.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S5 MUESTRAS PEQUEÑAS INDEPENDIENTES -->
+<div class="slide" id="s5">
+  <div class="sh sh-s"><span class="sh-code cs">9.2</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 05 · Muestras Pequeñas Independientes</div><div class="sh-title">Comparar medias — <span class="ts">muestras pequeñas e independientes</span> (t)</div></div></div>
+  <div class="sb">
+    <div class="concept">
+      <div class="concept-lbl">Concepto clave — cuando el TCL no aplica</div>
+      <div class="concept-txt">Cuando <strong style="color:#E0C560">al menos una muestra es pequeña (n &lt; 30)</strong>, el Teorema Central del Límite no garantiza la normalidad de x̄. Debemos imponer dos condiciones sobre las poblaciones: ambas son <strong style="color:#7ECFD3">normalmente distribuidas</strong> Y tienen <strong style="color:#7ECFD3">desviaciones estándar iguales</strong>. A cambio, usamos la distribución t.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔗 La varianza combinada — por qué existe</div>
+        <div class="box box-s">
+          <div class="blbl" style="color:var(--steel)">Intuición</div>
+          Asumimos σ₁ = σ₂ (varianzas iguales). En lugar de usar s₁ y s₂ por separado, las <strong>combinamos</strong> en un estimador mejor: s²p. Es un promedio ponderado, dando más peso a la muestra más grande.
+        </div>
+        <div class="formula">
+          <div class="formula-lbl">Varianza combinada s²p</div>
+          <div class="formula-eq">s²p = [(n₁−1)s₁² + (n₂−1)s₂²] / (n₁+n₂−2)</div>
+          <div class="formula-note">gl = n₁ + n₂ − 2</div>
+        </div>
+        <div class="formula" style="margin-bottom:0">
+          <div class="formula-lbl">IC y estadístico de prueba (muestras pequeñas)</div>
+          <div class="formula-eq">IC: (x̄₁−x̄₂) ± t<sub>α/2</sub> · √[s²p(1/n₁+1/n₂)]</div>
+          <div class="formula-eq">T = [(x̄₁−x̄₂)−D₀] / √[s²p(1/n₁+1/n₂)]</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">🆚 Muestras grandes vs. pequeñas — diferencias clave</div>
+        <div class="comp" style="margin-bottom:.75rem">
+          <div class="comp-head" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="comp-head-cell">Aspecto</div>
+            <div class="comp-head-cell">Grandes (Z)</div>
+            <div class="comp-head-cell">Pequeñas (t)</div>
+          </div>
+          <div class="comp-row" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="comp-cell">Tamaño requerido</div>
+            <div class="comp-cell">Ambas ≥ 30</div>
+            <div class="comp-cell">Al menos una &lt; 30</div>
+          </div>
+          <div class="comp-row" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="comp-cell">Distribución pob.</div>
+            <div class="comp-cell">Cualquiera (TCL)</div>
+            <div class="comp-cell">Ambas deben ser normales</div>
+          </div>
+          <div class="comp-row" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="comp-cell">¿Varianzas iguales?</div>
+            <div class="comp-cell">No se requiere</div>
+            <div class="comp-cell">Sí se requiere (σ₁ = σ₂)</div>
+          </div>
+          <div class="comp-row" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="comp-cell">Estadístico</div>
+            <div class="comp-cell">Z ~ N(0,1)</div>
+            <div class="comp-cell">T ~ t(n₁+n₂−2)</div>
+          </div>
+        </div>
+        <div class="box box-o" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--oran-dk)">⚠️ Matiz importante</div>
+          Aunque una muestra sea ≥ 30 y la otra &lt; 30, <strong>debes usar el enfoque t de muestras pequeñas</strong>. "Pequeña" significa que <em>al menos una</em> es pequeña.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S6 MUESTRAS PAREADAS -->
+<div class="slide" id="s6">
+  <div class="sh sh-t"><span class="sh-code ct">9.3</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 06 · Muestras Pareadas</div><div class="sh-title">Comparar medias — <span class="tt">muestras pareadas</span> · la ventaja del diseño</div></div></div>
+  <div class="sb">
+    <div class="concept">
+      <div class="concept-lbl">Concepto clave — eliminar el ruido estadístico</div>
+      <div class="concept-txt">El muestreo pareado es un <strong style="color:#E0C560">diseño poderoso</strong>: al comparar pares que son iguales en todo excepto el factor de interés, elimina la variabilidad no deseada (ej. diferencias entre autos al comparar combustibles). Esto permite detectar si el tratamiento realmente hace una diferencia.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">🔄 La transformación: dos muestras → una muestra</div>
+        <div class="box box-t">
+          <div class="blbl" style="color:var(--teal-dk)">Cómo funciona</div>
+          Para cada par, calcula d = x₁ − x₂ (<strong>¡siempre en el mismo orden!</strong>). Ahora tienes una sola muestra de diferencias d₁, d₂, …, dₙ. Trátala como tus datos. El problema se convierte en una prueba t de una muestra sobre d̄.
+        </div>
+        <div class="formula">
+          <div class="formula-lbl">IC para μd = μ₁ − μ₂ (pareadas)</div>
+          <div class="formula-eq">d̄ ± t<sub>α/2</sub> · (s<sub>d</sub> / √n)</div>
+          <div class="formula-note">gl = n − 1 · Estimador puntual = d̄ · Si n ≥ 30, puede usarse z<sub>α/2</sub></div>
+        </div>
+        <div class="formula" style="margin-bottom:0">
+          <div class="formula-lbl">Estadístico de prueba (pareadas)</div>
+          <div class="formula-eq">T = (d̄ − D₀) / (s<sub>d</sub> / √n)</div>
+          <div class="formula-note">H₀: μd = D₀ · Hₐ puede ser izquierda, derecha o dos colas.</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚖️ Pareadas vs. Independientes — cuándo elegir cada una</div>
+        <div class="card card-t" style="margin-bottom:.65rem">
+          <div class="card-ico">✅</div>
+          <div class="card-title">Usa muestras pareadas cuando…</div>
+          <div class="card-body">Las observaciones naturalmente vienen en pares (antes/después, gemelos, sujetos emparejados). La variable de emparejamiento (ej. modelo de auto) podría introducir variabilidad que enmascararía el efecto de interés.</div>
+        </div>
+        <div class="card card-r">
+          <div class="card-ico">❌</div>
+          <div class="card-title">No uses análisis pareado incorrectamente</div>
+          <div class="card-body">Si las muestras son verdaderamente independientes (seleccionadas al azar sin emparejamiento), es <strong>incorrecto</strong> usar las fórmulas pareadas. La estructura de los datos determina el método, no la preferencia del investigador.</div>
+        </div>
+        <div class="box box-g" style="margin-top:.5rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--gold-dk)">¡El orden importa!</div>
+          Restar siempre en el mismo sentido (siempre Auto 1 menos Auto 2) es crítico. Un orden inconsistente produce un d̄ sin sentido.
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S7 DOS PROPORCIONES -->
+<div class="slide" id="s7">
+  <div class="sh sh-o"><span class="sh-code co">9.4</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 07 · Dos Proporciones Poblacionales</div><div class="sh-title">Comparar <span class="to">dos proporciones</span> — la estructura paralela</div></div></div>
+  <div class="sb">
+    <div class="concept">
+      <div class="concept-lbl">Concepto clave — misma lógica, parámetro diferente</div>
+      <div class="concept-txt">Todo lo de las secciones 9.1–9.3 aplica aquí, pero reemplazamos medias con <strong style="color:#E0C560">proporciones</strong>. El estimador puntual de p₁ − p₂ es p̂₁ − p̂₂. Usamos Z (no t) porque se requieren muestras grandes para que la aproximación normal sea válida.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">📐 Fórmulas</div>
+        <div class="formula">
+          <div class="formula-lbl">IC para p₁ − p₂ (muestras grandes)</div>
+          <div class="formula-eq">(p̂₁−p̂₂) ± z<sub>α/2</sub>·√[p̂₁(1−p̂₁)/n₁ + p̂₂(1−p̂₂)/n₂]</div>
+        </div>
+        <div class="formula" style="margin-bottom:.75rem">
+          <div class="formula-lbl">Estadístico de prueba</div>
+          <div class="formula-eq">Z = [(p̂₁−p̂₂)−D₀] / √[p̂₁(1−p̂₁)/n₁ + p̂₂(1−p̂₂)/n₂]</div>
+        </div>
+        <div class="sec">✅ Condición de "muestra suficientemente grande"</div>
+        <div class="box box-o">
+          <div class="blbl" style="color:var(--oran-dk)">Ambos intervalos deben estar dentro de [0,1]</div>
+          Verificar: [p̂ᵢ ± 3√(p̂ᵢ(1−p̂ᵢ)/nᵢ)] ⊂ [0,1] para cada muestra. Es más matizado que simplemente n ≥ 30 — depende del valor de p̂.
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚠️ Advertencia crítica — supuesto de independencia</div>
+        <div class="card card-r" style="margin-bottom:.65rem">
+          <div class="card-ico">🚨</div>
+          <div class="card-title">La trampa de la encuesta electoral</div>
+          <div class="card-body">Si encuestas a las mismas personas y les pides elegir entre el Candidato A y B, entonces p̂A y p̂B provienen de la <strong>misma muestra</strong>, no de dos muestras independientes. Las fórmulas del IC y el estadístico de prueba de esta sección son <strong>inválidas</strong> en ese caso.</div>
+        </div>
+        <div class="box box-g">
+          <div class="blbl" style="color:var(--gold-dk)">La lógica es idéntica a la de medias</div>
+          H₀: p₁ − p₂ = D₀ (usualmente 0)<br>
+          Hₐ de tres formas: izquierda, derecha o dos colas<br>
+          Interpretación del IC: ¿incluye el cero?
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S8 TAMAÑO DE MUESTRA -->
+<div class="slide" id="s8">
+  <div class="sh sh-g"><span class="sh-code cg">9.5</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 08 · Tamaño de Muestra</div><div class="sh-title"><span class="tg">Tamaño de muestra</span> — planear antes de recolectar datos</div></div></div>
+  <div class="sb">
+    <div class="concept">
+      <div class="concept-lbl">Concepto clave — planear ahorra recursos</div>
+      <div class="concept-txt">Cada muestra cuesta tiempo, dinero y esfuerzo. Antes de recolectar datos, debemos estimar el <strong style="color:#E0C560">tamaño mínimo de muestra</strong> necesario para lograr un margen de error E deseado con un nivel de confianza dado. Muy pequeña → inconclusiva. Muy grande → desperdicio.</div>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">📏 Para medias — muestras independientes</div>
+        <div class="formula">
+          <div class="formula-lbl">Tamaños iguales mínimos n₁ = n₂</div>
+          <div class="formula-eq">n = (z<sub>α/2</sub>)²(σ₁² + σ₂²) / E²  (redondear hacia arriba)</div>
+          <div class="formula-note">Fijamos n₁ = n₂ porque no podemos resolver para dos incógnitas. σ₁ y σ₂ deben conocerse o estimarse de datos previos.</div>
+        </div>
+        <div class="sec" style="margin-top:.5rem">📏 Para medias — muestras pareadas</div>
+        <div class="formula">
+          <div class="formula-lbl">Número mínimo de pares n (pareadas)</div>
+          <div class="formula-eq">n = (z<sub>α/2</sub>)² σ<sub>d</sub>² / E²  (redondear hacia arriba)</div>
+          <div class="formula-note">σd es la DE de la población de diferencias. Válido cuando n ≥ 30 (usamos z, no t).</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">📏 Para proporciones</div>
+        <div class="formula">
+          <div class="formula-lbl">Tamaños iguales mínimos n₁ = n₂</div>
+          <div class="formula-eq">n = (z<sub>α/2</sub>)²[p̂₁(1−p̂₁) + p̂₂(1−p̂₂)] / E²</div>
+          <div class="formula-note">Si p̂₁ y p̂₂ son desconocidas, usar 0.5 para cada una (estimación conservadora — da el n máximo). Si solo una es desconocida, usar 0.5 solo para esa.</div>
+        </div>
+        <div class="box box-g">
+          <div class="blbl" style="color:var(--gold-dk)">Los tres ingredientes</div>
+          Toda fórmula de tamaño de muestra necesita exactamente tres cosas:<br>
+          <span class="bdg bdg-g">z<sub>α/2</sub></span> — del nivel de confianza<br>
+          <span class="bdg bdg-g">σ o p̂</span> — de conocimiento previo o datos piloto<br>
+          <span class="bdg bdg-g">E</span> — el margen de error máximo deseado, fijado por el investigador
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S9 TABLA COMPARATIVA MAESTRA -->
+<div class="slide" id="s9">
+  <div class="sh sh-s"><span class="sh-code cs">∑</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 09 · Síntesis</div><div class="sh-title">Los cinco métodos — <span class="ts">lado a lado</span></div></div></div>
+  <div class="sb">
+    <div class="comp" style="margin-bottom:.85rem">
+      <div class="comp-head" style="grid-template-columns:1.4fr 1fr 1fr 1.2fr 1.1fr">
+        <div class="comp-head-cell">Sección</div>
+        <div class="comp-head-cell">Estadístico</div>
+        <div class="comp-head-cell">Condiciones</div>
+        <div class="comp-head-cell">Fórmula del EE</div>
+        <div class="comp-head-cell">Grados de libertad</div>
+      </div>
+      <div class="comp-row" style="grid-template-columns:1.4fr 1fr 1fr 1.2fr 1.1fr">
+        <div class="comp-cell">9.1 Medias, grandes indep.</div>
+        <div class="comp-cell"><span class="bdg bdg-r">Z</span></div>
+        <div class="comp-cell">n₁≥30, n₂≥30, indep.</div>
+        <div class="comp-cell">√(s₁²/n₁ + s₂²/n₂)</div>
+        <div class="comp-cell">∞ (tabla Z)</div>
+      </div>
+      <div class="comp-row" style="grid-template-columns:1.4fr 1fr 1fr 1.2fr 1.1fr">
+        <div class="comp-cell">9.2 Medias, pequeñas indep.</div>
+        <div class="comp-cell"><span class="bdg bdg-s">T</span></div>
+        <div class="comp-cell">Pobs. normales, σ₁=σ₂, indep.</div>
+        <div class="comp-cell">√[s²p(1/n₁+1/n₂)]</div>
+        <div class="comp-cell">n₁+n₂−2</div>
+      </div>
+      <div class="comp-row" style="grid-template-columns:1.4fr 1fr 1fr 1.2fr 1.1fr">
+        <div class="comp-cell">9.3 Medias, pareadas</div>
+        <div class="comp-cell"><span class="bdg bdg-t">T</span></div>
+        <div class="comp-cell">Diferencias normales</div>
+        <div class="comp-cell">s<sub>d</sub>/√n</div>
+        <div class="comp-cell">n−1</div>
+      </div>
+      <div class="comp-row" style="grid-template-columns:1.4fr 1fr 1fr 1.2fr 1.1fr">
+        <div class="comp-cell">9.4 Proporciones, grandes</div>
+        <div class="comp-cell"><span class="bdg bdg-o">Z</span></div>
+        <div class="comp-cell">Muestras grandes, indep.</div>
+        <div class="comp-cell">√[p̂₁q̂₁/n₁+p̂₂q̂₂/n₂]</div>
+        <div class="comp-cell">∞ (tabla Z)</div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="box box-t">
+        <div class="blbl" style="color:var(--teal-dk)">El patrón universal de H₀</div>
+        En las cuatro pruebas, la hipótesis nula tiene la misma forma:<br>
+        <strong>H₀: [parámetro₁] − [parámetro₂] = D₀</strong><br>
+        Usualmente D₀ = 0 ("sin diferencia"). La alternativa puede ser izquierda, derecha o dos colas.
+      </div>
+      <div class="box box-r">
+        <div class="blbl" style="color:var(--red-dk)">El IC siempre se interpreta igual</div>
+        Si el IC contiene <strong>el 0</strong> → no hay diferencia significativa al nivel de confianza dado.<br>
+        Si el IC es completamente <strong>positivo</strong> → el Parámetro 1 es mayor.<br>
+        Si el IC es completamente <strong>negativo</strong> → el Parámetro 2 es mayor.
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S10 VERIFICACIÓN DE COMPRENSIÓN -->
+<div class="slide" id="s10">
+  <div class="sh sh-r"><span class="sh-code cr">?</span><div class="sh-meta"><div class="sh-lbl">Diapositiva 10 · Verificación de comprensión</div><div class="sh-title">Preguntas conceptuales — <span class="tr">comprensión, no cálculo</span></div></div></div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P1</div>
+          <div class="quiz-q">Dos muestras independientes de tamaños n₁ = 45 y n₂ = 18. ¿Cuál método corresponde?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Z (muestras grandes) — ambas son suficientemente grandes</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ t (muestras pequeñas) — n₂ &lt; 30, por lo que al menos una es pequeña</li>
+            <li><span class="opt-l">c</span> t pareada — hay que calcular diferencias</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P2</div>
+          <div class="quiz-q">¿Por qué el muestreo pareado suele detectar mejor un efecto real que el muestreo independiente?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Porque las muestras pareadas siempre son más grandes</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Porque el emparejamiento elimina la variabilidad de fondo (ruido estadístico), facilitando detectar el efecto del tratamiento</li>
+            <li><span class="opt-l">c</span> Porque la distribución t tiene colas más anchas que la Z</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P3</div>
+          <div class="quiz-q">Un IC del 95% para μ₁ − μ₂ es [−3.1, 1.4]. ¿Qué puedes concluir?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> μ₁ es significativamente mayor que μ₂</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ No hay evidencia suficiente de diferencia — el IC contiene el cero</li>
+            <li><span class="opt-l">c</span> μ₂ es significativamente mayor que μ₁</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P4</div>
+          <div class="quiz-q">La varianza combinada s²p se usa en el caso de muestras pequeñas. ¿Qué supuesto la hace válida?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> Los dos tamaños de muestra deben ser iguales</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ Las desviaciones estándar poblacionales deben ser iguales (σ₁ = σ₂), así se justifica combinar dos estimadores del mismo valor</li>
+            <li><span class="opt-l">c</span> Las poblaciones deben tener la misma media</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P5</div>
+          <div class="quiz-q">En una muestra pareada, olvidas restar siempre en el mismo orden. ¿Qué ocurre?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> El estadístico de prueba se vuelve más grande, lo que es mejor</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ El d̄ calculado pierde sentido — diferencias positivas y negativas se cancelan al azar, ocultando el efecto real</li>
+            <li><span class="opt-l">c</span> Nada — el signo de la diferencia no importa</li>
+          </ul>
+        </div>
+        <div class="quiz-box">
+          <div class="quiz-tag">P6</div>
+          <div class="quiz-q">Para planear el tamaño de muestra de dos proporciones sin estimaciones previas de p₁ y p₂, ¿qué valor usas?</div>
+          <ul class="quiz-opts">
+            <li><span class="opt-l">a</span> p̂ = 0 para ambas — estimación mínima</li>
+            <li class="correct"><span class="opt-l">b</span> ✓ p̂ = 0.5 para ambas — estimación conservadora que da el tamaño de muestra más grande (y más seguro)</li>
+            <li><span class="opt-l">c</span> p̂ = 1 para ambas — estimación máxima</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="nav-sp"></div>
+  </div>
+</div>
+
+<!-- S11 CIERRE -->
+<div class="slide cover cv-close" id="s11">
+  <div class="cv-mesh"></div><div class="cv-ribs"></div><div class="cv-wayfind"></div>
+  <div class="close-inner">
+    <div style="margin-bottom:1.5rem">
+      <div class="cv-gate" style="justify-content:center">LLEGANDO · PROBLEMAS DE DOS MUESTRAS · TERMINAL 9</div>
+    </div>
+    <h2 style="font-family:'Fraunces',serif;font-size:clamp(2rem,5vw,3.8rem);font-weight:700;color:#fff;line-height:.95;margin-bottom:.5rem;letter-spacing:-.02em">
+      Ideas <span style="color:#7ECFD3">clave</span>
+    </h2>
+    <div style="width:56px;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--teal));margin:.9rem auto 1.4rem;border-radius:2px"></div>
+    <div style="text-align:left;margin-bottom:1.5rem">
+      <div class="sum-row"><div class="sum-k" style="color:#FF8FA0">9.1 — Grandes, indep.</div><div class="sum-v">Estadístico Z. Ambas n ≥ 30, muestras independientes. Estimador = x̄₁ − x̄₂. Misma lógica IC + hipótesis que una sola población.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#93C5FD">9.2 — Pequeñas, indep.</div><div class="sum-v">Estadístico t, gl = n₁+n₂−2. Requiere pobs. normales Y σ₁=σ₂. Usa varianza combinada s²p. "Pequeña" = al menos una n &lt; 30.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#7ECFD3">9.3 — Pareadas</div><div class="sum-v">Calcula d = x₁−x₂ por par (¡orden consistente!). t sobre d̄, gl = n−1. Diseño poderoso: elimina variabilidad de fondo.</div></div>
+      <div class="sum-row"><div class="sum-k" style="color:#FFB070">9.4 — Proporciones</div><div class="sum-v">Estadístico Z, muestras grandes. Verificar [p̂±3EE] ⊂ [0,1]. Ojo: p̂A y p̂B de la misma encuesta NO son muestras independientes.</div></div>
+      <div class="sum-row" style="margin-bottom:0"><div class="sum-k" style="color:#E0C560">9.5 — Tamaño n</div><div class="sum-v">n = (z)²(σ²)/E² · Tres ingredientes: nivel de confianza, DE poblacional y margen de error deseado. Usar 0.5 cuando p̂ es desconocida.</div></div>
+    </div>
+    <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:.9rem 1.2rem;max-width:540px;margin:0 auto">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--gold);letter-spacing:2px;margin-bottom:.4rem">BIBLIOGRAFÍA</div>
+      <div style="font-size:.8rem;color:rgba(255,255,255,.55);line-height:1.65;text-align:left">
+        Shafer, G. & Zhang, Z. (2012). <em style="color:rgba(255,255,255,.8)">Introductory Statistics.</em> Saylor Academy.<br>
+        Capítulo 9: Two-Sample Problems.<br>
+        <span style="color:rgba(255,255,255,.35)">saylordotorg.github.io/text_introductory-statistics/s13-two-sample-problems.html</span>
+      </div>
+    </div>
+  </div>
+  <div class="nav-sp"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nb" id="pb-btn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-c">
+    <div class="ctr">Diapositiva <span id="cn">1</span> / <span id="tn">11</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nb" id="nb-btn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+const slides=document.querySelectorAll('.slide'),N=slides.length;let cur=0;
+document.getElementById('tn').textContent=N;
+const dotsEl=document.getElementById('dots');
+for(let i=0;i<N;i++){const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);}
+function update(){slides.forEach((s,i)=>{s.classList.toggle('active',i===cur);if(i===cur)s.scrollTop=0;});dotsEl.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===cur));document.getElementById('cn').textContent=cur+1;document.getElementById('pb-btn').disabled=cur===0;document.getElementById('nb-btn').disabled=cur===N-1;document.getElementById('pb').style.width=((cur+1)/N*100)+'%';}
+function go(d){const n=cur+d;if(n>=0&&n<N){cur=n;update();}}
+function goTo(i){cur=i;update();}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);});
+update();
+</script>
+</body>
+</html>
