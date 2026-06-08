@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encuadre · Bioestadística Aplicada · Verano 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:   #F6F0E8;
+  --cream2:  #EDE5D8;
+  --sand:    #D9CCBA;
+  --brown:   #7C5C3E;
+  --brown2:  #B08060;
+  --dark:    #2A1F14;
+  --teal:    #2E6B5E;
+  --teal2:   #4A9480;
+  --teal-lt: rgba(46,107,94,.12);
+  --ink:     #2A1F14;
+  --ink-md:  #5A4A36;
+  --ink-lt:  #8A7A66;
+  --white:   #FFFFFF;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── SLIDE FRAMEWORK ── */
+.slide {
+  display: none;
+  width: 100vw; min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn .38s ease;
+}
+.slide.active { display: flex; flex-direction: column; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; bottom:0; left:0; right:0; z-index:100;
+  background: rgba(42,31,20,.96);
+  backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .55rem 1.4rem;
+  gap: .6rem;
+}
+.nav-btn {
+  display: flex; align-items: center; gap: .35rem;
+  padding: .38rem .9rem; border-radius: 4px;
+  font-family: 'DM Mono', monospace; font-size: .74rem; font-weight: 500;
+  border: 1px solid rgba(214,194,174,.25); background: transparent;
+  color: var(--cream); cursor: pointer; transition: all .2s; letter-spacing: .5px;
+}
+.nav-btn:hover:not(:disabled) { background: rgba(214,194,174,.12); border-color: rgba(214,194,174,.5); }
+.nav-btn:disabled { opacity: .2; cursor: not-allowed; }
+
+.nav-center { display: flex; flex-direction: column; align-items: center; gap: .22rem; }
+.nav-counter {
+  font-family: 'DM Mono', monospace; font-size: .7rem; color: rgba(214,194,174,.55);
+}
+.nav-counter span { color: var(--cream); font-size: .88rem; font-weight: 500; }
+.dots { display: flex; gap: 5px; }
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(214,194,174,.22); border: none;
+  cursor: pointer; padding: 0; transition: all .2s;
+}
+.dot.active { background: var(--teal2); transform: scale(1.5); }
+
+.pb {
+  position: fixed; top:0; left:0; right:0; height: 3px; z-index: 200;
+  background: linear-gradient(90deg, var(--teal), var(--brown2), var(--teal2));
+  transform-origin: left;
+  transition: width .4s ease;
+}
+
+.slide-sp { height: 58px; flex-shrink: 0; }
+
+/* ══════════════════════════════════════════════════════════════
+   S1 — PORTADA
+══════════════════════════════════════════════════════════════ */
+#s1 {
+  background: var(--dark);
+  flex-direction: row;
+}
+.s1-left {
+  flex: 0 0 55%;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 3.5rem 3rem 3rem 3.5rem;
+  position: relative;
+  background: var(--cream);
+}
+.s1-left::after {
+  content: '';
+  position: absolute; right: 0; top: 0; bottom: 0; width: 6px;
+  background: linear-gradient(180deg, var(--teal), var(--brown), var(--teal2));
+}
+.s1-sup {
+  font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--brown2); margin-bottom: 1.2rem;
+}
+.s1-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem,5vw,4.8rem); font-weight: 900; line-height: .95;
+  color: var(--dark); letter-spacing: -.02em; margin-bottom: .5rem;
+}
+.s1-title em { color: var(--teal); font-style: normal; }
+.s1-divider { width: 64px; height: 3px; background: var(--brown2); border-radius: 2px; margin: 1.4rem 0; }
+.s1-sub { font-size: 1rem; font-weight: 500; color: var(--ink-md); margin-bottom: .28rem; }
+.s1-inst { font-size: .9rem; color: var(--ink-lt); }
+.s1-verano {
+  margin-top: 2rem; display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--teal); color: var(--white); padding: .3rem .88rem;
+  border-radius: 3px; font-family: 'DM Mono', monospace; font-size: .72rem;
+  letter-spacing: 1px; font-weight: 500;
+}
+
+.s1-right {
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 3rem 2.5rem;
+  gap: .8rem;
+}
+.info-card {
+  background: rgba(214,194,174,.08);
+  border: 1px solid rgba(214,194,174,.18);
+  border-radius: 5px; padding: .65rem .95rem;
+}
+.info-card .lbl {
+  font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--brown2); margin-bottom: .15rem;
+}
+.info-card .val { font-size: .95rem; color: var(--cream); font-weight: 400; }
+
+.s1-emoji { font-size: 5rem; text-align: center; margin-top: 1.5rem; opacity: .7; }
+
+/* ══════════════════════════════════════════════════════════════
+   S2 — INFORMACIÓN GENERAL
+══════════════════════════════════════════════════════════════ */
+#s2 { background: var(--cream); flex-direction: column; }
+#s3 { background: var(--cream); flex-direction: column; }
+#s4 { background: var(--cream); flex-direction: column; }
+#s5 { background: var(--cream); flex-direction: column; }
+#s6 { background: var(--cream); flex-direction: column; }
+#s7 { background: var(--cream); flex-direction: column; }
+#s8 { background: var(--cream); flex-direction: column; }
+#s9 { background: var(--dark); flex-direction: column; }
+
+/* ── Shared header ── */
+.sh {
+  background: var(--dark); padding: .7rem 2rem;
+  display: flex; align-items: center; gap: .75rem;
+  flex-shrink: 0;
+}
+.sh-title {
+  font-family: 'Playfair Display', serif; font-size: clamp(.95rem,2vw,1.35rem);
+  font-weight: 700; color: var(--cream);
+}
+.sh-title em { color: var(--teal2); font-style: normal; }
+.sh-accent { width: 4px; height: 36px; border-radius: 2px; flex-shrink: 0; }
+
+.sb { flex: 1; padding: 1.4rem 2rem; overflow-y: auto; }
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: .9rem; }
+
+/* ── Shared card ── */
+.card {
+  background: var(--white); border: 1px solid var(--sand);
+  border-radius: 6px; padding: .9rem 1rem;
+  box-shadow: 0 2px 8px rgba(42,31,20,.06);
+  position: relative; overflow: hidden;
+}
+.card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+.card-teal::before { background: var(--teal); }
+.card-brown::before { background: var(--brown); }
+.card-brown2::before { background: var(--brown2); }
+.card-sand::before { background: var(--sand); }
+
+.card-title { font-family:'Playfair Display',serif; font-size:.95rem; font-weight:700; color:var(--ink); margin-bottom:.22rem; }
+.card-sub { font-size:.82rem; color:var(--ink-lt); line-height:1.55; }
+
+/* ── Key-value row ── */
+.kv { display:flex; align-items:flex-start; gap:.6rem; padding:.5rem .75rem; border-radius:5px; background:var(--white); border:1px solid var(--sand); margin-bottom:.45rem; }
+.kv-k { font-size:.82rem; font-weight:600; color:var(--brown); min-width:185px; flex-shrink:0; }
+.kv-v { font-size:.84rem; color:var(--ink-md); line-height:1.5; }
+
+/* ── Box ── */
+.box { border-radius:6px; padding:.75rem .95rem; margin-bottom:.65rem; font-size:.84rem; line-height:1.65; border:1.5px solid; }
+.box-t { background:var(--teal-lt); border-color:rgba(46,107,94,.28); color:var(--ink-md); }
+.box-b { background:rgba(124,92,62,.09); border-color:rgba(124,92,62,.28); color:var(--ink-md); }
+.box-w { background:var(--white); border-color:var(--sand); color:var(--ink-md); }
+.box-dark { background:var(--dark); border-color:transparent; color:var(--cream); }
+.blbl { font-family:'DM Mono',monospace; font-size:.57rem; letter-spacing:2px; text-transform:uppercase; margin-bottom:.22rem; opacity:.7; }
+
+/* ── Section title ── */
+.sec { font-family:'Playfair Display',serif; font-weight:700; font-size:1rem; color:var(--ink); margin-bottom:.62rem; padding-bottom:.25rem; border-bottom:1.5px solid var(--sand); }
+
+/* ── UL ── */
+ul.ul { list-style:none; padding:0; }
+ul.ul li { padding:.3rem 0 .3rem 1.2rem; position:relative; font-size:.84rem; color:var(--ink-md); line-height:1.55; border-bottom:1px solid rgba(42,31,20,.05); }
+ul.ul li:last-child { border-bottom:none; }
+ul.ul li::before { content:''; position:absolute; left:0; top:.58rem; width:7px; height:7px; border-radius:50%; }
+ul.ul.lt li::before { background:var(--teal); }
+ul.ul.lb li::before { background:var(--brown2); }
+strong { color:var(--ink); font-weight:600; }
+
+/* ── Badge ── */
+.bdg { display:inline-flex; align-items:center; gap:.18rem; padding:.12rem .5rem; border-radius:3px; font-size:.68rem; font-weight:600; font-family:'DM Mono',monospace; border:1px solid; }
+.bdg-t { background:var(--teal-lt); color:var(--teal); border-color:rgba(46,107,94,.35); }
+.bdg-b { background:rgba(124,92,62,.1); color:var(--brown); border-color:rgba(124,92,62,.35); }
+
+/* ── Footer banner ── */
+.fbanner {
+  background:var(--teal); color:var(--white); padding:.5rem 2rem;
+  font-size:.84rem; font-weight:500; flex-shrink:0;
+  display:flex; align-items:center; gap:.5rem;
+}
+.fbanner.brown { background:var(--brown); }
+.fbanner.dark  { background:var(--dark); }
+
+/* ── Step card ── */
+.step { display:flex; gap:.72rem; padding:.7rem .85rem; background:var(--white); border:1.5px solid var(--sand); border-radius:6px; margin-bottom:.4rem; box-shadow:0 2px 6px rgba(42,31,20,.05); align-items:flex-start; }
+.step-n { min-width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:'DM Mono',monospace; font-weight:700; font-size:.72rem; color:var(--white); background:var(--teal); }
+.step-t strong { font-family:'Playfair Display',serif; font-size:.9rem; display:block; color:var(--ink); margin-bottom:.05rem; }
+.step-t p { font-size:.8rem; color:var(--ink-md); line-height:1.5; }
+
+/* ── Eval bar ── */
+.eval-row { display:flex; align-items:center; gap:.75rem; padding:.55rem .85rem; background:var(--white); border:1.5px solid var(--sand); border-radius:5px; margin-bottom:.4rem; }
+.eval-pct { min-width:52px; font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; line-height:1; }
+.eval-bar-wrap { flex:1; height:8px; background:var(--cream2); border-radius:4px; overflow:hidden; }
+.eval-bar { height:100%; border-radius:4px; }
+.eval-name { min-width:160px; font-size:.9rem; font-weight:600; color:var(--ink); }
+.eval-note { font-size:.78rem; color:var(--ink-lt); flex:1; text-align:right; }
+
+/* ── Prio comm ── */
+.prio-row { display:flex; align-items:center; gap:.65rem; padding:.52rem .85rem; background:var(--white); border:1.5px solid var(--sand); border-radius:5px; margin-bottom:.4rem; }
+.prio-n { width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:'DM Mono',monospace; font-size:.8rem; font-weight:700; color:var(--white); }
+.prio-lbl { font-size:.9rem; font-weight:600; color:var(--ink); flex:1; }
+.prio-note { font-size:.78rem; color:var(--ink-lt); }
+
+/* ── Summary slide (S9) ── */
+.sum-row { display:flex; gap:.55rem; margin-bottom:.38rem; font-size:.84rem; text-align:left; }
+.sum-k { min-width:160px; font-family:'DM Mono',monospace; font-size:.63rem; flex-shrink:0; padding-top:.08rem; letter-spacing:.5px; }
+.sum-v { color:rgba(246,240,232,.72); line-height:1.5; }
+
+/* ── Responsive ── */
+@media(max-width:768px){
+  .sb{padding:1rem;}
+  .g2,.g3{grid-template-columns:1fr;}
+  #s1{flex-direction:column;}
+  .s1-left{flex:none;padding:2rem 1.5rem;}
+  .s1-right{padding:1.5rem;}
+  .dots{max-width:200px; flex-wrap:wrap; justify-content:center;}
+}
+@media(max-width:480px){ .dots{display:none;} }
+</style>
+</head>
+<body>
+<div class="pb" id="pb"></div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S1  PORTADA
+════════════════════════════════════════════════════════════ -->
+<div class="slide active" id="s1">
+  <div class="s1-left">
+    <div class="s1-sup">Encuadre del curso · Verano 2026</div>
+    <h1 class="s1-title">Bio<em>estadística</em><br>Aplicada</h1>
+    <div class="s1-divider"></div>
+    <p class="s1-sub">Programa de Ingeniería Biomédica</p>
+    <p class="s1-inst">Universidad Autónoma de Ciudad Juárez</p>
+    <div class="s1-verano">☀️ &nbsp;Verano 2026</div>
+  </div>
+  <div class="s1-right">
+    <div style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--brown2);margin-bottom:.6rem;letter-spacing:.5px;">Información del curso</div>
+    <div class="info-card">
+      <div class="lbl">Período</div>
+      <div class="val">08 Jun – 17 Jul 2026</div>
+    </div>
+    <div class="info-card">
+      <div class="lbl">Nivel</div>
+      <div class="val">Intermedio</div>
+    </div>
+    <div class="info-card">
+      <div class="lbl">Plataforma</div>
+      <div class="val">Microsoft Teams</div>
+    </div>
+    <div class="info-card">
+      <div class="lbl">Evaluación mínima aprobatoria</div>
+      <div class="val">70 puntos</div>
+    </div>
+    <div class="s1-emoji">📚</div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S2  INFORMACIÓN GENERAL
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s2">
+  <div class="sh">
+    <div class="sh-accent" style="background:var(--teal)"></div>
+    <h2 class="sh-title">Información General del Curso</h2>
+  </div>
+  <div class="sb">
+    <div class="g2" style="margin-bottom:1rem">
+      <div>
+        <div class="sec">📅 Fechas importantes</div>
+        <div class="kv"><span class="kv-k">Período de clase</span><span class="kv-v">08 de junio – 17 de julio de 2026</span></div>
+        <div class="kv"><span class="kv-k">Exámenes parciales</span><span class="kv-v">4 parciales a lo largo del curso conforme se avance</span></div>
+        <div class="kv"><span class="kv-k">Examen final</span><span class="kv-v"><em style="color:var(--brown)">No aplica</em> — el curso evalúa mediante parciales</span></div>
+        <div class="kv"><span class="kv-k">Asuetos</span><span class="kv-v"><em style="color:var(--brown)">No hay</em> durante el período de verano</span></div>
+        <div class="kv"><span class="kv-k">Cierre captura de califs.</span><span class="kv-v">Por determinar</span></div>
+      </div>
+      <div>
+        <div class="sec">💻 Plataforma y recursos</div>
+        <div class="card card-teal" style="margin-bottom:.75rem">
+          <div class="card-title">Microsoft Teams</div>
+          <div class="card-sub">Plataforma principal del curso. Aquí se entregan tareas, se realizan exámenes y se gestiona la comunicación del grupo.</div>
+        </div>
+        <div class="card card-brown2">
+          <div class="card-title">Computadora de salón / Laptop</div>
+          <div class="card-sub">Se utilizará la computadora del salón de clase. Se permite traer laptop personal si lo prefieres.</div>
+        </div>
+      </div>
+    </div>
+    <div class="fbanner">
+      📌&nbsp; Anota las fechas del 08 Jun al 17 Jul — el curso de verano es intensivo y breve
+    </div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S3  QUÉ NECESITAMOS
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s3">
+  <div class="sh">
+    <div class="sh-accent" style="background:var(--brown2)"></div>
+    <h2 class="sh-title">¿Qué <em>Necesitamos</em> para la Clase?</h2>
+  </div>
+  <div class="sb">
+    <div class="g3" style="margin-bottom:1rem">
+      <div class="card card-teal">
+        <div style="font-size:2rem;margin-bottom:.5rem">💻</div>
+        <div class="card-title">Computadora</div>
+        <div class="card-sub">Se usa la del salón de clase. Puedes traer laptop personal si lo prefieres. Necesaria para Teams y actividades en línea.</div>
+      </div>
+      <div class="card" style="border-top:3px solid var(--teal2)">
+        <div style="font-size:2rem;margin-bottom:.5rem">📱</div>
+        <div class="card-title">Microsoft Teams</div>
+        <div class="card-sub">Plataforma oficial del curso. Entregas, exámenes y comunicación se gestionan aquí. Tener la app instalada o acceso web.</div>
+      </div>
+      <div class="card card-brown">
+        <div style="font-size:2rem;margin-bottom:.5rem">🧠</div>
+        <div class="card-title">Disposición activa</div>
+        <div class="card-sub">El verano es corto e intensivo. La participación y constancia en cada sesión marcan la diferencia.</div>
+      </div>
+    </div>
+    <div class="box box-t">
+      <div class="blbl" style="color:var(--teal)">Nota importante</div>
+      Dado que el curso es de verano y el período es breve, la preparación previa a cada sesión y el seguimiento continuo en Teams son especialmente relevantes.
+    </div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S4  RÚBRICA DE EVALUACIÓN
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s4">
+  <div class="sh">
+    <div class="sh-accent" style="background:var(--teal2)"></div>
+    <h2 class="sh-title">Rúbrica de <em>Evaluación</em></h2>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="sec">📊 Componentes de la calificación</div>
+
+        <div class="eval-row">
+          <div class="eval-pct" style="color:var(--teal)">50%</div>
+          <div class="eval-bar-wrap"><div class="eval-bar" style="width:50%;background:var(--teal)"></div></div>
+          <div class="eval-name">Exámenes Parciales</div>
+          <div class="eval-note">4 parciales durante el curso</div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-pct" style="color:var(--brown)">30%</div>
+          <div class="eval-bar-wrap"><div class="eval-bar" style="width:30%;background:var(--brown)"></div></div>
+          <div class="eval-name">Prácticas</div>
+          <div class="eval-note">Ejercicios aplicados</div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-pct" style="color:var(--brown2)">10%</div>
+          <div class="eval-bar-wrap"><div class="eval-bar" style="width:10%;background:var(--brown2)"></div></div>
+          <div class="eval-name">Tareas y Trabajos</div>
+          <div class="eval-note">Actividades semanales</div>
+        </div>
+        <div class="eval-row">
+          <div class="eval-pct" style="color:var(--sand);filter:saturate(1.2)">10%</div>
+          <div class="eval-bar-wrap"><div class="eval-bar" style="width:10%;background:var(--sand)"></div></div>
+          <div class="eval-name">Proyecto Final</div>
+          <div class="eval-note">Integrador al cierre</div>
+        </div>
+
+        <div style="background:var(--dark);border-radius:5px;padding:.65rem 1rem;margin-top:.55rem;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'DM Mono',monospace;font-size:.8rem;color:var(--cream);font-weight:500;">TOTAL: 100%</span>
+          <span style="font-family:'Playfair Display',serif;font-size:.9rem;color:var(--teal2);font-weight:700;">Mínimo aprobatorio: 70</span>
+        </div>
+      </div>
+      <div>
+        <div class="sec">📝 Sobre los exámenes</div>
+        <div class="box box-t">
+          <div class="blbl" style="color:var(--teal)">4 exámenes parciales</div>
+          No hay examen final. Se realizarán <strong>4 parciales</strong> conforme se avance en los temas del curso. Las fechas exactas se comunicarán con anticipación mediante Teams.
+        </div>
+        <div class="box box-w">
+          <div class="blbl">Plataforma de exámenes</div>
+          Los exámenes se realizan a través de <strong>Microsoft Teams</strong>. Asegúrate de contar con acceso estable el día de cada evaluación.
+        </div>
+        <div class="box box-b">
+          <div class="blbl" style="color:var(--brown)">Verano intensivo</div>
+          El período de verano es breve — las evaluaciones se distribuirán a lo largo de las 6 semanas del curso. El ritmo será más acelerado que en un semestre regular.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S5  REGLAS DE CLASE Y ASISTENCIA
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s5">
+  <div class="sh">
+    <div class="sh-accent" style="background:var(--brown)"></div>
+    <h2 class="sh-title">Reglas de Clase y <em>Asistencia</em></h2>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="sec">📋 Registro de asistencia</div>
+        <div class="box box-t" style="margin-bottom:.75rem">
+          <div class="blbl" style="color:var(--teal)">Dos formas de registrar asistencia</div>
+          La asistencia puede tomarse de <strong>dos maneras</strong>: de forma tradicional al inicio de la clase, o a través de actividades correspondientes de la sesión.
+        </div>
+        <div class="card card-teal" style="margin-bottom:.65rem">
+          <div class="card-title">Forma 1 — Asistencia tradicional</div>
+          <div class="card-sub">Se registra de forma presencial dentro de los primeros <strong>10 minutos</strong> del inicio de la clase. Llegar después de ese margen cuenta como inasistencia.</div>
+        </div>
+        <div class="card card-brown2">
+          <div class="card-title">Forma 2 — Actividades de la sesión</div>
+          <div class="card-sub">Completar las actividades correspondientes a la sesión también cuenta como registro de asistencia, aunque llegues después del margen de los 10 minutos.</div>
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚠️ Inasistencias y justificaciones</div>
+        <div class="box box-b">
+          <div class="blbl" style="color:var(--brown)">Justificaciones</div>
+          Para solicitar una justificación de inasistencia, tienes hasta <strong>24 horas después</strong> de la falta para presentarla al profesor.
+        </div>
+        <div class="box box-w">
+          <div class="blbl">Uso de IA en clase</div>
+          Puedes usar IA generativa en clase <strong>siempre que puedas razonar</strong> lo que proporciona. El propósito es apoyar y potenciar tu aprendizaje, no sustituir tu pensamiento.
+        </div>
+        <div class="box box-t" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--teal)">Verano — recomendación</div>
+          Dado el ritmo intensivo del verano, cada sesión tiene peso significativo. La constancia en la asistencia y participación es especialmente importante.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S6  ACUERDOS PRINCIPALES
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s6">
+  <div class="sh">
+    <div class="sh-accent" style="background:var(--teal2)"></div>
+    <h2 class="sh-title">Acuerdos <em>Principales</em></h2>
+  </div>
+  <div class="sb">
+    <div class="g2">
+      <div>
+        <div class="sec">📤 Entregas</div>
+        <div class="kv"><span class="kv-k">Fecha límite</span><span class="kv-v">Los <strong>sábados a las 11:59 p.m.</strong> de cada semana.</span></div>
+        <div class="kv"><span class="kv-k">Plataforma</span><span class="kv-v"><strong>Microsoft Teams</strong> — todas las entregas se hacen aquí.</span></div>
+        <div class="kv"><span class="kv-k">Entrega en equipo</span><span class="kv-v">Algunas actividades pueden hacerse en equipo, pero la <strong>entrega es individual</strong>.</span></div>
+
+        <div class="sec" style="margin-top:.8rem">📚 Citación</div>
+        <div class="box box-t" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--teal)">Formato IEEE</div>
+          Todas las investigaciones y trabajos deben citar sus fuentes usando el <strong>formato IEEE</strong>. Verifica las plantillas y ejemplos oficiales del estilo antes de entregar.
+        </div>
+      </div>
+      <div>
+        <div class="sec">💬 Comunicación — prioridad</div>
+        <div class="prio-row">
+          <div class="prio-n" style="background:var(--teal)">1</div>
+          <div class="prio-lbl">En persona</div>
+          <div class="prio-note">Primera y más directa</div>
+        </div>
+        <div class="prio-row">
+          <div class="prio-n" style="background:var(--brown)">2</div>
+          <div class="prio-lbl">Correo institucional</div>
+          <div class="prio-note">Para asuntos formales</div>
+        </div>
+        <div class="prio-row" style="margin-bottom:.75rem">
+          <div class="prio-n" style="background:var(--brown2)">3</div>
+          <div class="prio-lbl">Microsoft Teams</div>
+          <div class="prio-note">Última instancia</div>
+        </div>
+        <div class="box box-w">
+          <div class="blbl">Al enviar correo</div>
+          Comienza con un saludo y establece claramente el propósito. No envíes correos en blanco, con solo capturas de pantalla o con documentos sin explicación.
+        </div>
+        <div class="box box-b" style="margin-bottom:0">
+          <div class="blbl" style="color:var(--brown)">Ambiente de aprendizaje</div>
+          Siempre da lo mejor de ti. Construimos un ambiente de <strong>tolerancia y profesionalismo</strong>. Situaciones no cubiertas se acuerdan entre estudiante y profesor.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S7  TRABAJOS EXTEMPORALES
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s7">
+  <div class="sh">
+    <div class="sh-accent" style="background:var(--brown)"></div>
+    <h2 class="sh-title">Política de Trabajos <em>Extemporales</em></h2>
+  </div>
+  <div class="sb">
+    <div class="box box-b" style="margin-bottom:.9rem">
+      <div class="blbl" style="color:var(--brown)">Principio general</div>
+      Se permite la entrega extemporánea <strong>únicamente con autorización previa del profesor</strong>. Sin ese paso, la entrega no será aceptada.
+    </div>
+
+    <div class="step">
+      <div class="step-n">1</div>
+      <div class="step-t">
+        <strong>Comunícate con el profesor</strong>
+        <p>Habla con el profesor antes de subir cualquier trabajo fuera de tiempo. Explica la situación y solicita la autorización. Sin esta gestión previa, la entrega no procede.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">2</div>
+      <div class="step-t">
+        <strong>Ten el trabajo listo</strong>
+        <p>El trabajo debe estar <strong>completamente terminado</strong> antes de la conversación. Una vez autorizado, tendrás máximo <strong>12 horas</strong> para subirlo a Teams.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-n">3</div>
+      <div class="step-t">
+        <strong>Verificación de aprendizaje</strong>
+        <p>Antes de confirmar la entrega, el profesor realizará preguntas para verificar que el trabajo refleja tu aprendizaje real y tu autoría.</p>
+      </div>
+    </div>
+    <div class="step" style="margin-bottom:.9rem">
+      <div class="step-n">4</div>
+      <div class="step-t">
+        <strong>Confirmación y entrega</strong>
+        <p>Una vez verificado el aprendizaje, se habilita la entrega. La calificación máxima para trabajos extemporales es <strong>80 puntos</strong>.</p>
+      </div>
+    </div>
+
+    <div class="fbanner brown">
+      ⏱️&nbsp; Recuerda: en verano los plazos son cortos — no dejes los trabajos para el último momento
+    </div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S8  POLÍTICA DE IA
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s8">
+  <div class="sh">
+    <div class="sh-accent" style="background:var(--teal)"></div>
+    <h2 class="sh-title">Política de Uso de <em>Inteligencia Artificial</em></h2>
+  </div>
+  <div class="sb">
+    <div class="box box-dark" style="margin-bottom:.9rem">
+      <strong style="color:var(--teal2)">El propósito no es prohibir la IA — sino aprender a usarla para potenciar el aprendizaje.</strong>
+    </div>
+    <div class="g2">
+      <div>
+        <div class="sec">✅ Usos permitidos</div>
+        <ul class="ul lt">
+          <li>Mejora de código</li>
+          <li>Mejora de redacción y ortografía</li>
+          <li>Investigación de material para clase</li>
+          <li>Responder preguntas durante la clase</li>
+        </ul>
+        <div class="box box-t" style="margin-top:.7rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--teal)">Condición de uso</div>
+          Puedes usar cualquier herramienta de IA generativa siempre y cuando <strong>puedas razonar y explicar</strong> lo que proporciona. El aprendizaje real no se delega.
+        </div>
+      </div>
+      <div>
+        <div class="sec">⚠️ Ante sospechas de plagio</div>
+        <ul class="ul lb">
+          <li>Se revisará el trabajo <strong>en clase con el profesor</strong>.</li>
+          <li>Se realizarán preguntas para verificar la autoría del trabajo.</li>
+          <li>Las acciones futuras se determinarán en ese momento según los hallazgos.</li>
+        </ul>
+        <div class="box box-b" style="margin-top:.7rem;margin-bottom:0">
+          <div class="blbl" style="color:var(--brown)">Criterio clave</div>
+          Ante la sospecha de entrega sin autoría, la revisión en clase es el mecanismo de verificación. La transparencia y honestidad son parte del aprendizaje profesional.
+        </div>
+      </div>
+    </div>
+    <div class="fbanner" style="margin-top:.9rem">
+      💡&nbsp; Usa la IA como herramienta de apoyo, no como sustituto de tu pensamiento crítico
+    </div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════
+     S9  CIERRE
+════════════════════════════════════════════════════════════ -->
+<div class="slide" id="s9">
+  <div style="flex:1;display:flex;flex-direction:row;min-height:calc(100vh - 58px)">
+    <!-- Izquierda oscura -->
+    <div style="flex:0 0 42%;background:var(--dark);display:flex;flex-direction:column;justify-content:center;padding:3rem 2.5rem;position:relative;">
+      <div style="position:absolute;right:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--teal),var(--brown),var(--teal2))"></div>
+      <div style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--brown2);margin-bottom:1rem">¡Bienvenidos al curso!</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(2rem,4.5vw,3.5rem);font-weight:900;color:var(--cream);line-height:1.05;margin-bottom:1.2rem">Verano <span style="color:var(--teal2)">2026</span></h2>
+      <div style="width:48px;height:3px;background:var(--brown2);border-radius:2px;margin-bottom:1.2rem"></div>
+      <p style="font-size:.96rem;color:rgba(246,240,232,.6);line-height:1.7;font-style:italic">Construyamos juntos un período de aprendizaje intensivo, profesional y significativo.</p>
+      <div style="font-size:4.5rem;margin-top:1.8rem;opacity:.65">📊</div>
+    </div>
+    <!-- Derecha clara -->
+    <div style="flex:1;background:var(--cream);padding:2.5rem 2rem;overflow-y:auto;">
+      <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--teal);margin-bottom:.9rem">Resumen del encuadre</div>
+      <div class="sum-row" style="color:var(--ink-md)"><div class="sum-k" style="color:var(--teal)">📅 Período</div><div class="sum-v" style="color:var(--ink-md)">08 Jun – 17 Jul 2026 · Sin asuetos · Verano intensivo</div></div>
+      <div class="sum-row" style="color:var(--ink-md)"><div class="sum-k" style="color:var(--teal)">📊 Evaluación</div><div class="sum-v" style="color:var(--ink-md)">Parciales 50% · Prácticas 30% · Tareas 10% · Proyecto 10% · Mín. aprobatorio: 70</div></div>
+      <div class="sum-row" style="color:var(--ink-md)"><div class="sum-k" style="color:var(--teal)">📝 Exámenes</div><div class="sum-v" style="color:var(--ink-md)">4 parciales distribuidos a lo largo del curso · Sin examen final · Via Teams</div></div>
+      <div class="sum-row" style="color:var(--ink-md)"><div class="sum-k" style="color:var(--brown)">⏰ Entregas</div><div class="sum-v" style="color:var(--ink-md)">Sábados 11:59 p.m. · 6 días disponibles · Microsoft Teams</div></div>
+      <div class="sum-row" style="color:var(--ink-md)"><div class="sum-k" style="color:var(--brown)">💬 Comunicación</div><div class="sum-v" style="color:var(--ink-md)">1° En persona · 2° Correo institucional · 3° Teams</div></div>
+      <div class="sum-row" style="color:var(--ink-md)"><div class="sum-k" style="color:var(--brown)">📚 Citas</div><div class="sum-v" style="color:var(--ink-md)">Formato IEEE en todos los trabajos e investigaciones</div></div>
+      <div class="sum-row" style="color:var(--ink-md)"><div class="sum-k" style="color:var(--brown2)">🤖 IA</div><div class="sum-v" style="color:var(--ink-md)">Permitida con uso responsable — debes poder razonar lo que proporciona</div></div>
+      <div class="sum-row" style="color:var(--ink-md)"><div class="sum-k" style="color:var(--brown2)">📋 Asistencia</div><div class="sum-v" style="color:var(--ink-md)">Tradicional (primeros 10 min) o por actividades de la sesión</div></div>
+      <div class="sum-row" style="color:var(--ink-md);margin-bottom:0"><div class="sum-k" style="color:var(--brown2)">📌 Extemporales</div><div class="sum-v" style="color:var(--ink-md)">Solo con autorización previa · Verificación de aprendizaje · Máx. 65 pts</div></div>
+    </div>
+  </div>
+  <div class="slide-sp"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled>◀ Anterior</button>
+  <div class="nav-center">
+    <div class="nav-counter">Diapositiva <span id="cn">1</span> / <span id="tn">9</span></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="go(1)">Siguiente ▶</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+
+document.getElementById('tn').textContent = N;
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('button');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function update() {
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === cur);
+    if (i === cur) s.scrollTop = 0;
+  });
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+  document.getElementById('cn').textContent = cur + 1;
+  document.getElementById('prevBtn').disabled = cur === 0;
+  document.getElementById('nextBtn').disabled = cur === N - 1;
+  document.getElementById('pb').style.width = ((cur + 1) / N * 100) + '%';
+}
+
+function go(d) { const n = cur + d; if (n >= 0 && n < N) { cur = n; update(); } }
+function goTo(i) { cur = i; update(); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+});
+
+update();
+</script>
+</body>
+</html>
